@@ -2,6 +2,7 @@
 
 import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { Loader2, Lock, Eye, EyeOff, AlertCircle } from "lucide-react";
 
@@ -120,7 +121,7 @@ export default function LoginPage() {
           </div>
 
           <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.8rem", color: T.muted }}>
-            <a href="/" style={{ color: T.accent, textDecoration: "none" }}>← Back to website</a>
+            <Link href="/" style={{ color: T.accent, textDecoration: "none" }}>← Back to website</Link>
           </p>
         </div>
       </div>
