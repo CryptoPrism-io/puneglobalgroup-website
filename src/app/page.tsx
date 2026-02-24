@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, FormEvent } from "react";
+import Link from "next/link";
 import {
   Phone, Mail, MapPin, Factory, Package, Layers,
   ChevronRight, Menu, X, ArrowRight, CheckCircle,
@@ -346,8 +347,9 @@ function Navbar() {
   }, []);
 
   const links = [
-    { label: "Products", href: "#products" },
-    { label: "Industries", href: "#industries" },
+    { label: "Products", href: "/products" },
+    { label: "Infrastructure", href: "/infrastructure" },
+    { label: "Blog", href: "/blog" },
     { label: "About", href: "#about" },
     { label: "Contact", href: "#contact" },
   ];
@@ -383,10 +385,14 @@ function Navbar() {
 
           {/* Desktop Nav */}
           <div className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: "2.5rem" }}>
-            {links.map((l) => (
+            {links.map((l) => l.href.startsWith("#") ? (
               <button key={l.href} className="nav-link" onClick={() => scrollTo(l.href)} style={{ background: "none", border: "none" }}>
                 {l.label}
               </button>
+            ) : (
+              <Link key={l.href} href={l.href} className="nav-link" style={{ textDecoration: "none" }}>
+                {l.label}
+              </Link>
             ))}
           </div>
 
@@ -412,10 +418,10 @@ function Navbar() {
           <X size={28} />
         </button>
         <Logo inverted />
-        {links.map((l) => (
+        {links.map((l) => l.href.startsWith("#") ? (
           <button
             key={l.href}
-            onClick={() => scrollTo(l.href)}
+            onClick={() => { setMobileOpen(false); scrollTo(l.href); }}
             style={{
               background: "none", border: "none", cursor: "pointer",
               fontFamily: F.outfit, fontSize: "1.6rem", fontWeight: 300,
@@ -424,6 +430,18 @@ function Navbar() {
           >
             {l.label}
           </button>
+        ) : (
+          <Link
+            key={l.href}
+            href={l.href}
+            onClick={() => setMobileOpen(false)}
+            style={{
+              fontFamily: F.outfit, fontSize: "1.6rem", fontWeight: 300,
+              color: C.cream, letterSpacing: "0.08em", textDecoration: "none",
+            }}
+          >
+            {l.label}
+          </Link>
         ))}
         <button className="btn-saffron" onClick={() => scrollTo("#contact")}>
           Get Quote <ArrowRight size={14} />
