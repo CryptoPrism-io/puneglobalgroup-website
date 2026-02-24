@@ -941,7 +941,7 @@ function ProductsSection() {
 
         <div className="products-detail-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.25rem" }}>
           {products.map((p, i) => (
-            <div key={p.name} className="sr product-card" data-delay={`${0.07 * i}`} style={{
+            <Link key={p.name} href={`/products/${p.slug}`} className="sr product-card" data-delay={`${0.07 * i}`} style={{
               background: "#fff",
               border: `1px solid ${C.border}`,
               borderLeft: "none",
@@ -949,7 +949,13 @@ function ProductsSection() {
               overflow: "hidden",
               display: "flex", flexDirection: "column",
               padding: 0,
-            }}>
+              textDecoration: "none",
+              cursor: "pointer",
+              transition: "border-color 0.2s, box-shadow 0.2s",
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = C.saffron; (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 4px 16px rgba(244,162,54,0.12)`; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = C.border; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none"; }}
+            >
               {/* DS Smith: photo or gradient fallback */}
               {p.img ? (
                 <div style={{ height: "160px", overflow: "hidden", background: "#f0ede8" }}>
@@ -998,21 +1004,20 @@ function ProductsSection() {
                 }}>
                   {p.desc}
                 </p>
-                <div style={{ marginTop: "0.75rem", display: "flex", gap: "0.75rem", alignItems: "center" }}>
-                  <Link href={`/products/${p.slug}`} style={{
-                    display: "inline-flex", alignItems: "center", gap: "5px",
-                    color: C.charcoal, fontFamily: F.outfit,
-                    fontWeight: 600, fontSize: "0.76rem",
-                    letterSpacing: "0.05em",
-                    textDecoration: "underline",
-                    textDecorationColor: C.saffron,
-                    textUnderlineOffset: "3px",
-                  }}>
-                    View Details <ChevronRight size={12} />
-                  </Link>
-                </div>
+                <span style={{
+                  marginTop: "0.75rem",
+                  display: "inline-flex", alignItems: "center", gap: "5px",
+                  color: C.charcoal, fontFamily: F.outfit,
+                  fontWeight: 600, fontSize: "0.76rem",
+                  letterSpacing: "0.05em",
+                  textDecoration: "underline",
+                  textDecorationColor: C.saffron,
+                  textUnderlineOffset: "3px",
+                }}>
+                  View Details <ChevronRight size={12} />
+                </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
