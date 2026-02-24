@@ -182,3 +182,26 @@ Save all photos in: `C:\cpio_db\puneglobalgroup-website\public\products\`
 | Full flatlay | `flatlay-family.jpg` |
 
 Once you drop the files in, I'll wire them all into the website immediately.
+
+---
+
+## FBB (Folding Box Board) Shots
+
+FBB is a multi-ply paperboard — white coated top, cream/grey back. Used for premium packaging.
+**Background:** White seamless. **Lighting:** Raking side light to show surface texture and coating gloss.
+
+| # | Filename | Product | Angle | Key thing to show |
+|---|----------|---------|-------|-------------------|
+| 13 | `fbb-reel.jpg` | FBB paper reel (large roll, 1-2m wide) | Front 3/4, standing back 3m | Full reel height, paper layers on edge visible, any ITC/TNPL label on core |
+| 14 | `fbb-reel-side.jpg` | Same FBB reel | Side profile | Layers of coated board visible on the cross-section edge, white coated outer |
+| 15 | `fbb-sheets-stack.jpg` | Stack of cut FBB sheets | Side profile 15° tilt | Clean cut edge showing the multi-ply layers (white coat / clay / pulp / back coat), slight fan spread |
+| 16 | `fbb-sheets-topdown.jpg` | Single FBB sheet or small stack | Top-down flat lay | White coated surface, slight gloss sheen, any brand watermark visible |
+| 17 | `fbb-cutting-machine.jpg` | FBB sheet cutting/sheeting machine in operation | Wide shot from side | Machine + FBB sheets being cut, factory setting |
+| 18 | `fbb-cut-size.jpg` | Cut-to-size FBB sheet stacks, multiple sizes | 3/4 angle | Several stacks of different sizes showing the converting/sheeting output |
+| 19 | `fbb-grade-samples.jpg` | Multiple FBB grade samples side by side | Top-down flat lay | ITC Cyber Oak, TNPL, imported grades — label each with a small card if possible |
+
+### FBB Quick Notes
+- The **white coated surface** and **multi-ply cut edge** are the hero details — get those sharp
+- Reel shots: if reels are stored horizontally (lying down), shoot from the side showing the spiral layers
+- If you have ITC / TNPL branded packaging/wrappers on the reels, keep them visible — adds credibility
+- Cut edge of FBB sheet should show distinct layers: white clay coat → pulp → back grey — this is what makes FBB different from regular paper
