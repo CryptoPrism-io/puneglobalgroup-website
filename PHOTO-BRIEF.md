@@ -166,6 +166,7 @@
 
 Save all photos in: `C:\cpio_db\puneglobalgroup-website\public\products\`
 
+**PP Products**
 | Shot | Filename |
 |------|----------|
 | PP box open | `hero-pp-box-open.jpg` |
@@ -181,7 +182,91 @@ Save all photos in: `C:\cpio_db\puneglobalgroup-website\public\products\`
 | Factory line | `factory-line.jpg` |
 | Full flatlay | `flatlay-family.jpg` |
 
+**Infrastructure & Machinery**
+| Shot | Filename |
+|------|----------|
+| Facility wide | `infra-facility-wide.jpg` |
+| Facility aerial | `infra-facility-aerial.jpg` |
+| Extruder machine | `machine-extruder.jpg` |
+| Extruder detail | `machine-extruder-detail.jpg` |
+| Sheeting machine | `machine-sheeting.jpg` |
+| Sheeting detail | `machine-sheeting-detail.jpg` |
+| Slitting machine | `machine-slitting.jpg` |
+| QC measurement | `machine-qc-measurement.jpg` |
+| Warehouse stock | `warehouse-stock.jpg` |
+| Warehouse racking | `warehouse-racking.jpg` |
+| Dispatch loading | `dispatch-loading.jpg` |
+
+**People & Team**
+| Shot | Filename |
+|------|----------|
+| Founder portrait | `team-founder.jpg` |
+| Group team | `team-group.jpg` |
+| Worker on floor | `people-floor-working.jpg` |
+| QC check | `people-qc-checking.jpg` |
+| Office meeting | `people-office-meeting.jpg` |
+| Dispatch person | `people-dispatch.jpg` |
+| Handshake (optional) | `people-customer-handshake.jpg` |
+
+**FBB**
+| Shot | Filename |
+|------|----------|
+| FBB reel front | `fbb-reel.jpg` |
+| FBB reel side | `fbb-reel-side.jpg` |
+| FBB sheets stack | `fbb-sheets-stack.jpg` |
+| FBB sheet topdown | `fbb-sheets-topdown.jpg` |
+| FBB cutting machine | `fbb-cutting-machine.jpg` |
+| FBB cut sizes | `fbb-cut-size.jpg` |
+| FBB grade samples | `fbb-grade-samples.jpg` |
+
 Once you drop the files in, I'll wire them all into the website immediately.
+
+---
+
+## Infrastructure & Machinery Shots
+
+Used on the `/infrastructure` page. Show the facility as modern, precise, high-capacity.
+**Lighting:** Factory overhead + natural light if available. Don't use flash directly on machines.
+**Style:** Wide establishing shots + tight detail shots of each machine.
+
+| # | Filename | Subject | Angle | Key thing to show |
+|---|----------|---------|-------|-------------------|
+| 20 | `infra-facility-wide.jpg` | Full factory floor wide shot | Standing at one end, shooting down the length | Scale of facility, machines in background, clean floor |
+| 21 | `infra-facility-aerial.jpg` | Factory exterior or full floor from above | From rooftop / mezzanine / drone if possible | Roof, layout, size of building |
+| 22 | `machine-extruder.jpg` | PP sheet extrusion machine | 3/4 front, standing back 2m | Full machine height, PP sheet coming out if running |
+| 23 | `machine-extruder-detail.jpg` | Extrusion die head / nozzle close-up | Tight close-up | Material coming out, heat shimmer, precision detail |
+| 24 | `machine-sheeting.jpg` | FBB sheeting / cutting machine | 3/4 front wide | Full machine, sheet stack output on one side |
+| 25 | `machine-sheeting-detail.jpg` | Sheet cutter blade or cutting zone | Tight close-up | Blade precision, cut edge of FBB sheet, clean cut |
+| 26 | `machine-slitting.jpg` | Slitting / rewinding machine (if available) | 3/4 side | Reel being slit into narrower rolls |
+| 27 | `machine-qc-measurement.jpg` | Quality check — caliper/gauge measuring sheet | Close-up, hands visible | Precision measurement tool on PP or FBB sheet |
+| 28 | `warehouse-stock.jpg` | Finished goods warehouse / stock area | Wide shot | Pallets of PP boxes or FBB reels stacked, organised |
+| 29 | `warehouse-racking.jpg` | Racking / shelving with product | Side angle | Height of racking, products clearly visible |
+| 30 | `dispatch-loading.jpg` | Truck loading / dispatch area | Wide or 3/4 | Forklift or manual loading, PGG-branded boxes visible |
+
+---
+
+## People / Team Shots
+
+Used across Home (About section), Infrastructure, and Contact pages.
+**Style:** Candid working shots preferred over posed. Natural expressions. Safety gear if on factory floor.
+**Lighting:** Natural window light OR ring light for portraits. Avoid overhead harsh factory light for faces.
+
+| # | Filename | Subject | Angle | Notes |
+|---|----------|---------|-------|-------|
+| 31 | `team-founder.jpg` | Founder / MD — formal portrait | Head + shoulders, slight 3/4 | Professional but approachable. Plain wall or blurred factory background |
+| 32 | `team-group.jpg` | Full team or core team together | Group, standing, factory or office | Everyone facing camera, slight smiles. Shows company size |
+| 33 | `people-floor-working.jpg` | Worker operating PP machine | Candid side/3/4 | Safety gloves, focused on task, machine visible |
+| 34 | `people-qc-checking.jpg` | QC person checking/measuring product | Candid close-up | Hands + caliper or measuring tape on PP sheet or box |
+| 35 | `people-office-meeting.jpg` | 2-3 people at desk / table reviewing order | Over-shoulder or side | Laptop, samples, documents — business context |
+| 36 | `people-dispatch.jpg` | Person with clipboard at dispatch/warehouse | 3/4 candid | Boxes/pallet in background, professional look |
+| 37 | `people-customer-handshake.jpg` | Handshake / deal close moment (optional) | Close-up hands or full body | If natural moment available, great for About/Trust section |
+
+### People Shot Tips
+- Ask people to wear clean company t-shirt or plain dark shirt if available
+- Safety helmet + gloves on factory floor = instant credibility
+- Shoot in burst mode for candid expressions — pick the natural one
+- Blurred background (shallow focus) on portraits looks much more professional
+- Avoid: posed stiff smiles, cluttered backgrounds, fluorescent green tinge from old factory lights
 
 ---
 
