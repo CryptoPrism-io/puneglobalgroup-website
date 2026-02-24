@@ -99,7 +99,7 @@ function Navbar() {
         >
           Insights
         </Link>
-        <a
+        <Link
           href="/#contact"
           style={{
             fontFamily: FONT.outfit,
@@ -114,7 +114,7 @@ function Navbar() {
           }}
         >
           Get a Quote
-        </a>
+        </Link>
       </div>
     </nav>
   );
@@ -513,7 +513,7 @@ export default function ProductsPage() {
               margin: 0,
             }}
           >
-            Can't find your grade?
+            Can&apos;t find your grade?
           </p>
           <h2
             style={{
@@ -525,7 +525,7 @@ export default function ProductsPage() {
               lineHeight: 1.2,
             }}
           >
-            We Source What Others Can't
+            We Source What Others Can&apos;t
           </h2>
           <p
             style={{
@@ -541,7 +541,7 @@ export default function ProductsPage() {
             we can source speciality grades, non-standard GSMs, and custom converting requirements.
             Tell us what you need.
           </p>
-          <a
+          <Link
             href="/#contact"
             style={{
               fontFamily: FONT.outfit,
@@ -557,7 +557,7 @@ export default function ProductsPage() {
             }}
           >
             Send an Enquiry →
-          </a>
+          </Link>
         </div>
       </main>
 

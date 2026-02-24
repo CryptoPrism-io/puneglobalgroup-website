@@ -92,7 +92,7 @@ function Navbar() {
         >
           Infrastructure
         </Link>
-        <a
+        <Link
           href="/#contact"
           style={{
             fontFamily: FONT.outfit,
@@ -106,7 +106,7 @@ function Navbar() {
           }}
         >
           Get a Quote
-        </a>
+        </Link>
       </div>
     </nav>
   );
@@ -314,7 +314,7 @@ export default function BlogPage() {
           >
             Technical guides, compliance updates, and market intelligence for
             packaging buyers, procurement managers, and converting professionals
-            across India's paper and board supply chain.
+            across India&apos;s paper and board supply chain.
           </p>
         </div>
       </section>
@@ -532,7 +532,7 @@ export default function BlogPage() {
             </p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", alignItems: "flex-end" }}>
-            <a
+            <Link
               href="/#contact"
               style={{
                 fontFamily: FONT.outfit,
@@ -547,7 +547,7 @@ export default function BlogPage() {
               }}
             >
               Ask a Question →
-            </a>
+            </Link>
             <a
               href="tel:+919823383230"
               style={{

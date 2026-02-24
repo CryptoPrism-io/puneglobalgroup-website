@@ -92,7 +92,7 @@ function Navbar() {
         >
           Insights
         </Link>
-        <a
+        <Link
           href="/#contact"
           style={{
             fontFamily: FONT.outfit,
@@ -106,7 +106,7 @@ function Navbar() {
           }}
         >
           Get a Quote
-        </a>
+        </Link>
       </div>
     </nav>
   );
@@ -490,7 +490,7 @@ export default function InfrastructurePage() {
                   margin: "0 0 1.5rem",
                 }}
               >
-                Every reel that enters our facility is inspected against the mill's Certificate
+                Every reel that enters our facility is inspected against the mill&apos;s Certificate
                 of Analysis before processing begins. Our sheeting and slitting operations
                 maintain dimensional tolerances of ±0.3 mm, with every ream moisture-wrapped
                 before despatch to preserve paper condition.
@@ -992,11 +992,11 @@ export default function InfrastructurePage() {
               margin: 0,
             }}
           >
-            Share your grade, GSM, quantity, and timeline. We'll confirm availability
+            Share your grade, GSM, quantity, and timeline. We&apos;ll confirm availability
             and a processing schedule within 2 business hours.
           </p>
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", justifyContent: "center" }}>
-            <a
+            <Link
               href="/#contact"
               style={{
                 fontFamily: FONT.outfit,
@@ -1011,7 +1011,7 @@ export default function InfrastructurePage() {
               }}
             >
               Get a Quote →
-            </a>
+            </Link>
             <a
               href="tel:+919823383230"
               style={{
