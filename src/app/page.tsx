@@ -261,32 +261,21 @@ const GLOBAL_CSS = `
   }
 `;
 
-/* ─── Turiya Logo SVG ───────────────────────────────────────────────────────── */
-function TuriyaLogo({ size = 40 }: { size?: number }) {
-  const s = size;
-
+/* ─── Turiya Logo SVG — exact paths from official brand kit ─────────────────── */
+function TuriyaLogo({ size = 40, onDark = false }: { size?: number; onDark?: boolean }) {
+  const main = onDark ? C.cream : C.charcoal;
   return (
-    <svg width={s} height={s} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Pune Global Group Logo Symbol">
-      {/* Left-pointing triangle */}
-      <polygon
-        points={`22,13 22,27 10,20`}
-        fill={C.charcoal}
-        opacity="0.9"
-      />
-      {/* Right-pointing triangle */}
-      <polygon
-        points={`18,13 18,27 30,20`}
-        fill={C.charcoal}
-        opacity="0.9"
-      />
-      {/* Upward-pointing triangle (saffron) */}
-      <polygon
-        points={`20,6 12,22 28,22`}
-        fill={C.saffron}
-        opacity="0.95"
-      />
-      {/* Red dot — bindu at center */}
-      <circle cx="20" cy="20" r="2.2" fill={C.sindoor} />
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Pune Global Group Logo Symbol">
+      {/* Top-left shape — charcoal (on light) / cream (on dark) */}
+      <path d="M6 6 L38 6 Q44 6, 44 12 L18 38 Q12 44, 6 44 L6 6 Z" fill={main} />
+      {/* Top-right shape — saffron (accent) */}
+      <path d="M56 6 L94 6 L94 38 Q94 44, 88 44 L56 12 Q56 6, 62 6 Z" fill={C.saffron} />
+      {/* Bottom-right shape — charcoal / cream */}
+      <path d="M94 56 L94 94 L62 94 Q56 94, 56 88 L82 62 Q88 56, 94 56 Z" fill={main} />
+      {/* Bindu — bottom-left, saffron glow + sindoor centre */}
+      <circle cx="25" cy="75" r="12" fill={C.saffron} opacity="0.15" />
+      <circle cx="25" cy="75" r="5" fill={C.saffron} />
+      <circle cx="25" cy="75" r="1.8" fill={C.sindoor} />
     </svg>
   );
 }
@@ -297,7 +286,7 @@ function Logo({ inverted = false }: { inverted?: boolean }) {
   const subColor = inverted ? "rgba(255,253,248,0.65)" : C.taupe;
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "12px", userSelect: "none" }}>
-      <TuriyaLogo size={44} />
+      <TuriyaLogo size={44} onDark={inverted} />
       <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
         <span style={{
           fontFamily: F.outfit,
