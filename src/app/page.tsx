@@ -500,8 +500,7 @@ function Hero() {
               Since 1995, Pune Global Group has been a trusted source for ITC, TNPL
               and imported paper &amp; board grades — with in-house sheeting, rewinding
               and slitting capabilities. We supply printers, corrugators and box
-              makers across India, and manufacture corrugated and PP packaging
-              for industrial end-users.
+              makers across India, with ready stock and fast converting turnaround.
             </p>
 
             <div className="sr" data-delay="0.5" style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
@@ -648,7 +647,6 @@ function MarqueeTicker() {
     "FBB · DUPLEX BOARDS",
     "TEST LINERS",
     "SHEETING · REWINDING · SLITTING",
-    "CORRUGATED BOXES",
     "PP PACKAGING",
     "FLUTING MEDIUM",
     "COATED BOARDS",
@@ -709,13 +707,6 @@ function ProductsSection() {
       bg: `linear-gradient(140deg, #252e26 0%, #1a2118 100%)`,
     },
     {
-      eyebrow: "Corrugated Manufacturing",
-      heading: "3-Ply · 5-Ply · 7-Ply",
-      desc: "Heavy-duty corrugated boxes manufactured in-house using premium kraft and test liner paper. Die-cut, laminated and export-grade boxes for industrial and e-commerce requirements.",
-      tags: ["Standard Boxes", "Die-Cut Boxes", "Export Grade", "Laminated", "Custom Sizes"],
-      bg: `linear-gradient(140deg, #3a2e1e 0%, #4e3d28 100%)`,
-    },
-    {
       eyebrow: "PP Packaging Solutions",
       heading: "Boxes · Sheets · Crates",
       desc: "Polypropylene corrugated packaging for returnable and reusable logistics — lightweight, chemical-resistant and built to last thousands of trips without performance loss.",
@@ -757,12 +748,6 @@ function ProductsSection() {
       img: null,
       bg: `linear-gradient(145deg, #ddd8cc 0%, #d0cbc0 100%)`,
       icon: <Package size={28} color={C.charcoal} />,
-    },
-    {
-      name: "Corrugated Boxes",
-      spec: "3-Ply / 5-Ply / 7-Ply",
-      desc: "Standard and die-cut corrugated boxes for industrial shipping, export consignments and e-commerce.",
-      img: "https://jppack.in/products/ppcorrugatedboxes_24_07_25_07_46_48_121904.png",
     },
     {
       name: "PP Foldable Boxes",
@@ -816,7 +801,7 @@ function ProductsSection() {
             color: C.taupe, lineHeight: 1.75, maxWidth: "560px", marginTop: "1rem",
           }}>
             ITC, TNPL and imported paper grades in ready stock. In-house sheeting,
-            rewinding and slitting. Corrugated and PP box manufacturing.
+            rewinding and slitting. PP packaging solutions.
             One partner for the entire paper &amp; packaging supply chain.
           </p>
         </div>
@@ -1165,11 +1150,11 @@ function AboutSection() {
               marginBottom: "1.25rem",
             }}>
               Founded in 1995 by Managing Director <strong style={{ color: C.charcoal, fontWeight: 700 }}>Umesh Sahu</strong>, Pune Global
-              Group began as a paper and board trader in Pune, Maharashtra — supplying
-              corrugators, printers and box makers with ITC, TNPL and imported grades.
-              Over three decades, we built in-house converting capabilities: sheeting,
-              rewinding and slitting to serve customers with cut-to-size stock and
-              fast turnaround.
+              Group has been a trusted paper and board trader in Pune, Maharashtra —
+              supplying corrugators, printers and box makers with ITC, TNPL and
+              imported grades. Over three decades, we built in-house converting
+              capabilities: sheeting, rewinding and slitting so customers get
+              cut-to-size stock with fast turnaround and low MOQ.
             </p>
 
             <p style={{
@@ -1179,11 +1164,10 @@ function AboutSection() {
               color: C.taupe,
               marginBottom: "1.75rem",
             }}>
-              Today we operate from our converting and manufacturing facility at BU Bhandari
-              MIDC, Sanaswadi, and our commercial office in Gulmohar Center Point, Pune.
-              We supply corrugators, printers and box makers with ready-stock paper grades,
-              and manufacture corrugated and PP boxes for 500+ industrial clients across
-              India.
+              Today we operate from our converting facility at BU Bhandari MIDC, Sanaswadi,
+              and our commercial office in Gulmohar Center Point, Pune. We supply
+              corrugators, printers and box makers with ready-stock paper grades and
+              PP packaging solutions — serving 500+ clients across India.
             </p>
 
             <p style={{
@@ -1684,8 +1668,8 @@ function Footer() {
               marginTop: "1.25rem",
               maxWidth: "260px",
             }}>
-              Manufacturing high-quality corrugated and PP packaging solutions
-              from Pune since 1995. Serving industries across India.
+              Paper trading, converting and PP packaging solutions from Pune since 1995.
+              ITC, TNPL &amp; imported grades in ready stock.
             </p>
 
             <div style={{ marginTop: "1.5rem", display: "flex", gap: "12px" }}>
@@ -1711,7 +1695,7 @@ function Footer() {
               }}>
                 Products
               </div>
-              {["Corrugated Boxes", "PP Boxes & Sheets", "FBB & Duplex Cartons"].map((p) => (
+              {["ITC Paper & Boards", "PP Boxes & Sheets", "Duplex Boards", "Kraft Liner"].map((p) => (
                 <button key={p} className="footer-link" onClick={() => scrollTo("#products")} style={{ background: "none", border: "none", textAlign: "left" }}>
                   {p}
                 </button>
