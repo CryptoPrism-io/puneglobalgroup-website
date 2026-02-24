@@ -237,25 +237,33 @@ const GLOBAL_CSS = `
   /* Responsive */
   @media (max-width: 1024px) {
     .hero-grid { flex-direction: column !important; }
-    .hero-stat-panel { width: 100% !important; margin-top: 3rem !important; }
+    .hero-stat-panel { width: 100% !important; margin-top: 3rem !important; flex: none !important; }
     .about-grid { flex-direction: column !important; }
     .contact-grid { flex-direction: column !important; }
     .footer-grid { flex-direction: column !important; gap: 3rem !important; }
     .footer-cols { flex-direction: column !important; gap: 2rem !important; }
+    .infra-metrics-grid { grid-template-columns: repeat(3, 1fr) !important; }
   }
   @media (max-width: 768px) {
     .desktop-nav { display: none !important; }
     .mobile-menu-btn { display: flex !important; }
-    .hero-headline { font-size: clamp(2.4rem, 10vw, 4.5rem) !important; }
+    .hero-headline { font-size: clamp(2rem, 9vw, 3.5rem) !important; }
     .products-grid { grid-template-columns: 1fr !important; }
     .products-detail-grid { grid-template-columns: 1fr 1fr !important; }
     .industries-grid { grid-template-columns: 1fr 1fr !important; }
     .stats-row { flex-direction: column !important; gap: 1.5rem !important; }
     .stat-divider { display: none !important; }
+    .infra-callout-header { flex-direction: column !important; align-items: flex-start !important; gap: 1.25rem !important; }
+    .infra-metrics-grid { grid-template-columns: repeat(3, 1fr) !important; }
+    .blog-teaser-grid { grid-template-columns: 1fr !important; }
+    section { padding-top: 64px !important; padding-bottom: 64px !important; }
+    .infra-section { padding-top: 44px !important; padding-bottom: 44px !important; }
   }
   @media (max-width: 480px) {
     .industries-grid { grid-template-columns: 1fr !important; }
     .products-detail-grid { grid-template-columns: 1fr !important; }
+    .infra-metrics-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .blog-teaser-header { flex-direction: column !important; align-items: flex-start !important; gap: 1rem !important; }
   }
 `;
 
@@ -1053,9 +1061,9 @@ function InfraCallout() {
   ];
 
   return (
-    <div style={{ background: C.charcoal, padding: "56px clamp(1.5rem, 5vw, 4rem)" }}>
+    <div className="infra-section" style={{ background: C.charcoal, padding: "56px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem", flexWrap: "wrap", marginBottom: "2.5rem" }}>
+        <div className="infra-callout-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem", flexWrap: "wrap", marginBottom: "2.5rem" }}>
           <div>
             <span style={{ fontFamily: F.outfit, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>Converting Facility · Pune</span>
             <h2 style={{ fontFamily: F.outfit, fontWeight: 700, fontSize: "clamp(1.4rem, 2.5vw, 2rem)", color: C.cream, marginTop: "0.4rem", letterSpacing: "-0.01em" }}>
@@ -1073,7 +1081,7 @@ function InfraCallout() {
             View Full Facility <ArrowRight size={14} />
           </Link>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "1px", background: "rgba(255,253,248,0.08)" }}>
+        <div className="infra-metrics-grid" style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "1px", background: "rgba(255,253,248,0.08)" }}>
           {metrics.map((m) => (
             <div key={m.label} style={{
               background: C.charcoal, padding: "1.25rem 1rem", textAlign: "center",
@@ -1230,7 +1238,7 @@ function BlogTeaser() {
   return (
     <section style={{ background: C.dark, padding: "80px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-        <div className="sr" style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "3rem", flexWrap: "wrap", gap: "1rem" }}>
+        <div className="sr blog-teaser-header" style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "3rem", flexWrap: "wrap", gap: "1rem" }}>
           <div>
             <span style={{ fontFamily: F.outfit, fontSize: "0.72rem", letterSpacing: "0.16em", textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>Knowledge Hub</span>
             <h2 style={{ fontFamily: F.outfit, fontWeight: 700, fontSize: "clamp(1.6rem, 3vw, 2.4rem)", color: C.cream, letterSpacing: "-0.02em", lineHeight: 1.1, marginTop: "0.5rem" }}>
@@ -1249,7 +1257,7 @@ function BlogTeaser() {
           </Link>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+        <div className="blog-teaser-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
           {posts.map((post, i) => (
             <Link key={post.slug} href={`/blog/${post.slug}`} className="sr" data-delay={`${0.1 * i}`} style={{
               display: "block", textDecoration: "none",
