@@ -9,7 +9,10 @@
     "trailingSlash": true,
     "rewrites": [
       { "source": "/admin", "destination": "/admin/index.html" },
-      { "source": "/login", "destination": "/login/index.html" }
+      { "source": "/login", "destination": "/login/index.html" },
+      { "source": "/products", "destination": "/products/index.html" },
+      { "source": "/infrastructure", "destination": "/infrastructure/index.html" },
+      { "source": "/blog", "destination": "/blog/index.html" }
     ],
     "headers": [
       {
