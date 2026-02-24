@@ -469,10 +469,10 @@ function Hero() {
   };
 
   const stats = [
+    { label: "Boxes Sold", value: "100M+" },
+    { label: "States", value: "21" },
+    { label: "Global Customers", value: "500+" },
     { label: "Est.", value: "1995" },
-    { label: "Clients", value: "500+" },
-    { label: "Paper Grades", value: "40+" },
-    { label: "Reach", value: "Pan India" },
   ];
 
   return (
@@ -490,7 +490,7 @@ function Hero() {
           <div style={{ flex: "1 1 55%", display: "flex", flexDirection: "column", justifyContent: "center" }}>
 
             <span className="sr eyebrow" data-delay="0.1" style={{ marginBottom: "1.5rem", fontSize: "1.15rem" }}>
-              Paper Trading · Converting · Manufacturing
+              PP Manufacturing · FBB Converting · Paper Trading
             </span>
 
             <h1
@@ -506,9 +506,8 @@ function Hero() {
                 marginBottom: "1.75rem",
               }}
             >
-              Pune&apos;s Paper<br />
-              <span style={{ color: C.saffron }}>& Packaging</span>{" "}
-              House
+              Industrial PP Packaging.<br />
+              <span style={{ color: C.saffron }}>Manufactured</span> to Export.
             </h1>
 
             <p
@@ -523,36 +522,38 @@ function Hero() {
                 marginBottom: "2.5rem",
               }}
             >
-              Since 1995, Pune Global Group has been a trusted source for ITC, TNPL
-              and imported paper &amp; board grades — with in-house sheeting, rewinding
-              and slitting capabilities. We supply printers, corrugators and box
-              makers across India, with ready stock and fast converting turnaround.
+              Pune Global Group manufactures precision PP trays, separators, boxes
+              and crates for automotive, pharma and electronics industries — export-ready,
+              custom-spec, from our Pune facility. We also convert FBB sheets and
+              trade paper &amp; board grades across 21 states.
             </p>
 
             <div className="sr" data-delay="0.5" style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-              <button className="btn-saffron" onClick={scrollToContact}>
-                Get a Quote <ArrowRight size={16} />
-              </button>
-              <Link
-                href="/products"
+              <Link href="/products" className="btn-saffron" style={{ textDecoration: "none" }}>
+                View Products <ArrowRight size={16} />
+              </Link>
+              <button
+                onClick={scrollToContact}
                 style={{
                   display: "inline-flex", alignItems: "center", gap: "8px",
                   background: "transparent",
                   color: C.charcoal,
                   fontFamily: F.outfit,
                   fontSize: "0.9rem",
-                  fontWeight: 500,
-                  letterSpacing: "0.04em",
+                  fontWeight: 600,
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
                   padding: "13px 24px",
-                  border: `1.5px solid ${C.borderMid}`,
+                  border: `1.5px solid ${C.charcoal}`,
                   borderRadius: "2px",
                   cursor: "pointer",
-                  textDecoration: "none",
-                  transition: "border-color 0.25s, color 0.25s",
+                  transition: "border-color 0.25s, color 0.25s, background 0.25s",
                 }}
+                onMouseEnter={e => { const b = e.currentTarget; b.style.background = C.charcoal; b.style.color = C.cream; }}
+                onMouseLeave={e => { const b = e.currentTarget; b.style.background = "transparent"; b.style.color = C.charcoal; }}
               >
-                Explore Products <ChevronRight size={16} />
-              </Link>
+                Request RFQ <ChevronRight size={16} />
+              </button>
             </div>
           </div>
 
@@ -590,7 +591,7 @@ function Hero() {
                 display: "block",
                 marginBottom: "6px",
               }}>
-                Since 1995 — Pune, India
+                PP Manufacturer · Pune, India
               </span>
               <h2 style={{
                 fontFamily: F.outfit,
@@ -599,8 +600,8 @@ function Hero() {
                 color: C.cream,
                 lineHeight: 1.25,
               }}>
-                Packaging Excellence.<br />
-                <span style={{ color: C.saffron }}>Proven at Scale.</span>
+                Export-Ready.<br />
+                <span style={{ color: C.saffron }}>Custom to Spec.</span>
               </h2>
             </div>
 
@@ -644,8 +645,8 @@ function Hero() {
               paddingTop: "1.5rem",
               marginBottom: "1.25rem",
             }}>
-              &ldquo;Supplying printers, corrugators and box makers with the right
-              paper grade — cut to size, on time, every time.&rdquo;
+              &ldquo;We manufacture PP packaging to your exact spec — and ship it
+              anywhere in the world. 100 million boxes delivered. Counting.&rdquo;
             </p>
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
               <Link href="/infrastructure" style={{
@@ -685,15 +686,15 @@ function Hero() {
 /* ─── Marquee Ticker ────────────────────────────────────────────────────────── */
 function MarqueeTicker() {
   const items = [
-    "ITC PAPER & BOARDS",
-    "TNPL GRADES",
-    "IMPORTED KRAFT LINER",
-    "FBB · DUPLEX BOARDS",
-    "TEST LINERS",
-    "SHEETING · REWINDING · SLITTING",
-    "PP PACKAGING",
-    "FLUTING MEDIUM",
-    "COATED BOARDS",
+    "PP TRAYS · SEPARATORS · BOXES",
+    "INDUSTRIAL PP PACKAGING",
+    "EXPORT READY",
+    "PP CRATES · LAYER PADS · ESD BINS",
+    "CUSTOM PP MANUFACTURING",
+    "FBB CONVERTING",
+    "SHEETING · SLITTING · REWINDING",
+    "ITC · TNPL · IMPORTED GRADES",
+    "21 STATES · 500+ CUSTOMERS",
   ];
   const repeated = [...items, ...items];
 
@@ -737,40 +738,75 @@ function ProductsSection() {
   /* 4 business pillars — DS Smith hero-card style */
   const lines = [
     {
-      eyebrow: "Paper & Board Trading",
-      heading: "ITC · TNPL · Imported",
-      desc: "Authorised distributor of ITC PSPD, TNPL and leading imported grades — FBB, duplex, kraft liner, test liner, fluting medium and specialty boards. Ready stocks across GSM ranges.",
-      tags: ["ITC Cyber Oak", "ITC Cyber XLPac", "TNPL Grades", "Kraft Liner", "Duplex Board", "Test Liner"],
-      bg: `linear-gradient(140deg, ${C.charcoal} 0%, #4a403a 100%)`,
-      href: "/products",
-      cta: "Browse Paper Grades",
-    },
-    {
-      eyebrow: "Converting Services",
-      heading: "Sheeting · Rewinding · Slitting",
-      desc: "In-house converting facility in Pune — we convert jumbo rolls into sheets, rewind to required lengths and slit to width. Fast turnaround with MOQ flexibility for printers and corrugators.",
-      tags: ["Sheet Cutting", "Roll Rewinding", "Slitting", "Custom Sizes", "Low MOQ", "Quick Turnaround"],
-      bg: `linear-gradient(140deg, #252e26 0%, #1a2118 100%)`,
-      href: "/infrastructure",
-      cta: "See Our Facility",
-    },
-    {
-      eyebrow: "PP Packaging Solutions",
-      heading: "Boxes · Sheets · Crates",
-      desc: "Polypropylene corrugated packaging for returnable and reusable logistics — lightweight, chemical-resistant and built to last thousands of trips without performance loss.",
-      tags: ["Foldable PP Boxes", "PP Sheets", "PP Crates", "Layer Pads", "ESD Bins"],
-      bg: `linear-gradient(140deg, #1e2a2e 0%, #152028 100%)`,
+      eyebrow: "PP Manufacturing — Core Business",
+      heading: "Trays · Separators · Boxes · Crates",
+      desc: "We manufacture precision polypropylene packaging for automotive, pharma and electronics industries — industrial trays, separators, foldable boxes, crates and layer pads. Custom sizes. Export-ready documentation on every order.",
+      tags: ["PP Trays", "Separators", "Foldable Boxes", "PP Crates", "Layer Pads", "ESD Bins"],
+      bg: `linear-gradient(140deg, #1a2535 0%, #0f1a28 100%)`,
       href: "/products",
       cta: "View PP Products",
     },
+    {
+      eyebrow: "FBB Converting",
+      heading: "Cut to Size. Press-Ready.",
+      desc: "We cut FBB and board reels to your exact press sheet dimensions — sheeting, slitting, rewinding. Fast turnaround for printers, carton manufacturers and packaging converters across India.",
+      tags: ["FBB Sheeting", "Duplex Cutting", "Slitting", "Rewinding", "Custom Dimensions", "Low MOQ"],
+      bg: `linear-gradient(140deg, #252e26 0%, #1a2118 100%)`,
+      href: "/infrastructure",
+      cta: "See Converting Facility",
+    },
+    {
+      eyebrow: "Paper & PP Sheet Trading",
+      heading: "ITC · TNPL · Imported",
+      desc: "Authorised distributor of ITC PSPD and TNPL board grades — FBB, duplex, kraft liner and test liner. We also supply PP corrugated sheets in standard and custom sizes from our Pune warehouse.",
+      tags: ["ITC FBB", "TNPL Grades", "Kraft Liner", "Duplex Board", "PP Sheets", "Ready Stock"],
+      bg: `linear-gradient(140deg, ${C.charcoal} 0%, #4a403a 100%)`,
+      href: "/products",
+      cta: "Browse All Grades",
+    },
   ];
 
-  /* 10 product cards — paper grades + manufacturing */
+  /* Product cards — PP first, FBB secondary */
   const products = [
     {
+      name: "PP Foldable Boxes",
+      spec: "Manufactured · Returnable",
+      desc: "Custom-manufactured foldable PP boxes for automotive trays and returnable industrial logistics. Exported globally.",
+      img: "https://www.brotherspackaging.in/assets/images/products/ppbox/9.webp",
+      slug: "pp-foldable-boxes",
+    },
+    {
+      name: "PP Corrugated Sheets",
+      spec: "Manufactured · Custom Sizes",
+      desc: "Waterproof, UV-stable PP hollow corrugated sheets for layer pads, partition dividers and protective wrapping.",
+      img: "https://jppack.in/products/ppcorrugatedsheetssunpaksheetshollowsheetsfluteboardsheets_24_07_25_09_23_01_102592.png",
+      slug: "pp-corrugated-sheets",
+    },
+    {
+      name: "PP Corrugated Crates",
+      spec: "Manufactured · Heavy Duty",
+      desc: "Stackable returnable crates for automotive OEMs, engineering components and industrial material handling.",
+      img: "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
+      slug: "pp-foldable-boxes",
+    },
+    {
+      name: "PP Layer Pads",
+      spec: "Manufactured · Pallet-Ready",
+      desc: "PP layer pads and slip sheets for pallet stacking, product separation and surface protection in transit.",
+      img: "https://jppack.in/products/ppcorrugatedlayerpad_24_07_25_09_27_58_112075.png",
+      slug: "pp-layer-pads",
+    },
+    {
+      name: "ESD Packaging",
+      spec: "Manufactured · Anti-Static",
+      desc: "Anti-static PP bins and boxes for electronics manufacturers and PCB component handling. Export compliant.",
+      img: "https://jppack.in/products/ppcorrugatedesdbin_24_07_25_09_29_20_111119.png",
+      slug: "esd-packaging",
+    },
+    {
       name: "ITC FBB Boards",
-      spec: "Cyber Oak · Cyber XLPac",
-      desc: "ITC PSPD folding box boards — high stiffness, superior caliper consistency, FSC certified. 230–400 GSM range.",
+      spec: "Traded · Cyber Oak · Cyber XLPac",
+      desc: "ITC PSPD folding box boards — high stiffness, FSC certified, sheeted to press-ready sizes. 230–400 GSM.",
       img: null,
       bg: `linear-gradient(145deg, #e8d8b8 0%, #ddc99a 100%)`,
       icon: <Package size={28} color={C.charcoal} />,
@@ -778,8 +814,8 @@ function ProductsSection() {
     },
     {
       name: "Duplex Board",
-      spec: "Grey Back · White Back",
-      desc: "Coated duplex boards 200–450 GSM for pharmaceutical cartons, garment packaging and industrial use.",
+      spec: "Traded · Cut to Size",
+      desc: "Coated duplex boards 200–450 GSM for pharma cartons and retail packaging. Sheeted from reel.",
       img: null,
       bg: `linear-gradient(145deg, #e4e0d8 0%, #d8d4cc 100%)`,
       icon: <Package size={28} color={C.charcoal} />,
@@ -787,8 +823,8 @@ function ProductsSection() {
     },
     {
       name: "Kraft Liner",
-      spec: "100–440 GSM · Imported",
-      desc: "100% fresh fibre kraft liner for heavy-duty corrugated boxes, e-commerce and industrial packaging.",
+      spec: "Traded · 100–440 GSM",
+      desc: "100% fresh fibre imported kraft liner for heavy-duty corrugated and export packaging.",
       img: null,
       bg: `linear-gradient(145deg, #e0d0b8 0%, #d4c4a8 100%)`,
       icon: <Package size={28} color={C.charcoal} />,
@@ -796,47 +832,12 @@ function ProductsSection() {
     },
     {
       name: "Test Liners & Fluting",
-      spec: "Recycled · 80–400 GSM",
-      desc: "Cost-effective test liners and semi-chemical fluting medium for corrugators and box manufacturers.",
+      spec: "Traded · 80–400 GSM",
+      desc: "Recycled fibre test liners and fluting medium for corrugators and box manufacturers.",
       img: null,
       bg: `linear-gradient(145deg, #ddd8cc 0%, #d0cbc0 100%)`,
       icon: <Package size={28} color={C.charcoal} />,
       slug: "test-liners-fluting",
-    },
-    {
-      name: "PP Foldable Boxes",
-      spec: "Returnable • Lightweight",
-      desc: "Foldable polypropylene boxes with optional partitions for automotive component trays and returnable logistics.",
-      img: "https://www.brotherspackaging.in/assets/images/products/ppbox/9.webp",
-      slug: "pp-foldable-boxes",
-    },
-    {
-      name: "PP Corrugated Sheets",
-      spec: "Sunpak · Hollow · Flute Board",
-      desc: "Versatile PP hollow sheets for layer pads, partition dividers and protective wrapping in transit.",
-      img: "https://jppack.in/products/ppcorrugatedsheetssunpaksheetshollowsheetsfluteboardsheets_24_07_25_09_23_01_102592.png",
-      slug: "pp-corrugated-sheets",
-    },
-    {
-      name: "PP Corrugated Crates",
-      spec: "Heavy Duty • Stackable",
-      desc: "Durable returnable crates for automotive components, engineering parts and industrial material handling.",
-      img: "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
-      slug: "pp-foldable-boxes",
-    },
-    {
-      name: "PP Layer Pads",
-      spec: "Interleave • Pallet Slip",
-      desc: "Corrugated PP layer pads and slip sheets for pallet stacking, product separation and surface protection.",
-      img: "https://jppack.in/products/ppcorrugatedlayerpad_24_07_25_09_27_58_112075.png",
-      slug: "pp-layer-pads",
-    },
-    {
-      name: "ESD Packaging",
-      spec: "Anti-Static • PCB Safe",
-      desc: "Electrostatic-discharge-safe bins and boxes for electronics manufacturing and PCB component handling.",
-      img: "https://jppack.in/products/ppcorrugatedesdbin_24_07_25_09_29_20_111119.png",
-      slug: "esd-packaging",
     },
   ];
 
@@ -846,22 +847,22 @@ function ProductsSection() {
 
         {/* Section header */}
         <div className="sr" style={{ marginBottom: "4rem" }}>
-          <span className="eyebrow">What We Manufacture</span>
+          <span className="eyebrow">Three Business Lines</span>
           <h2 style={{
             fontFamily: F.outfit, fontWeight: 700,
             fontSize: "clamp(2rem, 4vw, 3.2rem)",
             color: C.charcoal, letterSpacing: "-0.02em", lineHeight: 1.1, maxWidth: "600px",
           }}>
-            Trade. Convert.<br />
-            <span style={{ color: C.saffron }}>Manufacture.</span>
+            Manufacture. Convert.<br />
+            <span style={{ color: C.saffron }}>Trade.</span>
           </h2>
           <p style={{
             fontFamily: F.baskerville, fontSize: "1rem",
             color: C.taupe, lineHeight: 1.75, maxWidth: "560px", marginTop: "1rem",
           }}>
-            ITC, TNPL and imported paper grades in ready stock. In-house sheeting,
-            rewinding and slitting. PP packaging solutions.
-            One partner for the entire paper &amp; packaging supply chain.
+            We manufacture industrial PP packaging to export spec. We convert FBB
+            into press-ready sheets. We trade ITC, TNPL and imported board grades.
+            One facility. One partner. 30 years.
           </p>
         </div>
 
@@ -943,7 +944,7 @@ function ProductsSection() {
             fontSize: "0.75rem", letterSpacing: "0.14em",
             textTransform: "uppercase", color: C.charcoal,
           }}>
-            Full Product Range
+            PP Manufacturing · FBB Converting · Paper Trading
           </span>
         </div>
 
