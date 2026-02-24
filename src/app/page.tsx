@@ -2,7 +2,7 @@
 
 import { useState, useEffect, FormEvent } from "react";
 import {
-  Phone, Mail, MapPin, Factory, Package, Layers, Box,
+  Phone, Mail, MapPin, Factory, Package,
   ChevronRight, Menu, X, ArrowRight, CheckCircle,
   Loader2, Car, Pill, ShoppingCart, Zap, Wrench,
 } from "lucide-react";
@@ -614,7 +614,7 @@ function Hero() {
               fontFamily: F.baskerville,
               fontStyle: "italic",
               fontSize: "0.88rem",
-              color: "rgba(255,253,248,0.45)",
+              color: "rgba(255,253,248,0.78)",
               lineHeight: 1.6,
               borderTop: "1px solid rgba(255,253,248,0.1)",
               paddingTop: "1.5rem",
@@ -715,63 +715,57 @@ function ProductsSection() {
     },
   ];
 
-  /* 8 specific products — DS Smith product-card grid style */
+  /* 8 specific products — real photos from industry reference */
   const products = [
     {
       name: "Corrugated Boxes",
       spec: "3-Ply / 5-Ply / 7-Ply",
       desc: "Standard and die-cut boxes for industrial shipping, export consignments and e-commerce last-mile delivery.",
-      icon: <Box size={28} color={C.charcoal} />,
-      bg: `linear-gradient(145deg, #f7eddc 0%, #eee0c8 100%)`,
+      img: "https://jppack.in/products/ppcorrugatedboxes_24_07_25_07_46_48_121904.png",
     },
     {
       name: "PP Foldable Boxes",
       spec: "Returnable • Lightweight",
       desc: "Foldable polypropylene boxes with optional partitions for component trays and automotive returnable packaging.",
-      icon: <Package size={28} color={C.charcoal} />,
-      bg: `linear-gradient(145deg, #deeadf 0%, #ccdece 100%)`,
+      img: "https://www.brotherspackaging.in/assets/images/products/ppbox/9.webp",
     },
     {
       name: "PP Corrugated Sheets",
       spec: "Sunpak · Hollow · Flute Board",
       desc: "Versatile PP hollow sheets used as layer pads, partition dividers and protective wrapping in transit.",
-      icon: <Layers size={28} color={C.charcoal} />,
-      bg: `linear-gradient(145deg, #ece8e0 0%, #e0dbd0 100%)`,
+      img: "https://jppack.in/products/ppcorrugatedsheetssunpaksheetshollowsheetsfluteboardsheets_24_07_25_09_23_01_102592.png",
     },
     {
       name: "PP Corrugated Crates",
       spec: "Heavy Duty • Stackable",
       desc: "Durable returnable crates for automotive components, engineering parts and industrial material handling.",
-      icon: <Factory size={28} color={C.charcoal} />,
-      bg: `linear-gradient(145deg, #dfe0ea 0%, #d0d2e0 100%)`,
+      img: "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
     },
     {
       name: "FBB & Duplex Cartons",
       spec: "High-Print • Retail Grade",
       desc: "Premium board cartons for FMCG shelf display, pharma secondary packaging and branded retail presentation.",
-      icon: <Package size={28} color={C.charcoal} />,
+      img: null,
       bg: `linear-gradient(145deg, #f0e8dc 0%, #e8ddd0 100%)`,
+      icon: <Package size={28} color={C.charcoal} />,
     },
     {
       name: "ESD Packaging",
       spec: "Anti-Static • PCB Safe",
       desc: "Electrostatic-discharge-safe bins, boxes and trays for electronics manufacturing and PCB component handling.",
-      icon: <Zap size={28} color={C.charcoal} />,
-      bg: `linear-gradient(145deg, #e0e8ee 0%, #d0dce4 100%)`,
+      img: "https://jppack.in/products/ppcorrugatedesdbin_24_07_25_09_29_20_111119.png",
     },
     {
       name: "PP Layer Pads",
       spec: "Interleave • Pallet Slip",
       desc: "Corrugated PP layer pads and slip sheets for pallet stacking, product separation and surface protection.",
-      icon: <Layers size={28} color={C.charcoal} />,
-      bg: `linear-gradient(145deg, #eeeee0 0%, #e4e4d0 100%)`,
+      img: "https://jppack.in/products/ppcorrugatedlayerpad_24_07_25_09_27_58_112075.png",
     },
     {
       name: "Display Racks",
       spec: "Retail • POS • In-Store",
       desc: "Corrugated and PP display racks for point-of-sale product presentation and in-store gondola merchandising.",
-      icon: <Factory size={28} color={C.charcoal} />,
-      bg: `linear-gradient(145deg, #f0e4dc 0%, #e8d8d0 100%)`,
+      img: "https://jppack.in/products/ppcorrugatedstoragerank_24_07_25_07_59_34_102808.png",
     },
   ];
 
@@ -895,21 +889,32 @@ function ProductsSection() {
               display: "flex", flexDirection: "column",
               padding: 0,
             }}>
-              {/* DS Smith: coloured image/illustration area */}
-              <div style={{
-                background: p.bg,
-                height: "130px",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
+              {/* DS Smith: photo or gradient fallback */}
+              {p.img ? (
+                <div style={{ height: "160px", overflow: "hidden", background: "#f0ede8" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={p.img}
+                    alt={p.name}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
+                  />
+                </div>
+              ) : (
                 <div style={{
-                  width: "60px", height: "60px",
-                  background: "rgba(255,255,255,0.65)",
-                  borderRadius: "50%",
+                  background: p.bg,
+                  height: "160px",
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
-                  {p.icon}
+                  <div style={{
+                    width: "60px", height: "60px",
+                    background: "rgba(255,255,255,0.65)",
+                    borderRadius: "50%",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    {p.icon}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Content */}
               <div style={{ padding: "1.1rem 1.2rem 1.3rem", display: "flex", flexDirection: "column", gap: "0.35rem", flex: 1 }}>
@@ -1182,11 +1187,11 @@ function AboutSection() {
               {/* Key stats */}
               <div style={{ marginBottom: "2rem" }}>
                 <span style={{
-                  fontFamily: F.cormorant,
-                  fontStyle: "italic",
-                  fontSize: "0.9rem",
-                  color: "rgba(255,253,248,0.45)",
-                  letterSpacing: "0.06em",
+                  fontFamily: F.outfit,
+                  fontWeight: 600,
+                  fontSize: "0.7rem",
+                  color: C.saffron,
+                  letterSpacing: "0.14em",
                   textTransform: "uppercase",
                   display: "block",
                   marginBottom: "1.25rem",
@@ -1203,12 +1208,12 @@ function AboutSection() {
                   <div key={item.label} style={{
                     display: "flex", justifyContent: "space-between", alignItems: "center",
                     padding: "0.75rem 0",
-                    borderBottom: "1px solid rgba(255,253,248,0.08)",
+                    borderBottom: "1px solid rgba(255,253,248,0.12)",
                   }}>
                     <span style={{
-                      fontFamily: F.outfit, fontWeight: 300,
-                      fontSize: "0.85rem", color: "rgba(255,253,248,0.5)",
-                      letterSpacing: "0.03em",
+                      fontFamily: F.outfit, fontWeight: 400,
+                      fontSize: "0.88rem", color: "rgba(255,253,248,0.82)",
+                      letterSpacing: "0.02em",
                     }}>{item.label}</span>
                     <span style={{
                       fontFamily: F.outfit, fontWeight: 700,
@@ -1221,11 +1226,11 @@ function AboutSection() {
               {/* Values */}
               <div>
                 <span style={{
-                  fontFamily: F.cormorant,
-                  fontStyle: "italic",
-                  fontSize: "0.9rem",
-                  color: "rgba(255,253,248,0.45)",
-                  letterSpacing: "0.06em",
+                  fontFamily: F.outfit,
+                  fontWeight: 600,
+                  fontSize: "0.7rem",
+                  color: C.saffron,
+                  letterSpacing: "0.14em",
                   textTransform: "uppercase",
                   display: "block",
                   marginBottom: "1rem",
@@ -1248,7 +1253,7 @@ function AboutSection() {
                       }}>{v.label}</div>
                       <div style={{
                         fontFamily: F.baskerville, fontSize: "0.82rem",
-                        color: "rgba(255,253,248,0.45)", lineHeight: 1.6,
+                        color: "rgba(255,253,248,0.78)", lineHeight: 1.6,
                       }}>{v.desc}</div>
                     </div>
                   </div>
@@ -1269,7 +1274,7 @@ function AboutSection() {
                 }} />
                 <span style={{
                   fontFamily: F.outfit, fontSize: "0.78rem",
-                  color: "rgba(255,253,248,0.35)",
+                  color: "rgba(255,253,248,0.72)",
                   letterSpacing: "0.06em",
                 }}>
                   GSTIN: 27FYYPS5999K1ZO
@@ -1644,7 +1649,7 @@ function Footer() {
             <p style={{
               fontFamily: F.baskerville,
               fontSize: "0.88rem",
-              color: "rgba(255,253,248,0.45)",
+              color: "rgba(255,253,248,0.8)",
               lineHeight: 1.75,
               marginTop: "1.25rem",
               maxWidth: "260px",
@@ -1671,7 +1676,7 @@ function Footer() {
             <div>
               <div style={{
                 fontFamily: F.outfit, fontWeight: 600, fontSize: "0.78rem",
-                color: "rgba(255,253,248,0.4)", letterSpacing: "0.12em",
+                color: "rgba(255,253,248,0.72)", letterSpacing: "0.12em",
                 textTransform: "uppercase", marginBottom: "1.25rem",
               }}>
                 Products
@@ -1687,7 +1692,7 @@ function Footer() {
             <div>
               <div style={{
                 fontFamily: F.outfit, fontWeight: 600, fontSize: "0.78rem",
-                color: "rgba(255,253,248,0.4)", letterSpacing: "0.12em",
+                color: "rgba(255,253,248,0.72)", letterSpacing: "0.12em",
                 textTransform: "uppercase", marginBottom: "1.25rem",
               }}>
                 Industries
@@ -1703,7 +1708,7 @@ function Footer() {
             <div>
               <div style={{
                 fontFamily: F.outfit, fontWeight: 600, fontSize: "0.78rem",
-                color: "rgba(255,253,248,0.4)", letterSpacing: "0.12em",
+                color: "rgba(255,253,248,0.72)", letterSpacing: "0.12em",
                 textTransform: "uppercase", marginBottom: "1.25rem",
               }}>
                 Company
@@ -1722,17 +1727,17 @@ function Footer() {
                 <a href="mailto:contact.puneglobalgroup@gmail.com" style={{
                   display: "flex", alignItems: "center", gap: "6px",
                   fontFamily: F.outfit, fontSize: "0.78rem",
-                  color: "rgba(255,253,248,0.45)", transition: "color 0.2s",
+                  color: "rgba(255,253,248,0.8)", transition: "color 0.2s",
                   marginBottom: "0.5rem",
                 }}
                 onMouseEnter={e => (e.currentTarget.style.color = C.saffron)}
-                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,253,248,0.45)")}
+                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,253,248,0.8)")}
                 >
                   <Mail size={13} /> contact.puneglobalgroup@gmail.com
                 </a>
                 <div style={{
                   fontFamily: F.outfit, fontSize: "0.78rem",
-                  color: "rgba(255,253,248,0.35)",
+                  color: "rgba(255,253,248,0.75)",
                   display: "flex", alignItems: "flex-start", gap: "6px",
                 }}>
                   <MapPin size={13} style={{ marginTop: "2px", flexShrink: 0 }} />
@@ -1754,7 +1759,7 @@ function Footer() {
         }}>
           <div style={{
             fontFamily: F.outfit, fontSize: "0.78rem",
-            color: "rgba(255,253,248,0.3)",
+            color: "rgba(255,253,248,0.72)",
           }}>
             © 2025 Pune Global Group. All rights reserved.
           </div>
@@ -1762,12 +1767,12 @@ function Footer() {
           <div style={{
             display: "flex", alignItems: "center", gap: "8px",
             fontFamily: F.outfit, fontSize: "0.75rem",
-            color: "rgba(255,253,248,0.3)",
+            color: "rgba(255,253,248,0.72)",
           }}>
             <span>GSTIN:</span>
             <span style={{
               fontFamily: "'Courier New', monospace",
-              color: "rgba(255,253,248,0.45)",
+              color: "rgba(255,253,248,0.8)",
               letterSpacing: "0.06em",
             }}>
               27FYYPS5999K1ZO
