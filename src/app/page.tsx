@@ -263,7 +263,7 @@ const GLOBAL_CSS = `
 function TuriyaLogo({ size = 40, onDark = false }: { size?: number; onDark?: boolean }) {
   const main = onDark ? C.cream : C.charcoal;
   return (
-    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Pune Global Group Logo Symbol">
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Pune Global Group Logo Symbol" style={{ transform: "rotate(-45deg)", display: "block" }}>
       {/* Top-left shape — charcoal (on light) / cream (on dark) */}
       <path d="M6 6 L38 6 Q44 6, 44 12 L18 38 Q12 44, 6 44 L6 6 Z" fill={main} />
       {/* Top-right shape — saffron (accent) */}
@@ -525,8 +525,8 @@ function Hero() {
               <button className="btn-saffron" onClick={scrollToContact}>
                 Get a Quote <ArrowRight size={16} />
               </button>
-              <button
-                onClick={scrollToProducts}
+              <Link
+                href="/products"
                 style={{
                   display: "inline-flex", alignItems: "center", gap: "8px",
                   background: "transparent",
@@ -539,13 +539,12 @@ function Hero() {
                   border: `1.5px solid ${C.borderMid}`,
                   borderRadius: "2px",
                   cursor: "pointer",
+                  textDecoration: "none",
                   transition: "border-color 0.25s, color 0.25s",
                 }}
-                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = C.saffron; (e.currentTarget as HTMLButtonElement).style.color = C.saffron; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = C.borderMid; (e.currentTarget as HTMLButtonElement).style.color = C.charcoal; }}
               >
-                Our Products <ChevronRight size={16} />
-              </button>
+                Explore Products <ChevronRight size={16} />
+              </Link>
             </div>
           </div>
 
@@ -635,10 +634,29 @@ function Hero() {
               lineHeight: 1.6,
               borderTop: "1px solid rgba(255,253,248,0.1)",
               paddingTop: "1.5rem",
+              marginBottom: "1.25rem",
             }}>
               &ldquo;Supplying printers, corrugators and box makers with the right
               paper grade — cut to size, on time, every time.&rdquo;
             </p>
+            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+              <Link href="/infrastructure" style={{
+                fontFamily: F.outfit, fontSize: "0.78rem", fontWeight: 500,
+                color: C.saffron, textDecoration: "none", letterSpacing: "0.05em",
+                display: "inline-flex", alignItems: "center", gap: "4px",
+                borderBottom: `1px solid rgba(244,162,54,0.35)`, paddingBottom: "2px",
+              }}>
+                Our Facility <ChevronRight size={12} />
+              </Link>
+              <Link href="/blog" style={{
+                fontFamily: F.outfit, fontSize: "0.78rem", fontWeight: 500,
+                color: "rgba(255,253,248,0.55)", textDecoration: "none", letterSpacing: "0.05em",
+                display: "inline-flex", alignItems: "center", gap: "4px",
+                borderBottom: "1px solid rgba(255,253,248,0.15)", paddingBottom: "2px",
+              }}>
+                Knowledge Hub <ChevronRight size={12} />
+              </Link>
+            </div>
 
             {/* Decorative bottom corner */}
             <div style={{
@@ -716,6 +734,8 @@ function ProductsSection() {
       desc: "Authorised distributor of ITC PSPD, TNPL and leading imported grades — FBB, duplex, kraft liner, test liner, fluting medium and specialty boards. Ready stocks across GSM ranges.",
       tags: ["ITC Cyber Oak", "ITC Cyber XLPac", "TNPL Grades", "Kraft Liner", "Duplex Board", "Test Liner"],
       bg: `linear-gradient(140deg, ${C.charcoal} 0%, #4a403a 100%)`,
+      href: "/products",
+      cta: "Browse Paper Grades",
     },
     {
       eyebrow: "Converting Services",
@@ -723,6 +743,8 @@ function ProductsSection() {
       desc: "In-house converting facility in Pune — we convert jumbo rolls into sheets, rewind to required lengths and slit to width. Fast turnaround with MOQ flexibility for printers and corrugators.",
       tags: ["Sheet Cutting", "Roll Rewinding", "Slitting", "Custom Sizes", "Low MOQ", "Quick Turnaround"],
       bg: `linear-gradient(140deg, #252e26 0%, #1a2118 100%)`,
+      href: "/infrastructure",
+      cta: "See Our Facility",
     },
     {
       eyebrow: "PP Packaging Solutions",
@@ -730,6 +752,8 @@ function ProductsSection() {
       desc: "Polypropylene corrugated packaging for returnable and reusable logistics — lightweight, chemical-resistant and built to last thousands of trips without performance loss.",
       tags: ["Foldable PP Boxes", "PP Sheets", "PP Crates", "Layer Pads", "ESD Bins"],
       bg: `linear-gradient(140deg, #1e2a2e 0%, #152028 100%)`,
+      href: "/products",
+      cta: "View PP Products",
     },
   ];
 
@@ -742,6 +766,7 @@ function ProductsSection() {
       img: null,
       bg: `linear-gradient(145deg, #e8d8b8 0%, #ddc99a 100%)`,
       icon: <Package size={28} color={C.charcoal} />,
+      slug: "itc-fbb-boards",
     },
     {
       name: "Duplex Board",
@@ -750,6 +775,7 @@ function ProductsSection() {
       img: null,
       bg: `linear-gradient(145deg, #e4e0d8 0%, #d8d4cc 100%)`,
       icon: <Package size={28} color={C.charcoal} />,
+      slug: "duplex-board",
     },
     {
       name: "Kraft Liner",
@@ -758,6 +784,7 @@ function ProductsSection() {
       img: null,
       bg: `linear-gradient(145deg, #e0d0b8 0%, #d4c4a8 100%)`,
       icon: <Package size={28} color={C.charcoal} />,
+      slug: "kraft-liner",
     },
     {
       name: "Test Liners & Fluting",
@@ -766,36 +793,42 @@ function ProductsSection() {
       img: null,
       bg: `linear-gradient(145deg, #ddd8cc 0%, #d0cbc0 100%)`,
       icon: <Package size={28} color={C.charcoal} />,
+      slug: "test-liners-fluting",
     },
     {
       name: "PP Foldable Boxes",
       spec: "Returnable • Lightweight",
       desc: "Foldable polypropylene boxes with optional partitions for automotive component trays and returnable logistics.",
       img: "https://www.brotherspackaging.in/assets/images/products/ppbox/9.webp",
+      slug: "pp-foldable-boxes",
     },
     {
       name: "PP Corrugated Sheets",
       spec: "Sunpak · Hollow · Flute Board",
       desc: "Versatile PP hollow sheets for layer pads, partition dividers and protective wrapping in transit.",
       img: "https://jppack.in/products/ppcorrugatedsheetssunpaksheetshollowsheetsfluteboardsheets_24_07_25_09_23_01_102592.png",
+      slug: "pp-corrugated-sheets",
     },
     {
       name: "PP Corrugated Crates",
       spec: "Heavy Duty • Stackable",
       desc: "Durable returnable crates for automotive components, engineering parts and industrial material handling.",
       img: "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
+      slug: "pp-foldable-boxes",
     },
     {
       name: "PP Layer Pads",
       spec: "Interleave • Pallet Slip",
       desc: "Corrugated PP layer pads and slip sheets for pallet stacking, product separation and surface protection.",
       img: "https://jppack.in/products/ppcorrugatedlayerpad_24_07_25_09_27_58_112075.png",
+      slug: "pp-layer-pads",
     },
     {
       name: "ESD Packaging",
       spec: "Anti-Static • PCB Safe",
       desc: "Electrostatic-discharge-safe bins and boxes for electronics manufacturing and PCB component handling.",
       img: "https://jppack.in/products/ppcorrugatedesdbin_24_07_25_09_29_20_111119.png",
+      slug: "esd-packaging",
     },
   ];
 
@@ -883,17 +916,14 @@ function ProductsSection() {
                 ))}
               </div>
 
-              <button onClick={scrollToContact} style={{
-                display: "inline-flex", alignItems: "center", gap: "8px",
-                background: "none", border: `1px solid ${C.saffron}`,
-                cursor: "pointer", color: C.saffron,
-                fontFamily: F.outfit, fontWeight: 600, fontSize: "0.82rem",
-                letterSpacing: "0.06em", textTransform: "uppercase",
-                padding: "9px 18px", borderRadius: "2px",
-                transition: "background 0.2s, color 0.2s",
+              <Link href={line.href} style={{
+                display: "inline-flex", alignItems: "center", gap: "6px", marginTop: "1.5rem",
+                fontFamily: F.outfit, fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.06em",
+                color: C.saffron, textDecoration: "none",
+                borderBottom: "1px solid rgba(244,162,54,0.4)", paddingBottom: "2px",
               }}>
-                Get Quote <ArrowRight size={13} />
-              </button>
+                {line.cta} <ArrowRight size={12} />
+              </Link>
             </div>
           ))}
         </div>
@@ -968,26 +998,34 @@ function ProductsSection() {
                 }}>
                   {p.desc}
                 </p>
-                <button onClick={scrollToContact} style={{
-                  marginTop: "0.75rem",
-                  display: "inline-flex", alignItems: "center", gap: "5px",
-                  background: "none", border: "none", cursor: "pointer",
-                  color: C.charcoal, fontFamily: F.outfit,
-                  fontWeight: 600, fontSize: "0.76rem",
-                  letterSpacing: "0.05em", padding: 0,
-                  textDecoration: "underline",
-                  textDecorationColor: C.saffron,
-                  textUnderlineOffset: "3px",
-                }}>
-                  Enquire <ChevronRight size={12} />
-                </button>
+                <div style={{ marginTop: "0.75rem", display: "flex", gap: "0.75rem", alignItems: "center" }}>
+                  <Link href={`/products/${p.slug}`} style={{
+                    display: "inline-flex", alignItems: "center", gap: "5px",
+                    color: C.charcoal, fontFamily: F.outfit,
+                    fontWeight: 600, fontSize: "0.76rem",
+                    letterSpacing: "0.05em",
+                    textDecoration: "underline",
+                    textDecorationColor: C.saffron,
+                    textUnderlineOffset: "3px",
+                  }}>
+                    View Details <ChevronRight size={12} />
+                  </Link>
+                </div>
               </div>
             </div>
           ))}
         </div>
 
         {/* Bottom CTA */}
-        <div style={{ textAlign: "center", marginTop: "3.5rem" }}>
+        <div style={{ textAlign: "center", marginTop: "3.5rem", display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap", alignItems: "center" }}>
+          <Link href="/products" style={{
+            display: "inline-flex", alignItems: "center", gap: "8px",
+            fontFamily: F.outfit, fontSize: "0.88rem", fontWeight: 600,
+            letterSpacing: "0.05em", color: C.charcoal, textDecoration: "none",
+            padding: "12px 24px", border: `1.5px solid ${C.borderMid}`, borderRadius: "2px",
+          }}>
+            View Full Catalogue <ArrowRight size={14} />
+          </Link>
           <button className="btn-saffron" onClick={scrollToContact}>
             Request a Custom Quote <ArrowRight size={16} />
           </button>
@@ -995,6 +1033,53 @@ function ProductsSection() {
 
       </div>
     </section>
+  );
+}
+
+/* ─── Infrastructure Callout ─────────────────────────────────────────────────── */
+function InfraCallout() {
+  const metrics = [
+    { value: "200 T/Day", label: "Processing Capacity" },
+    { value: "±0.3 mm", label: "Sheet Tolerance" },
+    { value: "2500 mm", label: "Max Reel Width" },
+    { value: "15400 mm", label: "Max Sheet Length" },
+    { value: "6 Machines", label: "In-House Equipment" },
+    { value: "48 Hr", label: "Typical Turnaround" },
+  ];
+
+  return (
+    <div style={{ background: C.charcoal, padding: "56px clamp(1.5rem, 5vw, 4rem)" }}>
+      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem", flexWrap: "wrap", marginBottom: "2.5rem" }}>
+          <div>
+            <span style={{ fontFamily: F.outfit, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>Converting Facility · Pune</span>
+            <h2 style={{ fontFamily: F.outfit, fontWeight: 700, fontSize: "clamp(1.4rem, 2.5vw, 2rem)", color: C.cream, marginTop: "0.4rem", letterSpacing: "-0.01em" }}>
+              Cut-to-size. Wound to spec. Shipped on time.
+            </h2>
+          </div>
+          <Link href="/infrastructure" style={{
+            display: "inline-flex", alignItems: "center", gap: "8px",
+            fontFamily: F.outfit, fontSize: "0.85rem", fontWeight: 600,
+            color: C.saffron, textDecoration: "none", letterSpacing: "0.04em",
+            border: `1px solid rgba(244,162,54,0.4)`,
+            padding: "10px 20px", borderRadius: "2px",
+            whiteSpace: "nowrap",
+          }}>
+            View Full Facility <ArrowRight size={14} />
+          </Link>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "1px", background: "rgba(255,253,248,0.08)" }}>
+          {metrics.map((m) => (
+            <div key={m.label} style={{
+              background: C.charcoal, padding: "1.25rem 1rem", textAlign: "center",
+            }}>
+              <div style={{ fontFamily: F.outfit, fontWeight: 700, fontSize: "1.4rem", color: C.saffron, lineHeight: 1.1 }}>{m.value}</div>
+              <div style={{ fontFamily: F.outfit, fontSize: "0.68rem", color: "rgba(255,253,248,0.5)", letterSpacing: "0.06em", textTransform: "uppercase", marginTop: "4px" }}>{m.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -1111,6 +1196,84 @@ function IndustriesSection() {
   );
 }
 
+/* ─── Blog Teaser ────────────────────────────────────────────────────────────── */
+function BlogTeaser() {
+  const posts = [
+    {
+      slug: "gsm-guide-paper-board",
+      category: "Industry Guide",
+      title: "Understanding GSM in Paper & Board — A Complete Buyer's Guide",
+      excerpt: "GSM is the most fundamental specification in paper buying. Get it wrong and you're either over-spending or watching your cartons fail.",
+      read: "6 min read",
+    },
+    {
+      slug: "fbb-vs-duplex-board",
+      category: "Product Guide",
+      title: "FBB vs Duplex Board: Which is Right for Your Packaging?",
+      excerpt: "Knowing when to use FBB vs Duplex could save 15–25% on board cost without compromising performance.",
+      read: "5 min read",
+    },
+    {
+      slug: "export-packaging-compliance-india",
+      category: "Compliance",
+      title: "Export Packaging Compliance for Indian Manufacturers in 2026",
+      excerpt: "BIS, EU, US FDA and FSC — what Indian exporters need to know before their next shipment.",
+      read: "8 min read",
+    },
+  ];
+
+  return (
+    <section style={{ background: C.dark, padding: "80px clamp(1.5rem, 5vw, 4rem)" }}>
+      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+        <div className="sr" style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "3rem", flexWrap: "wrap", gap: "1rem" }}>
+          <div>
+            <span style={{ fontFamily: F.outfit, fontSize: "0.72rem", letterSpacing: "0.16em", textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>Knowledge Hub</span>
+            <h2 style={{ fontFamily: F.outfit, fontWeight: 700, fontSize: "clamp(1.6rem, 3vw, 2.4rem)", color: C.cream, letterSpacing: "-0.02em", lineHeight: 1.1, marginTop: "0.5rem" }}>
+              Packaging Intelligence,<br />
+              <span style={{ color: C.saffron }}>Free to Use.</span>
+            </h2>
+          </div>
+          <Link href="/blog" style={{
+            display: "inline-flex", alignItems: "center", gap: "6px",
+            fontFamily: F.outfit, fontSize: "0.82rem", fontWeight: 600,
+            color: C.cream, textDecoration: "none", letterSpacing: "0.05em",
+            borderBottom: "1px solid rgba(255,253,248,0.25)", paddingBottom: "3px",
+            whiteSpace: "nowrap",
+          }}>
+            All Articles <ArrowRight size={13} />
+          </Link>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+          {posts.map((post, i) => (
+            <Link key={post.slug} href={`/blog/${post.slug}`} className="sr" data-delay={`${0.1 * i}`} style={{
+              display: "block", textDecoration: "none",
+              background: "rgba(255,253,248,0.04)",
+              border: "1px solid rgba(255,253,248,0.08)",
+              borderRadius: "2px",
+              padding: "1.75rem",
+              transition: "border-color 0.25s, background 0.25s",
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(244,162,54,0.45)"; (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,253,248,0.07)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,253,248,0.08)"; (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,253,248,0.04)"; }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                <span style={{ fontFamily: F.outfit, fontSize: "0.66rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: C.saffron }}>{post.category}</span>
+                <span style={{ fontFamily: F.outfit, fontSize: "0.66rem", color: "rgba(255,253,248,0.4)", letterSpacing: "0.04em" }}>{post.read}</span>
+              </div>
+              <h3 style={{ fontFamily: F.outfit, fontWeight: 600, fontSize: "0.98rem", color: C.cream, lineHeight: 1.35, marginBottom: "0.75rem" }}>{post.title}</h3>
+              <p style={{ fontFamily: F.baskerville, fontSize: "0.82rem", color: "rgba(255,253,248,0.6)", lineHeight: 1.65, marginBottom: "1.25rem" }}>{post.excerpt}</p>
+              <span style={{ fontFamily: F.outfit, fontSize: "0.76rem", fontWeight: 600, color: C.saffron, letterSpacing: "0.05em", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                Read Article <ChevronRight size={12} />
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ─── About Section ─────────────────────────────────────────────────────────── */
 function AboutSection() {
   const values = [
@@ -1200,6 +1363,16 @@ function AboutSection() {
               &ldquo;The right paper grade, cut to size, delivered on time — that is the
               foundation everything else is built on.&rdquo; — Umesh Sahu, Managing Director
             </p>
+            <div style={{ marginTop: "2.5rem" }}>
+              <Link href="/infrastructure" style={{
+                display: "inline-flex", alignItems: "center", gap: "8px",
+                fontFamily: F.outfit, fontSize: "0.85rem", fontWeight: 600,
+                color: C.charcoal, textDecoration: "none", letterSpacing: "0.04em",
+                padding: "11px 20px", border: `1.5px solid ${C.borderMid}`, borderRadius: "2px",
+              }}>
+                Our Converting Facility <ArrowRight size={14} />
+              </Link>
+            </div>
           </div>
 
           {/* Right column — dark card */}
@@ -1837,7 +2010,9 @@ export default function HomePage() {
         <Hero />
         <MarqueeTicker />
         <ProductsSection />
+        <InfraCallout />
         <IndustriesSection />
+        <BlogTeaser />
         <AboutSection />
         <ContactSection />
       </main>
