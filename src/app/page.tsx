@@ -2,9 +2,9 @@
 
 import { useState, useEffect, FormEvent } from "react";
 import {
-  Phone, Mail, MapPin, Factory, Package,
+  Phone, Mail, MapPin, Factory, Package, Layers,
   ChevronRight, Menu, X, ArrowRight, CheckCircle,
-  Loader2, Car, Pill, ShoppingCart, Zap, Wrench,
+  Loader2, Car, Pill, ShoppingCart, Wrench,
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
@@ -445,7 +445,7 @@ function Hero() {
   const stats = [
     { label: "Est.", value: "1995" },
     { label: "Clients", value: "500+" },
-    { label: "Product Lines", value: "3" },
+    { label: "Paper Grades", value: "40+" },
     { label: "Reach", value: "Pan India" },
   ];
 
@@ -464,7 +464,7 @@ function Hero() {
           <div style={{ flex: "1 1 55%", display: "flex", flexDirection: "column", justifyContent: "center" }}>
 
             <span className="sr eyebrow" data-delay="0.1" style={{ marginBottom: "1.5rem", fontSize: "1.15rem" }}>
-              Paper & PP Packaging Solutions
+              Paper Trading · Converting · Manufacturing
             </span>
 
             <h1
@@ -480,9 +480,9 @@ function Hero() {
                 marginBottom: "1.75rem",
               }}
             >
-              Your Trusted<br />
-              <span style={{ color: C.saffron }}>Packaging</span>{" "}
-              Partner
+              Pune&apos;s Paper<br />
+              <span style={{ color: C.saffron }}>& Packaging</span>{" "}
+              House
             </h1>
 
             <p
@@ -497,11 +497,11 @@ function Hero() {
                 marginBottom: "2.5rem",
               }}
             >
-              Pune Global Group has been crafting high-quality corrugated and PP
-              packaging solutions since 1995. From 3-ply corrugated boxes to
-              polypropylene sheets and FBB cartons, we serve India&apos;s most demanding
-              industries with precision and reliability.
-
+              Since 1995, Pune Global Group has been a trusted source for ITC, TNPL
+              and imported paper &amp; board grades — with in-house sheeting, rewinding
+              and slitting capabilities. We supply printers, corrugators and box
+              makers across India, and manufacture corrugated and PP packaging
+              for industrial end-users.
             </p>
 
             <div className="sr" data-delay="0.5" style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
@@ -619,8 +619,8 @@ function Hero() {
               borderTop: "1px solid rgba(255,253,248,0.1)",
               paddingTop: "1.5rem",
             }}>
-              &ldquo;Serving India&apos;s automotive, pharmaceutical, e-commerce,
-              FMCG and engineering sectors with packaging built to last.&rdquo;
+              &ldquo;Supplying printers, corrugators and box makers with the right
+              paper grade — cut to size, on time, every time.&rdquo;
             </p>
 
             {/* Decorative bottom corner */}
@@ -642,14 +642,16 @@ function Hero() {
 /* ─── Marquee Ticker ────────────────────────────────────────────────────────── */
 function MarqueeTicker() {
   const items = [
+    "ITC PAPER & BOARDS",
+    "TNPL GRADES",
+    "IMPORTED KRAFT LINER",
+    "FBB · DUPLEX BOARDS",
+    "TEST LINERS",
+    "SHEETING · REWINDING · SLITTING",
     "CORRUGATED BOXES",
-    "PP BOXES & SHEETS",
-    "FBB & DUPLEX CARTONS",
-    "AUTOMOTIVE",
-    "PHARMACEUTICAL",
-    "E-COMMERCE",
-    "FMCG",
-    "ENGINEERING",
+    "PP PACKAGING",
+    "FLUTING MEDIUM",
+    "COATED BOARDS",
   ];
   const repeated = [...items, ...items];
 
@@ -685,54 +687,93 @@ function MarqueeTicker() {
   );
 }
 
-/* ─── Products Section — DS Smith layout, JPPack+Brothers content ────────────── */
+/* ─── Products Section ───────────────────────────────────────────────────────── */
 function ProductsSection() {
   const scrollToContact = () =>
     document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
 
-  /* Three main product LINE cards — DS Smith hero-card style, dark bg */
+  /* 4 business pillars — DS Smith hero-card style */
   const lines = [
     {
-      eyebrow: "Corrugated Packaging",
-      heading: "3-Ply · 5-Ply · 7-Ply",
-      desc: "Heavy-duty corrugated boxes engineered for industrial, export and e-commerce requirements. Manufactured with premium kraft and test liner paper for maximum strength-to-weight ratio.",
-      tags: ["Standard Boxes", "Die-Cut Boxes", "Export Grade", "Laminated", "Custom Sizes"],
+      eyebrow: "Paper & Board Trading",
+      heading: "ITC · TNPL · Imported",
+      desc: "Authorised distributor of ITC PSPD, TNPL and leading imported grades — FBB, duplex, kraft liner, test liner, fluting medium and specialty boards. Ready stocks across GSM ranges.",
+      tags: ["ITC Cyber Oak", "ITC Cyber XLPac", "TNPL Grades", "Kraft Liner", "Duplex Board", "Test Liner"],
       bg: `linear-gradient(140deg, ${C.charcoal} 0%, #4a403a 100%)`,
+    },
+    {
+      eyebrow: "Converting Services",
+      heading: "Sheeting · Rewinding · Slitting",
+      desc: "In-house converting facility in Pune — we convert jumbo rolls into sheets, rewind to required lengths and slit to width. Fast turnaround with MOQ flexibility for printers and corrugators.",
+      tags: ["Sheet Cutting", "Roll Rewinding", "Slitting", "Custom Sizes", "Low MOQ", "Quick Turnaround"],
+      bg: `linear-gradient(140deg, #252e26 0%, #1a2118 100%)`,
+    },
+    {
+      eyebrow: "Corrugated Manufacturing",
+      heading: "3-Ply · 5-Ply · 7-Ply",
+      desc: "Heavy-duty corrugated boxes manufactured in-house using premium kraft and test liner paper. Die-cut, laminated and export-grade boxes for industrial and e-commerce requirements.",
+      tags: ["Standard Boxes", "Die-Cut Boxes", "Export Grade", "Laminated", "Custom Sizes"],
+      bg: `linear-gradient(140deg, #3a2e1e 0%, #4e3d28 100%)`,
     },
     {
       eyebrow: "PP Packaging Solutions",
       heading: "Boxes · Sheets · Crates",
       desc: "Polypropylene corrugated packaging for returnable and reusable logistics — lightweight, chemical-resistant and built to last thousands of trips without performance loss.",
       tags: ["Foldable PP Boxes", "PP Sheets", "PP Crates", "Layer Pads", "ESD Bins"],
-      bg: `linear-gradient(140deg, #2a352c 0%, #1e2820 100%)`,
-    },
-    {
-      eyebrow: "Paper Board Cartons",
-      heading: "FBB · Duplex · Retail",
-      desc: "Premium fine bleached board and duplex cartons for retail shelf presentation, pharmaceutical compliance and FMCG brand packaging with high-resolution print surfaces.",
-      tags: ["FBB Cartons", "Duplex Board", "Retail Cartons", "Pharma Cartons", "Custom Print"],
-      bg: `linear-gradient(140deg, #3a2e1e 0%, #4e3d28 100%)`,
+      bg: `linear-gradient(140deg, #1e2a2e 0%, #152028 100%)`,
     },
   ];
 
-  /* 8 specific products — real photos from industry reference */
+  /* 10 product cards — paper grades + manufacturing */
   const products = [
+    {
+      name: "ITC FBB Boards",
+      spec: "Cyber Oak · Cyber XLPac",
+      desc: "ITC PSPD folding box boards — high stiffness, superior caliper consistency, FSC certified. 230–400 GSM range.",
+      img: null,
+      bg: `linear-gradient(145deg, #e8d8b8 0%, #ddc99a 100%)`,
+      icon: <Package size={28} color={C.charcoal} />,
+    },
+    {
+      name: "Duplex Board",
+      spec: "Grey Back · White Back",
+      desc: "Coated duplex boards 200–450 GSM for pharmaceutical cartons, garment packaging and industrial use.",
+      img: null,
+      bg: `linear-gradient(145deg, #e4e0d8 0%, #d8d4cc 100%)`,
+      icon: <Package size={28} color={C.charcoal} />,
+    },
+    {
+      name: "Kraft Liner",
+      spec: "100–440 GSM · Imported",
+      desc: "100% fresh fibre kraft liner for heavy-duty corrugated boxes, e-commerce and industrial packaging.",
+      img: null,
+      bg: `linear-gradient(145deg, #e0d0b8 0%, #d4c4a8 100%)`,
+      icon: <Package size={28} color={C.charcoal} />,
+    },
+    {
+      name: "Test Liners & Fluting",
+      spec: "Recycled · 80–400 GSM",
+      desc: "Cost-effective test liners and semi-chemical fluting medium for corrugators and box manufacturers.",
+      img: null,
+      bg: `linear-gradient(145deg, #ddd8cc 0%, #d0cbc0 100%)`,
+      icon: <Package size={28} color={C.charcoal} />,
+    },
     {
       name: "Corrugated Boxes",
       spec: "3-Ply / 5-Ply / 7-Ply",
-      desc: "Standard and die-cut boxes for industrial shipping, export consignments and e-commerce last-mile delivery.",
+      desc: "Standard and die-cut corrugated boxes for industrial shipping, export consignments and e-commerce.",
       img: "https://jppack.in/products/ppcorrugatedboxes_24_07_25_07_46_48_121904.png",
     },
     {
       name: "PP Foldable Boxes",
       spec: "Returnable • Lightweight",
-      desc: "Foldable polypropylene boxes with optional partitions for component trays and automotive returnable packaging.",
+      desc: "Foldable polypropylene boxes with optional partitions for automotive component trays and returnable logistics.",
       img: "https://www.brotherspackaging.in/assets/images/products/ppbox/9.webp",
     },
     {
       name: "PP Corrugated Sheets",
       spec: "Sunpak · Hollow · Flute Board",
-      desc: "Versatile PP hollow sheets used as layer pads, partition dividers and protective wrapping in transit.",
+      desc: "Versatile PP hollow sheets for layer pads, partition dividers and protective wrapping in transit.",
       img: "https://jppack.in/products/ppcorrugatedsheetssunpaksheetshollowsheetsfluteboardsheets_24_07_25_09_23_01_102592.png",
     },
     {
@@ -742,30 +783,16 @@ function ProductsSection() {
       img: "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
     },
     {
-      name: "FBB & Duplex Cartons",
-      spec: "High-Print • Retail Grade",
-      desc: "Premium board cartons for FMCG shelf display, pharma secondary packaging and branded retail presentation.",
-      img: null,
-      bg: `linear-gradient(145deg, #f0e8dc 0%, #e8ddd0 100%)`,
-      icon: <Package size={28} color={C.charcoal} />,
-    },
-    {
-      name: "ESD Packaging",
-      spec: "Anti-Static • PCB Safe",
-      desc: "Electrostatic-discharge-safe bins, boxes and trays for electronics manufacturing and PCB component handling.",
-      img: "https://jppack.in/products/ppcorrugatedesdbin_24_07_25_09_29_20_111119.png",
-    },
-    {
       name: "PP Layer Pads",
       spec: "Interleave • Pallet Slip",
       desc: "Corrugated PP layer pads and slip sheets for pallet stacking, product separation and surface protection.",
       img: "https://jppack.in/products/ppcorrugatedlayerpad_24_07_25_09_27_58_112075.png",
     },
     {
-      name: "Display Racks",
-      spec: "Retail • POS • In-Store",
-      desc: "Corrugated and PP display racks for point-of-sale product presentation and in-store gondola merchandising.",
-      img: "https://jppack.in/products/ppcorrugatedstoragerank_24_07_25_07_59_34_102808.png",
+      name: "ESD Packaging",
+      spec: "Anti-Static • PCB Safe",
+      desc: "Electrostatic-discharge-safe bins and boxes for electronics manufacturing and PCB component handling.",
+      img: "https://jppack.in/products/ppcorrugatedesdbin_24_07_25_09_29_20_111119.png",
     },
   ];
 
@@ -781,15 +808,16 @@ function ProductsSection() {
             fontSize: "clamp(2rem, 4vw, 3.2rem)",
             color: C.charcoal, letterSpacing: "-0.02em", lineHeight: 1.1, maxWidth: "600px",
           }}>
-            Packaging Built for<br />
-            <span style={{ color: C.saffron }}>Every Industry.</span>
+            Trade. Convert.<br />
+            <span style={{ color: C.saffron }}>Manufacture.</span>
           </h2>
           <p style={{
             fontFamily: F.baskerville, fontSize: "1rem",
             color: C.taupe, lineHeight: 1.75, maxWidth: "560px", marginTop: "1rem",
           }}>
-            From industrial corrugated boxes to returnable PP solutions and premium retail
-            cartons — PGG has served India&apos;s most demanding packaging requirements since 1995.
+            ITC, TNPL and imported paper grades in ready stock. In-house sheeting,
+            rewinding and slitting. Corrugated and PP box manufacturing.
+            One partner for the entire paper &amp; packaging supply chain.
           </p>
         </div>
 
@@ -967,38 +995,53 @@ function ProductsSection() {
   );
 }
 
-/* ─── Industries Section ────────────────────────────────────────────────────── */
+/* ─── Who We Serve Section ──────────────────────────────────────────────────── */
 function IndustriesSection() {
-  const industries = [
+  const tradeCustomers = [
     {
       num: "01",
-      icon: <Car size={26} style={{ color: C.saffron }} />,
-      name: "Automotive",
-      desc: "Component trays, part separators, returnable PP boxes and corrugated packaging for OEMs and Tier-1 suppliers.",
+      icon: <Factory size={26} style={{ color: C.saffron }} />,
+      name: "Corrugators",
+      desc: "Kraft liner, test liner and fluting medium in ready stock. Sheeted or in rolls. Reliable supply for high-volume corrugated board production.",
     },
     {
       num: "02",
-      icon: <Pill size={26} style={{ color: C.saffron }} />,
-      name: "Pharmaceutical",
-      desc: "Clean-room compatible PP trays, FBB cartons and sterile-grade corrugated boxes meeting pharma packaging standards.",
+      icon: <Package size={26} style={{ color: C.saffron }} />,
+      name: "Box Makers",
+      desc: "Pre-cut corrugated sheets and boards delivered to size. Reduce waste and lead times for small and mid-size box manufacturers.",
     },
     {
       num: "03",
-      icon: <ShoppingCart size={26} style={{ color: C.saffron }} />,
-      name: "E-Commerce",
-      desc: "Transit-ready corrugated boxes, custom-sized mailers and protective inserts for last-mile delivery reliability.",
+      icon: <Layers size={26} style={{ color: C.saffron }} />,
+      name: "Printers & Converters",
+      desc: "FBB, duplex, coated and specialty boards sheeted to press-ready sizes. ITC and TNPL grades with consistent caliper and whiteness.",
     },
+  ];
+
+  const endIndustries = [
     {
       num: "04",
-      icon: <Zap size={26} style={{ color: C.saffron }} />,
-      name: "FMCG",
-      desc: "High-speed line-compatible cartons, duplex retail boxes and SRP (shelf-ready packaging) for consumer goods brands.",
+      icon: <Car size={26} style={{ color: C.saffron }} />,
+      name: "Automotive",
+      desc: "Returnable PP boxes, component trays and corrugated packaging for OEMs and Tier-1 suppliers across Pune and MIDC belt.",
     },
     {
       num: "05",
+      icon: <Pill size={26} style={{ color: C.saffron }} />,
+      name: "Pharmaceutical",
+      desc: "FBB cartons, duplex board and PP trays meeting pharma packaging compliance requirements.",
+    },
+    {
+      num: "06",
+      icon: <ShoppingCart size={26} style={{ color: C.saffron }} />,
+      name: "E-Commerce & FMCG",
+      desc: "Transit-ready corrugated boxes, retail cartons and shelf-ready packaging for consumer brands and last-mile delivery.",
+    },
+    {
+      num: "07",
       icon: <Wrench size={26} style={{ color: C.saffron }} />,
       name: "Engineering",
-      desc: "Heavy-duty 7-ply corrugated crates, custom foam-fitted boxes and export-standard packaging for precision machinery.",
+      desc: "Heavy-duty 7-ply corrugated crates and export-standard packaging for precision machinery and industrial goods.",
     },
   ];
 
@@ -1010,7 +1053,7 @@ function IndustriesSection() {
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
         <div className="sr" style={{ marginBottom: "3.5rem" }}>
-          <span className="eyebrow">Industries We Serve</span>
+          <span className="eyebrow">Who We Serve</span>
           <h2 style={{
             fontFamily: F.outfit,
             fontWeight: 700,
@@ -1019,59 +1062,44 @@ function IndustriesSection() {
             letterSpacing: "-0.02em",
             lineHeight: 1.1,
           }}>
-            Trusted Across<br />
-            <span style={{ color: C.saffron }}>Five Sectors</span>
+            The Full Paper<br />
+            <span style={{ color: C.saffron }}>Supply Chain.</span>
           </h2>
+          <p style={{ fontFamily: F.baskerville, fontSize: "1rem", color: C.taupe, lineHeight: 1.75, maxWidth: "520px", marginTop: "1rem" }}>
+            From paper traders and corrugators to automotive OEMs and pharma brands — we supply the right grade, converted to the right size, on time.
+          </p>
         </div>
 
-        <div className="industries-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "1.25rem" }}>
-          {industries.map((ind, i) => (
+        {/* Trade customers — primary */}
+        <div style={{ marginBottom: "0.75rem" }}>
+          <span style={{ fontFamily: F.outfit, fontWeight: 600, fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: C.saffron }}>
+            Paper Trade Customers
+          </span>
+        </div>
+        <div className="industries-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem", marginBottom: "3rem" }}>
+          {tradeCustomers.map((ind, i) => (
             <div key={ind.name} className="industry-tile sr" data-delay={`${0.1 * i}`}>
-              {/* Number label */}
-              <div style={{
-                fontFamily: F.outfit,
-                fontWeight: 700,
-                fontSize: "2.2rem",
-                color: C.saffron,
-                lineHeight: 1,
-                marginBottom: "1.25rem",
-                opacity: 0.4,
-              }}>
-                {ind.num}
-              </div>
+              <div style={{ fontFamily: F.outfit, fontWeight: 700, fontSize: "2rem", color: C.saffron, lineHeight: 1, marginBottom: "1rem", opacity: 0.35 }}>{ind.num}</div>
+              <div style={{ width: "44px", height: "44px", background: C.saffronDim, borderRadius: "2px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>{ind.icon}</div>
+              <h3 style={{ fontFamily: F.outfit, fontWeight: 600, fontSize: "1.05rem", color: C.charcoal, marginBottom: "0.6rem" }}>{ind.name}</h3>
+              <p style={{ fontFamily: F.baskerville, fontSize: "0.85rem", lineHeight: 1.7, color: C.taupe }}>{ind.desc}</p>
+            </div>
+          ))}
+        </div>
 
-              {/* Icon */}
-              <div style={{
-                width: "46px", height: "46px",
-                background: C.saffronDim,
-                borderRadius: "2px",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                marginBottom: "1rem",
-              }}>
-                {ind.icon}
-              </div>
-
-              {/* Name */}
-              <h3 style={{
-                fontFamily: F.outfit,
-                fontWeight: 600,
-                fontSize: "1.05rem",
-                color: C.charcoal,
-                marginBottom: "0.6rem",
-                letterSpacing: "-0.01em",
-              }}>
-                {ind.name}
-              </h3>
-
-              {/* Description */}
-              <p style={{
-                fontFamily: F.baskerville,
-                fontSize: "0.85rem",
-                lineHeight: 1.7,
-                color: C.taupe,
-              }}>
-                {ind.desc}
-              </p>
+        {/* End-use industries */}
+        <div style={{ marginBottom: "0.75rem" }}>
+          <span style={{ fontFamily: F.outfit, fontWeight: 600, fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: C.taupe }}>
+            End-Use Industries
+          </span>
+        </div>
+        <div className="industries-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.25rem" }}>
+          {endIndustries.map((ind, i) => (
+            <div key={ind.name} className="industry-tile sr" data-delay={`${0.15 * i}`}>
+              <div style={{ fontFamily: F.outfit, fontWeight: 700, fontSize: "2rem", color: C.saffron, lineHeight: 1, marginBottom: "1rem", opacity: 0.35 }}>{ind.num}</div>
+              <div style={{ width: "44px", height: "44px", background: C.saffronDim, borderRadius: "2px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>{ind.icon}</div>
+              <h3 style={{ fontFamily: F.outfit, fontWeight: 600, fontSize: "1.05rem", color: C.charcoal, marginBottom: "0.6rem" }}>{ind.name}</h3>
+              <p style={{ fontFamily: F.baskerville, fontSize: "0.85rem", lineHeight: 1.7, color: C.taupe }}>{ind.desc}</p>
             </div>
           ))}
         </div>
@@ -1137,10 +1165,11 @@ function AboutSection() {
               marginBottom: "1.25rem",
             }}>
               Founded in 1995 by Managing Director <strong style={{ color: C.charcoal, fontWeight: 700 }}>Umesh Sahu</strong>, Pune Global
-              Group began as a focused corrugated box manufacturer in Pune, Maharashtra.
-              Over three decades, the company evolved into a comprehensive packaging
-              solutions provider, adding PP corrugated products and premium board cartons
-              to serve a rapidly expanding industrial base.
+              Group began as a paper and board trader in Pune, Maharashtra — supplying
+              corrugators, printers and box makers with ITC, TNPL and imported grades.
+              Over three decades, we built in-house converting capabilities: sheeting,
+              rewinding and slitting to serve customers with cut-to-size stock and
+              fast turnaround.
             </p>
 
             <p style={{
@@ -1150,10 +1179,11 @@ function AboutSection() {
               color: C.taupe,
               marginBottom: "1.75rem",
             }}>
-              Operating from our manufacturing facility at BU Bhandari MIDC, Sanaswadi,
-              and our commercial office in Gulmohar Center Point, Pune — we serve over
-              500 clients across automotive, pharmaceutical, FMCG, e-commerce and
-              engineering sectors throughout India.
+              Today we operate from our converting and manufacturing facility at BU Bhandari
+              MIDC, Sanaswadi, and our commercial office in Gulmohar Center Point, Pune.
+              We supply corrugators, printers and box makers with ready-stock paper grades,
+              and manufacture corrugated and PP boxes for 500+ industrial clients across
+              India.
             </p>
 
             <p style={{
@@ -1165,8 +1195,8 @@ function AboutSection() {
               paddingLeft: "1.25rem",
               borderLeft: `3px solid ${C.saffron}`,
             }}>
-              &ldquo;Our commitment is simple — deliver packaging that protects what our
-              customers have built, every single time.&rdquo; — Umesh Sahu, Managing Director
+              &ldquo;The right paper grade, cut to size, delivered on time — that is the
+              foundation everything else is built on.&rdquo; — Umesh Sahu, Managing Director
             </p>
           </div>
 
@@ -1202,7 +1232,7 @@ function AboutSection() {
                 {[
                   { stat: "1995", label: "Year Established" },
                   { stat: "500+", label: "Active Clients" },
-                  { stat: "3", label: "Product Lines" },
+                  { stat: "40+", label: "Paper Grades" },
                   { stat: "2", label: "Locations — Pune" },
                 ].map((item) => (
                   <div key={item.label} style={{
