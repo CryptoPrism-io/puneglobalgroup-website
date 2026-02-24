@@ -105,18 +105,13 @@ const GLOBAL_CSS = `
 
   /* Product card hover */
   .product-card {
-    background: ${C.cream};
-    border: 1px solid ${C.border};
-    border-left: 5px solid ${C.saffron};
-    padding: 2.5rem 2rem;
     border-radius: 2px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-left-color 0.3s;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
     cursor: default;
   }
   .product-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(58,53,48,0.1);
-    border-left-color: ${C.saffron};
+    box-shadow: 0 14px 36px rgba(58,53,48,0.1);
   }
 
   /* Industry tile hover */
@@ -252,12 +247,14 @@ const GLOBAL_CSS = `
     .mobile-menu-btn { display: flex !important; }
     .hero-headline { font-size: clamp(2.4rem, 10vw, 4.5rem) !important; }
     .products-grid { grid-template-columns: 1fr !important; }
+    .products-detail-grid { grid-template-columns: 1fr 1fr !important; }
     .industries-grid { grid-template-columns: 1fr 1fr !important; }
     .stats-row { flex-direction: column !important; gap: 1.5rem !important; }
     .stat-divider { display: none !important; }
   }
   @media (max-width: 480px) {
     .industries-grid { grid-template-columns: 1fr !important; }
+    .products-detail-grid { grid-template-columns: 1fr !important; }
   }
 `;
 
@@ -688,131 +685,278 @@ function MarqueeTicker() {
   );
 }
 
-/* ─── Products Section ──────────────────────────────────────────────────────── */
+/* ─── Products Section — DS Smith layout, JPPack+Brothers content ────────────── */
 function ProductsSection() {
+  const scrollToContact = () =>
+    document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+
+  /* Three main product LINE cards — DS Smith hero-card style, dark bg */
+  const lines = [
+    {
+      eyebrow: "Corrugated Packaging",
+      heading: "3-Ply · 5-Ply · 7-Ply",
+      desc: "Heavy-duty corrugated boxes engineered for industrial, export and e-commerce requirements. Manufactured with premium kraft and test liner paper for maximum strength-to-weight ratio.",
+      tags: ["Standard Boxes", "Die-Cut Boxes", "Export Grade", "Laminated", "Custom Sizes"],
+      bg: `linear-gradient(140deg, ${C.charcoal} 0%, #4a403a 100%)`,
+    },
+    {
+      eyebrow: "PP Packaging Solutions",
+      heading: "Boxes · Sheets · Crates",
+      desc: "Polypropylene corrugated packaging for returnable and reusable logistics — lightweight, chemical-resistant and built to last thousands of trips without performance loss.",
+      tags: ["Foldable PP Boxes", "PP Sheets", "PP Crates", "Layer Pads", "ESD Bins"],
+      bg: `linear-gradient(140deg, #2a352c 0%, #1e2820 100%)`,
+    },
+    {
+      eyebrow: "Paper Board Cartons",
+      heading: "FBB · Duplex · Retail",
+      desc: "Premium fine bleached board and duplex cartons for retail shelf presentation, pharmaceutical compliance and FMCG brand packaging with high-resolution print surfaces.",
+      tags: ["FBB Cartons", "Duplex Board", "Retail Cartons", "Pharma Cartons", "Custom Print"],
+      bg: `linear-gradient(140deg, #3a2e1e 0%, #4e3d28 100%)`,
+    },
+  ];
+
+  /* 8 specific products — DS Smith product-card grid style */
   const products = [
     {
-      icon: <Box size={28} style={{ color: C.saffron }} />,
       name: "Corrugated Boxes",
-      description:
-        "Heavy-duty corrugated packaging engineered for industrial and export-grade requirements. Manufactured using premium kraft and test liner paper with precise fluting for maximum strength-to-weight ratio.",
-      variants: ["3-Ply", "5-Ply", "7-Ply", "Die-Cut", "Custom Sizes", "Export Grade"],
-      detail: "Ideal for industrial goods, engineering components and export consignments requiring robust protection in transit.",
+      spec: "3-Ply / 5-Ply / 7-Ply",
+      desc: "Standard and die-cut boxes for industrial shipping, export consignments and e-commerce last-mile delivery.",
+      icon: <Box size={28} color={C.charcoal} />,
+      bg: `linear-gradient(145deg, #f7eddc 0%, #eee0c8 100%)`,
     },
     {
-      icon: <Layers size={28} style={{ color: C.saffron }} />,
-      name: "PP Boxes & Sheets",
-      description:
-        "Polypropylene corrugated packaging built for reusability, chemical resistance and lightweight handling. Available as boxes, sheets, trays and partition systems for returnable logistics.",
-      variants: ["PP Corrugated Boxes", "PP Sheets", "Trays", "Partitions", "Returnable Packs"],
-      detail: "Perfect for automotive component trays, pharmaceutical handling and sustainable reusable logistics.",
+      name: "PP Foldable Boxes",
+      spec: "Returnable • Lightweight",
+      desc: "Foldable polypropylene boxes with optional partitions for component trays and automotive returnable packaging.",
+      icon: <Package size={28} color={C.charcoal} />,
+      bg: `linear-gradient(145deg, #deeadf 0%, #ccdece 100%)`,
     },
     {
-      icon: <Package size={28} style={{ color: C.saffron }} />,
+      name: "PP Corrugated Sheets",
+      spec: "Sunpak · Hollow · Flute Board",
+      desc: "Versatile PP hollow sheets used as layer pads, partition dividers and protective wrapping in transit.",
+      icon: <Layers size={28} color={C.charcoal} />,
+      bg: `linear-gradient(145deg, #ece8e0 0%, #e0dbd0 100%)`,
+    },
+    {
+      name: "PP Corrugated Crates",
+      spec: "Heavy Duty • Stackable",
+      desc: "Durable returnable crates for automotive components, engineering parts and industrial material handling.",
+      icon: <Factory size={28} color={C.charcoal} />,
+      bg: `linear-gradient(145deg, #dfe0ea 0%, #d0d2e0 100%)`,
+    },
+    {
       name: "FBB & Duplex Cartons",
-      description:
-        "Premium fine bleached board and duplex board cartons for retail shelf presentation and pharmaceutical packaging. High printability surfaces for brand-forward packaging solutions.",
-      variants: ["FBB Cartons", "Duplex Board", "Retail Boxes", "Pharma Cartons", "Custom Print"],
-      detail: "Trusted by FMCG and pharmaceutical brands for impeccable print quality and structural integrity on retail shelves.",
+      spec: "High-Print • Retail Grade",
+      desc: "Premium board cartons for FMCG shelf display, pharma secondary packaging and branded retail presentation.",
+      icon: <Package size={28} color={C.charcoal} />,
+      bg: `linear-gradient(145deg, #f0e8dc 0%, #e8ddd0 100%)`,
+    },
+    {
+      name: "ESD Packaging",
+      spec: "Anti-Static • PCB Safe",
+      desc: "Electrostatic-discharge-safe bins, boxes and trays for electronics manufacturing and PCB component handling.",
+      icon: <Zap size={28} color={C.charcoal} />,
+      bg: `linear-gradient(145deg, #e0e8ee 0%, #d0dce4 100%)`,
+    },
+    {
+      name: "PP Layer Pads",
+      spec: "Interleave • Pallet Slip",
+      desc: "Corrugated PP layer pads and slip sheets for pallet stacking, product separation and surface protection.",
+      icon: <Layers size={28} color={C.charcoal} />,
+      bg: `linear-gradient(145deg, #eeeee0 0%, #e4e4d0 100%)`,
+    },
+    {
+      name: "Display Racks",
+      spec: "Retail • POS • In-Store",
+      desc: "Corrugated and PP display racks for point-of-sale product presentation and in-store gondola merchandising.",
+      icon: <Factory size={28} color={C.charcoal} />,
+      bg: `linear-gradient(145deg, #f0e4dc 0%, #e8d8d0 100%)`,
     },
   ];
 
   return (
-    <section id="products" style={{
-      background: C.cream,
-      padding: "100px clamp(1.5rem, 5vw, 4rem)",
-    }}>
+    <section id="products" style={{ background: C.cream, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
-        <div className="sr" style={{ marginBottom: "3.5rem" }}>
+        {/* Section header */}
+        <div className="sr" style={{ marginBottom: "4rem" }}>
           <span className="eyebrow">What We Manufacture</span>
           <h2 style={{
-            fontFamily: F.outfit,
-            fontWeight: 700,
+            fontFamily: F.outfit, fontWeight: 700,
             fontSize: "clamp(2rem, 4vw, 3.2rem)",
-            color: C.charcoal,
-            letterSpacing: "-0.02em",
-            lineHeight: 1.1,
-            maxWidth: "600px",
+            color: C.charcoal, letterSpacing: "-0.02em", lineHeight: 1.1, maxWidth: "600px",
           }}>
-            Three Product Lines.<br />
-            <span style={{ color: C.saffron }}>Infinite Applications.</span>
+            Packaging Built for<br />
+            <span style={{ color: C.saffron }}>Every Industry.</span>
           </h2>
           <p style={{
-            fontFamily: F.baskerville,
-            fontSize: "1rem",
-            color: C.taupe,
-            lineHeight: 1.75,
-            maxWidth: "560px",
-            marginTop: "1rem",
+            fontFamily: F.baskerville, fontSize: "1rem",
+            color: C.taupe, lineHeight: 1.75, maxWidth: "560px", marginTop: "1rem",
           }}>
-            From industrial corrugated boxes to premium retail cartons — Pune Global
-            Group delivers packaging solutions that meet the exacting standards of
-            India&apos;s most demanding sectors.
+            From industrial corrugated boxes to returnable PP solutions and premium retail
+            cartons — PGG has served India&apos;s most demanding packaging requirements since 1995.
           </p>
         </div>
 
-        <div className="products-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.75rem" }}>
-          {products.map((p, i) => (
-            <div key={p.name} className="product-card sr" data-delay={`${0.15 * i}`}>
-              {/* Icon */}
+        {/* ── DS Smith top: 3 large dark category cards ── */}
+        <div className="products-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem", marginBottom: "4rem" }}>
+          {lines.map((line, i) => (
+            <div key={line.eyebrow} className="sr" data-delay={`${0.1 * i}`} style={{
+              background: line.bg,
+              borderRadius: "2px",
+              padding: "2.5rem",
+              position: "relative",
+              overflow: "hidden",
+              display: "flex", flexDirection: "column",
+            }}>
+              {/* Saffron corner accent */}
               <div style={{
-                width: "52px", height: "52px",
-                background: C.saffronDim,
-                borderRadius: "2px",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                marginBottom: "1.5rem",
-              }}>
-                {p.icon}
-              </div>
+                position: "absolute", top: 0, right: 0,
+                width: "90px", height: "90px",
+                background: C.saffron, opacity: 0.07,
+                clipPath: "polygon(100% 0, 100% 100%, 0 0)",
+              }} />
 
-              {/* Name */}
-              <h3 style={{
-                fontFamily: F.outfit,
-                fontWeight: 600,
-                fontSize: "1.25rem",
-                color: C.charcoal,
+              <span style={{
+                fontFamily: F.outfit, fontWeight: 600,
+                fontSize: "0.68rem", letterSpacing: "0.16em",
+                textTransform: "uppercase", color: C.saffron,
                 marginBottom: "0.75rem",
-                letterSpacing: "-0.01em",
               }}>
-                {p.name}
+                {line.eyebrow}
+              </span>
+
+              <h3 style={{
+                fontFamily: F.outfit, fontWeight: 700,
+                fontSize: "1.45rem", color: C.cream,
+                letterSpacing: "-0.01em", lineHeight: 1.2,
+                marginBottom: "1rem",
+              }}>
+                {line.heading}
               </h3>
 
-              {/* Description */}
               <p style={{
-                fontFamily: F.baskerville,
-                fontSize: "0.92rem",
-                lineHeight: 1.75,
-                color: C.taupe,
-                marginBottom: "1.25rem",
+                fontFamily: F.baskerville, fontSize: "0.88rem",
+                color: "rgba(255,253,248,0.68)", lineHeight: 1.72,
+                marginBottom: "1.25rem", flex: 1,
               }}>
-                {p.description}
+                {line.desc}
               </p>
 
-              {/* Detail note */}
-              <p style={{
-                fontFamily: F.baskerville,
-                fontStyle: "italic",
-                fontSize: "0.85rem",
-                color: C.taupe,
-                opacity: 0.75,
-                lineHeight: 1.65,
-                marginBottom: "1.5rem",
-                paddingLeft: "12px",
-                borderLeft: `2px solid ${C.saffronBorder}`,
-              }}>
-                {p.detail}
-              </p>
-
-              {/* Variant tags */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0" }}>
-                {p.variants.map((v) => (
-                  <span key={v} className="variant-tag">{v}</span>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "1.75rem" }}>
+                {line.tags.map((t) => (
+                  <span key={t} style={{
+                    fontFamily: F.outfit, fontSize: "0.7rem",
+                    padding: "3px 10px",
+                    border: `1px solid rgba(244,162,54,0.3)`,
+                    color: "rgba(255,253,248,0.6)",
+                    borderRadius: "2px",
+                  }}>
+                    {t}
+                  </span>
                 ))}
+              </div>
+
+              <button onClick={scrollToContact} style={{
+                display: "inline-flex", alignItems: "center", gap: "8px",
+                background: "none", border: `1px solid ${C.saffron}`,
+                cursor: "pointer", color: C.saffron,
+                fontFamily: F.outfit, fontWeight: 600, fontSize: "0.82rem",
+                letterSpacing: "0.06em", textTransform: "uppercase",
+                padding: "9px 18px", borderRadius: "2px",
+                transition: "background 0.2s, color 0.2s",
+              }}>
+                Get Quote <ArrowRight size={13} />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* ── DS Smith bottom: full product range grid ── */}
+        <div style={{ marginBottom: "1.75rem", borderBottom: `2px solid ${C.saffron}`, paddingBottom: "0.6rem", display: "inline-block" }}>
+          <span style={{
+            fontFamily: F.outfit, fontWeight: 600,
+            fontSize: "0.75rem", letterSpacing: "0.14em",
+            textTransform: "uppercase", color: C.charcoal,
+          }}>
+            Full Product Range
+          </span>
+        </div>
+
+        <div className="products-detail-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.25rem" }}>
+          {products.map((p, i) => (
+            <div key={p.name} className="sr product-card" data-delay={`${0.07 * i}`} style={{
+              background: "#fff",
+              border: `1px solid ${C.border}`,
+              borderLeft: "none",
+              borderRadius: "2px",
+              overflow: "hidden",
+              display: "flex", flexDirection: "column",
+              padding: 0,
+            }}>
+              {/* DS Smith: coloured image/illustration area */}
+              <div style={{
+                background: p.bg,
+                height: "130px",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                <div style={{
+                  width: "60px", height: "60px",
+                  background: "rgba(255,255,255,0.65)",
+                  borderRadius: "50%",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  {p.icon}
+                </div>
+              </div>
+
+              {/* Content */}
+              <div style={{ padding: "1.1rem 1.2rem 1.3rem", display: "flex", flexDirection: "column", gap: "0.35rem", flex: 1 }}>
+                <span style={{
+                  fontFamily: F.outfit, fontSize: "0.66rem",
+                  letterSpacing: "0.1em", textTransform: "uppercase",
+                  color: C.saffron, fontWeight: 600,
+                }}>
+                  {p.spec}
+                </span>
+                <h4 style={{
+                  fontFamily: F.outfit, fontWeight: 600,
+                  fontSize: "0.98rem", color: C.charcoal, lineHeight: 1.25,
+                }}>
+                  {p.name}
+                </h4>
+                <p style={{
+                  fontFamily: F.baskerville, fontSize: "0.8rem",
+                  color: C.taupe, lineHeight: 1.65, flex: 1,
+                }}>
+                  {p.desc}
+                </p>
+                <button onClick={scrollToContact} style={{
+                  marginTop: "0.75rem",
+                  display: "inline-flex", alignItems: "center", gap: "5px",
+                  background: "none", border: "none", cursor: "pointer",
+                  color: C.charcoal, fontFamily: F.outfit,
+                  fontWeight: 600, fontSize: "0.76rem",
+                  letterSpacing: "0.05em", padding: 0,
+                  textDecoration: "underline",
+                  textDecorationColor: C.saffron,
+                  textUnderlineOffset: "3px",
+                }}>
+                  Enquire <ChevronRight size={12} />
+                </button>
               </div>
             </div>
           ))}
         </div>
+
+        {/* Bottom CTA */}
+        <div style={{ textAlign: "center", marginTop: "3.5rem" }}>
+          <button className="btn-saffron" onClick={scrollToContact}>
+            Request a Custom Quote <ArrowRight size={16} />
+          </button>
+        </div>
+
       </div>
     </section>
   );
