@@ -7,12 +7,14 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": true,
     "trailingSlash": true,
+    "redirects": [
+      { "source": "/products", "destination": "/products/", "type": 301 },
+      { "source": "/infrastructure", "destination": "/infrastructure/", "type": 301 },
+      { "source": "/blog", "destination": "/blog/", "type": 301 }
+    ],
     "rewrites": [
       { "source": "/admin", "destination": "/admin/index.html" },
-      { "source": "/login", "destination": "/login/index.html" },
-      { "source": "/products", "destination": "/products/index.html" },
-      { "source": "/infrastructure", "destination": "/infrastructure/index.html" },
-      { "source": "/blog", "destination": "/blog/index.html" }
+      { "source": "/login", "destination": "/login/index.html" }
     ],
     "headers": [
       {
