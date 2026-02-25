@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { blogPosts, BlogPost } from "@/lib/pgg-data";
+import { SiteLogo } from "@/components/SiteLogo";
 
 // ————————————————————————————————————————————
 // The Merchant — Design Tokens
@@ -127,18 +128,7 @@ function Navbar() {
         transition: "border-color 0.3s ease, background 0.3s ease",
       }}
     >
-      <Link
-        href="/"
-        style={{
-          fontFamily: F.display,
-          fontWeight: 700,
-          color: C.charcoal,
-          textDecoration: "none",
-          fontSize: "1.05rem",
-        }}
-      >
-        Pune Global Group
-      </Link>
+      <SiteLogo href="/" />
 
       <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
         <Link href="/products" className="blog-nav-link">Products</Link>

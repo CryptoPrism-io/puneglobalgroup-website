@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { products, Product } from "@/lib/pgg-data";
+import { SiteLogo } from "@/components/SiteLogo";
 
 /* ─── Merchant tokens ─────────────────────────────────────────────────────────── */
 const C = {
@@ -75,12 +76,7 @@ function Navbar() {
       padding: "0 clamp(1.5rem, 4vw, 3rem)", height: "68px",
       transition: "all 0.3s ease",
     }}>
-      <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.6rem", textDecoration: "none" }}>
-        <span style={{ fontFamily: F.body, fontSize: "0.72rem", color: C.taupe, letterSpacing: "0.06em" }}>←</span>
-        <span style={{ fontFamily: F.body, fontWeight: 600, color: C.charcoal, fontSize: "0.92rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-          Pune Global Group
-        </span>
-      </Link>
+      <SiteLogo href="/" />
       <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
         <Link href="/infrastructure" className="nav-link-m" style={{ textDecoration: "none" }}>Infrastructure</Link>
         <Link href="/blog" className="nav-link-m" style={{ textDecoration: "none" }}>Insights</Link>
