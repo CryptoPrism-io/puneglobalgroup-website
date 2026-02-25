@@ -61,6 +61,56 @@ const GLOBAL_CSS = `
   ::selection { background: ${C.saffron}; color: #fff; }
   a { text-decoration: none; color: inherit; }
 
+  /* ── Hero entrance animations ────────────────── */
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ruleGrow {
+    from { transform: scaleX(0); transform-origin: left; }
+    to   { transform: scaleX(1); transform-origin: left; }
+  }
+  @keyframes statReveal {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes eyebrowSlide {
+    from { opacity: 0; letter-spacing: 0.18em; }
+    to   { opacity: 1; letter-spacing: 0.03em; }
+  }
+  .hero-eyebrow-anim {
+    animation: eyebrowSlide 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s both;
+  }
+  .hero-h1-line1 {
+    display: block;
+    animation: heroFadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.22s both;
+  }
+  .hero-h1-line2 {
+    display: block;
+    animation: heroFadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.4s both;
+  }
+  .hero-rule-anim {
+    animation: ruleGrow 0.85s cubic-bezier(0.22,1,0.36,1) 0.55s both;
+  }
+  .hero-body-anim {
+    animation: heroFadeUp 0.85s ease 0.65s both;
+  }
+  .hero-cta-anim {
+    animation: heroFadeUp 0.85s ease 0.8s both;
+  }
+  .hero-stat-anim-0 { animation: statReveal 0.7s ease 0.9s  both; }
+  .hero-stat-anim-1 { animation: statReveal 0.7s ease 1.0s  both; }
+  .hero-stat-anim-2 { animation: statReveal 0.7s ease 1.1s  both; }
+  .hero-stat-anim-3 { animation: statReveal 0.7s ease 1.2s  both; }
+
+  /* ── Section number pulse ────────────────────── */
+  @keyframes numFade {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 0.4; transform: translateY(0); }
+  }
+  .prod-num-anim { opacity: 0; }
+  .prod-num-anim.visible { animation: numFade 0.7s ease forwards; }
+
   /* Scroll reveal */
   .sr { opacity: 0; transform: translateY(26px); transition: opacity 0.85s ease, transform 0.85s ease; }
   .sr.visible { opacity: 1; transform: translateY(0); }
@@ -262,6 +312,23 @@ function Logo({ inverted = false }: { inverted?: boolean }) {
   );
 }
 
+/* ─── Stat counter hook ──────────────────────────────────────────────────────── */
+function useCountUp(end: number, duration = 1400, enabled = true) {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    if (!enabled) { setVal(end); return; }
+    const start = performance.now();
+    const tick = (now: number) => {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setVal(Math.round(eased * end));
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [end, duration, enabled]);
+  return val;
+}
+
 /* ─── Scroll reveal hook ─────────────────────────────────────────────────────── */
 function useScrollReveal() {
   useEffect(() => {
@@ -384,16 +451,46 @@ function Navbar() {
   );
 }
 
+/* ─── Animated stat ──────────────────────────────────────────────────────────── */
+function AnimatedStat({ raw, label, note, animClass }: {
+  raw: string; label: string; note: string; animClass: string;
+}) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setReady(true), 900); return () => clearTimeout(t); }, []);
+  const num = parseInt(raw.replace(/[^0-9]/g, ""), 10);
+  const suffix = raw.replace(/[0-9]/g, "");
+  const counted = useCountUp(num, 1600, ready);
+  const display = ready ? `${counted}${suffix}` : raw;
+
+  return (
+    <div className={animClass} style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
+      <div style={{ fontFamily: F.display, fontWeight: 700,
+        fontSize: "2.2rem", color: C.saffron, lineHeight: 1,
+        transition: "color 0.3s" }}>
+        {display}
+      </div>
+      <div style={{ fontFamily: F.body, fontWeight: 500, fontSize: "0.7rem",
+        color: C.charcoal, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+        {label}
+      </div>
+      <div style={{ fontFamily: F.italic, fontStyle: "italic",
+        fontSize: "0.78rem", color: C.taupe }}>
+        {note}
+      </div>
+    </div>
+  );
+}
+
 /* ─── Hero ───────────────────────────────────────────────────────────────────── */
 function Hero() {
   const scrollToContact = () =>
     document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
 
   const stats = [
-    { value: "100M+", label: "Boxes Delivered", note: "and counting" },
-    { value: "500+",  label: "Active Clients",  note: "across India" },
-    { value: "21",    label: "States Served",   note: "nationwide" },
-    { value: "1995",  label: "Established",     note: "Pune, Maharashtra" },
+    { raw: "100M+", label: "Boxes Delivered", note: "and counting" },
+    { raw: "500+",  label: "Active Clients",  note: "across India" },
+    { raw: "21",    label: "States Served",   note: "nationwide" },
+    { raw: "1995",  label: "Established",     note: "Pune, Maharashtra" },
   ];
 
   return (
@@ -404,8 +501,8 @@ function Hero() {
     }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto", width: "100%" }}>
 
-        {/* Eyebrow rule */}
-        <div className="sr" data-delay="0.05"
+        {/* Eyebrow — CSS animation */}
+        <div className="hero-eyebrow-anim"
           style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
           <span style={{ fontFamily: F.italic, fontStyle: "italic",
             fontSize: "0.95rem", color: C.taupe, whiteSpace: "nowrap" }}>
@@ -418,27 +515,26 @@ function Hero() {
           </span>
         </div>
 
-        {/* Headline */}
-        <h1 className="sr hero-headline" data-delay="0.12" style={{
+        {/* Headline — staggered lines */}
+        <h1 className="hero-headline" style={{
           fontFamily: F.display, fontWeight: 700,
           fontSize: "clamp(3rem, 7vw, 7rem)",
-          lineHeight: 1.0, color: C.charcoal,
+          lineHeight: 1.02, color: C.charcoal,
           letterSpacing: "-0.025em", maxWidth: "920px", marginBottom: "0",
         }}>
-          Industrial Packaging.<br />
-          <em style={{ fontWeight: 400, color: C.warm, fontStyle: "italic" }}>
+          <span className="hero-h1-line1">Industrial Packaging.</span>
+          <em className="hero-h1-line2" style={{ fontWeight: 400, color: C.warm, fontStyle: "italic" }}>
             Manufactured to Export.
           </em>
         </h1>
 
-        {/* Horizontal rule */}
-        <div className="sr" data-delay="0.22"
+        {/* Rule — grows from left */}
+        <div className="hero-rule-anim"
           style={{ height: "1px", background: C.borderMid, margin: "2.75rem 0" }} />
 
-        {/* Body + CTAs */}
-        <div className="sr" data-delay="0.28" style={{ display: "flex", gap: "4rem",
-          alignItems: "flex-start", flexWrap: "wrap" }}>
-          <div style={{ flex: "1 1 400px", maxWidth: "520px" }}>
+        {/* Body */}
+        <div style={{ display: "flex", gap: "4rem", alignItems: "flex-start", flexWrap: "wrap" }}>
+          <div className="hero-body-anim" style={{ flex: "1 1 400px", maxWidth: "520px" }}>
             <p style={{ fontFamily: F.body, fontSize: "1.05rem", lineHeight: 1.85,
               color: C.taupe, marginBottom: "2.5rem", fontWeight: 300 }}>
               Pune Global Group manufactures precision PP trays, separators, boxes
@@ -446,7 +542,7 @@ function Hero() {
               custom-spec, from our Pune facility. We also convert FBB sheets and
               trade paper &amp; board grades across 21 states.
             </p>
-            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+            <div className="hero-cta-anim" style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
               <Link href="/products" className="btn-primary" style={{ textDecoration: "none" }}>
                 View Products <ArrowRight size={14} />
               </Link>
@@ -456,7 +552,7 @@ function Hero() {
             </div>
           </div>
 
-          {/* Stats row — saffron numbers */}
+          {/* Stats — animated counters */}
           <div className="hero-stats-row"
             style={{ display: "flex", flex: "0 0 auto", alignSelf: "flex-end" }}>
             {stats.map((stat, i) => (
@@ -465,19 +561,10 @@ function Hero() {
                 borderLeft: `1px solid ${C.borderMid}`,
                 borderRight: i === stats.length - 1 ? `1px solid ${C.borderMid}` : "none",
               }}>
-                <div style={{ fontFamily: F.display, fontWeight: 700,
-                  fontSize: "2.2rem", color: C.saffron, lineHeight: 1, marginBottom: "5px" }}>
-                  {stat.value}
-                </div>
-                <div style={{ fontFamily: F.body, fontWeight: 500, fontSize: "0.7rem",
-                  color: C.charcoal, letterSpacing: "0.05em", textTransform: "uppercase",
-                  marginBottom: "2px" }}>
-                  {stat.label}
-                </div>
-                <div style={{ fontFamily: F.italic, fontStyle: "italic",
-                  fontSize: "0.78rem", color: C.taupe }}>
-                  {stat.note}
-                </div>
+                <AnimatedStat
+                  raw={stat.raw} label={stat.label} note={stat.note}
+                  animClass={`hero-stat-anim-${i}`}
+                />
               </div>
             ))}
           </div>
@@ -767,8 +854,9 @@ function ProductsSection() {
               onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = "#fff"; }}
               onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = i % 2 === 1 ? C.parchment : C.cream; }}>
 
-              <div style={{ fontFamily: F.display, fontWeight: 700, fontSize: "3.5rem",
-                color: C.saffron, lineHeight: 1, marginBottom: "1.5rem", opacity: 0.5 }}>
+              <div className="sr prod-num-anim" data-delay={`${0.05 + 0.1 * i}`}
+                style={{ fontFamily: F.display, fontWeight: 700, fontSize: "3.5rem",
+                  color: C.saffron, lineHeight: 1, marginBottom: "1.5rem" }}>
                 {line.num}
               </div>
 

@@ -1,589 +1,302 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { products, Product } from "@/lib/pgg-data";
 
-// ————————————————————————————————————————————
-// Brand constants
-// ————————————————————————————————————————————
+/* ─── Merchant tokens ─────────────────────────────────────────────────────────── */
 const C = {
-  cream: "#FFFDF8",
-  charcoal: "#3A3530",
-  saffron: "#F4A236",
-  sindoor: "#DC143C",
-  taupe: "#5A534D",
-  dark: "#2C2825",
-  light: "#F5F0E8",
-  border: "#E8E2D9",
+  cream:     "#FAF7F2",
+  parchment: "#F0EAE0",
+  charcoal:  "#1C1A17",
+  warm:      "#4A4540",
+  taupe:     "#7A736D",
+  saffron:   "#D4860E",
+  dark:      "#141210",
+  border:    "rgba(28,26,23,0.1)",
+  borderMid: "rgba(28,26,23,0.16)",
 };
-
-const FONT = {
-  outfit: "'Outfit', sans-serif",
-  cormorant: "'Cormorant Garamond', Georgia, serif",
-  baskerville: "'Libre Baskerville', Georgia, serif",
+const F = {
+  display: "'Playfair Display', Georgia, serif",
+  body:    "'DM Sans', system-ui, sans-serif",
+  italic:  "'Cormorant Garamond', Georgia, serif",
 };
+const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');`;
 
-// ————————————————————————————————————————————
-// Category filter tabs
-// ————————————————————————————————————————————
+const CSS = `
+  ${FONTS}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: ${C.cream}; color: ${C.charcoal}; font-family: ${F.body}; -webkit-font-smoothing: antialiased; }
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9998; opacity: 0.022;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes ruleGrow { from { transform:scaleX(0); transform-origin:left; } to { transform:scaleX(1); transform-origin:left; } }
+  .page-fade { animation: fadeUp 0.85s ease both; }
+  .delay-1 { animation-delay: 0.12s; }
+  .delay-2 { animation-delay: 0.26s; }
+  .delay-3 { animation-delay: 0.4s; }
+  .rule-anim { animation: ruleGrow 0.85s cubic-bezier(0.22,1,0.36,1) 0.35s both; }
+  .nav-link-m { position:relative; font-family:${F.body}; font-size:0.875rem; color:${C.warm}; cursor:pointer; padding:4px 0; transition:color 0.2s; }
+  .nav-link-m::after { content:''; position:absolute; left:0; bottom:-2px; width:0; height:1px; background:${C.charcoal}; transition:width 0.28s; }
+  .nav-link-m:hover { color:${C.charcoal}; }
+  .nav-link-m:hover::after { width:100%; }
+  .prod-card { transition: border-color 0.22s, box-shadow 0.22s, transform 0.22s; }
+  .prod-card:hover { border-color: ${C.charcoal} !important; transform: translateY(-3px); box-shadow: 0 8px 24px rgba(28,26,23,0.08); }
+  .btn-p { display:inline-flex; align-items:center; gap:8px; background:${C.charcoal}; color:${C.cream}; font-family:${F.body}; font-size:0.8rem; font-weight:500; letter-spacing:0.09em; text-transform:uppercase; padding:13px 28px; border:none; border-radius:1px; cursor:pointer; transition:background 0.2s, transform 0.15s; text-decoration:none; }
+  .btn-p:hover { background:${C.dark}; transform:translateY(-1px); }
+  .btn-o { display:inline-flex; align-items:center; gap:8px; background:transparent; color:${C.charcoal}; font-family:${F.body}; font-size:0.8rem; font-weight:500; letter-spacing:0.09em; text-transform:uppercase; padding:12px 28px; border:1px solid ${C.borderMid}; border-radius:1px; cursor:pointer; transition:all 0.2s; text-decoration:none; }
+  .btn-o:hover { background:${C.charcoal}; color:${C.cream}; }
+  @media(max-width:768px) { .prod-grid { grid-template-columns:1fr 1fr !important; } .hero-rule-wrap { display:none; } }
+  @media(max-width:480px) { .prod-grid { grid-template-columns:1fr !important; } }
+`;
+
+/* ─── Filter tabs ─────────────────────────────────────────────────────────────── */
 type FilterTab = "All" | "Paper & Board" | "PP Packaging";
 const TABS: FilterTab[] = ["All", "Paper & Board", "PP Packaging"];
 
-// ————————————————————————————————————————————
-// Sub-components
-// ————————————————————————————————————————————
-
+/* ─── Subpage Navbar ─────────────────────────────────────────────────────────── */
 function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const h = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", h, { passive: true });
+    return () => window.removeEventListener("scroll", h);
+  }, []);
+
   return (
-    <nav
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-        background: C.dark,
-        borderBottom: `1px solid rgba(244,162,54,0.2)`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0 2rem",
-        height: "64px",
-      }}
-    >
-      <Link
-        href="/"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-          textDecoration: "none",
-        }}
-      >
-        <span style={{ color: C.saffron, fontSize: "1.1rem" }}>←</span>
-        <span
-          style={{
-            fontFamily: FONT.outfit,
-            fontWeight: 700,
-            color: "#FFFDF8",
-            fontSize: "0.95rem",
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-          }}
-        >
+    <nav style={{
+      position: "sticky", top: 0, zIndex: 100,
+      background: C.cream,
+      borderBottom: scrolled ? `1px solid ${C.borderMid}` : `1px solid ${C.border}`,
+      boxShadow: scrolled ? "0 1px 20px rgba(28,26,23,0.05)" : "none",
+      display: "flex", alignItems: "center", justifyContent: "space-between",
+      padding: "0 clamp(1.5rem, 4vw, 3rem)", height: "68px",
+      transition: "all 0.3s ease",
+    }}>
+      <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.6rem", textDecoration: "none" }}>
+        <span style={{ fontFamily: F.body, fontSize: "0.72rem", color: C.taupe, letterSpacing: "0.06em" }}>←</span>
+        <span style={{ fontFamily: F.body, fontWeight: 600, color: C.charcoal, fontSize: "0.92rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>
           Pune Global Group
         </span>
       </Link>
-
-      <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-        <Link
-          href="/infrastructure"
-          style={{
-            fontFamily: FONT.outfit,
-            color: "#FFFDF8",
-            textDecoration: "none",
-            fontSize: "0.875rem",
-            opacity: 0.8,
-          }}
-        >
-          Infrastructure
-        </Link>
-        <Link
-          href="/blog"
-          style={{
-            fontFamily: FONT.outfit,
-            color: "#FFFDF8",
-            textDecoration: "none",
-            fontSize: "0.875rem",
-            opacity: 0.8,
-          }}
-        >
-          Insights
-        </Link>
-        <Link
-          href="/#contact"
-          style={{
-            fontFamily: FONT.outfit,
-            background: C.saffron,
-            color: C.dark,
-            textDecoration: "none",
-            fontSize: "0.875rem",
-            fontWeight: 600,
-            padding: "0.5rem 1.25rem",
-            borderRadius: "4px",
-            letterSpacing: "0.02em",
-          }}
-        >
-          Get a Quote
+      <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+        <Link href="/infrastructure" className="nav-link-m" style={{ textDecoration: "none" }}>Infrastructure</Link>
+        <Link href="/blog" className="nav-link-m" style={{ textDecoration: "none" }}>Insights</Link>
+        <Link href="/#contact" className="btn-p" style={{ padding: "9px 20px", fontSize: "0.75rem" }}>
+          Get a Quote →
         </Link>
       </div>
     </nav>
   );
 }
 
-function CategoryTag({ category }: { category: string }) {
-  const isPP = category === "PP Packaging";
+/* ─── Product Card ───────────────────────────────────────────────────────────── */
+function ProductCard({ product, delay }: { product: Product; delay: number }) {
+  const isPP = product.category === "PP Packaging";
   return (
-    <span
-      style={{
-        fontFamily: FONT.outfit,
-        fontSize: "0.7rem",
-        fontWeight: 600,
-        letterSpacing: "0.08em",
-        textTransform: "uppercase",
-        background: isPP ? "rgba(220,20,60,0.1)" : "rgba(244,162,54,0.12)",
-        color: isPP ? C.sindoor : "#C47E1A",
-        padding: "0.25rem 0.6rem",
-        borderRadius: "3px",
-        border: `1px solid ${isPP ? "rgba(220,20,60,0.25)" : "rgba(244,162,54,0.3)"}`,
-      }}
-    >
-      {category}
-    </span>
-  );
-}
-
-function ProductCard({ product }: { product: Product }) {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <Link
-      href={`/products/${product.slug}`}
-      style={{ textDecoration: "none" }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <div
-        style={{
-          background: "#FFFFFF",
-          border: `1.5px solid ${hovered ? C.saffron : C.border}`,
-          borderRadius: "8px",
-          overflow: "hidden",
-          transition: "all 0.25s ease",
-          transform: hovered ? "translateY(-4px)" : "translateY(0)",
-          boxShadow: hovered
-            ? "0 12px 40px rgba(58,53,48,0.12)"
-            : "0 2px 8px rgba(58,53,48,0.05)",
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-        }}
-      >
-        {/* Image strip */}
+    <Link href={`/products/${product.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column" }}>
+      <div className="prod-card" style={{
+        background: "#fff", border: `1px solid ${C.border}`,
+        borderRadius: "1px", overflow: "hidden", display: "flex", flexDirection: "column", height: "100%",
+        animation: `fadeUp 0.7s ease ${delay}s both`,
+      }}>
         {product.image ? (
-          <div
-            style={{
-              width: "100%",
-              height: "180px",
-              overflow: "hidden",
-              background: C.light,
-            }}
-          >
-            <img
-              src={product.image}
-              alt={product.name}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                transition: "transform 0.35s ease",
-                transform: hovered ? "scale(1.05)" : "scale(1)",
-              }}
-            />
+          <div style={{ height: "180px", overflow: "hidden", background: C.parchment }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={product.image} alt={product.name}
+              style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.4s ease" }}
+              onMouseEnter={e => { (e.target as HTMLImageElement).style.transform = "scale(1.04)"; }}
+              onMouseLeave={e => { (e.target as HTMLImageElement).style.transform = "scale(1)"; }} />
           </div>
         ) : (
-          <div
-            style={{
-              width: "100%",
-              height: "8px",
-              background: product.category === "PP Packaging"
-                ? `linear-gradient(90deg, ${C.sindoor}, #ff6b8a)`
-                : `linear-gradient(90deg, ${C.saffron}, #f9c96e)`,
-            }}
-          />
+          <div style={{ height: "6px", background: isPP ? "#8B1A1A" : C.saffron }} />
         )}
 
-        {/* Content */}
-        <div style={{ padding: "1.5rem", flex: 1, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-          <CategoryTag category={product.category} />
+        <div style={{ padding: "1.5rem", flex: 1, display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+          <span style={{
+            fontFamily: F.body, fontSize: "0.64rem", fontWeight: 600,
+            letterSpacing: "0.1em", textTransform: "uppercase",
+            color: isPP ? "#8B1A1A" : C.saffron,
+            background: isPP ? "rgba(139,26,26,0.07)" : "rgba(212,134,14,0.08)",
+            border: `1px solid ${isPP ? "rgba(139,26,26,0.18)" : "rgba(212,134,14,0.22)"}`,
+            padding: "3px 8px", borderRadius: "1px", alignSelf: "flex-start",
+          }}>
+            {product.category}
+          </span>
 
-          <h3
-            style={{
-              fontFamily: FONT.cormorant,
-              fontSize: "1.3rem",
-              fontWeight: 700,
-              color: C.charcoal,
-              margin: 0,
-              lineHeight: 1.3,
-            }}
-          >
+          <h3 style={{ fontFamily: F.display, fontSize: "1.15rem", fontWeight: 600,
+            color: C.charcoal, lineHeight: 1.3 }}>
             {product.name}
           </h3>
 
-          <p
-            style={{
-              fontFamily: FONT.outfit,
-              fontSize: "0.85rem",
-              color: C.taupe,
-              margin: 0,
-              lineHeight: 1.6,
-              flex: 1,
-            }}
-          >
+          <p style={{ fontFamily: F.body, fontSize: "0.84rem", color: C.taupe,
+            lineHeight: 1.7, flex: 1, fontWeight: 300 }}>
             {product.tagline}
           </p>
 
           {/* Spec pills */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginTop: "0.25rem" }}>
-            {product.gsmRange && (
-              <span
-                style={{
-                  fontFamily: FONT.outfit,
-                  fontSize: "0.72rem",
-                  fontWeight: 500,
-                  color: C.taupe,
-                  background: C.light,
-                  border: `1px solid ${C.border}`,
-                  padding: "0.2rem 0.55rem",
-                  borderRadius: "20px",
-                }}
-              >
-                {product.gsmRange}
-              </span>
-            )}
-            {product.thickness && (
-              <span
-                style={{
-                  fontFamily: FONT.outfit,
-                  fontSize: "0.72rem",
-                  fontWeight: 500,
-                  color: C.taupe,
-                  background: C.light,
-                  border: `1px solid ${C.border}`,
-                  padding: "0.2rem 0.55rem",
-                  borderRadius: "20px",
-                }}
-              >
-                {product.thickness}
-              </span>
-            )}
-            {product.surfaceResistivity && (
-              <span
-                style={{
-                  fontFamily: FONT.outfit,
-                  fontSize: "0.72rem",
-                  fontWeight: 500,
-                  color: C.taupe,
-                  background: C.light,
-                  border: `1px solid ${C.border}`,
-                  padding: "0.2rem 0.55rem",
-                  borderRadius: "20px",
-                }}
-              >
-                {product.surfaceResistivity}
-              </span>
-            )}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+            {[product.gsmRange, product.thickness, product.surfaceResistivity]
+              .filter(Boolean).map((s) => (
+              <span key={s} style={{
+                fontFamily: F.body, fontSize: "0.68rem", fontWeight: 400,
+                color: C.taupe, background: C.parchment,
+                border: `1px solid ${C.border}`, padding: "2px 8px", borderRadius: "1px",
+              }}>{s}</span>
+            ))}
           </div>
 
-          {/* Arrow CTA */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.4rem",
-              marginTop: "0.5rem",
-              fontFamily: FONT.outfit,
-              fontSize: "0.8rem",
-              fontWeight: 600,
-              color: C.saffron,
-              letterSpacing: "0.04em",
-            }}
-          >
-            View Details
-            <span
-              style={{
-                transform: hovered ? "translateX(4px)" : "translateX(0)",
-                transition: "transform 0.2s ease",
-                display: "inline-block",
-              }}
-            >
-              →
-            </span>
-          </div>
+          <span style={{
+            display: "inline-flex", alignItems: "center", gap: "4px",
+            fontFamily: F.body, fontSize: "0.74rem", fontWeight: 500,
+            color: C.charcoal, borderBottom: `1px solid ${C.borderMid}`,
+            paddingBottom: "1px", alignSelf: "flex-start", marginTop: "0.25rem",
+          }}>
+            View Details →
+          </span>
         </div>
       </div>
     </Link>
   );
 }
 
-// ————————————————————————————————————————————
-// Main Page
-// ————————————————————————————————————————————
+/* ─── Page ───────────────────────────────────────────────────────────────────── */
 export default function ProductsPage() {
   const [activeTab, setActiveTab] = useState<FilterTab>("All");
-
-  const filtered = activeTab === "All"
-    ? products
-    : products.filter((p) => p.category === activeTab);
+  const filtered = activeTab === "All" ? products : products.filter(p => p.category === activeTab);
 
   return (
-    <div style={{ background: C.cream, minHeight: "100vh", fontFamily: FONT.outfit }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap');
-        *, *::before, *::after { box-sizing: border-box; }
-        body { margin: 0; }
-      `}</style>
-
+    <div style={{ background: C.cream, minHeight: "100vh" }}>
+      <style>{CSS}</style>
       <Navbar />
 
-      {/* ——— Hero Section ——— */}
-      <section
-        style={{
-          background: `linear-gradient(135deg, ${C.dark} 0%, #3A3530 60%, #2C2825 100%)`,
-          padding: "5rem 2rem 4rem",
-          textAlign: "center",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {/* Decorative pattern */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: `radial-gradient(circle at 20% 50%, rgba(244,162,54,0.08) 0%, transparent 50%),
-                              radial-gradient(circle at 80% 30%, rgba(244,162,54,0.06) 0%, transparent 40%)`,
-          }}
-        />
-        <div style={{ position: "relative", maxWidth: "700px", margin: "0 auto" }}>
-          <p
-            style={{
-              fontFamily: FONT.outfit,
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: C.saffron,
-              margin: "0 0 1.25rem",
-            }}
-          >
-            Our Products
-          </p>
-          <h1
-            style={{
-              fontFamily: FONT.cormorant,
-              fontSize: "clamp(2.2rem, 5vw, 3.5rem)",
-              fontWeight: 700,
-              color: "#FFFDF8",
-              margin: "0 0 1.25rem",
-              lineHeight: 1.15,
-            }}
-          >
-            40+ Grades.{" "}
-            <span style={{ color: C.saffron }}>3 Business Lines.</span>
+      {/* Hero */}
+      <section style={{ background: C.cream, padding: "72px clamp(1.5rem, 5vw, 4rem) 60px" }}>
+        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+          <div className="page-fade" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}>
+            <span style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "0.9rem", color: C.taupe, whiteSpace: "nowrap" }}>
+              Our Products
+            </span>
+            <div className="rule-anim hero-rule-wrap" style={{ flex: 1, height: "1px", background: C.border }} />
+            <span style={{ fontFamily: F.body, fontSize: "0.68rem", color: C.taupe, letterSpacing: "0.12em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+              40+ Grades · 3 Business Lines
+            </span>
+          </div>
+
+          <h1 className="page-fade delay-1" style={{
+            fontFamily: F.display, fontWeight: 700,
+            fontSize: "clamp(2.4rem, 5.5vw, 5rem)",
+            lineHeight: 1.02, color: C.charcoal, letterSpacing: "-0.025em",
+            maxWidth: "760px",
+          }}>
+            Paper &amp; Board.<br />
+            <em style={{ fontWeight: 400, color: C.warm }}>PP Packaging.</em>
           </h1>
-          <p
-            style={{
-              fontFamily: FONT.outfit,
-              fontSize: "1rem",
-              color: "rgba(255,253,248,0.75)",
-              lineHeight: 1.75,
-              margin: 0,
-            }}
-          >
+
+          <div className="rule-anim" style={{ height: "1px", background: C.borderMid, margin: "2rem 0" }} />
+
+          <p className="page-fade delay-2" style={{
+            fontFamily: F.body, fontSize: "1rem", color: C.taupe, lineHeight: 1.8,
+            maxWidth: "580px", fontWeight: 300,
+          }}>
             From ITC FBB and Duplex Boards to imported Kraft Liners and high-performance
             PP corrugated packaging — Pune Global Group supplies, converts, and delivers
-            across India with FSC Chain of Custody certification and 200 tons/day processing capacity.
+            across India with 200 tons/day processing capacity.
           </p>
         </div>
       </section>
 
-      {/* ——— Filter Tabs ——— */}
-      <div
-        style={{
-          background: "#FFFFFF",
-          borderBottom: `1px solid ${C.border}`,
-          position: "sticky",
-          top: "64px",
-          zIndex: 90,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1200px",
-            margin: "0 auto",
-            padding: "0 2rem",
-            display: "flex",
-            gap: "0",
-            overflowX: "auto",
-          }}
-        >
+      {/* Filter tabs */}
+      <div style={{
+        background: C.parchment, borderTop: `1px solid ${C.borderMid}`,
+        borderBottom: `1px solid ${C.borderMid}`,
+        position: "sticky", top: "68px", zIndex: 90,
+      }}>
+        <div style={{ maxWidth: "1400px", margin: "0 auto",
+          padding: "0 clamp(1.5rem, 5vw, 4rem)", display: "flex", overflowX: "auto" }}>
           {TABS.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              style={{
-                fontFamily: FONT.outfit,
-                fontSize: "0.875rem",
-                fontWeight: activeTab === tab ? 600 : 400,
-                color: activeTab === tab ? C.saffron : C.taupe,
-                background: "none",
-                border: "none",
-                borderBottom: activeTab === tab
-                  ? `2.5px solid ${C.saffron}`
-                  : "2.5px solid transparent",
-                padding: "1rem 1.5rem",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-                transition: "all 0.2s ease",
-                letterSpacing: "0.02em",
-              }}
-            >
+            <button key={tab} onClick={() => setActiveTab(tab)} style={{
+              fontFamily: F.body, fontSize: "0.84rem", fontWeight: activeTab === tab ? 500 : 400,
+              color: activeTab === tab ? C.charcoal : C.taupe,
+              background: "none", border: "none",
+              borderBottom: activeTab === tab ? `2px solid ${C.charcoal}` : "2px solid transparent",
+              padding: "1rem 1.5rem", cursor: "pointer", whiteSpace: "nowrap",
+              transition: "all 0.2s",
+            }}>
               {tab}
-              <span
-                style={{
-                  marginLeft: "0.4rem",
-                  fontSize: "0.72rem",
-                  background: activeTab === tab ? "rgba(244,162,54,0.15)" : C.light,
-                  color: activeTab === tab ? C.saffron : C.taupe,
-                  padding: "0.1rem 0.4rem",
-                  borderRadius: "10px",
-                  fontWeight: 500,
-                }}
-              >
-                {tab === "All"
-                  ? products.length
-                  : products.filter((p) => p.category === tab).length}
+              <span style={{
+                marginLeft: "0.4rem", fontSize: "0.7rem", fontWeight: 400,
+                background: activeTab === tab ? "rgba(28,26,23,0.08)" : C.parchment,
+                color: C.taupe, padding: "1px 6px", borderRadius: "10px",
+              }}>
+                {tab === "All" ? products.length : products.filter(p => p.category === tab).length}
               </span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* ——— Product Grid ——— */}
-      <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "3rem 2rem 5rem" }}>
-        {/* Results count */}
-        <p
-          style={{
-            fontFamily: FONT.outfit,
-            fontSize: "0.875rem",
-            color: C.taupe,
-            margin: "0 0 2rem",
-          }}
-        >
-          Showing {filtered.length} {filtered.length === 1 ? "product" : "products"}
+      {/* Grid */}
+      <main style={{ maxWidth: "1400px", margin: "0 auto", padding: "3rem clamp(1.5rem, 5vw, 4rem) 5rem" }}>
+        <p style={{ fontFamily: F.body, fontSize: "0.82rem", color: C.taupe, marginBottom: "2rem" }}>
+          Showing <strong style={{ color: C.charcoal }}>{filtered.length}</strong>{" "}
+          {filtered.length === 1 ? "product" : "products"}
           {activeTab !== "All" && ` in ${activeTab}`}
         </p>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-            gap: "1.75rem",
-            alignItems: "stretch",
-          }}
-        >
-          {filtered.map((product) => (
-            <ProductCard key={product.slug} product={product} />
+        <div className="prod-grid" style={{
+          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "1px", background: C.borderMid,
+        }}>
+          {filtered.map((product, i) => (
+            <ProductCard key={product.slug} product={product} delay={0.05 * i} />
           ))}
         </div>
 
-        {/* ——— CTA Banner ——— */}
-        <div
-          style={{
-            marginTop: "4rem",
-            background: `linear-gradient(135deg, ${C.dark}, #3A3530)`,
-            borderRadius: "12px",
-            padding: "3rem 2.5rem",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            textAlign: "center",
-            gap: "1.25rem",
-            border: `1px solid rgba(244,162,54,0.2)`,
-          }}
-        >
-          <p
-            style={{
-              fontFamily: FONT.outfit,
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              color: C.saffron,
-              margin: 0,
-            }}
-          >
-            Can&apos;t find your grade?
-          </p>
-          <h2
-            style={{
-              fontFamily: FONT.cormorant,
-              fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
-              fontWeight: 700,
-              color: "#FFFDF8",
-              margin: 0,
-              lineHeight: 1.2,
-            }}
-          >
-            We Source What Others Can&apos;t
-          </h2>
-          <p
-            style={{
-              fontFamily: FONT.outfit,
-              fontSize: "0.95rem",
-              color: "rgba(255,253,248,0.7)",
-              margin: 0,
-              maxWidth: "520px",
-              lineHeight: 1.7,
-            }}
-          >
-            With direct mill relationships across India, Europe, and South America,
-            we can source speciality grades, non-standard GSMs, and custom converting requirements.
-            Tell us what you need.
-          </p>
-          <Link
-            href="/#contact"
-            style={{
-              fontFamily: FONT.outfit,
-              background: C.saffron,
-              color: C.dark,
-              textDecoration: "none",
-              fontSize: "0.9rem",
-              fontWeight: 700,
-              padding: "0.85rem 2rem",
-              borderRadius: "4px",
-              letterSpacing: "0.04em",
-              transition: "opacity 0.2s",
-            }}
-          >
+        {/* CTA Banner */}
+        <div style={{
+          marginTop: "4rem", background: C.charcoal, borderRadius: "1px",
+          padding: "3rem 2.5rem", display: "grid",
+          gridTemplateColumns: "1fr auto", gap: "2rem", alignItems: "center",
+        }}>
+          <div>
+            <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "0.9rem",
+              color: "rgba(250,247,242,0.55)", marginBottom: "0.5rem" }}>
+              Can&apos;t find your grade?
+            </p>
+            <h2 style={{ fontFamily: F.display, fontSize: "clamp(1.5rem, 2.5vw, 2rem)",
+              fontWeight: 600, color: C.cream, lineHeight: 1.2, margin: "0 0 0.75rem" }}>
+              We Source What Others Can&apos;t.
+            </h2>
+            <p style={{ fontFamily: F.body, fontSize: "0.9rem", color: "rgba(250,247,242,0.6)",
+              maxWidth: "480px", lineHeight: 1.75, fontWeight: 300 }}>
+              With direct mill relationships across India, Europe, and South America,
+              we can source specialty grades, non-standard GSMs, and custom converting requirements.
+            </p>
+          </div>
+          <Link href="/#contact" className="btn-o"
+            style={{ borderColor: "rgba(250,247,242,0.25)", color: C.cream, whiteSpace: "nowrap" }}
+            onMouseEnter={e => { const a = e.currentTarget; a.style.background = "rgba(250,247,242,0.1)"; a.style.borderColor = "rgba(250,247,242,0.5)"; }}
+            onMouseLeave={e => { const a = e.currentTarget; a.style.background = "transparent"; a.style.borderColor = "rgba(250,247,242,0.25)"; }}>
             Send an Enquiry →
           </Link>
         </div>
       </main>
 
-      {/* ——— Footer ——— */}
-      <footer
-        style={{
-          background: C.dark,
-          borderTop: `1px solid rgba(244,162,54,0.15)`,
-          padding: "2rem",
-          textAlign: "center",
-        }}
-      >
-        <p
-          style={{
-            fontFamily: FONT.outfit,
-            fontSize: "0.8rem",
-            color: "rgba(255,253,248,0.45)",
-            margin: 0,
-          }}
-        >
-          © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO ·{" "}
-          <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ color: "rgba(255,253,248,0.45)", textDecoration: "none" }}>
+      {/* Footer */}
+      <footer style={{ background: C.dark, padding: "2rem clamp(1.5rem, 5vw, 4rem)" }}>
+        <div style={{ maxWidth: "1400px", margin: "0 auto", display: "flex",
+          justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
+          <span style={{ fontFamily: F.body, fontSize: "0.76rem", color: "rgba(250,247,242,0.38)" }}>
+            © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO
+          </span>
+          <a href="mailto:contact.puneglobalgroup@gmail.com"
+            style={{ fontFamily: F.body, fontSize: "0.76rem", color: "rgba(250,247,242,0.38)", textDecoration: "none" }}>
             contact.puneglobalgroup@gmail.com
-          </a>{" "}
-          · +91 98233 83230
-        </p>
+          </a>
+        </div>
       </footer>
     </div>
   );
