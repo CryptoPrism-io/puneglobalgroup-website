@@ -165,7 +165,7 @@ const GLOBAL_CSS = `
   .eyebrow {
     font-family: ${F.italic};
     font-style: italic;
-    font-size: 1rem;
+    font-size: 1.18rem;
     font-weight: 400;
     color: ${C.taupe};
     letter-spacing: 0.03em;
@@ -304,7 +304,7 @@ function Logo({ inverted = false }: { inverted?: boolean }) {
           Pune Global Group
         </span>
         <span style={{ fontFamily: F.italic, fontStyle: "italic", fontWeight: 400,
-          fontSize: "0.8rem", color: subColor, letterSpacing: "0.03em", lineHeight: 1.2 }}>
+          fontSize: "0.98rem", color: subColor, letterSpacing: "0.03em", lineHeight: 1.2 }}>
           Your Trusted Packaging Partner
         </span>
       </div>
@@ -474,7 +474,7 @@ function AnimatedStat({ raw, label, note, animClass }: {
         {label}
       </div>
       <div style={{ fontFamily: F.italic, fontStyle: "italic",
-        fontSize: "0.78rem", color: C.taupe }}>
+        fontSize: "1.15rem", color: C.taupe }}>
         {note}
       </div>
     </div>
@@ -497,7 +497,7 @@ function Hero() {
     <section style={{
       minHeight: "100vh", background: C.cream,
       display: "flex", flexDirection: "column", justifyContent: "center",
-      padding: "120px clamp(1.5rem, 5vw, 4rem) 80px",
+      padding: "clamp(80px, 13vh, 140px) clamp(1.5rem, 5vw, 4rem) clamp(48px, 8vh, 80px)",
     }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto", width: "100%" }}>
 
@@ -505,7 +505,7 @@ function Hero() {
         <div className="hero-eyebrow-anim"
           style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
           <span style={{ fontFamily: F.italic, fontStyle: "italic",
-            fontSize: "0.95rem", color: C.taupe, whiteSpace: "nowrap" }}>
+            fontSize: "1.15rem", color: C.taupe, whiteSpace: "nowrap" }}>
             PP Manufacturing · FBB Converting · Paper Trading
           </span>
           <div style={{ flex: 1, height: "1px", background: C.border }} />
@@ -591,7 +591,7 @@ function MarqueeTicker() {
 
   return (
     <div style={{
-      background: C.parchment, height: "46px", overflow: "hidden",
+      background: C.parchment, height: "54px", overflow: "hidden",
       display: "flex", alignItems: "center",
       borderTop: `1px solid ${C.borderMid}`, borderBottom: `1px solid ${C.borderMid}`,
     }}>
@@ -600,7 +600,7 @@ function MarqueeTicker() {
           <span key={i} style={{
             display: "inline-flex", alignItems: "center",
             fontFamily: F.italic, fontStyle: "italic",
-            fontSize: "0.88rem", letterSpacing: "0.01em",
+            fontSize: "1.08rem", letterSpacing: "0.01em",
             color: C.warm, whiteSpace: "nowrap", padding: "0 2.5rem",
           }}>
             {item}
@@ -871,7 +871,7 @@ function ProductsSection() {
                 {line.heading}
               </h3>
 
-              <p style={{ fontFamily: F.body, fontSize: "0.88rem", color: C.warm,
+              <p style={{ fontFamily: F.body, fontSize: "1.08rem", color: C.warm,
                 lineHeight: 1.78, marginBottom: "1.5rem", flex: 1, fontWeight: 300 }}>
                 {line.desc}
               </p>
@@ -890,7 +890,7 @@ function ProductsSection() {
 
               <Link href={line.href} style={{
                 display: "inline-flex", alignItems: "center", gap: "6px",
-                fontFamily: F.body, fontSize: "0.78rem", fontWeight: 500,
+                fontFamily: F.body, fontSize: "1.15rem", fontWeight: 500,
                 letterSpacing: "0.06em", color: C.charcoal, textDecoration: "none",
                 borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "2px",
                 alignSelf: "flex-start",
@@ -1010,7 +1010,7 @@ function InfraCallout() {
         }}>
           <div>
             <span style={{ fontFamily: F.italic, fontStyle: "italic",
-              fontSize: "0.9rem", color: "rgba(250,247,242,0.5)", display: "block", marginBottom: "8px" }}>
+              fontSize: "1.1rem", color: "rgba(250,247,242,0.5)", display: "block", marginBottom: "8px" }}>
               Converting Facility · BU Bhandari MIDC, Sanaswadi
             </span>
             <h2 style={{ fontFamily: F.display, fontWeight: 600,
@@ -1022,7 +1022,7 @@ function InfraCallout() {
           </div>
           <Link href="/infrastructure" style={{
             display: "inline-flex", alignItems: "center", gap: "8px",
-            fontFamily: F.body, fontSize: "0.8rem", fontWeight: 500,
+            fontFamily: F.body, fontSize: "0.98rem", fontWeight: 500,
             color: C.cream, textDecoration: "none", letterSpacing: "0.07em",
             textTransform: "uppercase",
             border: `1px solid rgba(250,247,242,0.25)`,
@@ -1247,7 +1247,7 @@ function BlogTeaser() {
           </div>
           <Link href="/blog" style={{
             display: "inline-flex", alignItems: "center", gap: "6px",
-            fontFamily: F.body, fontSize: "0.78rem", fontWeight: 500,
+            fontFamily: F.body, fontSize: "1.15rem", fontWeight: 500,
             color: C.warm, textDecoration: "none", letterSpacing: "0.06em",
             textTransform: "uppercase",
             borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "3px",
@@ -1277,7 +1277,7 @@ function BlogTeaser() {
                   {post.category}
                 </span>
                 <span style={{ fontFamily: F.italic, fontStyle: "italic",
-                  fontSize: "0.78rem", color: C.taupe }}>
+                  fontSize: "1.15rem", color: C.taupe }}>
                   {post.read} read
                 </span>
               </div>
@@ -1285,7 +1285,7 @@ function BlogTeaser() {
                 color: C.charcoal, lineHeight: 1.4, marginBottom: "0.75rem" }}>
                 {post.title}
               </h3>
-              <p style={{ fontFamily: F.body, fontSize: "0.84rem", color: C.taupe,
+              <p style={{ fontFamily: F.body, fontSize: "1.02rem", color: C.taupe,
                 lineHeight: 1.7, marginBottom: "1.5rem", fontWeight: 300 }}>
                 {post.excerpt}
               </p>
@@ -1362,7 +1362,7 @@ function AboutSection() {
                 &ldquo;The right paper grade, cut to size, delivered on time — that is the
                 foundation everything else is built on.&rdquo;
               </p>
-              <span style={{ fontFamily: F.body, fontSize: "0.78rem", color: C.taupe,
+              <span style={{ fontFamily: F.body, fontSize: "1.15rem", color: C.taupe,
                 letterSpacing: "0.04em", marginTop: "8px", display: "block" }}>
                 — Umesh Sahu, Managing Director
               </span>
@@ -1397,7 +1397,7 @@ function AboutSection() {
                   borderBottom: `1px solid ${C.border}`,
                 }}>
                   <span style={{ fontFamily: F.body, fontWeight: 400,
-                    fontSize: "0.9rem", color: C.warm }}>
+                    fontSize: "1.1rem", color: C.warm }}>
                     {item.label}
                   </span>
                   <span style={{ fontFamily: F.display, fontWeight: 700,
@@ -1419,11 +1419,11 @@ function AboutSection() {
                 }}>
                   <CheckCircle size={15} style={{ color: C.saffron, marginTop: "2px", flexShrink: 0 }} />
                   <div>
-                    <div style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.88rem",
+                    <div style={{ fontFamily: F.body, fontWeight: 600, fontSize: "1.08rem",
                       color: C.charcoal, marginBottom: "2px" }}>
                       {v.label}
                     </div>
-                    <div style={{ fontFamily: F.body, fontSize: "0.8rem", color: C.taupe,
+                    <div style={{ fontFamily: F.body, fontSize: "0.98rem", color: C.taupe,
                       lineHeight: 1.6, fontWeight: 300 }}>
                       {v.desc}
                     </div>
@@ -1504,12 +1504,12 @@ function ContactSection() {
                 paddingBottom: "1.5rem", borderBottom: `2px solid ${C.saffron}`, marginBottom: "2rem" }}>
                 <TuriyaLogo size={34} />
                 <div>
-                  <div style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.9rem",
+                  <div style={{ fontFamily: F.body, fontWeight: 600, fontSize: "1.1rem",
                     color: C.charcoal, letterSpacing: "0.08em", textTransform: "uppercase" }}>
                     Pune Global Group
                   </div>
                   <div style={{ fontFamily: F.italic, fontStyle: "italic",
-                    fontSize: "0.8rem", color: C.taupe }}>
+                    fontSize: "0.98rem", color: C.taupe }}>
                     Paper &amp; PP Packaging Solutions
                   </div>
                 </div>
@@ -1530,14 +1530,14 @@ function ContactSection() {
                       {item.label}
                     </div>
                     {item.href ? (
-                      <a href={item.href} style={{ fontFamily: F.body, fontSize: "0.9rem",
+                      <a href={item.href} style={{ fontFamily: F.body, fontSize: "1.1rem",
                         color: C.charcoal, lineHeight: 1.5, transition: "color 0.2s" }}
                         onMouseEnter={e => (e.currentTarget.style.color = C.saffron)}
                         onMouseLeave={e => (e.currentTarget.style.color = C.charcoal)}>
                         {item.value}
                       </a>
                     ) : (
-                      <div style={{ fontFamily: F.body, fontSize: "0.9rem",
+                      <div style={{ fontFamily: F.body, fontSize: "1.1rem",
                         color: C.charcoal, lineHeight: 1.5 }}>
                         {item.value}
                       </div>
@@ -1547,7 +1547,7 @@ function ContactSection() {
               ))}
 
               <div style={{ marginTop: "2rem", paddingTop: "1.5rem", borderTop: `1px solid ${C.border}`,
-                fontFamily: F.italic, fontStyle: "italic", fontSize: "0.84rem",
+                fontFamily: F.italic, fontStyle: "italic", fontSize: "1.02rem",
                 color: C.taupe, lineHeight: 1.6 }}>
                 Monday – Saturday · 9:30 AM – 6:30 PM IST
               </div>
@@ -1562,7 +1562,7 @@ function ContactSection() {
                 color: C.charcoal, marginBottom: "0.5rem" }}>
                 Request a Quote
               </h3>
-              <p style={{ fontFamily: F.body, fontSize: "0.88rem", color: C.taupe,
+              <p style={{ fontFamily: F.body, fontSize: "1.08rem", color: C.taupe,
                 lineHeight: 1.65, marginBottom: "2rem", fontWeight: 300 }}>
                 Share your packaging requirements and our team will respond within one business day.
               </p>
@@ -1575,7 +1575,7 @@ function ContactSection() {
                     color: C.charcoal, marginBottom: "0.5rem" }}>
                     Message Received
                   </div>
-                  <div style={{ fontFamily: F.body, fontSize: "0.9rem", color: C.taupe,
+                  <div style={{ fontFamily: F.body, fontSize: "1.1rem", color: C.taupe,
                     lineHeight: 1.6, fontWeight: 300 }}>
                     Thank you for reaching out. We will respond within one business day.
                   </div>
@@ -1645,7 +1645,7 @@ function ContactSection() {
                   </button>
 
                   <p style={{ fontFamily: F.italic, fontStyle: "italic",
-                    fontSize: "0.78rem", color: C.taupe, opacity: 0.7 }}>
+                    fontSize: "1.15rem", color: C.taupe, opacity: 0.7 }}>
                     We respect your privacy. Your information will never be shared.
                   </p>
                 </form>
