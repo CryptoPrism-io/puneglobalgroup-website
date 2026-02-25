@@ -46,6 +46,19 @@ body {
 }
 
 /* ————————————————————————————————————————
+   Heading text shadows — The Merchant
+   Outer drop shadow + inner highlight on all h1/h2
+   Applies site-wide to Playfair Display headings
+   ———————————————————————————————————————— */
+h1, h2 {
+  text-shadow:
+    0 1px 0 rgba(255, 248, 235, 0.65),
+    0 -1px 0 rgba(28, 26, 23, 0.10),
+    0 2px 5px rgba(28, 26, 23, 0.18),
+    0 6px 22px rgba(28, 26, 23, 0.10);
+}
+
+/* ————————————————————————————————————————
    Global paper grain overlay — The Merchant
    Gives every page the feel of textured cream stock
    ———————————————————————————————————————— */
