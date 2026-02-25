@@ -104,56 +104,7 @@ const GLOBAL_CSS = `
   .nav-link:hover { color: ${C.charcoal}; }
   .nav-link:hover::after { width: 100%; }
 
-  /* Product card hover */
-  .product-card {
-    border-radius: 2px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    cursor: default;
-  }
-  .product-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 36px rgba(58,53,48,0.1);
-  }
-
-  /* Industry tile hover */
-  .industry-tile {
-    background: ${C.cream};
-    border: 1px solid ${C.border};
-    padding: 2rem 1.75rem;
-    border-radius: 2px;
-    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
-    cursor: default;
-  }
-  .industry-tile:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(58,53,48,0.08);
-    background: #fff;
-  }
-
-  /* CTA button */
-  .btn-saffron {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: ${C.saffron};
-    color: #fff;
-    font-family: ${F.outfit};
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 13px 28px;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
-  }
-  .btn-saffron:hover {
-    background: #e5941f;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(244,162,54,0.4);
-  }
-  .btn-saffron:active { transform: translateY(0); }
+  /* eyebrow is now handled in the new section below */
 
   /* Form inputs */
   .form-input {
@@ -174,13 +125,12 @@ const GLOBAL_CSS = `
   }
   .form-input::placeholder { color: ${C.taupe}; opacity: 0.65; }
 
-  /* Section eyebrow */
+  /* Section eyebrow — gradient applied in new block below */
   .eyebrow {
     font-family: ${F.cormorant};
     font-style: italic;
     font-size: 1.05rem;
     font-weight: 400;
-    color: ${C.saffron};
     letter-spacing: 0.04em;
     display: block;
     margin-bottom: 12px;
@@ -264,6 +214,116 @@ const GLOBAL_CSS = `
     .products-detail-grid { grid-template-columns: 1fr !important; }
     .infra-metrics-grid { grid-template-columns: repeat(2, 1fr) !important; }
     .blog-teaser-header { flex-direction: column !important; align-items: flex-start !important; gap: 1rem !important; }
+  }
+
+  /* ── Gradient text ───────────────────────────────────── */
+  .grad-accent {
+    background: linear-gradient(130deg, #F4A236 0%, #E0601A 52%, #DC143C 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline;
+  }
+  .grad-accent-light {
+    background: linear-gradient(130deg, #FFD57A 0%, #F4A236 45%, #FF6B35 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline;
+  }
+  .eyebrow {
+    background: linear-gradient(130deg, #F4A236 0%, #DC143C 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Shadow tokens ───────────────────────────────────── */
+  .product-card {
+    border-radius: 2px;
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+    cursor: default;
+    box-shadow:
+      0 1px 3px rgba(58,53,48,0.05),
+      inset 0 1px 0 rgba(255,255,255,0.88);
+  }
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow:
+      0 4px 10px rgba(58,53,48,0.05),
+      0 16px 36px rgba(58,53,48,0.1),
+      0 2px 4px rgba(244,162,54,0.08),
+      inset 0 1px 0 rgba(255,255,255,0.92);
+  }
+  .industry-tile {
+    background: ${C.cream};
+    border: 1px solid ${C.border};
+    padding: 2rem 1.75rem;
+    border-radius: 2px;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    cursor: default;
+    box-shadow:
+      0 1px 3px rgba(58,53,48,0.04),
+      inset 0 1px 0 rgba(255,255,255,0.92);
+  }
+  .industry-tile:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 8px 24px rgba(58,53,48,0.09),
+      0 2px 6px rgba(58,53,48,0.05),
+      inset 0 1px 0 rgba(255,255,255,0.95);
+    background: #fff;
+  }
+  .btn-saffron {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: ${C.saffron};
+    color: #fff;
+    font-family: ${F.outfit};
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 13px 28px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+    box-shadow:
+      0 2px 8px rgba(244,162,54,0.3),
+      0 1px 2px rgba(244,162,54,0.2),
+      inset 0 1px 0 rgba(255,255,255,0.22);
+  }
+  .btn-saffron:hover {
+    background: #e5941f;
+    transform: translateY(-2px);
+    box-shadow:
+      0 8px 24px rgba(244,162,54,0.45),
+      0 3px 8px rgba(244,162,54,0.3),
+      inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .btn-saffron:active { transform: translateY(0); }
+
+  /* ── Carousel ────────────────────────────────────────── */
+  @keyframes carouselSlideIn {
+    from { opacity: 0; transform: translateX(24px) scale(0.98); }
+    to   { opacity: 1; transform: translateX(0) scale(1); }
+  }
+  @keyframes carouselProgress {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+  .carousel-card-enter {
+    animation: carouselSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .carousel-card-enter:nth-child(2) { animation-delay: 0.07s; }
+  .carousel-card-enter:nth-child(3) { animation-delay: 0.14s; }
+  @media (max-width: 768px) {
+    .carousel-track { grid-template-columns: 1fr 1fr !important; }
+  }
+  @media (max-width: 480px) {
+    .carousel-track { grid-template-columns: 1fr !important; }
   }
 `;
 
@@ -507,7 +567,7 @@ function Hero() {
               }}
             >
               Industrial PP Packaging.<br />
-              <span style={{ color: C.saffron }}>Manufactured</span> to Export.
+              <span className="grad-accent">Manufactured</span> to Export.
             </h1>
 
             <p
@@ -572,6 +632,7 @@ function Hero() {
               gap: "2rem",
               position: "relative",
               overflow: "hidden",
+              boxShadow: "0 20px 60px rgba(44,40,37,0.22), 0 6px 20px rgba(44,40,37,0.14), inset 0 1px 0 rgba(255,255,255,0.07)",
             }}
           >
             {/* Decorative saffron accent bar */}
@@ -601,7 +662,7 @@ function Hero() {
                 lineHeight: 1.25,
               }}>
                 Export-Ready.<br />
-                <span style={{ color: C.saffron }}>Custom to Spec.</span>
+                <span className="grad-accent-light">Custom to Spec.</span>
               </h2>
             </div>
 
@@ -730,6 +791,216 @@ function MarqueeTicker() {
   );
 }
 
+/* ─── Product Carousel ────────────────────────────────────────────────────────── */
+const PP_PRODUCTS = [
+  {
+    name: "PP Foldable Boxes",
+    spec: "Manufactured · Returnable",
+    desc: "Custom-manufactured foldable PP boxes for automotive trays and returnable industrial logistics. Exported globally.",
+    img: "https://www.brotherspackaging.in/assets/images/products/ppbox/9.webp",
+    slug: "pp-foldable-boxes",
+  },
+  {
+    name: "PP Corrugated Sheets",
+    spec: "Manufactured · Custom Sizes",
+    desc: "Waterproof, UV-stable PP hollow corrugated sheets for layer pads, partition dividers and protective wrapping.",
+    img: "https://jppack.in/products/ppcorrugatedsheetssunpaksheetshollowsheetsfluteboardsheets_24_07_25_09_23_01_102592.png",
+    slug: "pp-corrugated-sheets",
+  },
+  {
+    name: "PP Corrugated Crates",
+    spec: "Manufactured · Heavy Duty",
+    desc: "Stackable returnable crates for automotive OEMs, engineering components and industrial material handling.",
+    img: "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
+    slug: "pp-foldable-boxes",
+  },
+  {
+    name: "PP Layer Pads",
+    spec: "Manufactured · Pallet-Ready",
+    desc: "PP layer pads and slip sheets for pallet stacking, product separation and surface protection in transit.",
+    img: "https://jppack.in/products/ppcorrugatedlayerpad_24_07_25_09_27_58_112075.png",
+    slug: "pp-layer-pads",
+  },
+  {
+    name: "ESD Packaging",
+    spec: "Manufactured · Anti-Static",
+    desc: "Anti-static PP bins and boxes for electronics manufacturers and PCB component handling. Export compliant.",
+    img: "https://jppack.in/products/ppcorrugatedesdbin_24_07_25_09_29_20_111119.png",
+    slug: "esd-packaging",
+  },
+];
+
+function ProductCarousel() {
+  const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [key, setKey] = useState(0);
+  const n = PP_PRODUCTS.length;
+
+  useEffect(() => {
+    if (paused) return;
+    const t = setInterval(() => {
+      setIdx(i => (i + 1) % n);
+      setKey(k => k + 1);
+    }, 4000);
+    return () => clearInterval(t);
+  }, [paused, n]);
+
+  const go = (dir: number) => {
+    setIdx(i => (i + dir + n) % n);
+    setKey(k => k + 1);
+  };
+
+  const visible = [0, 1, 2].map(o => PP_PRODUCTS[(idx + o) % n]);
+
+  return (
+    <div
+      style={{ position: "relative" }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* Progress bar */}
+      {!paused && (
+        <div style={{ height: "2px", background: C.border, marginBottom: "1.25rem", borderRadius: "1px", overflow: "hidden" }}>
+          <div
+            key={`bar-${key}`}
+            style={{
+              height: "100%",
+              background: `linear-gradient(90deg, ${C.saffron}, #DC143C)`,
+              transformOrigin: "left center",
+              animation: "carouselProgress 4s linear forwards",
+              boxShadow: `0 0 8px rgba(244,162,54,0.5)`,
+            }}
+          />
+        </div>
+      )}
+
+      {/* Cards */}
+      <div
+        key={key}
+        className="carousel-track"
+        style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}
+      >
+        {visible.map((p, i) => (
+          <Link
+            key={`${p.name}-${i}`}
+            href={`/products/${p.slug}`}
+            className="carousel-card-enter product-card"
+            style={{
+              background: "#fff",
+              border: `1px solid ${C.border}`,
+              borderLeft: "none",
+              borderRadius: "2px",
+              overflow: "hidden",
+              display: "flex", flexDirection: "column",
+              padding: 0,
+              textDecoration: "none",
+              cursor: "pointer",
+              transition: "border-color 0.2s, box-shadow 0.2s",
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = C.saffron; (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 8px 28px rgba(244,162,54,0.15), 0 2px 6px rgba(244,162,54,0.1), inset 0 1px 0 rgba(255,255,255,0.9)`; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = C.border; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 1px 3px rgba(58,53,48,0.05), inset 0 1px 0 rgba(255,255,255,0.88)"; }}
+          >
+            <div style={{ height: "180px", overflow: "hidden", background: "#f0ede8", position: "relative" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={p.img}
+                alt={p.name}
+                style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
+              />
+              {/* Gradient overlay on image */}
+              <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0,
+                height: "60px",
+                background: "linear-gradient(to top, rgba(58,53,48,0.18) 0%, transparent 100%)",
+              }} />
+            </div>
+            <div style={{ padding: "1.1rem 1.2rem 1.3rem", display: "flex", flexDirection: "column", gap: "0.35rem", flex: 1 }}>
+              <span style={{
+                fontFamily: F.outfit, fontSize: "0.66rem",
+                letterSpacing: "0.1em", textTransform: "uppercase",
+                color: C.saffron, fontWeight: 600,
+              }}>{p.spec}</span>
+              <h4 style={{
+                fontFamily: F.outfit, fontWeight: 600,
+                fontSize: "0.98rem", color: C.charcoal, lineHeight: 1.25,
+              }}>{p.name}</h4>
+              <p style={{
+                fontFamily: F.baskerville, fontSize: "0.8rem",
+                color: C.taupe, lineHeight: 1.65, flex: 1,
+              }}>{p.desc}</p>
+              <span style={{
+                marginTop: "0.75rem",
+                display: "inline-flex", alignItems: "center", gap: "5px",
+                color: C.charcoal, fontFamily: F.outfit,
+                fontWeight: 600, fontSize: "0.76rem",
+                letterSpacing: "0.05em",
+                textDecoration: "underline",
+                textDecorationColor: C.saffron,
+                textUnderlineOffset: "3px",
+              }}>
+                View Details <ChevronRight size={12} />
+              </span>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* Controls row */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "1.5rem" }}>
+
+        {/* Dot indicators */}
+        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          {PP_PRODUCTS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => { setIdx(i); setKey(k => k + 1); }}
+              style={{
+                width: i === idx ? "28px" : "8px",
+                height: "8px",
+                borderRadius: "4px",
+                background: i === idx ? C.saffron : C.border,
+                border: "none",
+                cursor: "pointer",
+                transition: "all 0.3s cubic-bezier(0.22,1,0.36,1)",
+                padding: 0,
+                boxShadow: i === idx ? `0 0 8px rgba(244,162,54,0.4)` : "none",
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Prev/Next arrows */}
+        <div style={{ display: "flex", gap: "8px" }}>
+          {[{ dir: -1, label: "‹" }, { dir: 1, label: "›" }].map(({ dir, label }) => (
+            <button
+              key={dir}
+              onClick={() => go(dir)}
+              style={{
+                width: "38px", height: "38px",
+                borderRadius: "50%",
+                background: C.cream,
+                border: `1.5px solid ${C.borderMid}`,
+                cursor: "pointer",
+                fontFamily: F.outfit,
+                fontSize: "1.2rem",
+                color: C.charcoal,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                transition: "all 0.2s ease",
+                boxShadow: "0 1px 4px rgba(58,53,48,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+                lineHeight: 1,
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = C.saffron; (e.currentTarget as HTMLButtonElement).style.color = "#fff"; (e.currentTarget as HTMLButtonElement).style.borderColor = C.saffron; (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 4px 12px rgba(244,162,54,0.35), inset 0 1px 0 rgba(255,255,255,0.2)`; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = C.cream; (e.currentTarget as HTMLButtonElement).style.color = C.charcoal; (e.currentTarget as HTMLButtonElement).style.borderColor = C.borderMid; (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 1px 4px rgba(58,53,48,0.08), inset 0 1px 0 rgba(255,255,255,0.9)"; }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Products Section ───────────────────────────────────────────────────────── */
 function ProductsSection() {
   const scrollToContact = () =>
@@ -766,48 +1037,12 @@ function ProductsSection() {
     },
   ];
 
-  /* Product cards — PP first, FBB secondary */
-  const products = [
-    {
-      name: "PP Foldable Boxes",
-      spec: "Manufactured · Returnable",
-      desc: "Custom-manufactured foldable PP boxes for automotive trays and returnable industrial logistics. Exported globally.",
-      img: "https://www.brotherspackaging.in/assets/images/products/ppbox/9.webp",
-      slug: "pp-foldable-boxes",
-    },
-    {
-      name: "PP Corrugated Sheets",
-      spec: "Manufactured · Custom Sizes",
-      desc: "Waterproof, UV-stable PP hollow corrugated sheets for layer pads, partition dividers and protective wrapping.",
-      img: "https://jppack.in/products/ppcorrugatedsheetssunpaksheetshollowsheetsfluteboardsheets_24_07_25_09_23_01_102592.png",
-      slug: "pp-corrugated-sheets",
-    },
-    {
-      name: "PP Corrugated Crates",
-      spec: "Manufactured · Heavy Duty",
-      desc: "Stackable returnable crates for automotive OEMs, engineering components and industrial material handling.",
-      img: "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
-      slug: "pp-foldable-boxes",
-    },
-    {
-      name: "PP Layer Pads",
-      spec: "Manufactured · Pallet-Ready",
-      desc: "PP layer pads and slip sheets for pallet stacking, product separation and surface protection in transit.",
-      img: "https://jppack.in/products/ppcorrugatedlayerpad_24_07_25_09_27_58_112075.png",
-      slug: "pp-layer-pads",
-    },
-    {
-      name: "ESD Packaging",
-      spec: "Manufactured · Anti-Static",
-      desc: "Anti-static PP bins and boxes for electronics manufacturers and PCB component handling. Export compliant.",
-      img: "https://jppack.in/products/ppcorrugatedesdbin_24_07_25_09_29_20_111119.png",
-      slug: "esd-packaging",
-    },
+  /* Paper & board grades — no image, gradient bg */
+  const paperProducts = [
     {
       name: "ITC FBB Boards",
       spec: "Traded · Cyber Oak · Cyber XLPac",
       desc: "ITC PSPD folding box boards — high stiffness, FSC certified, sheeted to press-ready sizes. 230–400 GSM.",
-      img: null,
       bg: `linear-gradient(145deg, #e8d8b8 0%, #ddc99a 100%)`,
       icon: <Package size={28} color={C.charcoal} />,
       slug: "itc-fbb-boards",
@@ -816,7 +1051,6 @@ function ProductsSection() {
       name: "Duplex Board",
       spec: "Traded · Cut to Size",
       desc: "Coated duplex boards 200–450 GSM for pharma cartons and retail packaging. Sheeted from reel.",
-      img: null,
       bg: `linear-gradient(145deg, #e4e0d8 0%, #d8d4cc 100%)`,
       icon: <Package size={28} color={C.charcoal} />,
       slug: "duplex-board",
@@ -825,7 +1059,6 @@ function ProductsSection() {
       name: "Kraft Liner",
       spec: "Traded · 100–440 GSM",
       desc: "100% fresh fibre imported kraft liner for heavy-duty corrugated and export packaging.",
-      img: null,
       bg: `linear-gradient(145deg, #e0d0b8 0%, #d4c4a8 100%)`,
       icon: <Package size={28} color={C.charcoal} />,
       slug: "kraft-liner",
@@ -834,7 +1067,6 @@ function ProductsSection() {
       name: "Test Liners & Fluting",
       spec: "Traded · 80–400 GSM",
       desc: "Recycled fibre test liners and fluting medium for corrugators and box manufacturers.",
-      img: null,
       bg: `linear-gradient(145deg, #ddd8cc 0%, #d0cbc0 100%)`,
       icon: <Package size={28} color={C.charcoal} />,
       slug: "test-liners-fluting",
@@ -854,7 +1086,7 @@ function ProductsSection() {
             color: C.charcoal, letterSpacing: "-0.02em", lineHeight: 1.1, maxWidth: "600px",
           }}>
             Manufacture. Convert.<br />
-            <span style={{ color: C.saffron }}>Trade.</span>
+            <span className="grad-accent">Trade.</span>
           </h2>
           <p style={{
             fontFamily: F.baskerville, fontSize: "1rem",
@@ -876,7 +1108,12 @@ function ProductsSection() {
               position: "relative",
               overflow: "hidden",
               display: "flex", flexDirection: "column",
-            }}>
+              boxShadow: "0 4px 16px rgba(0,0,0,0.18), 0 12px 40px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.06)",
+              transition: "transform 0.28s ease, box-shadow 0.28s ease",
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 28px rgba(0,0,0,0.25), 0 20px 56px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.08)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 16px rgba(0,0,0,0.18), 0 12px 40px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.06)"; }}
+            >
               {/* Saffron corner accent */}
               <div style={{
                 position: "absolute", top: 0, right: 0,
@@ -937,19 +1174,43 @@ function ProductsSection() {
           ))}
         </div>
 
-        {/* ── DS Smith bottom: full product range grid ── */}
-        <div style={{ marginBottom: "1.75rem", borderBottom: `2px solid ${C.saffron}`, paddingBottom: "0.6rem", display: "inline-block" }}>
+        {/* ── PP Products — auto-carousel ── */}
+        <div style={{ marginBottom: "1.25rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ borderBottom: `2px solid ${C.saffron}`, paddingBottom: "0.6rem", display: "inline-block" }}>
+            <span style={{
+              fontFamily: F.outfit, fontWeight: 600,
+              fontSize: "0.75rem", letterSpacing: "0.14em",
+              textTransform: "uppercase", color: C.charcoal,
+            }}>
+              PP Products — Auto Showcase
+            </span>
+          </div>
+          <Link href="/products" style={{
+            fontFamily: F.outfit, fontSize: "0.76rem", fontWeight: 500,
+            color: C.taupe, textDecoration: "none", letterSpacing: "0.05em",
+            display: "inline-flex", alignItems: "center", gap: "4px",
+          }}>
+            View All <ChevronRight size={12} />
+          </Link>
+        </div>
+
+        <div className="sr" data-delay="0.1">
+          <ProductCarousel />
+        </div>
+
+        {/* ── Paper & Board grades grid ── */}
+        <div style={{ marginTop: "3rem", marginBottom: "1.25rem", borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "0.6rem", display: "inline-block" }}>
           <span style={{
             fontFamily: F.outfit, fontWeight: 600,
             fontSize: "0.75rem", letterSpacing: "0.14em",
             textTransform: "uppercase", color: C.charcoal,
           }}>
-            PP Manufacturing · FBB Converting · Paper Trading
+            Paper &amp; Board Grades
           </span>
         </div>
 
         <div className="products-detail-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.25rem" }}>
-          {products.map((p, i) => (
+          {paperProducts.map((p, i) => (
             <Link key={p.name} href={`/products/${p.slug}`} className="sr product-card" data-delay={`${0.07 * i}`} style={{
               background: "#fff",
               border: `1px solid ${C.border}`,
@@ -962,67 +1223,29 @@ function ProductsSection() {
               cursor: "pointer",
               transition: "border-color 0.2s, box-shadow 0.2s",
             }}
-            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = C.saffron; (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 4px 16px rgba(244,162,54,0.12)`; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = C.border; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none"; }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = C.saffron; (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 8px 24px rgba(244,162,54,0.12), inset 0 1px 0 rgba(255,255,255,0.9)`; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = C.border; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 1px 3px rgba(58,53,48,0.05), inset 0 1px 0 rgba(255,255,255,0.88)"; }}
             >
-              {/* DS Smith: photo or gradient fallback */}
-              {p.img ? (
-                <div style={{ height: "160px", overflow: "hidden", background: "#f0ede8" }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={p.img}
-                    alt={p.name}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
-                  />
-                </div>
-              ) : (
+              <div style={{
+                background: p.bg,
+                height: "130px",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
                 <div style={{
-                  background: p.bg,
-                  height: "160px",
+                  width: "56px", height: "56px",
+                  background: "rgba(255,255,255,0.65)",
+                  borderRadius: "50%",
                   display: "flex", alignItems: "center", justifyContent: "center",
+                  boxShadow: "0 2px 8px rgba(58,53,48,0.12), inset 0 1px 0 rgba(255,255,255,0.9)",
                 }}>
-                  <div style={{
-                    width: "60px", height: "60px",
-                    background: "rgba(255,255,255,0.65)",
-                    borderRadius: "50%",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    {p.icon}
-                  </div>
+                  {p.icon}
                 </div>
-              )}
-
-              {/* Content */}
-              <div style={{ padding: "1.1rem 1.2rem 1.3rem", display: "flex", flexDirection: "column", gap: "0.35rem", flex: 1 }}>
-                <span style={{
-                  fontFamily: F.outfit, fontSize: "0.66rem",
-                  letterSpacing: "0.1em", textTransform: "uppercase",
-                  color: C.saffron, fontWeight: 600,
-                }}>
-                  {p.spec}
-                </span>
-                <h4 style={{
-                  fontFamily: F.outfit, fontWeight: 600,
-                  fontSize: "0.98rem", color: C.charcoal, lineHeight: 1.25,
-                }}>
-                  {p.name}
-                </h4>
-                <p style={{
-                  fontFamily: F.baskerville, fontSize: "0.8rem",
-                  color: C.taupe, lineHeight: 1.65, flex: 1,
-                }}>
-                  {p.desc}
-                </p>
-                <span style={{
-                  marginTop: "0.75rem",
-                  display: "inline-flex", alignItems: "center", gap: "5px",
-                  color: C.charcoal, fontFamily: F.outfit,
-                  fontWeight: 600, fontSize: "0.76rem",
-                  letterSpacing: "0.05em",
-                  textDecoration: "underline",
-                  textDecorationColor: C.saffron,
-                  textUnderlineOffset: "3px",
-                }}>
+              </div>
+              <div style={{ padding: "1rem 1.1rem 1.2rem", display: "flex", flexDirection: "column", gap: "0.3rem", flex: 1 }}>
+                <span style={{ fontFamily: F.outfit, fontSize: "0.66rem", letterSpacing: "0.1em", textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>{p.spec}</span>
+                <h4 style={{ fontFamily: F.outfit, fontWeight: 600, fontSize: "0.95rem", color: C.charcoal, lineHeight: 1.25 }}>{p.name}</h4>
+                <p style={{ fontFamily: F.baskerville, fontSize: "0.78rem", color: C.taupe, lineHeight: 1.65, flex: 1 }}>{p.desc}</p>
+                <span style={{ marginTop: "0.65rem", display: "inline-flex", alignItems: "center", gap: "5px", color: C.charcoal, fontFamily: F.outfit, fontWeight: 600, fontSize: "0.74rem", letterSpacing: "0.05em", textDecoration: "underline", textDecorationColor: C.saffron, textUnderlineOffset: "3px" }}>
                   View Details <ChevronRight size={12} />
                 </span>
               </div>
@@ -1037,6 +1260,7 @@ function ProductsSection() {
             fontFamily: F.outfit, fontSize: "0.88rem", fontWeight: 600,
             letterSpacing: "0.05em", color: C.charcoal, textDecoration: "none",
             padding: "12px 24px", border: `1.5px solid ${C.borderMid}`, borderRadius: "2px",
+            boxShadow: "0 1px 4px rgba(58,53,48,0.06), inset 0 1px 0 rgba(255,255,255,0.85)",
           }}>
             View Full Catalogue <ArrowRight size={14} />
           </Link>
@@ -1085,7 +1309,10 @@ function InfraCallout() {
         <div className="infra-metrics-grid" style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "1px", background: "rgba(255,253,248,0.08)" }}>
           {metrics.map((m) => (
             <div key={m.label} style={{
-              background: C.charcoal, padding: "1.25rem 1rem", textAlign: "center",
+              background: C.charcoal,
+              padding: "1.25rem 1rem",
+              textAlign: "center",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -1px 0 rgba(0,0,0,0.15)",
             }}>
               <div style={{ fontFamily: F.outfit, fontWeight: 700, fontSize: "1.4rem", color: C.saffron, lineHeight: 1.1 }}>{m.value}</div>
               <div style={{ fontFamily: F.outfit, fontSize: "0.68rem", color: "rgba(255,253,248,0.5)", letterSpacing: "0.06em", textTransform: "uppercase", marginTop: "4px" }}>{m.label}</div>
@@ -1165,7 +1392,7 @@ function IndustriesSection() {
             lineHeight: 1.1,
           }}>
             The Full Paper<br />
-            <span style={{ color: C.saffron }}>Supply Chain.</span>
+            <span className="grad-accent">Supply Chain.</span>
           </h2>
           <p style={{ fontFamily: F.baskerville, fontSize: "1rem", color: C.taupe, lineHeight: 1.75, maxWidth: "520px", marginTop: "1rem" }}>
             From paper traders and corrugators to automotive OEMs and pharma brands — we supply the right grade, converted to the right size, on time.
@@ -1244,7 +1471,7 @@ function BlogTeaser() {
             <span style={{ fontFamily: F.outfit, fontSize: "0.72rem", letterSpacing: "0.16em", textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>Knowledge Hub</span>
             <h2 style={{ fontFamily: F.outfit, fontWeight: 700, fontSize: "clamp(1.6rem, 3vw, 2.4rem)", color: C.cream, letterSpacing: "-0.02em", lineHeight: 1.1, marginTop: "0.5rem" }}>
               Packaging Intelligence,<br />
-              <span style={{ color: C.saffron }}>Free to Use.</span>
+              <span className="grad-accent-light">Free to Use.</span>
             </h2>
           </div>
           <Link href="/blog" style={{
@@ -1334,7 +1561,7 @@ function AboutSection() {
               marginBottom: "1.75rem",
             }}>
               Three Decades of{" "}
-              <span style={{ color: C.saffron }}>Packaging Excellence</span>
+              <span className="grad-accent">Packaging Excellence</span>
             </h2>
 
             <p style={{
@@ -1397,6 +1624,7 @@ function AboutSection() {
               padding: "2.5rem",
               position: "relative",
               overflow: "hidden",
+              boxShadow: "0 20px 60px rgba(44,40,37,0.22), 0 6px 20px rgba(44,40,37,0.14), inset 0 1px 0 rgba(255,255,255,0.07)",
             }}>
               <div style={{
                 position: "absolute", top: 0, left: 0, right: 0,
@@ -1578,7 +1806,7 @@ function ContactSection() {
             lineHeight: 1.1,
           }}>
             Start Your Packaging<br />
-            <span style={{ color: C.saffron }}>Project Today</span>
+            <span className="grad-accent">Project Today</span>
           </h2>
         </div>
 
@@ -1591,6 +1819,7 @@ function ContactSection() {
               border: `1px solid ${C.border}`,
               borderRadius: "2px",
               padding: "2.5rem",
+              boxShadow: "0 4px 16px rgba(58,53,48,0.06), 0 1px 4px rgba(58,53,48,0.04), inset 0 1px 0 rgba(255,255,255,0.95)",
             }}>
               {/* Document header */}
               <div style={{
