@@ -5,35 +5,114 @@ import Link from "next/link";
 import { products, Product } from "@/lib/pgg-data";
 
 // ————————————————————————————————————————————
-// Brand constants
+// The Merchant — Design Tokens
 // ————————————————————————————————————————————
 const C = {
-  cream: "#FFFDF8",
-  charcoal: "#3A3530",
-  saffron: "#F4A236",
-  sindoor: "#DC143C",
-  taupe: "#5A534D",
-  dark: "#2C2825",
-  light: "#F5F0E8",
-  border: "#E8E2D9",
+  cream: "#FAF7F2",
+  parchment: "#F0EAE0",
+  charcoal: "#1C1A17",
+  warm: "#4A4540",
+  taupe: "#7A736D",
+  saffron: "#D4860E",
+  dark: "#141210",
+  border: "rgba(28,26,23,0.1)",
+  borderMid: "rgba(28,26,23,0.16)",
 };
 
-const FONT = {
-  outfit: "'Outfit', sans-serif",
-  cormorant: "'Cormorant Garamond', Georgia, serif",
-  baskerville: "'Libre Baskerville', Georgia, serif",
+const F = {
+  display: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
+  body: "'DM Sans', 'Plus Jakarta Sans', sans-serif",
+  italic: "'Cormorant Garamond', Georgia, serif",
 };
 
-// ————————————————————————————————————————————
-// Sub-components
-// ————————————————————————————————————————————
-function SubpageNav({ productName }: { productName: string }) {
-  const [scrolled, setScrolled] = useState(false);
+const GLOBAL_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #FAF7F2; }
 
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ruleGrow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  .sr { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .sr.visible { opacity: 1; transform: translateY(0); }
+
+  .prod-nav-link {
+    font-family: 'DM Sans', sans-serif;
+    color: ${C.charcoal};
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .prod-nav-link:hover { opacity: 1; }
+
+  .app-card {
+    background: #fff;
+    border: 1px solid ${C.border};
+    border-left: 3px solid ${C.charcoal};
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: ${C.charcoal};
+    line-height: 1.5;
+    transition: border-left-color 0.2s ease;
+  }
+  .app-card:hover { border-left-color: ${C.saffron}; }
+
+  .related-card {
+    background: #fff;
+    border: 1px solid ${C.border};
+    border-radius: 4px;
+    padding: 1.25rem;
+    text-decoration: none;
+    display: block;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .related-card:hover {
+    border-color: ${C.borderMid};
+    box-shadow: 0 8px 24px rgba(28,26,23,0.07);
+  }
+`;
+
+// ————————————————————————————————————————————
+// Scroll reveal
+// ————————————————————————————————————————————
+function useScrollReveal() {
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handler);
-    return () => window.removeEventListener("scroll", handler);
+    const els = document.querySelectorAll(".sr");
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            obs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+}
+
+// ————————————————————————————————————————————
+// Navbar
+// ————————————————————————————————————————————
+function SubpageNav() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const h = () => setScrolled(window.scrollY > 30);
+    window.addEventListener("scroll", h);
+    return () => window.removeEventListener("scroll", h);
   }, []);
 
   return (
@@ -42,15 +121,15 @@ function SubpageNav({ productName }: { productName: string }) {
         position: "sticky",
         top: 0,
         zIndex: 100,
-        background: scrolled ? C.dark : "rgba(44,40,37,0.95)",
-        backdropFilter: "blur(12px)",
-        borderBottom: `1px solid rgba(244,162,54,${scrolled ? "0.25" : "0.1"})`,
+        background: scrolled ? "rgba(250,247,242,0.97)" : C.cream,
+        backdropFilter: "blur(8px)",
+        borderBottom: `1px solid ${scrolled ? C.borderMid : C.border}`,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "0 2rem",
+        padding: "0 2.5rem",
         height: "64px",
-        transition: "all 0.3s ease",
+        transition: "border-color 0.3s ease, background 0.3s ease",
       }}
     >
       <Link
@@ -62,33 +141,45 @@ function SubpageNav({ productName }: { productName: string }) {
           textDecoration: "none",
         }}
       >
-        <span style={{ color: C.saffron, fontSize: "1.1rem" }}>←</span>
+        <span style={{ color: C.taupe, fontSize: "0.9rem" }}>←</span>
         <span
           style={{
-            fontFamily: FONT.outfit,
-            fontWeight: 700,
-            color: "#FFFDF8",
+            fontFamily: F.body,
+            fontWeight: 500,
+            color: C.charcoal,
             fontSize: "0.875rem",
-            letterSpacing: "0.06em",
-            textTransform: "uppercase",
+            opacity: 0.8,
           }}
         >
           All Products
         </span>
       </Link>
 
+      <Link
+        href="/"
+        style={{
+          fontFamily: F.display,
+          fontWeight: 700,
+          color: C.charcoal,
+          textDecoration: "none",
+          fontSize: "1rem",
+        }}
+      >
+        Pune Global Group
+      </Link>
+
       <a
         href="/#contact"
         style={{
-          fontFamily: FONT.outfit,
-          background: C.saffron,
-          color: C.dark,
+          fontFamily: F.body,
+          background: C.charcoal,
+          color: C.cream,
           textDecoration: "none",
-          fontSize: "0.875rem",
-          fontWeight: 600,
+          fontSize: "0.82rem",
+          fontWeight: 500,
           padding: "0.5rem 1.25rem",
-          borderRadius: "4px",
-          letterSpacing: "0.02em",
+          borderRadius: "3px",
+          letterSpacing: "0.03em",
         }}
       >
         Get a Quote
@@ -97,21 +188,24 @@ function SubpageNav({ productName }: { productName: string }) {
   );
 }
 
+// ————————————————————————————————————————————
+// Category Tag
+// ————————————————————————————————————————————
 function CategoryTag({ category }: { category: string }) {
   const isPP = category === "PP Packaging";
   return (
     <span
       style={{
-        fontFamily: FONT.outfit,
-        fontSize: "0.72rem",
+        fontFamily: F.body,
+        fontSize: "0.7rem",
         fontWeight: 600,
         letterSpacing: "0.1em",
         textTransform: "uppercase",
-        background: isPP ? "rgba(220,20,60,0.15)" : "rgba(244,162,54,0.15)",
-        color: isPP ? C.sindoor : "#C47E1A",
-        padding: "0.3rem 0.75rem",
-        borderRadius: "3px",
-        border: `1px solid ${isPP ? "rgba(220,20,60,0.3)" : "rgba(244,162,54,0.35)"}`,
+        background: isPP ? "rgba(139,26,26,0.1)" : "rgba(212,134,14,0.1)",
+        color: isPP ? "#8B1A1A" : C.saffron,
+        padding: "0.28rem 0.7rem",
+        borderRadius: "2px",
+        border: `1px solid ${isPP ? "rgba(139,26,26,0.2)" : "rgba(212,134,14,0.25)"}`,
         display: "inline-block",
       }}
     >
@@ -120,76 +214,29 @@ function CategoryTag({ category }: { category: string }) {
   );
 }
 
-function CheckIcon() {
-  return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "20px",
-        height: "20px",
-        background: "rgba(244,162,54,0.15)",
-        color: C.saffron,
-        borderRadius: "50%",
-        fontSize: "0.7rem",
-        fontWeight: 700,
-        flexShrink: 0,
-      }}
-    >
-      ✓
-    </span>
-  );
-}
-
-function ShieldIcon() {
-  return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "20px",
-        height: "20px",
-        background: "rgba(220,20,60,0.12)",
-        color: C.sindoor,
-        borderRadius: "50%",
-        fontSize: "0.65rem",
-        fontWeight: 700,
-        flexShrink: 0,
-      }}
-    >
-      ✓
-    </span>
-  );
-}
-
+// ————————————————————————————————————————————
+// Product Page Content
+// ————————————————————————————————————————————
 function ProductPageContent({ product }: { product: Product }) {
-  const isPP = product.category === "PP Packaging";
+  useScrollReveal();
 
   return (
-    <div style={{ background: C.cream, minHeight: "100vh", fontFamily: FONT.outfit }}>
-      {/* ——— Hero Section ——— */}
+    <div style={{ background: C.cream, minHeight: "100vh" }}>
+      {/* ——— Hero ——— */}
       <section
         style={{
-          background: `linear-gradient(135deg, ${C.dark} 0%, #3A3530 70%)`,
-          padding: "4rem 2rem 3.5rem",
+          background: C.cream,
+          padding: "4.5rem 2.5rem 4rem",
           position: "relative",
           overflow: "hidden",
+          borderBottom: `1px solid ${C.border}`,
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: isPP
-              ? `radial-gradient(circle at 10% 60%, rgba(220,20,60,0.08) 0%, transparent 45%),
-                 radial-gradient(circle at 90% 20%, rgba(244,162,54,0.06) 0%, transparent 35%)`
-              : `radial-gradient(circle at 10% 60%, rgba(244,162,54,0.1) 0%, transparent 45%),
-                 radial-gradient(circle at 90% 20%, rgba(244,162,54,0.06) 0%, transparent 35%)`,
-            pointerEvents: "none",
-          }}
-        />
+        {/* Paper grain */}
+        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity: 0.035 }} aria-hidden>
+          <filter id="grain-prod"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
+          <rect width="100%" height="100%" filter="url(#grain-prod)" />
+        </svg>
 
         <div
           style={{
@@ -198,78 +245,137 @@ function ProductPageContent({ product }: { product: Product }) {
             margin: "0 auto",
             display: "grid",
             gridTemplateColumns: product.image ? "1fr 1fr" : "1fr",
-            gap: "3rem",
+            gap: "4rem",
             alignItems: "center",
           }}
         >
           <div>
-            <CategoryTag category={product.category} />
+            <div style={{ marginBottom: "1.25rem", animation: "fadeUp 0.6s ease both" }}>
+              <CategoryTag category={product.category} />
+            </div>
+
+            <div
+              style={{
+                width: "48px",
+                height: "2px",
+                background: C.charcoal,
+                marginBottom: "1.25rem",
+                transformOrigin: "left",
+                animation: "ruleGrow 0.5s ease 0.15s both",
+              }}
+            />
+
             <h1
               style={{
-                fontFamily: FONT.cormorant,
-                fontSize: "clamp(2rem, 4.5vw, 3rem)",
+                fontFamily: F.display,
+                fontSize: "clamp(2rem, 4.5vw, 3.1rem)",
                 fontWeight: 700,
-                color: "#FFFDF8",
-                margin: "1rem 0 0.75rem",
-                lineHeight: 1.15,
+                color: C.charcoal,
+                margin: "0 0 1rem",
+                lineHeight: 1.1,
+                animation: "fadeUp 0.7s ease 0.2s both",
               }}
             >
               {product.name}
             </h1>
+
             <p
               style={{
-                fontFamily: FONT.outfit,
+                fontFamily: F.body,
                 fontSize: "1rem",
-                color: "rgba(255,253,248,0.75)",
-                margin: "0 0 1.75rem",
+                color: C.warm,
+                margin: "0 0 2rem",
                 lineHeight: 1.7,
                 maxWidth: "520px",
+                animation: "fadeUp 0.7s ease 0.35s both",
               }}
             >
               {product.tagline}
             </p>
 
             {/* Key spec pills */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem", marginBottom: "2rem" }}>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "0.5rem",
+                marginBottom: "2rem",
+                animation: "fadeUp 0.7s ease 0.5s both",
+              }}
+            >
               {product.gsmRange && (
-                <div style={{ fontFamily: FONT.outfit, fontSize: "0.8rem", fontWeight: 500, color: "#FFFDF8", background: "rgba(255,253,248,0.08)", border: "1px solid rgba(255,253,248,0.15)", padding: "0.4rem 0.9rem", borderRadius: "4px" }}>
+                <div style={{ fontFamily: F.body, fontSize: "0.78rem", fontWeight: 500, color: C.charcoal, background: C.parchment, border: `1px solid ${C.borderMid}`, padding: "0.38rem 0.85rem", borderRadius: "3px" }}>
                   <span style={{ color: C.saffron, fontWeight: 700 }}>GSM: </span>{product.gsmRange}
                 </div>
               )}
               {product.thickness && (
-                <div style={{ fontFamily: FONT.outfit, fontSize: "0.8rem", fontWeight: 500, color: "#FFFDF8", background: "rgba(255,253,248,0.08)", border: "1px solid rgba(255,253,248,0.15)", padding: "0.4rem 0.9rem", borderRadius: "4px" }}>
+                <div style={{ fontFamily: F.body, fontSize: "0.78rem", fontWeight: 500, color: C.charcoal, background: C.parchment, border: `1px solid ${C.borderMid}`, padding: "0.38rem 0.85rem", borderRadius: "3px" }}>
                   <span style={{ color: C.saffron, fontWeight: 700 }}>Thickness: </span>{product.thickness}
                 </div>
               )}
               {product.surfaceResistivity && (
-                <div style={{ fontFamily: FONT.outfit, fontSize: "0.8rem", fontWeight: 500, color: "#FFFDF8", background: "rgba(255,253,248,0.08)", border: "1px solid rgba(255,253,248,0.15)", padding: "0.4rem 0.9rem", borderRadius: "4px" }}>
+                <div style={{ fontFamily: F.body, fontSize: "0.78rem", fontWeight: 500, color: C.charcoal, background: C.parchment, border: `1px solid ${C.borderMid}`, padding: "0.38rem 0.85rem", borderRadius: "3px" }}>
                   <span style={{ color: C.saffron, fontWeight: 700 }}>Resistivity: </span>{product.surfaceResistivity}
                 </div>
               )}
               {product.origin && (
-                <div style={{ fontFamily: FONT.outfit, fontSize: "0.8rem", fontWeight: 500, color: "#FFFDF8", background: "rgba(255,253,248,0.08)", border: "1px solid rgba(255,253,248,0.15)", padding: "0.4rem 0.9rem", borderRadius: "4px" }}>
+                <div style={{ fontFamily: F.body, fontSize: "0.78rem", fontWeight: 500, color: C.charcoal, background: C.parchment, border: `1px solid ${C.borderMid}`, padding: "0.38rem 0.85rem", borderRadius: "3px" }}>
                   <span style={{ color: C.saffron, fontWeight: 700 }}>Origin: </span>{product.origin}
                 </div>
               )}
               {product.certifications && product.certifications.map((cert) => (
-                <div key={cert} style={{ fontFamily: FONT.outfit, fontSize: "0.8rem", fontWeight: 600, color: C.saffron, background: "rgba(244,162,54,0.12)", border: "1px solid rgba(244,162,54,0.3)", padding: "0.4rem 0.9rem", borderRadius: "4px" }}>
+                <div key={cert} style={{ fontFamily: F.body, fontSize: "0.78rem", fontWeight: 600, color: C.charcoal, background: "#fff", border: `1px solid ${C.borderMid}`, padding: "0.38rem 0.85rem", borderRadius: "3px" }}>
                   {cert}
                 </div>
               ))}
             </div>
 
-            <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-              <a href="/#contact" style={{ fontFamily: FONT.outfit, background: C.saffron, color: C.dark, textDecoration: "none", fontSize: "0.9rem", fontWeight: 700, padding: "0.85rem 1.75rem", borderRadius: "4px" }}>
+            <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", animation: "fadeUp 0.7s ease 0.6s both" }}>
+              <a
+                href="/#contact"
+                style={{
+                  fontFamily: F.body,
+                  background: C.charcoal,
+                  color: C.cream,
+                  textDecoration: "none",
+                  fontSize: "0.875rem",
+                  fontWeight: 600,
+                  padding: "0.85rem 1.75rem",
+                  borderRadius: "3px",
+                  letterSpacing: "0.02em",
+                }}
+              >
                 Enquire Now →
               </a>
-              <a href="/#contact" style={{ fontFamily: FONT.outfit, background: "transparent", color: "#FFFDF8", textDecoration: "none", fontSize: "0.9rem", fontWeight: 500, padding: "0.85rem 1.75rem", borderRadius: "4px", border: "1px solid rgba(255,253,248,0.3)" }}>
+              <a
+                href="/#contact"
+                style={{
+                  fontFamily: F.body,
+                  background: "transparent",
+                  color: C.charcoal,
+                  textDecoration: "none",
+                  fontSize: "0.875rem",
+                  fontWeight: 400,
+                  padding: "0.85rem 1.75rem",
+                  borderRadius: "3px",
+                  border: `1px solid ${C.borderMid}`,
+                }}
+              >
                 Request Sample
               </a>
             </div>
           </div>
 
           {product.image && (
-            <div style={{ borderRadius: "10px", overflow: "hidden", boxShadow: "0 24px 64px rgba(0,0,0,0.35)", maxHeight: "360px" }}>
+            <div
+              style={{
+                borderRadius: "6px",
+                overflow: "hidden",
+                boxShadow: "0 24px 64px rgba(28,26,23,0.12)",
+                maxHeight: "380px",
+                animation: "fadeUp 0.8s ease 0.3s both",
+              }}
+            >
               <img src={product.image} alt={product.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
           )}
@@ -278,13 +384,13 @@ function ProductPageContent({ product }: { product: Product }) {
 
       {/* ——— Brands / Variants Banner ——— */}
       {(product.brands || product.variants) && (
-        <div style={{ background: "#FFFFFF", borderBottom: `1px solid ${C.border}`, padding: "1.25rem 2rem" }}>
+        <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "1.25rem 2.5rem" }}>
           <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
-            <span style={{ fontFamily: FONT.outfit, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: C.taupe }}>
+            <span style={{ fontFamily: F.body, fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: C.taupe }}>
               {product.brands ? "Available Brands:" : "Variants:"}
             </span>
             {(product.brands || product.variants || []).map((item) => (
-              <span key={item} style={{ fontFamily: FONT.outfit, fontSize: "0.82rem", fontWeight: 500, color: C.charcoal, background: C.light, border: `1px solid ${C.border}`, padding: "0.3rem 0.75rem", borderRadius: "3px" }}>
+              <span key={item} style={{ fontFamily: F.body, fontSize: "0.82rem", fontWeight: 500, color: C.charcoal, background: C.parchment, border: `1px solid ${C.border}`, padding: "0.28rem 0.7rem", borderRadius: "2px" }}>
                 {item}
               </span>
             ))}
@@ -293,17 +399,54 @@ function ProductPageContent({ product }: { product: Product }) {
       )}
 
       {/* ——— Main Content ——— */}
-      <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "3rem 2rem 5rem" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem" }}>
+      <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "3.5rem 2.5rem 5rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3.5rem" }}>
           {/* Features */}
-          <section>
-            <h2 style={{ fontFamily: FONT.cormorant, fontSize: "1.75rem", fontWeight: 700, color: C.charcoal, margin: "0 0 1.5rem", paddingBottom: "0.75rem", borderBottom: `2px solid ${C.saffron}` }}>
+          <section className="sr">
+            <h2
+              style={{
+                fontFamily: F.display,
+                fontSize: "1.65rem",
+                fontWeight: 700,
+                color: C.charcoal,
+                margin: "0 0 1.5rem",
+                paddingBottom: "0.75rem",
+                borderBottom: `1px solid ${C.borderMid}`,
+              }}
+            >
               Key Features
             </h2>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               {product.features.map((feature, i) => (
-                <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem", fontFamily: FONT.outfit, fontSize: "0.9rem", color: C.charcoal, lineHeight: 1.6 }}>
-                  <CheckIcon />
+                <li
+                  key={i}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "0.75rem",
+                    fontFamily: F.body,
+                    fontSize: "0.9rem",
+                    color: C.warm,
+                    lineHeight: 1.65,
+                  }}
+                >
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "20px",
+                      height: "20px",
+                      background: C.parchment,
+                      color: C.charcoal,
+                      borderRadius: "50%",
+                      fontSize: "0.65rem",
+                      fontWeight: 700,
+                      flexShrink: 0,
+                    }}
+                  >
+                    ✓
+                  </span>
                   <span>{feature}</span>
                 </li>
               ))}
@@ -311,13 +454,23 @@ function ProductPageContent({ product }: { product: Product }) {
           </section>
 
           {/* Applications */}
-          <section>
-            <h2 style={{ fontFamily: FONT.cormorant, fontSize: "1.75rem", fontWeight: 700, color: C.charcoal, margin: "0 0 1.5rem", paddingBottom: "0.75rem", borderBottom: `2px solid ${C.saffron}` }}>
+          <section className="sr">
+            <h2
+              style={{
+                fontFamily: F.display,
+                fontSize: "1.65rem",
+                fontWeight: 700,
+                color: C.charcoal,
+                margin: "0 0 1.5rem",
+                paddingBottom: "0.75rem",
+                borderBottom: `1px solid ${C.borderMid}`,
+              }}
+            >
               Applications
             </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem" }}>
               {product.applications.map((app, i) => (
-                <div key={i} style={{ background: "#FFFFFF", border: `1px solid ${C.border}`, borderRadius: "6px", padding: "0.75rem 1rem", fontFamily: FONT.outfit, fontSize: "0.82rem", color: C.charcoal, lineHeight: 1.5, borderLeft: `3px solid ${C.saffron}` }}>
+                <div key={i} className="app-card">
                   {app}
                 </div>
               ))}
@@ -326,19 +479,35 @@ function ProductPageContent({ product }: { product: Product }) {
         </div>
 
         {/* Specs Table */}
-        <section style={{ marginTop: "3rem" }}>
-          <h2 style={{ fontFamily: FONT.cormorant, fontSize: "1.75rem", fontWeight: 700, color: C.charcoal, margin: "0 0 1.5rem", paddingBottom: "0.75rem", borderBottom: `2px solid ${C.saffron}` }}>
+        <section style={{ marginTop: "3.5rem" }} className="sr">
+          <h2
+            style={{
+              fontFamily: F.display,
+              fontSize: "1.65rem",
+              fontWeight: 700,
+              color: C.charcoal,
+              margin: "0 0 1.5rem",
+              paddingBottom: "0.75rem",
+              borderBottom: `1px solid ${C.borderMid}`,
+            }}
+          >
             Technical Specifications
           </h2>
-          <div style={{ background: "#FFFFFF", border: `1px solid ${C.border}`, borderRadius: "8px", overflow: "hidden" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: FONT.outfit }}>
+          <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: "6px", overflow: "hidden" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: F.body }}>
               <tbody>
                 {product.specsTable.map((spec, i) => (
-                  <tr key={i} style={{ borderBottom: i < product.specsTable.length - 1 ? `1px solid ${C.border}` : "none", background: i % 2 === 0 ? "#FFFFFF" : C.cream }}>
-                    <td style={{ padding: "0.875rem 1.5rem", fontSize: "0.82rem", fontWeight: 600, color: C.taupe, width: "40%", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                  <tr
+                    key={i}
+                    style={{
+                      borderBottom: i < product.specsTable.length - 1 ? `1px solid ${C.border}` : "none",
+                      background: i % 2 === 0 ? "#fff" : C.cream,
+                    }}
+                  >
+                    <td style={{ padding: "0.875rem 1.5rem", fontSize: "0.78rem", fontWeight: 600, color: C.taupe, width: "40%", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                       {spec.label}
                     </td>
-                    <td style={{ padding: "0.875rem 1.5rem", fontSize: "0.9rem", fontWeight: 500, color: C.charcoal }}>
+                    <td style={{ padding: "0.875rem 1.5rem", fontSize: "0.88rem", fontWeight: 500, color: C.charcoal }}>
                       {spec.value}
                     </td>
                   </tr>
@@ -349,15 +518,59 @@ function ProductPageContent({ product }: { product: Product }) {
         </section>
 
         {/* Export Compliance */}
-        <section style={{ marginTop: "3rem" }}>
-          <h2 style={{ fontFamily: FONT.cormorant, fontSize: "1.75rem", fontWeight: 700, color: C.charcoal, margin: "0 0 1.5rem", paddingBottom: "0.75rem", borderBottom: `2px solid ${C.sindoor}` }}>
-            Export Compliance & Certifications
+        <section style={{ marginTop: "3rem" }} className="sr">
+          <h2
+            style={{
+              fontFamily: F.display,
+              fontSize: "1.65rem",
+              fontWeight: 700,
+              color: C.charcoal,
+              margin: "0 0 1.5rem",
+              paddingBottom: "0.75rem",
+              borderBottom: `1px solid ${C.borderMid}`,
+            }}
+          >
+            Export Compliance &amp; Certifications
           </h2>
-          <div style={{ background: "rgba(220,20,60,0.03)", border: `1px solid rgba(220,20,60,0.15)`, borderRadius: "8px", padding: "1.5rem 2rem" }}>
+          <div
+            style={{
+              background: C.parchment,
+              border: `1px solid ${C.border}`,
+              borderRadius: "6px",
+              padding: "1.75rem 2rem",
+            }}
+          >
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               {product.exportCompliance.map((item, i) => (
-                <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem", fontFamily: FONT.outfit, fontSize: "0.9rem", color: C.charcoal, lineHeight: 1.6 }}>
-                  <ShieldIcon />
+                <li
+                  key={i}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "0.75rem",
+                    fontFamily: F.body,
+                    fontSize: "0.9rem",
+                    color: C.warm,
+                    lineHeight: 1.65,
+                  }}
+                >
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "20px",
+                      height: "20px",
+                      background: "#fff",
+                      color: C.charcoal,
+                      borderRadius: "50%",
+                      fontSize: "0.65rem",
+                      fontWeight: 700,
+                      flexShrink: 0,
+                    }}
+                  >
+                    ✓
+                  </span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -366,23 +579,52 @@ function ProductPageContent({ product }: { product: Product }) {
         </section>
 
         {/* CTA */}
-        <section style={{ marginTop: "3rem", background: `linear-gradient(135deg, ${C.dark} 0%, #3A3530 100%)`, borderRadius: "12px", padding: "3rem 2.5rem", display: "grid", gridTemplateColumns: "1fr auto", gap: "2rem", alignItems: "center", border: `1px solid rgba(244,162,54,0.2)` }}>
+        <section
+          style={{
+            marginTop: "3.5rem",
+            background: C.dark,
+            borderRadius: "6px",
+            padding: "3.5rem 3rem",
+            display: "grid",
+            gridTemplateColumns: "1fr auto",
+            gap: "2rem",
+            alignItems: "center",
+          }}
+          className="sr"
+        >
           <div>
-            <p style={{ fontFamily: FONT.outfit, fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: C.saffron, margin: "0 0 0.5rem" }}>
+            <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "0.95rem", color: "rgba(250,247,242,0.5)", margin: "0 0 0.75rem" }}>
               Ready to proceed?
             </p>
-            <h3 style={{ fontFamily: FONT.cormorant, fontSize: "1.75rem", fontWeight: 700, color: "#FFFDF8", margin: "0 0 0.75rem" }}>
+            <h3 style={{ fontFamily: F.display, fontSize: "1.65rem", fontWeight: 700, color: C.cream, margin: "0 0 0.875rem", lineHeight: 1.2 }}>
               Request a Sample or Quotation
             </h3>
-            <p style={{ fontFamily: FONT.outfit, fontSize: "0.875rem", color: "rgba(255,253,248,0.65)", margin: 0, lineHeight: 1.7 }}>
-              Share your application requirements and we will send you a sample with full technical documentation — COA, FSC certificate, and food contact declarations where applicable.
+            <p style={{ fontFamily: F.body, fontSize: "0.875rem", color: "rgba(250,247,242,0.55)", margin: 0, lineHeight: 1.7 }}>
+              Share your application requirements and we will send you a sample with full technical
+              documentation — COA, FSC certificate, and food contact declarations where applicable.
             </p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", alignItems: "flex-end" }}>
-            <a href="/#contact" style={{ fontFamily: FONT.outfit, background: C.saffron, color: C.dark, textDecoration: "none", fontSize: "0.9rem", fontWeight: 700, padding: "0.9rem 1.75rem", borderRadius: "4px", whiteSpace: "nowrap" }}>
+            <a
+              href="/#contact"
+              style={{
+                fontFamily: F.body,
+                background: C.cream,
+                color: C.charcoal,
+                textDecoration: "none",
+                fontSize: "0.875rem",
+                fontWeight: 600,
+                padding: "0.9rem 1.75rem",
+                borderRadius: "3px",
+                whiteSpace: "nowrap",
+              }}
+            >
               Request Sample →
             </a>
-            <a href={`mailto:contact.puneglobalgroup@gmail.com?subject=Enquiry: ${product.name}`} style={{ fontFamily: FONT.outfit, fontSize: "0.8rem", color: "rgba(255,253,248,0.6)", textDecoration: "none", textAlign: "center" }}>
+            <a
+              href={`mailto:contact.puneglobalgroup@gmail.com?subject=Enquiry: ${product.name}`}
+              style={{ fontFamily: F.body, fontSize: "0.8rem", color: "rgba(250,247,242,0.4)", textDecoration: "none", textAlign: "center" }}
+            >
               contact.puneglobalgroup@gmail.com
             </a>
           </div>
@@ -390,15 +632,15 @@ function ProductPageContent({ product }: { product: Product }) {
       </main>
 
       {/* Footer */}
-      <footer style={{ background: C.dark, borderTop: `1px solid rgba(244,162,54,0.15)`, padding: "2rem", textAlign: "center" }}>
+      <footer style={{ background: C.dark, borderTop: `1px solid rgba(250,247,242,0.07)`, padding: "2rem 2.5rem", textAlign: "center" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
-          <Link href="/products" style={{ fontFamily: FONT.outfit, fontSize: "0.8rem", color: "rgba(255,253,248,0.5)", textDecoration: "none" }}>
+          <Link href="/products" style={{ fontFamily: F.body, fontSize: "0.78rem", color: "rgba(250,247,242,0.4)", textDecoration: "none" }}>
             ← All Products
           </Link>
-          <p style={{ fontFamily: FONT.outfit, fontSize: "0.8rem", color: "rgba(255,253,248,0.45)", margin: 0 }}>
+          <p style={{ fontFamily: F.body, fontSize: "0.78rem", color: "rgba(250,247,242,0.35)", margin: 0 }}>
             © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO · +91 98233 83230
           </p>
-          <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ fontFamily: FONT.outfit, fontSize: "0.8rem", color: "rgba(255,253,248,0.5)", textDecoration: "none" }}>
+          <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ fontFamily: F.body, fontSize: "0.78rem", color: "rgba(250,247,242,0.4)", textDecoration: "none" }}>
             contact.puneglobalgroup@gmail.com
           </a>
         </div>
@@ -415,20 +657,38 @@ export default function ProductPageClient({ slug }: { slug: string }) {
 
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap');
-        *, *::before, *::after { box-sizing: border-box; }
-        body { margin: 0; }
-      `}</style>
+      <style>{GLOBAL_CSS}</style>
       {product ? (
         <>
-          <SubpageNav productName={product.name} />
+          <SubpageNav />
           <ProductPageContent product={product} />
         </>
       ) : (
-        <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: C.cream, fontFamily: FONT.outfit, gap: "1rem" }}>
-          <h1 style={{ fontFamily: FONT.cormorant, fontSize: "2.5rem", color: C.charcoal, margin: 0 }}>Product Not Found</h1>
-          <Link href="/products" style={{ fontFamily: FONT.outfit, background: C.saffron, color: C.dark, textDecoration: "none", padding: "0.75rem 1.5rem", borderRadius: "4px", fontWeight: 600 }}>
+        <div
+          style={{
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            background: C.cream,
+            fontFamily: F.body,
+            gap: "1rem",
+          }}
+        >
+          <h1 style={{ fontFamily: F.display, fontSize: "2.5rem", color: C.charcoal, margin: 0 }}>Product Not Found</h1>
+          <Link
+            href="/products"
+            style={{
+              fontFamily: F.body,
+              background: C.charcoal,
+              color: C.cream,
+              textDecoration: "none",
+              padding: "0.75rem 1.5rem",
+              borderRadius: "3px",
+              fontWeight: 500,
+            }}
+          >
             ← View All Products
           </Link>
         </div>

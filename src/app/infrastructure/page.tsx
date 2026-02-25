@@ -1,108 +1,158 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { machines, capabilities } from "@/lib/pgg-data";
 
 // ————————————————————————————————————————————
-// Brand constants
+// The Merchant — Design Tokens
 // ————————————————————————————————————————————
 const C = {
-  cream: "#FFFDF8",
-  charcoal: "#3A3530",
-  saffron: "#F4A236",
-  sindoor: "#DC143C",
-  taupe: "#5A534D",
-  dark: "#2C2825",
-  light: "#F5F0E8",
-  border: "#E8E2D9",
+  cream: "#FAF7F2",
+  parchment: "#F0EAE0",
+  charcoal: "#1C1A17",
+  warm: "#4A4540",
+  taupe: "#7A736D",
+  saffron: "#D4860E", // numbers/stats/ordinals only
+  dark: "#141210",
+  border: "rgba(28,26,23,0.1)",
+  borderMid: "rgba(28,26,23,0.16)",
 };
 
-const FONT = {
-  outfit: "'Outfit', sans-serif",
-  cormorant: "'Cormorant Garamond', Georgia, serif",
-  baskerville: "'Libre Baskerville', Georgia, serif",
+const F = {
+  display: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
+  body: "'DM Sans', 'Plus Jakarta Sans', sans-serif",
+  italic: "'Cormorant Garamond', Georgia, serif",
 };
+
+const GLOBAL_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #FAF7F2; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ruleGrow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+  @keyframes eyebrowIn {
+    from { opacity: 0; letter-spacing: 0.35em; }
+    to   { opacity: 1; letter-spacing: 0.22em; }
+  }
+
+  .sr { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .sr.visible { opacity: 1; transform: translateY(0); }
+
+  .infra-nav-link {
+    font-family: 'DM Sans', sans-serif;
+    color: ${C.charcoal};
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .infra-nav-link:hover { opacity: 1; }
+
+  .machine-card {
+    background: #fff;
+    border: 1px solid ${C.border};
+    border-radius: 6px;
+    padding: 1.75rem;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+  .machine-card:hover {
+    border-color: ${C.borderMid};
+    box-shadow: 0 12px 40px rgba(28,26,23,0.08);
+    transform: translateY(-3px);
+  }
+
+  .cap-item + .cap-item { border-left: 1px solid ${C.border}; }
+`;
 
 // ————————————————————————————————————————————
-// Sub-components
+// Scroll reveal
+// ————————————————————————————————————————————
+function useScrollReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll(".sr");
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            obs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+}
+
+// ————————————————————————————————————————————
+// Navbar
 // ————————————————————————————————————————————
 function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const h = () => setScrolled(window.scrollY > 30);
+    window.addEventListener("scroll", h);
+    return () => window.removeEventListener("scroll", h);
+  }, []);
+
   return (
     <nav
       style={{
         position: "sticky",
         top: 0,
         zIndex: 100,
-        background: C.dark,
-        borderBottom: `1px solid rgba(244,162,54,0.2)`,
+        background: scrolled ? "rgba(250,247,242,0.97)" : C.cream,
+        backdropFilter: "blur(8px)",
+        borderBottom: `1px solid ${scrolled ? C.borderMid : C.border}`,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "0 2rem",
+        padding: "0 2.5rem",
         height: "64px",
+        transition: "border-color 0.3s ease, background 0.3s ease",
       }}
     >
       <Link
         href="/"
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
+          fontFamily: F.display,
+          fontWeight: 700,
+          color: C.charcoal,
           textDecoration: "none",
+          fontSize: "1.05rem",
+          letterSpacing: "0.01em",
         }}
       >
-        <span style={{ color: C.saffron, fontSize: "1.1rem" }}>←</span>
-        <span
-          style={{
-            fontFamily: FONT.outfit,
-            fontWeight: 700,
-            color: "#FFFDF8",
-            fontSize: "0.875rem",
-            letterSpacing: "0.06em",
-            textTransform: "uppercase",
-          }}
-        >
-          Pune Global Group
-        </span>
+        Pune Global Group
       </Link>
 
-      <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-        <Link
-          href="/products"
-          style={{
-            fontFamily: FONT.outfit,
-            color: "#FFFDF8",
-            textDecoration: "none",
-            fontSize: "0.875rem",
-            opacity: 0.8,
-          }}
-        >
-          Products
-        </Link>
-        <Link
-          href="/blog"
-          style={{
-            fontFamily: FONT.outfit,
-            color: "#FFFDF8",
-            textDecoration: "none",
-            fontSize: "0.875rem",
-            opacity: 0.8,
-          }}
-        >
-          Insights
-        </Link>
+      <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+        <Link href="/products" className="infra-nav-link">Products</Link>
+        <Link href="/blog" className="infra-nav-link">Insights</Link>
         <Link
           href="/#contact"
           style={{
-            fontFamily: FONT.outfit,
-            background: C.saffron,
-            color: C.dark,
+            fontFamily: F.body,
+            background: C.charcoal,
+            color: C.cream,
             textDecoration: "none",
-            fontSize: "0.875rem",
-            fontWeight: 600,
+            fontSize: "0.82rem",
+            fontWeight: 500,
             padding: "0.5rem 1.25rem",
-            borderRadius: "4px",
+            borderRadius: "3px",
+            letterSpacing: "0.03em",
           }}
         >
           Get a Quote
@@ -112,39 +162,27 @@ function Navbar() {
   );
 }
 
-function MachineCard({ machine }: { machine: typeof machines[0] }) {
-  const [hovered, setHovered] = useState(false);
-
+// ————————————————————————————————————————————
+// Machine Card
+// ————————————————————————————————————————————
+function MachineCard({ machine, delay }: { machine: typeof machines[0]; delay: number }) {
   return (
     <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        background: "#FFFFFF",
-        border: `1.5px solid ${hovered ? C.saffron : C.border}`,
-        borderRadius: "8px",
-        padding: "1.75rem",
-        transition: "all 0.25s ease",
-        boxShadow: hovered
-          ? "0 12px 32px rgba(58,53,48,0.1)"
-          : "0 2px 8px rgba(58,53,48,0.04)",
-        transform: hovered ? "translateY(-3px)" : "translateY(0)",
-      }}
+      className="machine-card sr"
+      style={{ animationDelay: `${delay}s` }}
     >
-      {/* Icon */}
       <div
         style={{
-          width: "48px",
-          height: "48px",
-          background: hovered ? "rgba(244,162,54,0.15)" : C.light,
-          borderRadius: "8px",
+          width: "44px",
+          height: "44px",
+          background: C.parchment,
+          borderRadius: "4px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: "1.5rem",
+          fontSize: "1.3rem",
           marginBottom: "1.25rem",
-          transition: "background 0.25s ease",
-          border: `1px solid ${hovered ? "rgba(244,162,54,0.3)" : C.border}`,
+          border: `1px solid ${C.border}`,
         }}
       >
         {machine.icon}
@@ -152,11 +190,12 @@ function MachineCard({ machine }: { machine: typeof machines[0] }) {
 
       <h3
         style={{
-          fontFamily: FONT.cormorant,
-          fontSize: "1.3rem",
-          fontWeight: 700,
+          fontFamily: F.display,
+          fontSize: "1.2rem",
+          fontWeight: 600,
           color: C.charcoal,
           margin: "0 0 0.5rem",
+          lineHeight: 1.25,
         }}
       >
         {machine.name}
@@ -164,49 +203,31 @@ function MachineCard({ machine }: { machine: typeof machines[0] }) {
 
       <p
         style={{
-          fontFamily: FONT.outfit,
-          fontSize: "0.85rem",
+          fontFamily: F.body,
+          fontSize: "0.84rem",
           color: C.taupe,
           margin: "0 0 1.25rem",
-          lineHeight: 1.6,
+          lineHeight: 1.65,
         }}
       >
         {machine.description}
       </p>
 
-      <ul
-        style={{
-          listStyle: "none",
-          padding: 0,
-          margin: 0,
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.45rem",
-        }}
-      >
+      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.4rem" }}>
         {machine.specs.map((spec, i) => (
           <li
             key={i}
             style={{
-              fontFamily: FONT.outfit,
-              fontSize: "0.78rem",
-              color: C.charcoal,
+              fontFamily: F.body,
+              fontSize: "0.77rem",
+              color: C.warm,
               display: "flex",
               alignItems: "flex-start",
               gap: "0.5rem",
               lineHeight: 1.5,
             }}
           >
-            <span
-              style={{
-                color: C.saffron,
-                fontWeight: 700,
-                marginTop: "1px",
-                flexShrink: 0,
-              }}
-            >
-              ·
-            </span>
+            <span style={{ color: C.saffron, fontWeight: 700, marginTop: "1px", flexShrink: 0 }}>·</span>
             {spec}
           </li>
         ))}
@@ -219,83 +240,90 @@ function MachineCard({ machine }: { machine: typeof machines[0] }) {
 // Main Page
 // ————————————————————————————————————————————
 export default function InfrastructurePage() {
+  useScrollReveal();
+
   return (
-    <div style={{ background: C.cream, minHeight: "100vh", fontFamily: FONT.outfit }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap');
-        *, *::before, *::after { box-sizing: border-box; }
-        body { margin: 0; }
-      `}</style>
+    <div style={{ background: C.cream, minHeight: "100vh", fontFamily: F.body }}>
+      <style>{GLOBAL_CSS}</style>
 
       <Navbar />
 
       {/* ——— Hero ——— */}
       <section
         style={{
-          background: `linear-gradient(135deg, ${C.dark} 0%, #3A3530 60%, #2C2825 100%)`,
-          padding: "5rem 2rem 4.5rem",
+          background: C.cream,
+          padding: "5rem 2.5rem 4rem",
           position: "relative",
           overflow: "hidden",
+          borderBottom: `1px solid ${C.border}`,
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: `radial-gradient(circle at 15% 40%, rgba(244,162,54,0.09) 0%, transparent 45%),
-                              radial-gradient(circle at 85% 70%, rgba(244,162,54,0.06) 0%, transparent 35%)`,
-            pointerEvents: "none",
-          }}
-        />
-        <div
-          style={{
-            position: "relative",
-            maxWidth: "900px",
-            margin: "0 auto",
-            textAlign: "center",
-          }}
-        >
+        {/* Paper grain */}
+        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity: 0.035 }} aria-hidden>
+          <filter id="grain-infra"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
+          <rect width="100%" height="100%" filter="url(#grain-infra)" />
+        </svg>
+
+        <div style={{ position: "relative", maxWidth: "860px", margin: "0 auto" }}>
+          {/* Eyebrow */}
           <p
             style={{
-              fontFamily: FONT.outfit,
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: C.saffron,
-              margin: "0 0 1.25rem",
+              fontFamily: F.italic,
+              fontStyle: "italic",
+              fontSize: "1rem",
+              fontWeight: 400,
+              color: C.taupe,
+              margin: "0 0 1.5rem",
+              animation: "eyebrowIn 0.8s ease both",
             }}
           >
             Converting Infrastructure
           </p>
+
+          {/* Rule */}
+          <div
+            style={{
+              width: "48px",
+              height: "2px",
+              background: C.charcoal,
+              marginBottom: "1.5rem",
+              transformOrigin: "left",
+              animation: "ruleGrow 0.6s ease 0.2s both",
+            }}
+          />
+
           <h1
             style={{
-              fontFamily: FONT.cormorant,
-              fontSize: "clamp(2.2rem, 5vw, 3.75rem)",
+              fontFamily: F.display,
+              fontSize: "clamp(2.4rem, 5vw, 3.75rem)",
               fontWeight: 700,
-              color: "#FFFDF8",
-              margin: "0 0 1.25rem",
-              lineHeight: 1.1,
+              color: C.charcoal,
+              margin: "0 0 1.5rem",
+              lineHeight: 1.08,
+              animation: "fadeUp 0.8s ease 0.3s both",
             }}
           >
             Built for Speed.{" "}
-            <span style={{ color: C.saffron }}>Engineered for Precision.</span>
+            <br />
+            <em style={{ fontStyle: "italic", fontWeight: 500 }}>Engineered for Precision.</em>
           </h1>
+
           <p
             style={{
-              fontFamily: FONT.outfit,
+              fontFamily: F.body,
               fontSize: "1.05rem",
-              color: "rgba(255,253,248,0.75)",
+              color: C.warm,
               lineHeight: 1.75,
               margin: "0 0 2rem",
-              maxWidth: "680px",
-              marginLeft: "auto",
-              marginRight: "auto",
+              maxWidth: "620px",
+              animation: "fadeUp 0.8s ease 0.45s both",
             }}
           >
             Our dedicated converting facility at BU Bhandari MIDC, Sanaswadi, Pune
-            processes up to 200 tons per day — rewinding, sheeting, slitting, and pallet
-            wrapping for same-city delivery or pan-India dispatch.
+            processes up to{" "}
+            <strong style={{ color: C.saffron, fontFamily: F.display, fontWeight: 700 }}>200 tons per day</strong>
+            {" "}— rewinding, sheeting, slitting, and pallet wrapping for same-city
+            delivery or pan-India dispatch.
           </p>
 
           {/* Location badge */}
@@ -304,19 +332,20 @@ export default function InfrastructurePage() {
               display: "inline-flex",
               alignItems: "center",
               gap: "0.6rem",
-              background: "rgba(244,162,54,0.12)",
-              border: "1px solid rgba(244,162,54,0.3)",
-              borderRadius: "4px",
-              padding: "0.6rem 1.25rem",
+              background: C.parchment,
+              border: `1px solid ${C.borderMid}`,
+              borderRadius: "3px",
+              padding: "0.65rem 1.25rem",
+              animation: "fadeUp 0.7s ease 0.6s both",
             }}
           >
-            <span style={{ fontSize: "1rem" }}>📍</span>
+            <span style={{ fontSize: "0.9rem" }}>📍</span>
             <span
               style={{
-                fontFamily: FONT.outfit,
-                fontSize: "0.85rem",
+                fontFamily: F.body,
+                fontSize: "0.84rem",
                 fontWeight: 500,
-                color: "#FFFDF8",
+                color: C.charcoal,
               }}
             >
               108 BU Bhandari MIDC, Sanaswadi, Pune 412208
@@ -326,50 +355,45 @@ export default function InfrastructurePage() {
       </section>
 
       {/* ——— Capabilities Strip ——— */}
-      <section
-        style={{
-          background: "#FFFFFF",
-          borderBottom: `1px solid ${C.border}`,
-          padding: "0",
-        }}
-      >
+      <section style={{ background: "#fff", borderBottom: `1px solid ${C.border}` }}>
         <div
           style={{
             maxWidth: "1200px",
             margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+            display: "flex",
+            flexWrap: "wrap",
           }}
         >
           {capabilities.map((cap, i) => (
             <div
               key={i}
+              className="cap-item"
               style={{
-                padding: "1.75rem 1.25rem",
+                flex: "1 1 160px",
+                padding: "2rem 1.5rem",
                 textAlign: "center",
-                borderRight: i < capabilities.length - 1 ? `1px solid ${C.border}` : "none",
               }}
             >
-              <div style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>{cap.icon}</div>
+              <div style={{ fontSize: "1.4rem", marginBottom: "0.6rem" }}>{cap.icon}</div>
               <div
                 style={{
-                  fontFamily: FONT.cormorant,
-                  fontSize: "1.4rem",
+                  fontFamily: F.display,
+                  fontSize: "1.6rem",
                   fontWeight: 700,
-                  color: C.charcoal,
-                  lineHeight: 1.1,
-                  marginBottom: "0.3rem",
+                  color: C.saffron,
+                  lineHeight: 1,
+                  marginBottom: "0.4rem",
                 }}
               >
                 {cap.value}
               </div>
               <div
                 style={{
-                  fontFamily: FONT.outfit,
-                  fontSize: "0.72rem",
+                  fontFamily: F.body,
+                  fontSize: "0.71rem",
                   fontWeight: 500,
                   color: C.taupe,
-                  letterSpacing: "0.06em",
+                  letterSpacing: "0.08em",
                   textTransform: "uppercase",
                 }}
               >
@@ -381,40 +405,48 @@ export default function InfrastructurePage() {
       </section>
 
       {/* ——— Machines Section ——— */}
-      <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "4rem 2rem" }}>
-        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+      <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "5rem 2.5rem" }}>
+        <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="sr">
           <p
             style={{
-              fontFamily: FONT.outfit,
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: C.saffron,
+              fontFamily: F.italic,
+              fontStyle: "italic",
+              fontSize: "1rem",
+              color: C.taupe,
               margin: "0 0 0.75rem",
             }}
           >
             Equipment
           </p>
+          <div
+            style={{
+              width: "32px",
+              height: "2px",
+              background: C.charcoal,
+              margin: "0 auto 1.25rem",
+              transformOrigin: "center",
+            }}
+          />
           <h2
             style={{
-              fontFamily: FONT.cormorant,
+              fontFamily: F.display,
               fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)",
               fontWeight: 700,
               color: C.charcoal,
               margin: "0 0 1rem",
-              lineHeight: 1.2,
+              lineHeight: 1.15,
             }}
           >
             Six Converting Machines.{" "}
-            <span style={{ color: C.saffron }}>One Integrated Facility.</span>
+            <br />
+            <em style={{ fontStyle: "italic", fontWeight: 500 }}>One Integrated Facility.</em>
           </h2>
           <p
             style={{
-              fontFamily: FONT.outfit,
+              fontFamily: F.body,
               fontSize: "0.95rem",
               color: C.taupe,
-              maxWidth: "600px",
+              maxWidth: "580px",
               margin: "0 auto",
               lineHeight: 1.7,
             }}
@@ -428,11 +460,11 @@ export default function InfrastructurePage() {
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-            gap: "1.5rem",
+            gap: "1.25rem",
           }}
         >
-          {machines.map((machine) => (
-            <MachineCard key={machine.name} machine={machine} />
+          {machines.map((machine, i) => (
+            <MachineCard key={machine.name} machine={machine} delay={i * 0.1} />
           ))}
         </div>
       </section>
@@ -440,10 +472,10 @@ export default function InfrastructurePage() {
       {/* ——— Quality Section ——— */}
       <section
         style={{
-          background: C.light,
+          background: C.parchment,
           borderTop: `1px solid ${C.border}`,
           borderBottom: `1px solid ${C.border}`,
-          padding: "4rem 2rem",
+          padding: "5rem 2.5rem",
         }}
       >
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
@@ -451,56 +483,57 @@ export default function InfrastructurePage() {
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
-              gap: "4rem",
-              alignItems: "center",
+              gap: "5rem",
+              alignItems: "start",
             }}
           >
-            <div>
+            <div className="sr">
               <p
                 style={{
-                  fontFamily: FONT.outfit,
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: C.saffron,
-                  margin: "0 0 0.75rem",
+                  fontFamily: F.italic,
+                  fontStyle: "italic",
+                  fontSize: "1rem",
+                  color: C.taupe,
+                  margin: "0 0 1rem",
                 }}
               >
                 Quality Assurance
               </p>
+              <div style={{ width: "32px", height: "2px", background: C.charcoal, marginBottom: "1.25rem" }} />
               <h2
                 style={{
-                  fontFamily: FONT.cormorant,
-                  fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
+                  fontFamily: F.display,
+                  fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
                   fontWeight: 700,
                   color: C.charcoal,
-                  margin: "0 0 1.25rem",
+                  margin: "0 0 1.5rem",
                   lineHeight: 1.2,
                 }}
               >
-                Zero Defect Commitment
+                Zero Defect{" "}
+                <br />
+                <em style={{ fontStyle: "italic", fontWeight: 500 }}>Commitment</em>
               </h2>
               <p
                 style={{
-                  fontFamily: FONT.outfit,
+                  fontFamily: F.body,
                   fontSize: "0.9rem",
-                  color: C.taupe,
-                  lineHeight: 1.75,
-                  margin: "0 0 1.5rem",
+                  color: C.warm,
+                  lineHeight: 1.8,
+                  margin: "0 0 1.25rem",
                 }}
               >
                 Every reel that enters our facility is inspected against the mill&apos;s Certificate
                 of Analysis before processing begins. Our sheeting and slitting operations
                 maintain dimensional tolerances of ±0.3 mm, with every ream moisture-wrapped
-                before despatch to preserve paper condition.
+                before despatch.
               </p>
               <p
                 style={{
-                  fontFamily: FONT.outfit,
+                  fontFamily: F.body,
                   fontSize: "0.9rem",
-                  color: C.taupe,
-                  lineHeight: 1.75,
+                  color: C.warm,
+                  lineHeight: 1.8,
                   margin: 0,
                 }}
               >
@@ -510,33 +543,33 @@ export default function InfrastructurePage() {
               </p>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }} className="sr">
               {[
                 {
                   badge: "ISO 9001",
                   label: "Quality Management System",
                   desc: "Certified quality management across all processing and trading operations",
-                  color: "#2563EB",
+                  accent: "#2563EB",
                 },
                 {
                   badge: "FSC C064218",
                   label: "Chain of Custody Certification",
                   desc: "Full FSC traceability from mill to converted goods — enables FSC logo on client packaging",
-                  color: "#16A34A",
+                  accent: "#16A34A",
                 },
                 {
                   badge: "Zero Defect",
                   label: "Pre-Despatch Inspection",
                   desc: "100% visual and dimensional inspection before every shipment leaves our facility",
-                  color: C.saffron,
+                  accent: C.charcoal,
                 },
               ].map((item) => (
                 <div
                   key={item.badge}
                   style={{
-                    background: "#FFFFFF",
+                    background: "#fff",
                     border: `1px solid ${C.border}`,
-                    borderRadius: "8px",
+                    borderRadius: "4px",
                     padding: "1.25rem",
                     display: "flex",
                     gap: "1rem",
@@ -545,15 +578,15 @@ export default function InfrastructurePage() {
                 >
                   <span
                     style={{
-                      fontFamily: FONT.outfit,
-                      fontSize: "0.7rem",
-                      fontWeight: 700,
+                      fontFamily: F.body,
+                      fontSize: "0.68rem",
+                      fontWeight: 600,
                       letterSpacing: "0.06em",
                       textTransform: "uppercase",
-                      color: "#FFFFFF",
-                      background: item.color,
+                      color: "#fff",
+                      background: item.accent,
                       padding: "0.3rem 0.6rem",
-                      borderRadius: "3px",
+                      borderRadius: "2px",
                       whiteSpace: "nowrap",
                       flexShrink: 0,
                     }}
@@ -563,21 +596,21 @@ export default function InfrastructurePage() {
                   <div>
                     <div
                       style={{
-                        fontFamily: FONT.outfit,
+                        fontFamily: F.body,
                         fontSize: "0.875rem",
                         fontWeight: 600,
                         color: C.charcoal,
-                        marginBottom: "0.25rem",
+                        marginBottom: "0.3rem",
                       }}
                     >
                       {item.label}
                     </div>
                     <div
                       style={{
-                        fontFamily: FONT.outfit,
-                        fontSize: "0.8rem",
+                        fontFamily: F.body,
+                        fontSize: "0.79rem",
                         color: C.taupe,
-                        lineHeight: 1.5,
+                        lineHeight: 1.55,
                       }}
                     >
                       {item.desc}
@@ -591,49 +624,35 @@ export default function InfrastructurePage() {
       </section>
 
       {/* ——— Locations ——— */}
-      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "4rem 2rem" }}>
-        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-          <p
-            style={{
-              fontFamily: FONT.outfit,
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: C.saffron,
-              margin: "0 0 0.75rem",
-            }}
-          >
+      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "5rem 2.5rem" }}>
+        <div style={{ textAlign: "center", marginBottom: "3rem" }} className="sr">
+          <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "1rem", color: C.taupe, margin: "0 0 0.75rem" }}>
             Our Locations
           </p>
+          <div style={{ width: "32px", height: "2px", background: C.charcoal, margin: "0 auto 1.25rem" }} />
           <h2
             style={{
-              fontFamily: FONT.cormorant,
-              fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
+              fontFamily: F.display,
+              fontSize: "clamp(1.6rem, 3.5vw, 2.4rem)",
               fontWeight: 700,
               color: C.charcoal,
               margin: 0,
               lineHeight: 1.2,
             }}
           >
-            Two Addresses. One Point of Contact.
+            Two Addresses.{" "}
+            <em style={{ fontStyle: "italic", fontWeight: 500 }}>One Point of Contact.</em>
           </h2>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "1.5rem",
-          }}
-        >
-          {/* Converting Facility */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
+          {/* Converting Facility — dark card */}
           <div
+            className="sr"
             style={{
               background: C.dark,
-              borderRadius: "10px",
-              padding: "2.25rem",
-              border: `1px solid rgba(244,162,54,0.2)`,
+              borderRadius: "6px",
+              padding: "2.5rem",
               position: "relative",
               overflow: "hidden",
             }}
@@ -644,18 +663,18 @@ export default function InfrastructurePage() {
                 top: 0,
                 left: 0,
                 right: 0,
-                height: "3px",
-                background: `linear-gradient(90deg, ${C.saffron}, #f9c96e)`,
+                height: "2px",
+                background: C.saffron,
               }}
             />
             <p
               style={{
-                fontFamily: FONT.outfit,
-                fontSize: "0.72rem",
+                fontFamily: F.body,
+                fontSize: "0.7rem",
                 fontWeight: 600,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
-                color: C.saffron,
+                color: "rgba(250,247,242,0.5)",
                 margin: "0 0 1rem",
               }}
             >
@@ -663,10 +682,10 @@ export default function InfrastructurePage() {
             </p>
             <h3
               style={{
-                fontFamily: FONT.cormorant,
-                fontSize: "1.5rem",
-                fontWeight: 700,
-                color: "#FFFDF8",
+                fontFamily: F.display,
+                fontSize: "1.45rem",
+                fontWeight: 600,
+                color: C.cream,
                 margin: "0 0 0.75rem",
               }}
             >
@@ -674,9 +693,9 @@ export default function InfrastructurePage() {
             </h3>
             <p
               style={{
-                fontFamily: FONT.outfit,
+                fontFamily: F.body,
                 fontSize: "0.875rem",
-                color: "rgba(255,253,248,0.7)",
+                color: "rgba(250,247,242,0.6)",
                 lineHeight: 1.7,
                 margin: "0 0 1.5rem",
               }}
@@ -685,38 +704,33 @@ export default function InfrastructurePage() {
               Sanaswadi, Pune — 412 208<br />
               Maharashtra, India
             </p>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.4rem",
-              }}
-            >
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
               {["Rewinding & Sheeting", "Slitting & Guillotine", "Shrink & Stretch Wrapping", "200 Tons/Day Capacity"].map((item) => (
                 <div
                   key={item}
                   style={{
-                    fontFamily: FONT.outfit,
+                    fontFamily: F.body,
                     fontSize: "0.78rem",
-                    color: "rgba(255,253,248,0.65)",
+                    color: "rgba(250,247,242,0.55)",
                     display: "flex",
                     alignItems: "center",
-                    gap: "0.4rem",
+                    gap: "0.5rem",
                   }}
                 >
-                  <span style={{ color: C.saffron }}>✓</span> {item}
+                  <span style={{ color: C.saffron, fontWeight: 700 }}>✓</span> {item}
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Commercial Office */}
+          {/* Commercial Office — cream card */}
           <div
+            className="sr"
             style={{
-              background: "#FFFFFF",
-              borderRadius: "10px",
-              padding: "2.25rem",
-              border: `1px solid ${C.border}`,
+              background: "#fff",
+              borderRadius: "6px",
+              padding: "2.5rem",
+              border: `1px solid ${C.borderMid}`,
               position: "relative",
               overflow: "hidden",
             }}
@@ -727,18 +741,18 @@ export default function InfrastructurePage() {
                 top: 0,
                 left: 0,
                 right: 0,
-                height: "3px",
-                background: `linear-gradient(90deg, ${C.sindoor}, #ff6b8a)`,
+                height: "2px",
+                background: C.charcoal,
               }}
             />
             <p
               style={{
-                fontFamily: FONT.outfit,
-                fontSize: "0.72rem",
+                fontFamily: F.body,
+                fontSize: "0.7rem",
                 fontWeight: 600,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
-                color: C.sindoor,
+                color: C.taupe,
                 margin: "0 0 1rem",
               }}
             >
@@ -746,9 +760,9 @@ export default function InfrastructurePage() {
             </p>
             <h3
               style={{
-                fontFamily: FONT.cormorant,
-                fontSize: "1.5rem",
-                fontWeight: 700,
+                fontFamily: F.display,
+                fontSize: "1.45rem",
+                fontWeight: 600,
                 color: C.charcoal,
                 margin: "0 0 0.75rem",
               }}
@@ -757,9 +771,9 @@ export default function InfrastructurePage() {
             </h3>
             <p
               style={{
-                fontFamily: FONT.outfit,
+                fontFamily: F.body,
                 fontSize: "0.875rem",
-                color: C.taupe,
+                color: C.warm,
                 lineHeight: 1.7,
                 margin: "0 0 1.5rem",
               }}
@@ -769,47 +783,14 @@ export default function InfrastructurePage() {
               Maharashtra, India
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              <a
-                href="tel:+919823383230"
-                style={{
-                  fontFamily: FONT.outfit,
-                  fontSize: "0.875rem",
-                  color: C.charcoal,
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  fontWeight: 500,
-                }}
-              >
-                <span style={{ color: C.saffron }}>📞</span> +91 98233 83230
+              <a href="tel:+919823383230" style={{ fontFamily: F.body, fontSize: "0.875rem", color: C.charcoal, textDecoration: "none", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: 500 }}>
+                <span>📞</span> +91 98233 83230
               </a>
-              <a
-                href="mailto:contact.puneglobalgroup@gmail.com"
-                style={{
-                  fontFamily: FONT.outfit,
-                  fontSize: "0.875rem",
-                  color: C.charcoal,
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  fontWeight: 500,
-                }}
-              >
-                <span style={{ color: C.saffron }}>✉</span> contact.puneglobalgroup@gmail.com
+              <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ fontFamily: F.body, fontSize: "0.875rem", color: C.charcoal, textDecoration: "none", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: 500 }}>
+                <span>✉</span> contact.puneglobalgroup@gmail.com
               </a>
-              <div
-                style={{
-                  fontFamily: FONT.outfit,
-                  fontSize: "0.78rem",
-                  color: C.taupe,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                }}
-              >
-                <span style={{ color: C.taupe }}>GSTIN:</span> 27FYYPS5999K1ZO
+              <div style={{ fontFamily: F.body, fontSize: "0.78rem", color: C.taupe }}>
+                GSTIN: 27FYYPS5999K1ZO
               </div>
             </div>
           </div>
@@ -819,38 +800,30 @@ export default function InfrastructurePage() {
       {/* ——— Processing Workflow ——— */}
       <section
         style={{
-          background: C.light,
+          background: C.parchment,
           borderTop: `1px solid ${C.border}`,
           borderBottom: `1px solid ${C.border}`,
-          padding: "4rem 2rem",
+          padding: "5rem 2.5rem",
         }}
       >
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-            <p
-              style={{
-                fontFamily: FONT.outfit,
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: C.saffron,
-                margin: "0 0 0.75rem",
-              }}
-            >
+          <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="sr">
+            <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "1rem", color: C.taupe, margin: "0 0 0.75rem" }}>
               How We Work
             </p>
+            <div style={{ width: "32px", height: "2px", background: C.charcoal, margin: "0 auto 1.25rem" }} />
             <h2
               style={{
-                fontFamily: FONT.cormorant,
-                fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
+                fontFamily: F.display,
+                fontSize: "clamp(1.6rem, 3.5vw, 2.4rem)",
                 fontWeight: 700,
                 color: C.charcoal,
                 margin: 0,
                 lineHeight: 1.2,
               }}
             >
-              From Order to Despatch in 24–36 Hours
+              From Order to Despatch in{" "}
+              <span style={{ color: C.saffron }}>24–36 Hours</span>
             </h2>
           </div>
 
@@ -866,11 +839,11 @@ export default function InfrastructurePage() {
             <div
               style={{
                 position: "absolute",
-                top: "28px",
+                top: "22px",
                 left: "10%",
                 right: "10%",
-                height: "2px",
-                background: `linear-gradient(90deg, ${C.saffron}, rgba(244,162,54,0.2))`,
+                height: "1px",
+                background: C.borderMid,
                 zIndex: 0,
               }}
             />
@@ -896,37 +869,36 @@ export default function InfrastructurePage() {
               >
                 <div
                   style={{
-                    width: "56px",
-                    height: "56px",
-                    background: C.saffron,
+                    width: "44px",
+                    height: "44px",
+                    background: C.charcoal,
                     borderRadius: "50%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: "1.3rem",
+                    fontSize: "1.1rem",
                     marginBottom: "1rem",
-                    boxShadow: "0 4px 16px rgba(244,162,54,0.3)",
                   }}
                 >
                   {item.icon}
                 </div>
                 <div
                   style={{
-                    fontFamily: FONT.outfit,
-                    fontSize: "0.65rem",
+                    fontFamily: F.display,
+                    fontSize: "0.7rem",
                     fontWeight: 700,
-                    letterSpacing: "0.1em",
                     color: C.saffron,
                     marginBottom: "0.35rem",
+                    letterSpacing: "0.05em",
                   }}
                 >
-                  STEP {item.step}
+                  {item.step}
                 </div>
                 <div
                   style={{
-                    fontFamily: FONT.outfit,
-                    fontSize: "0.8rem",
-                    fontWeight: 600,
+                    fontFamily: F.body,
+                    fontSize: "0.78rem",
+                    fontWeight: 500,
                     color: C.charcoal,
                     lineHeight: 1.4,
                     whiteSpace: "pre-line",
@@ -944,13 +916,13 @@ export default function InfrastructurePage() {
       <section
         style={{
           background: C.dark,
-          padding: "4.5rem 2rem",
+          padding: "5rem 2.5rem",
           textAlign: "center",
         }}
       >
         <div
           style={{
-            maxWidth: "620px",
+            maxWidth: "600px",
             margin: "0 auto",
             display: "flex",
             flexDirection: "column",
@@ -960,12 +932,10 @@ export default function InfrastructurePage() {
         >
           <p
             style={{
-              fontFamily: FONT.outfit,
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: C.saffron,
+              fontFamily: F.italic,
+              fontStyle: "italic",
+              fontSize: "1rem",
+              color: "rgba(250,247,242,0.55)",
               margin: 0,
             }}
           >
@@ -973,10 +943,10 @@ export default function InfrastructurePage() {
           </p>
           <h2
             style={{
-              fontFamily: FONT.cormorant,
+              fontFamily: F.display,
               fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
               fontWeight: 700,
-              color: "#FFFDF8",
+              color: C.cream,
               margin: 0,
               lineHeight: 1.2,
             }}
@@ -985,10 +955,10 @@ export default function InfrastructurePage() {
           </h2>
           <p
             style={{
-              fontFamily: FONT.outfit,
+              fontFamily: F.body,
               fontSize: "0.95rem",
-              color: "rgba(255,253,248,0.7)",
-              lineHeight: 1.7,
+              color: "rgba(250,247,242,0.6)",
+              lineHeight: 1.75,
               margin: 0,
             }}
           >
@@ -999,14 +969,14 @@ export default function InfrastructurePage() {
             <Link
               href="/#contact"
               style={{
-                fontFamily: FONT.outfit,
-                background: C.saffron,
-                color: C.dark,
+                fontFamily: F.body,
+                background: C.cream,
+                color: C.charcoal,
                 textDecoration: "none",
-                fontSize: "0.9rem",
-                fontWeight: 700,
+                fontSize: "0.875rem",
+                fontWeight: 600,
                 padding: "0.9rem 2rem",
-                borderRadius: "4px",
+                borderRadius: "3px",
                 letterSpacing: "0.02em",
               }}
             >
@@ -1015,18 +985,18 @@ export default function InfrastructurePage() {
             <a
               href="tel:+919823383230"
               style={{
-                fontFamily: FONT.outfit,
+                fontFamily: F.body,
                 background: "transparent",
-                color: "#FFFDF8",
+                color: C.cream,
                 textDecoration: "none",
-                fontSize: "0.9rem",
-                fontWeight: 500,
+                fontSize: "0.875rem",
+                fontWeight: 400,
                 padding: "0.9rem 2rem",
-                borderRadius: "4px",
-                border: "1px solid rgba(255,253,248,0.3)",
+                borderRadius: "3px",
+                border: `1px solid rgba(250,247,242,0.2)`,
               }}
             >
-              📞 +91 98233 83230
+              +91 98233 83230
             </a>
           </div>
         </div>
@@ -1036,21 +1006,21 @@ export default function InfrastructurePage() {
       <footer
         style={{
           background: C.dark,
-          borderTop: `1px solid rgba(244,162,54,0.12)`,
-          padding: "2rem",
+          borderTop: `1px solid rgba(250,247,242,0.07)`,
+          padding: "2rem 2.5rem",
           textAlign: "center",
         }}
       >
         <p
           style={{
-            fontFamily: FONT.outfit,
-            fontSize: "0.8rem",
-            color: "rgba(255,253,248,0.4)",
+            fontFamily: F.body,
+            fontSize: "0.78rem",
+            color: "rgba(250,247,242,0.35)",
             margin: 0,
           }}
         >
           © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO ·{" "}
-          <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ color: "rgba(255,253,248,0.4)", textDecoration: "none" }}>
+          <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ color: "rgba(250,247,242,0.35)", textDecoration: "none" }}>
             contact.puneglobalgroup@gmail.com
           </a>{" "}
           · +91 98233 83230

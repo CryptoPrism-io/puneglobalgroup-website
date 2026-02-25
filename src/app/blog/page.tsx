@@ -1,108 +1,160 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { blogPosts, BlogPost } from "@/lib/pgg-data";
 
 // ————————————————————————————————————————————
-// Brand constants
+// The Merchant — Design Tokens
 // ————————————————————————————————————————————
 const C = {
-  cream: "#FFFDF8",
-  charcoal: "#3A3530",
-  saffron: "#F4A236",
-  sindoor: "#DC143C",
-  taupe: "#5A534D",
-  dark: "#2C2825",
-  light: "#F5F0E8",
-  border: "#E8E2D9",
+  cream: "#FAF7F2",
+  parchment: "#F0EAE0",
+  charcoal: "#1C1A17",
+  warm: "#4A4540",
+  taupe: "#7A736D",
+  saffron: "#D4860E",
+  dark: "#141210",
+  border: "rgba(28,26,23,0.1)",
+  borderMid: "rgba(28,26,23,0.16)",
 };
 
-const FONT = {
-  outfit: "'Outfit', sans-serif",
-  cormorant: "'Cormorant Garamond', Georgia, serif",
-  baskerville: "'Libre Baskerville', Georgia, serif",
+const F = {
+  display: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
+  body: "'DM Sans', 'Plus Jakarta Sans', sans-serif",
+  italic: "'Cormorant Garamond', Georgia, serif",
 };
+
+const GLOBAL_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #FAF7F2; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ruleGrow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  .sr { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .sr.visible { opacity: 1; transform: translateY(0); }
+
+  .blog-nav-link {
+    font-family: 'DM Sans', sans-serif;
+    color: ${C.charcoal};
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .blog-nav-link:hover { opacity: 1; }
+
+  .blog-card {
+    background: #fff;
+    border: 1px solid ${C.border};
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    text-decoration: none;
+  }
+  .blog-card:hover {
+    border-color: ${C.borderMid};
+    box-shadow: 0 12px 40px rgba(28,26,23,0.08);
+    transform: translateY(-4px);
+  }
+
+  .read-arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+  .blog-card:hover .read-arrow { transform: translateX(4px); }
+`;
 
 // ————————————————————————————————————————————
-// Sub-components
+// Scroll reveal
+// ————————————————————————————————————————————
+function useScrollReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll(".sr");
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            obs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+}
+
+// ————————————————————————————————————————————
+// Navbar
 // ————————————————————————————————————————————
 function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const h = () => setScrolled(window.scrollY > 30);
+    window.addEventListener("scroll", h);
+    return () => window.removeEventListener("scroll", h);
+  }, []);
+
   return (
     <nav
       style={{
         position: "sticky",
         top: 0,
         zIndex: 100,
-        background: C.dark,
-        borderBottom: `1px solid rgba(244,162,54,0.2)`,
+        background: scrolled ? "rgba(250,247,242,0.97)" : C.cream,
+        backdropFilter: "blur(8px)",
+        borderBottom: `1px solid ${scrolled ? C.borderMid : C.border}`,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "0 2rem",
+        padding: "0 2.5rem",
         height: "64px",
+        transition: "border-color 0.3s ease, background 0.3s ease",
       }}
     >
       <Link
         href="/"
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
+          fontFamily: F.display,
+          fontWeight: 700,
+          color: C.charcoal,
           textDecoration: "none",
+          fontSize: "1.05rem",
         }}
       >
-        <span style={{ color: C.saffron, fontSize: "1.1rem" }}>←</span>
-        <span
-          style={{
-            fontFamily: FONT.outfit,
-            fontWeight: 700,
-            color: "#FFFDF8",
-            fontSize: "0.875rem",
-            letterSpacing: "0.06em",
-            textTransform: "uppercase",
-          }}
-        >
-          Pune Global Group
-        </span>
+        Pune Global Group
       </Link>
 
-      <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-        <Link
-          href="/products"
-          style={{
-            fontFamily: FONT.outfit,
-            color: "#FFFDF8",
-            textDecoration: "none",
-            fontSize: "0.875rem",
-            opacity: 0.8,
-          }}
-        >
-          Products
-        </Link>
-        <Link
-          href="/infrastructure"
-          style={{
-            fontFamily: FONT.outfit,
-            color: "#FFFDF8",
-            textDecoration: "none",
-            fontSize: "0.875rem",
-            opacity: 0.8,
-          }}
-        >
-          Infrastructure
-        </Link>
+      <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+        <Link href="/products" className="blog-nav-link">Products</Link>
+        <Link href="/infrastructure" className="blog-nav-link">Infrastructure</Link>
         <Link
           href="/#contact"
           style={{
-            fontFamily: FONT.outfit,
-            background: C.saffron,
-            color: C.dark,
+            fontFamily: F.body,
+            background: C.charcoal,
+            color: C.cream,
             textDecoration: "none",
-            fontSize: "0.875rem",
-            fontWeight: 600,
+            fontSize: "0.82rem",
+            fontWeight: 500,
             padding: "0.5rem 1.25rem",
-            borderRadius: "4px",
+            borderRadius: "3px",
+            letterSpacing: "0.03em",
           }}
         >
           Get a Quote
@@ -112,133 +164,97 @@ function Navbar() {
   );
 }
 
-function BlogCard({ post }: { post: BlogPost }) {
-  const [hovered, setHovered] = useState(false);
-
+// ————————————————————————————————————————————
+// Blog Card
+// ————————————————————————————————————————————
+function BlogCard({ post, delay }: { post: BlogPost; delay: number }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      style={{ textDecoration: "none" }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      className="blog-card sr"
+      style={{ animationDelay: `${delay}s` } as React.CSSProperties}
     >
-      <article
+      {/* Category accent bar */}
+      <div style={{ height: "3px", background: post.categoryColor, flexShrink: 0 }} />
+
+      <div
         style={{
-          background: "#FFFFFF",
-          border: `1.5px solid ${hovered ? C.saffron : C.border}`,
-          borderRadius: "8px",
-          overflow: "hidden",
-          transition: "all 0.25s ease",
-          transform: hovered ? "translateY(-4px)" : "translateY(0)",
-          boxShadow: hovered
-            ? "0 12px 40px rgba(58,53,48,0.12)"
-            : "0 2px 8px rgba(58,53,48,0.05)",
+          padding: "1.75rem",
+          flex: 1,
           display: "flex",
           flexDirection: "column",
-          height: "100%",
+          gap: "0.875rem",
         }}
       >
-        {/* Top accent bar */}
-        <div
-          style={{
-            height: "4px",
-            background: `linear-gradient(90deg, ${post.categoryColor}, ${post.categoryColor}88)`,
-          }}
-        />
+        {/* Category + meta */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+          <span
+            style={{
+              fontFamily: F.body,
+              fontSize: "0.68rem",
+              fontWeight: 600,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: post.categoryColor,
+              background: `${post.categoryColor}15`,
+              border: `1px solid ${post.categoryColor}30`,
+              padding: "0.22rem 0.55rem",
+              borderRadius: "2px",
+            }}
+          >
+            {post.category}
+          </span>
+          <span style={{ fontFamily: F.body, fontSize: "0.74rem", color: C.taupe }}>
+            {post.date} · {post.readTime} read
+          </span>
+        </div>
 
-        <div
+        {/* Title */}
+        <h2
           style={{
-            padding: "1.75rem",
+            fontFamily: F.display,
+            fontSize: "1.25rem",
+            fontWeight: 600,
+            color: C.charcoal,
+            margin: 0,
+            lineHeight: 1.3,
             flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
           }}
         >
-          {/* Category + meta */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
-            <span
-              style={{
-                fontFamily: FONT.outfit,
-                fontSize: "0.7rem",
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: post.categoryColor,
-                background: `${post.categoryColor}15`,
-                border: `1px solid ${post.categoryColor}30`,
-                padding: "0.25rem 0.6rem",
-                borderRadius: "3px",
-              }}
-            >
-              {post.category}
-            </span>
-            <span
-              style={{
-                fontFamily: FONT.outfit,
-                fontSize: "0.75rem",
-                color: C.taupe,
-              }}
-            >
-              {post.date} · {post.readTime} read
-            </span>
-          </div>
+          {post.title}
+        </h2>
 
-          {/* Title */}
-          <h2
-            style={{
-              fontFamily: FONT.cormorant,
-              fontSize: "1.35rem",
-              fontWeight: 700,
-              color: C.charcoal,
-              margin: 0,
-              lineHeight: 1.3,
-              flex: 1,
-            }}
-          >
-            {post.title}
-          </h2>
+        {/* Excerpt */}
+        <p
+          style={{
+            fontFamily: F.body,
+            fontSize: "0.875rem",
+            color: C.taupe,
+            margin: 0,
+            lineHeight: 1.65,
+          }}
+        >
+          {post.excerpt}
+        </p>
 
-          {/* Excerpt */}
-          <p
-            style={{
-              fontFamily: FONT.outfit,
-              fontSize: "0.875rem",
-              color: C.taupe,
-              margin: 0,
-              lineHeight: 1.65,
-            }}
-          >
-            {post.excerpt}
-          </p>
-
-          {/* Read more */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.4rem",
-              fontFamily: FONT.outfit,
-              fontSize: "0.82rem",
-              fontWeight: 600,
-              color: C.saffron,
-              letterSpacing: "0.04em",
-              marginTop: "0.25rem",
-            }}
-          >
-            Read Article
-            <span
-              style={{
-                transform: hovered ? "translateX(4px)" : "translateX(0)",
-                transition: "transform 0.2s ease",
-                display: "inline-block",
-              }}
-            >
-              →
-            </span>
-          </div>
+        {/* Read more */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.35rem",
+            fontFamily: F.body,
+            fontSize: "0.8rem",
+            fontWeight: 600,
+            color: C.charcoal,
+            letterSpacing: "0.02em",
+            marginTop: "0.25rem",
+          }}
+        >
+          Read Article
+          <span className="read-arrow">→</span>
         </div>
-      </article>
+      </div>
     </Link>
   );
 }
@@ -247,69 +263,75 @@ function BlogCard({ post }: { post: BlogPost }) {
 // Main Page
 // ————————————————————————————————————————————
 export default function BlogPage() {
+  useScrollReveal();
+
   return (
-    <div style={{ background: C.cream, minHeight: "100vh", fontFamily: FONT.outfit }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap');
-        *, *::before, *::after { box-sizing: border-box; }
-        body { margin: 0; }
-      `}</style>
+    <div style={{ background: C.cream, minHeight: "100vh", fontFamily: F.body }}>
+      <style>{GLOBAL_CSS}</style>
 
       <Navbar />
 
       {/* ——— Hero ——— */}
       <section
         style={{
-          background: `linear-gradient(135deg, ${C.dark} 0%, #3A3530 60%)`,
-          padding: "5rem 2rem 4.5rem",
-          textAlign: "center",
+          background: C.cream,
+          padding: "5.5rem 2.5rem 4rem",
           position: "relative",
           overflow: "hidden",
+          borderBottom: `1px solid ${C.border}`,
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: `radial-gradient(circle at 25% 60%, rgba(244,162,54,0.08) 0%, transparent 40%),
-                              radial-gradient(circle at 75% 30%, rgba(244,162,54,0.05) 0%, transparent 35%)`,
-            pointerEvents: "none",
-          }}
-        />
-        <div style={{ position: "relative", maxWidth: "680px", margin: "0 auto" }}>
+        {/* Paper grain */}
+        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity: 0.035 }} aria-hidden>
+          <filter id="grain-blog"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
+          <rect width="100%" height="100%" filter="url(#grain-blog)" />
+        </svg>
+
+        <div style={{ position: "relative", maxWidth: "760px", margin: "0 auto" }}>
           <p
             style={{
-              fontFamily: FONT.outfit,
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: C.saffron,
+              fontFamily: F.italic,
+              fontStyle: "italic",
+              fontSize: "1rem",
+              color: C.taupe,
               margin: "0 0 1.25rem",
+              animation: "fadeUp 0.7s ease both",
             }}
           >
             Industry Insights
           </p>
+          <div
+            style={{
+              width: "48px",
+              height: "2px",
+              background: C.charcoal,
+              marginBottom: "1.5rem",
+              transformOrigin: "left",
+              animation: "ruleGrow 0.6s ease 0.15s both",
+            }}
+          />
           <h1
             style={{
-              fontFamily: FONT.cormorant,
+              fontFamily: F.display,
               fontSize: "clamp(2.2rem, 5vw, 3.5rem)",
               fontWeight: 700,
-              color: "#FFFDF8",
-              margin: "0 0 1.25rem",
-              lineHeight: 1.12,
+              color: C.charcoal,
+              margin: "0 0 1.5rem",
+              lineHeight: 1.1,
+              animation: "fadeUp 0.8s ease 0.25s both",
             }}
           >
             Packaging{" "}
-            <span style={{ color: C.saffron }}>Knowledge Hub</span>
+            <em style={{ fontStyle: "italic", fontWeight: 500 }}>Knowledge Hub</em>
           </h1>
           <p
             style={{
-              fontFamily: FONT.outfit,
+              fontFamily: F.body,
               fontSize: "1rem",
-              color: "rgba(255,253,248,0.72)",
+              color: C.warm,
               lineHeight: 1.75,
               margin: 0,
+              animation: "fadeUp 0.8s ease 0.4s both",
             }}
           >
             Technical guides, compliance updates, and market intelligence for
@@ -320,83 +342,105 @@ export default function BlogPage() {
       </section>
 
       {/* ——— Blog Grid ——— */}
-      <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "3.5rem 2rem 5rem" }}>
-        {/* Featured post (first one) */}
-        <div style={{ marginBottom: "3rem" }}>
+      <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "4rem 2.5rem 5rem" }}>
+
+        {/* Featured post */}
+        <div style={{ marginBottom: "3.5rem" }}>
           <p
             style={{
-              fontFamily: FONT.outfit,
-              fontSize: "0.72rem",
+              fontFamily: F.body,
+              fontSize: "0.7rem",
               fontWeight: 600,
               letterSpacing: "0.15em",
               textTransform: "uppercase",
               color: C.taupe,
-              margin: "0 0 1.25rem",
+              margin: "0 0 1.5rem",
             }}
           >
             Latest Articles
           </p>
 
-          {/* Featured large card */}
           <Link
             href={`/blog/${blogPosts[0].slug}`}
             style={{ textDecoration: "none", display: "block" }}
           >
             <article
               style={{
-                background: "#FFFFFF",
-                border: `1.5px solid ${C.border}`,
-                borderRadius: "10px",
+                background: "#fff",
+                border: `1px solid ${C.border}`,
+                borderRadius: "6px",
                 overflow: "hidden",
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr",
-                marginBottom: "1.5rem",
                 transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+                marginBottom: "1.5rem",
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = C.saffron;
-                (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 40px rgba(58,53,48,0.1)";
+                (e.currentTarget as HTMLElement).style.borderColor = C.borderMid;
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 40px rgba(28,26,23,0.08)";
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLElement).style.borderColor = C.border;
                 (e.currentTarget as HTMLElement).style.boxShadow = "none";
               }}
             >
-              {/* Left: visual */}
+              {/* Left: parchment visual panel */}
               <div
                 style={{
-                  background: `linear-gradient(135deg, ${C.dark} 0%, #3A3530 100%)`,
+                  background: C.parchment,
                   padding: "3rem",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "flex-end",
-                  minHeight: "260px",
+                  minHeight: "280px",
                   position: "relative",
                   overflow: "hidden",
+                  borderRight: `1px solid ${C.border}`,
                 }}
               >
+                {/* Category accent bar */}
                 <div
                   style={{
                     position: "absolute",
-                    inset: 0,
-                    backgroundImage: `radial-gradient(circle at 30% 70%, rgba(244,162,54,0.12) 0%, transparent 50%)`,
-                    pointerEvents: "none",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: "3px",
+                    background: blogPosts[0].categoryColor,
                   }}
                 />
+                {/* Large italic number */}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "1.5rem",
+                    right: "1.5rem",
+                    fontFamily: F.display,
+                    fontSize: "8rem",
+                    fontWeight: 700,
+                    color: C.border,
+                    lineHeight: 1,
+                    fontStyle: "italic",
+                    userSelect: "none",
+                    pointerEvents: "none",
+                  }}
+                >
+                  01
+                </div>
                 <span
                   style={{
-                    fontFamily: FONT.outfit,
-                    fontSize: "0.7rem",
+                    fontFamily: F.body,
+                    fontSize: "0.68rem",
                     fontWeight: 600,
                     letterSpacing: "0.12em",
                     textTransform: "uppercase",
                     color: blogPosts[0].categoryColor,
-                    background: `${blogPosts[0].categoryColor}20`,
-                    border: `1px solid ${blogPosts[0].categoryColor}40`,
+                    background: `${blogPosts[0].categoryColor}18`,
+                    border: `1px solid ${blogPosts[0].categoryColor}35`,
                     padding: "0.25rem 0.6rem",
-                    borderRadius: "3px",
+                    borderRadius: "2px",
                     display: "inline-block",
-                    marginBottom: "0.75rem",
+                    marginBottom: "1rem",
                     position: "relative",
                     zIndex: 1,
                   }}
@@ -405,10 +449,10 @@ export default function BlogPage() {
                 </span>
                 <h2
                   style={{
-                    fontFamily: FONT.cormorant,
-                    fontSize: "1.75rem",
+                    fontFamily: F.display,
+                    fontSize: "1.65rem",
                     fontWeight: 700,
-                    color: "#FFFDF8",
+                    color: C.charcoal,
                     margin: 0,
                     lineHeight: 1.2,
                     position: "relative",
@@ -422,27 +466,21 @@ export default function BlogPage() {
               {/* Right: content */}
               <div
                 style={{
-                  padding: "2.5rem",
+                  padding: "3rem",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
                   gap: "1rem",
                 }}
               >
-                <div
-                  style={{
-                    fontFamily: FONT.outfit,
-                    fontSize: "0.78rem",
-                    color: C.taupe,
-                  }}
-                >
+                <div style={{ fontFamily: F.body, fontSize: "0.78rem", color: C.taupe }}>
                   {blogPosts[0].date} · {blogPosts[0].readTime} read
                 </div>
                 <p
                   style={{
-                    fontFamily: FONT.outfit,
+                    fontFamily: F.body,
                     fontSize: "0.95rem",
-                    color: C.taupe,
+                    color: C.warm,
                     margin: 0,
                     lineHeight: 1.7,
                   }}
@@ -451,11 +489,11 @@ export default function BlogPage() {
                 </p>
                 <div
                   style={{
-                    fontFamily: FONT.outfit,
+                    fontFamily: F.body,
                     fontSize: "0.85rem",
                     fontWeight: 600,
-                    color: C.saffron,
-                    letterSpacing: "0.04em",
+                    color: C.charcoal,
+                    letterSpacing: "0.02em",
                   }}
                 >
                   Read Article →
@@ -465,84 +503,82 @@ export default function BlogPage() {
           </Link>
         </div>
 
-        {/* ——— Remaining 3 posts grid ——— */}
+        {/* Remaining posts grid */}
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-            gap: "1.5rem",
+            gap: "1.25rem",
           }}
         >
-          {blogPosts.slice(1).map((post) => (
-            <BlogCard key={post.slug} post={post} />
+          {blogPosts.slice(1).map((post, i) => (
+            <BlogCard key={post.slug} post={post} delay={i * 0.1} />
           ))}
         </div>
 
-        {/* ——— Subscribe / CTA ——— */}
+        {/* ——— CTA Banner ——— */}
         <div
+          className="sr"
           style={{
-            marginTop: "4rem",
-            background: `linear-gradient(135deg, ${C.dark}, #3A3530)`,
-            borderRadius: "12px",
-            padding: "3rem 2.5rem",
+            marginTop: "4.5rem",
+            background: C.dark,
+            borderRadius: "6px",
+            padding: "3.5rem 3rem",
             display: "grid",
             gridTemplateColumns: "1fr auto",
             gap: "2rem",
             alignItems: "center",
-            border: `1px solid rgba(244,162,54,0.2)`,
           }}
         >
           <div>
             <p
               style={{
-                fontFamily: FONT.outfit,
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: C.saffron,
-                margin: "0 0 0.5rem",
+                fontFamily: F.italic,
+                fontStyle: "italic",
+                fontSize: "0.95rem",
+                color: "rgba(250,247,242,0.5)",
+                margin: "0 0 0.75rem",
               }}
             >
               Need Expert Advice?
             </p>
             <h3
               style={{
-                fontFamily: FONT.cormorant,
+                fontFamily: F.display,
                 fontSize: "1.75rem",
                 fontWeight: 700,
-                color: "#FFFDF8",
-                margin: "0 0 0.75rem",
+                color: C.cream,
+                margin: "0 0 0.875rem",
+                lineHeight: 1.2,
               }}
             >
               Talk to Our Technical Team
             </h3>
             <p
               style={{
-                fontFamily: FONT.outfit,
+                fontFamily: F.body,
                 fontSize: "0.875rem",
-                color: "rgba(255,253,248,0.65)",
+                color: "rgba(250,247,242,0.55)",
                 margin: 0,
                 lineHeight: 1.7,
               }}
             >
               Our sales team has hands-on experience across pharma, FMCG, automotive,
-              and electronics packaging. If you have a board specification question,
-              we will give you a direct, honest answer — not a sales pitch.
+              and electronics packaging. Honest answers — not a sales pitch.
             </p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", alignItems: "flex-end" }}>
             <Link
               href="/#contact"
               style={{
-                fontFamily: FONT.outfit,
-                background: C.saffron,
-                color: C.dark,
+                fontFamily: F.body,
+                background: C.cream,
+                color: C.charcoal,
                 textDecoration: "none",
-                fontSize: "0.9rem",
-                fontWeight: 700,
+                fontSize: "0.875rem",
+                fontWeight: 600,
                 padding: "0.9rem 1.75rem",
-                borderRadius: "4px",
+                borderRadius: "3px",
                 whiteSpace: "nowrap",
               }}
             >
@@ -551,9 +587,9 @@ export default function BlogPage() {
             <a
               href="tel:+919823383230"
               style={{
-                fontFamily: FONT.outfit,
+                fontFamily: F.body,
                 fontSize: "0.8rem",
-                color: "rgba(255,253,248,0.55)",
+                color: "rgba(250,247,242,0.4)",
                 textDecoration: "none",
                 textAlign: "center",
               }}
@@ -568,21 +604,21 @@ export default function BlogPage() {
       <footer
         style={{
           background: C.dark,
-          borderTop: `1px solid rgba(244,162,54,0.15)`,
-          padding: "2rem",
+          borderTop: `1px solid rgba(250,247,242,0.07)`,
+          padding: "2rem 2.5rem",
           textAlign: "center",
         }}
       >
         <p
           style={{
-            fontFamily: FONT.outfit,
-            fontSize: "0.8rem",
-            color: "rgba(255,253,248,0.4)",
+            fontFamily: F.body,
+            fontSize: "0.78rem",
+            color: "rgba(250,247,242,0.35)",
             margin: 0,
           }}
         >
           © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO ·{" "}
-          <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ color: "rgba(255,253,248,0.4)", textDecoration: "none" }}>
+          <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ color: "rgba(250,247,242,0.35)", textDecoration: "none" }}>
             contact.puneglobalgroup@gmail.com
           </a>
         </p>
