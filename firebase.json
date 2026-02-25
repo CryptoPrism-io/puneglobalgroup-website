@@ -6,12 +6,6 @@
     "public": "out",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": true,
-    "trailingSlash": true,
-    "redirects": [
-      { "source": "/products", "destination": "/products/", "type": 301 },
-      { "source": "/infrastructure", "destination": "/infrastructure/", "type": 301 },
-      { "source": "/blog", "destination": "/blog/", "type": 301 }
-    ],
     "rewrites": [
       { "source": "/admin", "destination": "/admin/index.html" },
       { "source": "/login", "destination": "/login/index.html" }
