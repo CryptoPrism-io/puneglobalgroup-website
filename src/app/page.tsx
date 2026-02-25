@@ -258,7 +258,7 @@ const GLOBAL_CSS = `
   @media (max-width: 768px) {
     .desktop-nav { display: none !important; }
     .mobile-menu-btn { display: flex !important; }
-    .hero-headline { font-size: clamp(2.4rem, 10vw, 4rem) !important; }
+    .hero-headline { font-size: clamp(2.2rem, 9vw, 3.2rem) !important; }
     .products-grid { grid-template-columns: 1fr !important; }
     .products-detail-grid { grid-template-columns: 1fr 1fr !important; }
     .industries-grid { grid-template-columns: 1fr 1fr !important; }
@@ -518,7 +518,7 @@ function Hero() {
         {/* Headline — staggered lines */}
         <h1 className="hero-headline" style={{
           fontFamily: F.display, fontWeight: 700,
-          fontSize: "clamp(3rem, 7vw, 7rem)",
+          fontSize: "clamp(2.8rem, 5vw, 5rem)",
           lineHeight: 1.02, color: C.charcoal,
           letterSpacing: "-0.025em", maxWidth: "920px", marginBottom: "0",
         }}>
