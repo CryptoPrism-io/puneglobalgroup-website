@@ -519,13 +519,23 @@ function Hero() {
         <h1 className="hero-headline" style={{
           fontFamily: F.display, fontWeight: 700,
           fontSize: "clamp(2.8rem, 5vw, 5rem)",
-          lineHeight: 1.02, color: C.charcoal,
-          letterSpacing: "-0.025em", maxWidth: "920px", marginBottom: "0",
+          lineHeight: 1.08, color: C.charcoal,
+          letterSpacing: "-0.02em", maxWidth: "820px", marginBottom: "0",
         }}>
-          <span className="hero-h1-line1">Industrial Packaging.</span>
-          <em className="hero-h1-line2" style={{ fontWeight: 400, color: C.warm, fontStyle: "italic" }}>
-            Manufactured to Export.
-          </em>
+          <span className="hero-h1-line1" style={{ display: "block" }}>
+            Engineered for Industry.
+          </span>
+          <span className="hero-h1-line2" style={{
+            display: "block",
+            fontSize: "0.72em",
+            fontWeight: 400,
+            letterSpacing: "0em",
+            color: C.warm,
+            marginTop: "0.18em",
+          }}>
+            Trusted{" "}
+            <span style={{ color: C.saffron, fontWeight: 600 }}>Across India.</span>
+          </span>
         </h1>
 
         {/* Rule — grows from left */}
