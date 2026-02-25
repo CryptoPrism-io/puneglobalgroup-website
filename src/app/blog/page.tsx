@@ -13,7 +13,7 @@ const C = {
   charcoal: "#1C1A17",
   warm: "#4A4540",
   taupe: "#7A736D",
-  saffron: "#E8960A",
+  saffron: "#F5A623",
   dark: "#141210",
   border: "rgba(28,26,23,0.1)",
   borderMid: "rgba(28,26,23,0.16)",
