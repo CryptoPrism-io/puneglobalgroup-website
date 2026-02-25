@@ -31,3 +31,19 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# Local scripts & tooling (not for repo)
+generate-product-shots.py
+generate-product-shots-fast.py
+product-shots-plan.md
+service-account.json
+tsconfig.tsbuildinfo
+
+# Reference images & knowledge docs (local research only)
+*.jpg
+*.png
+*-knowledge.md
+TROUBLESHOOTING.md
+
+# Playwright / browser automation local cache
+.playwright-mcp/
