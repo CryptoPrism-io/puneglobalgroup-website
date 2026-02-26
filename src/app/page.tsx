@@ -777,9 +777,15 @@ function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
 
   useEffect(() => {
     if (hovered) return;
-    const t = setInterval(() => setIdx(c => (c + 1) % p.imgs.length), 1500);
-    return () => clearInterval(t);
-  }, [hovered, p.imgs.length]);
+    let intervalId: ReturnType<typeof setInterval> | undefined;
+    const timeoutId = setTimeout(() => {
+      intervalId = setInterval(() => setIdx(c => (c + 1) % p.imgs.length), 1500);
+    }, i * 375);
+    return () => {
+      clearTimeout(timeoutId);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [hovered, i, p.imgs.length]);
 
   return (
     <Link href={`/products/${p.slug}`}
