@@ -257,11 +257,15 @@ const GLOBAL_CSS = `
     .footer-cols { flex-direction: column !important; gap: 2rem !important; }
     .infra-metrics-grid { grid-template-columns: repeat(3, 1fr) !important; }
   }
+  @media (max-width: 1024px) {
+    .pp-product-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  }
   @media (max-width: 768px) {
     .desktop-nav { display: none !important; }
     .mobile-menu-btn { display: flex !important; }
     .hero-headline { font-size: clamp(2.2rem, 9vw, 3.2rem) !important; }
     .products-grid { grid-template-columns: 1fr !important; }
+    .pp-product-grid { grid-template-columns: 1fr 1fr !important; }
     .products-detail-grid { grid-template-columns: 1fr 1fr !important; }
     .industries-grid { grid-template-columns: 1fr 1fr !important; }
     .infra-metrics-grid { grid-template-columns: repeat(3, 1fr) !important; }
@@ -271,6 +275,7 @@ const GLOBAL_CSS = `
   }
   @media (max-width: 480px) {
     .industries-grid { grid-template-columns: 1fr !important; }
+    .pp-product-grid { grid-template-columns: 1fr !important; }
     .products-detail-grid { grid-template-columns: 1fr !important; }
     .infra-metrics-grid { grid-template-columns: repeat(2, 1fr) !important; }
     .blog-teaser-header { flex-direction: column !important; align-items: flex-start !important; gap: 1rem !important; }
@@ -657,7 +662,7 @@ const PP_PRODUCTS = [
       "/products/pp/pp-corrugated-crates-2.jpg",
       "/products/pp/pp-corrugated-crates-3.jpg",
     ],
-    slug: "pp-foldable-boxes",
+    slug: "pp-corrugated-crates",
   },
   {
     name: "PP Layer Pads",
@@ -790,7 +795,7 @@ function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
 
 function PPProductGrid() {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "1px",
+    <div className="pp-product-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "1px",
       background: C.borderMid }}>
       {PP_PRODUCTS.map((p, i) => (
         <PPProductCard key={p.name} p={p} i={i} />

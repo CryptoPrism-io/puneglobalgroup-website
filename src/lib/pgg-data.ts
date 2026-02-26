@@ -415,7 +415,58 @@ export const products: Product[] = [
   },
 
   // ——————————————————————————————————————————
-  // 9. ESD Packaging
+  // 9. PP Corrugated Crates
+  // ——————————————————————————————————————————
+  {
+    slug: "pp-corrugated-crates",
+    name: "PP Corrugated Crates",
+    category: "PP Packaging",
+    tagline: "Heavy-duty stackable PP corrugated crates for returnable industrial and automotive logistics",
+    thickness: "4–10 mm PP corrugated sheet",
+    features: [
+      "Heavy-duty construction — handles up to 30 kg static load",
+      "Stackable design — safe multi-level stacking in warehouses",
+      "Foldable variants available for return logistics",
+      "Reusable for 500+ cycles under normal handling conditions",
+      "Interlocking lid and base options for secure transit",
+      "Waterproof and chemical resistant — suitable for industrial environments",
+      "Customisable sizes, colours, and printed labelling",
+      "Lightweight — reduces freight cost vs metal or wooden crates",
+    ],
+    applications: [
+      "Automotive OEM and Tier-1 component logistics",
+      "Engineering and precision parts transit",
+      "Warehouse and intra-plant material handling",
+      "Pharma bulk packaging and transit containers",
+      "FMCG distribution and retail replenishment",
+      "Export packaging for heavy industrial goods",
+    ],
+    specsTable: [
+      { label: "Sheet Thickness", value: "4 – 10 mm PP corrugated" },
+      { label: "Standard Sizes", value: "400×300×250 mm to 1200×800×600 mm" },
+      { label: "Custom Sizes", value: "Available on request" },
+      { label: "Static Load Capacity", value: "Up to 30 kg (configuration-dependent)" },
+      { label: "Reusability", value: "500+ cycles under normal conditions" },
+      { label: "Colour Options", value: "Black, Grey, Blue, Yellow, Green, Red" },
+      { label: "Printing", value: "1–2 colour screen print / barcode labelling" },
+      { label: "MOQ", value: "50 units per size" },
+      { label: "Lead Time", value: "7–12 working days (standard sizes)" },
+    ],
+    exportCompliance: [
+      "REACH compliant polypropylene substrate",
+      "RoHS compliant for electronics-adjacent applications",
+    ],
+    certifications: ["ISO 9001"],
+    image: "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
+    images: [
+      "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
+      "/products/pp/pp-corrugated-crates-2.jpg",
+      "/products/pp/pp-corrugated-crates-3.jpg",
+    ],
+  },
+
+  // ——————————————————————————————————————————
+  // 10. ESD Packaging
   // ——————————————————————————————————————————
   {
     slug: "esd-packaging",
