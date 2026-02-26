@@ -504,12 +504,12 @@ function Hero() {
         {/* Eyebrow — CSS animation */}
         <div className="hero-eyebrow-anim"
           style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
-          <span style={{ fontFamily: F.italic, fontStyle: "italic",
+          <span className="hero-eyebrow-text" style={{ fontFamily: F.italic, fontStyle: "italic",
             fontSize: "1.15rem", color: C.taupe, whiteSpace: "nowrap" }}>
             PP Manufacturing · FBB Converting · Paper Trading
           </span>
-          <div style={{ flex: 1, height: "1px", background: C.border }} />
-          <span style={{ fontFamily: F.body, fontSize: "0.7rem", color: C.taupe,
+          <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: C.border }} />
+          <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: C.taupe,
             letterSpacing: "0.12em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
             Pune, India · Est. 1995
           </span>
@@ -530,7 +530,7 @@ function Hero() {
             fontSize: "0.72em",
             fontWeight: 400,
             letterSpacing: "0em",
-            color: C.warm,
+            color: C.charcoal,
             marginTop: "0.18em",
           }}>
             Trusted{" "}
@@ -1441,16 +1441,6 @@ function AboutSection() {
                 </div>
               ))}
 
-              <div style={{ marginTop: "1.5rem", paddingTop: "1.25rem",
-                borderTop: `1px solid ${C.border}`,
-                display: "flex", alignItems: "center", gap: "8px" }}>
-                <div style={{ width: "6px", height: "6px", borderRadius: "50%",
-                  background: C.saffron }} />
-                <span style={{ fontFamily: F.body, fontSize: "0.75rem", color: C.taupe,
-                  letterSpacing: "0.05em" }}>
-                  GSTIN: 27FYYPS5999K1ZO
-                </span>
-              </div>
             </div>
           </div>
 
@@ -1766,7 +1756,7 @@ function Footer() {
           flexWrap: "wrap", gap: "1rem", padding: "1.5rem 0" }}>
           <div style={{ fontFamily: F.body, fontSize: "0.76rem",
             color: "rgba(250,247,242,0.38)" }}>
-            © 2025 Pune Global Group. All rights reserved.
+            © {new Date().getFullYear()} Pune Global Group. All rights reserved.
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px",
             fontFamily: F.body, fontSize: "0.73rem", color: "rgba(250,247,242,0.38)" }}>
