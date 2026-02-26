@@ -6,6 +6,7 @@ import {
   Phone, Mail, MapPin, Factory, Package, Layers,
   ChevronRight, Menu, X, ArrowRight, CheckCircle,
   Loader2, Car, Pill, ShoppingCart, Wrench,
+  FileStack, Scroll, Waves,
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
@@ -22,7 +23,8 @@ const C = {
   charcoal:  "#1C1A17",
   warm:      "#4A4540",
   taupe:     "#7A736D",
-  saffron:   "#F5A623",   /* reserved: numbers, stats, one CTA only */
+  saffron:   "#F5A623",   /* reserved: decorative accents, labels */
+  saffrondark: "#B8720D", /* WCAG AA large text (3.65:1 on cream) — use for stat numbers */
   dark:      "#141210",
   border:    "rgba(28,26,23,0.1)",
   borderMid: "rgba(28,26,23,0.16)",
@@ -219,6 +221,7 @@ const GLOBAL_CSS = `
   .footer-link {
     font-family: ${F.body}; font-size: 0.84rem; color: rgba(250,247,242,0.52);
     transition: color 0.2s; cursor: pointer; display: block; margin-bottom: 10px;
+    text-decoration: none; background: none; border: none; padding: 0; text-align: left;
   }
   .footer-link:hover { color: ${C.cream}; }
 
@@ -465,7 +468,7 @@ function AnimatedStat({ raw, label, note, animClass }: {
   return (
     <div className={animClass} style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
       <div style={{ fontFamily: F.display, fontWeight: 700,
-        fontSize: "2.2rem", color: C.saffron, lineHeight: 1,
+        fontSize: "2.2rem", color: C.saffrondark, lineHeight: 1,
         transition: "color 0.3s" }}>
         {display}
       </div>
@@ -497,7 +500,7 @@ function Hero() {
     <section style={{
       minHeight: "100vh", background: C.cream,
       display: "flex", flexDirection: "column", justifyContent: "center",
-      padding: "clamp(80px, 13vh, 140px) clamp(1.5rem, 5vw, 4rem) clamp(48px, 8vh, 80px)",
+      padding: "clamp(50px, 8vh, 90px) clamp(1.5rem, 5vw, 4rem) clamp(48px, 8vh, 80px)",
     }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto", width: "100%" }}>
 
@@ -804,6 +807,7 @@ function ProductsSection() {
       spec: "Traded · Cyber Oak · Cyber XLPac",
       desc: "ITC PSPD folding box boards — high stiffness, FSC certified, sheeted to press-ready sizes. 230–400 GSM.",
       bg: `linear-gradient(145deg, #EDE0C8 0%, #E0CBA8 100%)`,
+      icon: <Layers size={28} color={C.warm} />,
       slug: "itc-fbb-boards",
     },
     {
@@ -811,6 +815,7 @@ function ProductsSection() {
       spec: "Traded · Cut to Size",
       desc: "Coated duplex boards 200–450 GSM for pharma cartons and retail packaging. Sheeted from reel.",
       bg: `linear-gradient(145deg, #E8E4DC 0%, #DDD8D0 100%)`,
+      icon: <FileStack size={28} color={C.warm} />,
       slug: "duplex-board",
     },
     {
@@ -818,6 +823,7 @@ function ProductsSection() {
       spec: "Traded · 100–440 GSM",
       desc: "100% fresh fibre imported kraft liner for heavy-duty corrugated and export packaging.",
       bg: `linear-gradient(145deg, #E0D0B4 0%, #D4C4A0 100%)`,
+      icon: <Scroll size={28} color={C.warm} />,
       slug: "kraft-liner",
     },
     {
@@ -825,6 +831,7 @@ function ProductsSection() {
       spec: "Traded · 80–400 GSM",
       desc: "Recycled fibre test liners and fluting medium for corrugators and box manufacturers.",
       bg: `linear-gradient(145deg, #DDD8CC 0%, #D0CBC0 100%)`,
+      icon: <Waves size={28} color={C.warm} />,
       slug: "test-liners-fluting",
     },
   ];
@@ -856,13 +863,13 @@ function ProductsSection() {
           {lines.map((line, i) => (
             <div key={line.eyebrow} className="sr" data-delay={`${0.1 * i}`}
               style={{
-                background: i % 2 === 1 ? C.parchment : C.cream,
+                background: C.cream,
                 padding: "2.75rem",
                 display: "flex", flexDirection: "column",
                 transition: "background 0.25s",
               }}
               onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = "#fff"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = i % 2 === 1 ? C.parchment : C.cream; }}>
+              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = C.cream; }}>
 
               <div className="sr prod-num-anim" data-delay={`${0.05 + 0.1 * i}`}
                 style={{ fontFamily: F.display, fontWeight: 700, fontSize: "3.5rem",
@@ -958,7 +965,7 @@ function ProductsSection() {
                 background: p.bg, height: "110px",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
-                <Package size={28} color={C.warm} />
+                {p.icon}
               </div>
               <div style={{ padding: "1.25rem 1.25rem 1.5rem",
                 display: "flex", flexDirection: "column", gap: "0.35rem", flex: 1 }}>
@@ -1660,8 +1667,24 @@ function ContactSection() {
 
 /* ─── Footer ─────────────────────────────────────────────────────────────────── */
 function Footer() {
-  const scrollTo = (href: string) =>
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+  const productLinks = [
+    { label: "ITC Paper & Boards", href: "/products/itc-fbb-boards/" },
+    { label: "PP Boxes & Sheets",  href: "/products/pp-foldable-boxes/" },
+    { label: "Duplex Boards",      href: "/products/duplex-board/" },
+    { label: "Kraft Liner",        href: "/products/kraft-liner/" },
+  ];
+  const industryLinks = [
+    { label: "Automotive",     href: "/#industries" },
+    { label: "Pharmaceutical", href: "/#industries" },
+    { label: "E-Commerce",     href: "/#industries" },
+    { label: "FMCG",           href: "/#industries" },
+    { label: "Engineering",    href: "/#industries" },
+  ];
+  const companyLinks = [
+    { label: "About Us",    href: "/#about" },
+    { label: "Contact",     href: "/#contact" },
+    { label: "Get a Quote", href: "/#contact" },
+  ];
 
   return (
     <footer style={{ background: C.dark, padding: "70px clamp(1.5rem, 5vw, 4rem) 0" }}>
@@ -1694,12 +1717,10 @@ function Footer() {
                 textTransform: "uppercase", marginBottom: "1.25rem" }}>
                 Products
               </div>
-              {["ITC Paper & Boards", "PP Boxes & Sheets", "Duplex Boards", "Kraft Liner"].map(p => (
-                <button key={p} className="footer-link"
-                  onClick={() => scrollTo("#products")}
-                  style={{ background: "none", border: "none", textAlign: "left" }}>
-                  {p}
-                </button>
+              {productLinks.map(({ label, href }) => (
+                <Link key={label} href={href} className="footer-link">
+                  {label}
+                </Link>
               ))}
             </div>
 
@@ -1709,12 +1730,10 @@ function Footer() {
                 textTransform: "uppercase", marginBottom: "1.25rem" }}>
                 Industries
               </div>
-              {["Automotive", "Pharmaceutical", "E-Commerce", "FMCG", "Engineering"].map(ind => (
-                <button key={ind} className="footer-link"
-                  onClick={() => scrollTo("#industries")}
-                  style={{ background: "none", border: "none", textAlign: "left" }}>
-                  {ind}
-                </button>
+              {industryLinks.map(({ label, href }) => (
+                <Link key={label} href={href} className="footer-link">
+                  {label}
+                </Link>
               ))}
             </div>
 
@@ -1724,13 +1743,10 @@ function Footer() {
                 textTransform: "uppercase", marginBottom: "1.25rem" }}>
                 Company
               </div>
-              {[{ label: "About Us", href: "#about" }, { label: "Contact", href: "#contact" },
-                { label: "Get a Quote", href: "#contact" }].map(l => (
-                <button key={l.label} className="footer-link"
-                  onClick={() => scrollTo(l.href)}
-                  style={{ background: "none", border: "none", textAlign: "left" }}>
-                  {l.label}
-                </button>
+              {companyLinks.map(({ label, href }) => (
+                <Link key={label} href={href} className="footer-link">
+                  {label}
+                </Link>
               ))}
               <div style={{ marginTop: "1.5rem" }}>
                 <a href="mailto:contact.puneglobalgroup@gmail.com"
