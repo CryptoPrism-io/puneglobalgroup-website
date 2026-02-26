@@ -624,143 +624,177 @@ function MarqueeTicker() {
   );
 }
 
-/* ─── Product Carousel ───────────────────────────────────────────────────────── */
+/* ─── PP Product Grid (multi-image carousel + hover expand, matches Paper cards) ── */
 const PP_PRODUCTS = [
   {
     name: "PP Foldable Boxes",
     spec: "Manufactured · Returnable",
     desc: "Custom-manufactured foldable PP boxes for automotive trays and returnable industrial logistics. Exported globally.",
-    img: "https://www.brotherspackaging.in/assets/images/products/ppbox/9.webp",
+    imgs: [
+      "https://www.brotherspackaging.in/assets/images/products/ppbox/9.webp",
+      "/products/pp/pp-foldable-boxes-2.jpg",
+      "/products/pp/pp-foldable-boxes-3.jpg",
+    ],
     slug: "pp-foldable-boxes",
   },
   {
     name: "PP Corrugated Sheets",
     spec: "Manufactured · Custom Sizes",
     desc: "Waterproof, UV-stable PP hollow corrugated sheets for layer pads, partition dividers and protective wrapping.",
-    img: "https://jppack.in/products/ppcorrugatedsheetssunpaksheetshollowsheetsfluteboardsheets_24_07_25_09_23_01_102592.png",
+    imgs: [
+      "https://jppack.in/products/ppcorrugatedsheetssunpaksheetshollowsheetsfluteboardsheets_24_07_25_09_23_01_102592.png",
+      "/products/pp/pp-corrugated-sheets-2.jpg",
+      "/products/pp/pp-corrugated-sheets-3.jpg",
+    ],
     slug: "pp-corrugated-sheets",
   },
   {
     name: "PP Corrugated Crates",
     spec: "Manufactured · Heavy Duty",
     desc: "Stackable returnable crates for automotive OEMs, engineering components and industrial material handling.",
-    img: "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
+    imgs: [
+      "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
+      "/products/pp/pp-corrugated-crates-2.jpg",
+      "/products/pp/pp-corrugated-crates-3.jpg",
+    ],
     slug: "pp-foldable-boxes",
   },
   {
     name: "PP Layer Pads",
     spec: "Manufactured · Pallet-Ready",
     desc: "PP layer pads and slip sheets for pallet stacking, product separation and surface protection in transit.",
-    img: "https://jppack.in/products/ppcorrugatedlayerpad_24_07_25_09_27_58_112075.png",
+    imgs: [
+      "https://jppack.in/products/ppcorrugatedlayerpad_24_07_25_09_27_58_112075.png",
+      "/products/pp/pp-layer-pads-2.jpg",
+      "/products/pp/pp-layer-pads-3.jpg",
+    ],
     slug: "pp-layer-pads",
   },
   {
     name: "ESD Packaging",
     spec: "Manufactured · Anti-Static",
     desc: "Anti-static PP bins and boxes for electronics manufacturers and PCB component handling. Export compliant.",
-    img: "https://jppack.in/products/ppcorrugatedesdbin_24_07_25_09_29_20_111119.png",
+    imgs: [
+      "https://jppack.in/products/ppcorrugatedesdbin_24_07_25_09_29_20_111119.png",
+      "/products/pp/pp-esd-packaging-2.jpg",
+      "/products/pp/pp-esd-packaging-3.jpg",
+    ],
     slug: "esd-packaging",
   },
 ];
 
-function ProductCarousel() {
+function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
   const [idx, setIdx] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const [key, setKey] = useState(0);
-  const n = PP_PRODUCTS.length;
+  const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
-    if (paused) return;
-    const t = setInterval(() => { setIdx(i => (i + 1) % n); setKey(k => k + 1); }, 4000);
-    return () => clearInterval(t);
-  }, [paused, n]);
-
-  const go = (dir: number) => { setIdx(i => (i + dir + n) % n); setKey(k => k + 1); };
-  const visible = [0, 1, 2].map(o => PP_PRODUCTS[(idx + o) % n]);
+    if (hovered) return;
+    let intervalId: ReturnType<typeof setInterval> | undefined;
+    const timeoutId = setTimeout(() => {
+      intervalId = setInterval(() => setIdx(c => (c + 1) % p.imgs.length), 1500);
+    }, i * 375);
+    return () => {
+      clearTimeout(timeoutId);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [hovered, i, p.imgs.length]);
 
   return (
-    <div style={{ position: "relative" }}
-      onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
-      {!paused && (
-        <div style={{ height: "1px", background: C.border, marginBottom: "1.25rem", overflow: "hidden" }}>
-          <div key={`bar-${key}`} style={{
-            height: "100%", background: C.saffron,
-            transformOrigin: "left center",
-            animation: "carouselProgress 4s linear forwards",
-          }} />
-        </div>
-      )}
-
-      <div key={key} className="carousel-track"
-        style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px",
-          background: C.borderMid }}>
-        {visible.map((p, i) => (
-          <Link key={`${p.name}-${i}`} href={`/products/${p.slug}`}
-            className="carousel-card-enter product-card"
+    <Link href={`/products/${p.slug}`}
+      className="sr product-card" data-delay={`${0.07 * i}`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: hovered ? "#fff" : C.cream,
+        border: "none",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        textDecoration: "none",
+        transition: "background 0.25s",
+      }}>
+      {/* Image area — expands on hover */}
+      <div style={{
+        height: hovered ? "190px" : "110px",
+        overflow: "hidden",
+        position: "relative",
+        transition: "height 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+        flexShrink: 0,
+      }}>
+        {p.imgs.map((src, j) => (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img key={src} src={src} alt={`${p.name} — ${j + 1}`}
             style={{
-              background: C.cream,
-              border: `1px solid ${C.border}`,
-              overflow: "hidden", display: "flex", flexDirection: "column",
-              textDecoration: "none",
-            }}>
-            <div style={{ height: "190px", overflow: "hidden", background: C.parchment, position: "relative" }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={p.img} alt={p.name}
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-            </div>
-            <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.4rem", flex: 1 }}>
-              <span style={{ fontFamily: F.body, fontSize: "0.65rem", letterSpacing: "0.1em",
-                textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>
-                {p.spec}
-              </span>
-              <h4 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1rem",
-                color: C.charcoal, lineHeight: 1.25 }}>
-                {p.name}
-              </h4>
-              <p style={{ fontFamily: F.body, fontSize: "0.82rem", color: C.taupe,
-                lineHeight: 1.7, flex: 1, fontWeight: 300 }}>
-                {p.desc}
-              </p>
-              <span style={{ marginTop: "0.75rem", display: "inline-flex", alignItems: "center",
-                gap: "4px", color: C.charcoal, fontFamily: F.body, fontWeight: 500,
-                fontSize: "0.74rem", letterSpacing: "0.04em",
-                borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "1px",
-                alignSelf: "flex-start" }}>
-                View Details <ChevronRight size={11} />
-              </span>
-            </div>
-          </Link>
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+              opacity: j === idx ? 1 : 0,
+              transition: "opacity 0.55s ease",
+            }} />
         ))}
-      </div>
-
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "1.25rem" }}>
-        <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
-          {PP_PRODUCTS.map((_, i) => (
-            <button key={i} onClick={() => { setIdx(i); setKey(k => k + 1); }} style={{
-              width: i === idx ? "24px" : "6px", height: "6px",
-              borderRadius: "3px",
-              background: i === idx ? C.charcoal : C.borderMid,
-              border: "none", cursor: "pointer",
-              transition: "all 0.3s cubic-bezier(0.22,1,0.36,1)", padding: 0,
+        {/* Dot indicators — visible on hover */}
+        <div style={{
+          position: "absolute",
+          bottom: "8px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          gap: "4px",
+          opacity: hovered ? 1 : 0,
+          transition: "opacity 0.3s",
+          zIndex: 2,
+        }}>
+          {p.imgs.map((_, j) => (
+            <span key={j} style={{
+              width: "5px",
+              height: "5px",
+              borderRadius: "50%",
+              background: j === idx ? "#fff" : "rgba(255,255,255,0.45)",
+              transition: "background 0.2s, transform 0.2s",
+              transform: j === idx ? "scale(1.3)" : "scale(1)",
+              display: "block",
             }} />
           ))}
         </div>
-        <div style={{ display: "flex", gap: "6px" }}>
-          {[{ dir: -1, label: "‹" }, { dir: 1, label: "›" }].map(({ dir, label }) => (
-            <button key={dir} onClick={() => go(dir)} style={{
-              width: "36px", height: "36px", borderRadius: "1px",
-              background: "transparent", border: `1px solid ${C.borderMid}`,
-              cursor: "pointer", fontFamily: F.body, fontSize: "1.1rem",
-              color: C.charcoal, display: "flex", alignItems: "center", justifyContent: "center",
-              transition: "all 0.2s", lineHeight: 1,
-            }}
-            onMouseEnter={e => { const b = e.currentTarget; b.style.background = C.charcoal; b.style.color = C.cream; }}
-            onMouseLeave={e => { const b = e.currentTarget; b.style.background = "transparent"; b.style.color = C.charcoal; }}>
-              {label}
-            </button>
-          ))}
-        </div>
       </div>
+
+      {/* Text body */}
+      <div style={{ padding: "1.25rem 1.25rem 1.5rem",
+        display: "flex", flexDirection: "column", gap: "0.35rem", flex: 1 }}>
+        <span style={{ fontFamily: F.body, fontSize: "0.63rem", letterSpacing: "0.1em",
+          textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>
+          {p.spec}
+        </span>
+        <h4 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "0.98rem",
+          color: C.charcoal, lineHeight: 1.25 }}>
+          {p.name}
+        </h4>
+        <p style={{ fontFamily: F.body, fontSize: "0.79rem", color: C.taupe,
+          lineHeight: 1.7, flex: 1, fontWeight: 300 }}>
+          {p.desc}
+        </p>
+        <span style={{ marginTop: "0.75rem", display: "inline-flex", alignItems: "center",
+          gap: "4px", color: C.charcoal, fontFamily: F.body, fontWeight: 500,
+          fontSize: "0.74rem", letterSpacing: "0.04em",
+          borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "1px",
+          alignSelf: "flex-start" }}>
+          View Details <ChevronRight size={11} />
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+function PPProductGrid() {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "1px",
+      background: C.borderMid }}>
+      {PP_PRODUCTS.map((p, i) => (
+        <PPProductCard key={p.name} p={p} i={i} />
+      ))}
     </div>
   );
 }
@@ -1041,7 +1075,7 @@ function ProductsSection() {
             View All <ChevronRight size={11} />
           </Link>
         </div>
-        <div className="sr" data-delay="0.1"><ProductCarousel /></div>
+        <div className="sr" data-delay="0.1"><PPProductGrid /></div>
 
         {/* Paper grades */}
         <div style={{ display: "flex", alignItems: "center", gap: "1rem",
