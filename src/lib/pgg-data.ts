@@ -24,6 +24,7 @@ export interface Product {
   exportCompliance: string[];
   certifications?: string[];
   image?: string;
+  images?: string[];
 }
 
 export const products: Product[] = [
@@ -72,6 +73,11 @@ export const products: Product[] = [
       "US FDA compliant for food-contact applications",
     ],
     certifications: ["FSC", "ISO 9001", "BRC"],
+    images: [
+      "/products/paper/fbb-board.jpg",
+      "/products/paper/fbb-board-2.jpg",
+      "/products/paper/fbb-board-3.jpg",
+    ],
   },
 
   // ——————————————————————————————————————————
@@ -120,6 +126,11 @@ export const products: Product[] = [
       "BIS IS 1397 compliant",
       "REACH compliant — no restricted substances",
     ],
+    images: [
+      "/products/paper/duplex-board.jpg",
+      "/products/paper/duplex-board-2.jpg",
+      "/products/paper/duplex-board-3.jpg",
+    ],
   },
 
   // ——————————————————————————————————————————
@@ -165,6 +176,11 @@ export const products: Product[] = [
       "FSC certification available on request",
       "ISPM-15 not applicable (no solid wood component)",
     ],
+    images: [
+      "/products/paper/kraft-liner.jpg",
+      "/products/paper/kraft-liner-2.jpg",
+      "/products/paper/kraft-liner-3.jpg",
+    ],
   },
 
   // ——————————————————————————————————————————
@@ -206,6 +222,11 @@ export const products: Product[] = [
     ],
     exportCompliance: [
       "BIS IS 1397 compliant",
+    ],
+    images: [
+      "/products/paper/test-liner.jpg",
+      "/products/paper/test-liner-2.jpg",
+      "/products/paper/test-liner-3.jpg",
     ],
   },
 
@@ -250,6 +271,11 @@ export const products: Product[] = [
     exportCompliance: [
       "BIS IS 1397 compliant",
       "FSC available on request",
+    ],
+    images: [
+      "/products/paper/fbb-board.jpg",
+      "/products/paper/kraft-liner-2.jpg",
+      "/products/paper/duplex-board-2.jpg",
     ],
   },
 

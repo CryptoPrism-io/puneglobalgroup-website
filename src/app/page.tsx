@@ -765,6 +765,110 @@ function ProductCarousel() {
   );
 }
 
+/* ─── Paper Product Card (multi-image carousel + hover expand) ────────────────── */
+type PaperProduct = {
+  name: string; spec: string; desc: string;
+  imgs: string[]; slug: string;
+};
+
+function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
+  const [idx, setIdx] = useState(0);
+  const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    if (hovered) return;
+    const t = setInterval(() => setIdx(c => (c + 1) % p.imgs.length), 1500);
+    return () => clearInterval(t);
+  }, [hovered, p.imgs.length]);
+
+  return (
+    <Link href={`/products/${p.slug}`}
+      className="sr product-card" data-delay={`${0.07 * i}`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: hovered ? "#fff" : C.cream,
+        border: "none",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        textDecoration: "none",
+        transition: "background 0.25s",
+      }}>
+      {/* Image area — expands on hover */}
+      <div style={{
+        height: hovered ? "190px" : "110px",
+        overflow: "hidden",
+        position: "relative",
+        transition: "height 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+        flexShrink: 0,
+      }}>
+        {p.imgs.map((src, j) => (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img key={src} src={src} alt={`${p.name} — ${j + 1}`}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+              opacity: j === idx ? 1 : 0,
+              transition: "opacity 0.55s ease",
+            }} />
+        ))}
+        {/* Dot indicators — visible on hover */}
+        <div style={{
+          position: "absolute",
+          bottom: "8px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          gap: "4px",
+          opacity: hovered ? 1 : 0,
+          transition: "opacity 0.3s",
+          zIndex: 2,
+        }}>
+          {p.imgs.map((_, j) => (
+            <span key={j} style={{
+              width: "5px",
+              height: "5px",
+              borderRadius: "50%",
+              background: j === idx ? "#fff" : "rgba(255,255,255,0.45)",
+              transition: "background 0.2s, transform 0.2s",
+              transform: j === idx ? "scale(1.3)" : "scale(1)",
+              display: "block",
+            }} />
+          ))}
+        </div>
+      </div>
+
+      {/* Text body */}
+      <div style={{ padding: "1.25rem 1.25rem 1.5rem",
+        display: "flex", flexDirection: "column", gap: "0.35rem", flex: 1 }}>
+        <span style={{ fontFamily: F.body, fontSize: "0.63rem", letterSpacing: "0.1em",
+          textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>
+          {p.spec}
+        </span>
+        <h4 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "0.98rem",
+          color: C.charcoal, lineHeight: 1.25 }}>
+          {p.name}
+        </h4>
+        <p style={{ fontFamily: F.body, fontSize: "0.79rem", color: C.taupe,
+          lineHeight: 1.7, flex: 1, fontWeight: 300 }}>
+          {p.desc}
+        </p>
+        <span style={{ marginTop: "0.65rem", display: "inline-flex", alignItems: "center",
+          gap: "4px", color: C.charcoal, fontFamily: F.body, fontWeight: 500,
+          fontSize: "0.72rem", letterSpacing: "0.04em", borderBottom: `1px solid ${C.borderMid}`,
+          paddingBottom: "1px", alignSelf: "flex-start" }}>
+          View Details <ChevronRight size={11} />
+        </span>
+      </div>
+    </Link>
+  );
+}
+
 /* ─── Products Section ───────────────────────────────────────────────────────── */
 function ProductsSection() {
   const scrollToContact = () =>
@@ -805,28 +909,28 @@ function ProductsSection() {
       name: "ITC FBB Boards",
       spec: "Traded · Cyber Oak · Cyber XLPac",
       desc: "ITC PSPD folding box boards — high stiffness, FSC certified, sheeted to press-ready sizes. 230–400 GSM.",
-      img: "/products/paper/fbb-board.jpg",
+      imgs: ["/products/paper/fbb-board.jpg", "/products/paper/fbb-board-2.jpg", "/products/paper/fbb-board-3.jpg"],
       slug: "itc-fbb-boards",
     },
     {
       name: "Duplex Board",
       spec: "Traded · Cut to Size",
       desc: "Coated duplex boards 200–450 GSM for pharma cartons and retail packaging. Sheeted from reel.",
-      img: "/products/paper/duplex-board.jpg",
+      imgs: ["/products/paper/duplex-board.jpg", "/products/paper/duplex-board-2.jpg", "/products/paper/duplex-board-3.jpg"],
       slug: "duplex-board",
     },
     {
       name: "Kraft Liner",
       spec: "Traded · 100–440 GSM",
       desc: "100% fresh fibre imported kraft liner for heavy-duty corrugated and export packaging.",
-      img: "/products/paper/kraft-liner.jpg",
+      imgs: ["/products/paper/kraft-liner.jpg", "/products/paper/kraft-liner-2.jpg", "/products/paper/kraft-liner-3.jpg"],
       slug: "kraft-liner",
     },
     {
       name: "Test Liners & Fluting",
       spec: "Traded · 80–400 GSM",
       desc: "Recycled fibre test liners and fluting medium for corrugators and box manufacturers.",
-      img: "/products/paper/test-liner.jpg",
+      imgs: ["/products/paper/test-liner.jpg", "/products/paper/test-liner-2.jpg", "/products/paper/test-liner-3.jpg"],
       slug: "test-liners-fluting",
     },
   ];
@@ -947,42 +1051,7 @@ function ProductsSection() {
           style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1px",
             background: C.borderMid }}>
           {paperProducts.map((p, i) => (
-            <Link key={p.name} href={`/products/${p.slug}`}
-              className="sr product-card" data-delay={`${0.07 * i}`}
-              style={{
-                background: C.cream, border: "none",
-                overflow: "hidden", display: "flex", flexDirection: "column",
-                textDecoration: "none",
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "#fff"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = C.cream; }}>
-              <div style={{ height: "110px", overflow: "hidden" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.img} alt={p.name}
-                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-              </div>
-              <div style={{ padding: "1.25rem 1.25rem 1.5rem",
-                display: "flex", flexDirection: "column", gap: "0.35rem", flex: 1 }}>
-                <span style={{ fontFamily: F.body, fontSize: "0.63rem", letterSpacing: "0.1em",
-                  textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>
-                  {p.spec}
-                </span>
-                <h4 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "0.98rem",
-                  color: C.charcoal, lineHeight: 1.25 }}>
-                  {p.name}
-                </h4>
-                <p style={{ fontFamily: F.body, fontSize: "0.79rem", color: C.taupe,
-                  lineHeight: 1.7, flex: 1, fontWeight: 300 }}>
-                  {p.desc}
-                </p>
-                <span style={{ marginTop: "0.65rem", display: "inline-flex", alignItems: "center",
-                  gap: "4px", color: C.charcoal, fontFamily: F.body, fontWeight: 500,
-                  fontSize: "0.72rem", letterSpacing: "0.04em", borderBottom: `1px solid ${C.borderMid}`,
-                  paddingBottom: "1px", alignSelf: "flex-start" }}>
-                  View Details <ChevronRight size={11} />
-                </span>
-              </div>
-            </Link>
+            <PaperProductCard key={p.name} p={p} i={i} />
           ))}
         </div>
 

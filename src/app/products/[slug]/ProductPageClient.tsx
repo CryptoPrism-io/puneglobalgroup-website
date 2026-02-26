@@ -179,6 +179,108 @@ function SubpageNav() {
 }
 
 // ————————————————————————————————————————————
+// Product Hero Image Carousel
+// ————————————————————————————————————————————
+function ProductHeroCarousel({ images, name }: { images: string[]; name: string }) {
+  const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused || images.length <= 1) return;
+    const t = setInterval(() => setIdx(c => (c + 1) % images.length), 1500);
+    return () => clearInterval(t);
+  }, [paused, images.length]);
+
+  return (
+    <div
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      style={{
+        position: "relative",
+        borderRadius: "6px",
+        overflow: "hidden",
+        boxShadow: "0 24px 64px rgba(28,26,23,0.12)",
+        maxHeight: "380px",
+        animation: "fadeUp 0.8s ease 0.3s both",
+        cursor: "pointer",
+      }}
+    >
+      {images.map((src, j) => (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img
+          key={src}
+          src={src}
+          alt={`${name} — view ${j + 1}`}
+          style={{
+            width: "100%",
+            height: "380px",
+            objectFit: "cover",
+            display: "block",
+            position: j === 0 ? "relative" : "absolute",
+            top: 0,
+            left: 0,
+            opacity: j === idx ? 1 : 0,
+            transition: "opacity 0.7s ease",
+          }}
+        />
+      ))}
+
+      {/* Dot navigation */}
+      {images.length > 1 && (
+        <div style={{
+          position: "absolute",
+          bottom: "12px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          gap: "6px",
+          zIndex: 2,
+        }}>
+          {images.map((_, j) => (
+            <button
+              key={j}
+              onClick={() => setIdx(j)}
+              style={{
+                width: "7px",
+                height: "7px",
+                borderRadius: "50%",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+                background: j === idx ? "#fff" : "rgba(255,255,255,0.45)",
+                transition: "background 0.25s, transform 0.25s",
+                transform: j === idx ? "scale(1.25)" : "scale(1)",
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Pause badge */}
+      {paused && images.length > 1 && (
+        <div style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: "0.6rem",
+          fontWeight: 600,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          background: "rgba(28,26,23,0.55)",
+          color: "rgba(250,247,242,0.85)",
+          padding: "3px 8px",
+          borderRadius: "99px",
+          backdropFilter: "blur(4px)",
+        }}>
+          Paused
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ————————————————————————————————————————————
 // Category Tag
 // ————————————————————————————————————————————
 function CategoryTag({ category }: { category: string }) {
@@ -234,7 +336,7 @@ function ProductPageContent({ product }: { product: Product }) {
             maxWidth: "1100px",
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: product.image ? "1fr 1fr" : "1fr",
+            gridTemplateColumns: (product.images?.length || product.image) ? "1fr 1fr" : "1fr",
             gap: "4rem",
             alignItems: "center",
           }}
@@ -356,18 +458,11 @@ function ProductPageContent({ product }: { product: Product }) {
             </div>
           </div>
 
-          {product.image && (
-            <div
-              style={{
-                borderRadius: "6px",
-                overflow: "hidden",
-                boxShadow: "0 24px 64px rgba(28,26,23,0.12)",
-                maxHeight: "380px",
-                animation: "fadeUp 0.8s ease 0.3s both",
-              }}
-            >
-              <img src={product.image} alt={product.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            </div>
+          {(product.images?.length || product.image) && (
+            <ProductHeroCarousel
+              images={product.images?.length ? product.images : [product.image!]}
+              name={product.name}
+            />
           )}
         </div>
       </section>
