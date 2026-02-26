@@ -6,7 +6,6 @@ import {
   Phone, Mail, MapPin, Factory, Package, Layers,
   ChevronRight, Menu, X, ArrowRight, CheckCircle,
   Loader2, Car, Pill, ShoppingCart, Wrench,
-  FileStack, Scroll, Waves,
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
@@ -806,32 +805,28 @@ function ProductsSection() {
       name: "ITC FBB Boards",
       spec: "Traded · Cyber Oak · Cyber XLPac",
       desc: "ITC PSPD folding box boards — high stiffness, FSC certified, sheeted to press-ready sizes. 230–400 GSM.",
-      bg: `linear-gradient(145deg, #EDE0C8 0%, #E0CBA8 100%)`,
-      icon: <Layers size={28} color={C.warm} />,
+      img: "/products/paper/fbb-board.jpg",
       slug: "itc-fbb-boards",
     },
     {
       name: "Duplex Board",
       spec: "Traded · Cut to Size",
       desc: "Coated duplex boards 200–450 GSM for pharma cartons and retail packaging. Sheeted from reel.",
-      bg: `linear-gradient(145deg, #E8E4DC 0%, #DDD8D0 100%)`,
-      icon: <FileStack size={28} color={C.warm} />,
+      img: "/products/paper/duplex-board.jpg",
       slug: "duplex-board",
     },
     {
       name: "Kraft Liner",
       spec: "Traded · 100–440 GSM",
       desc: "100% fresh fibre imported kraft liner for heavy-duty corrugated and export packaging.",
-      bg: `linear-gradient(145deg, #E0D0B4 0%, #D4C4A0 100%)`,
-      icon: <Scroll size={28} color={C.warm} />,
+      img: "/products/paper/kraft-liner.jpg",
       slug: "kraft-liner",
     },
     {
       name: "Test Liners & Fluting",
       spec: "Traded · 80–400 GSM",
       desc: "Recycled fibre test liners and fluting medium for corrugators and box manufacturers.",
-      bg: `linear-gradient(145deg, #DDD8CC 0%, #D0CBC0 100%)`,
-      icon: <Waves size={28} color={C.warm} />,
+      img: "/products/paper/test-liner.jpg",
       slug: "test-liners-fluting",
     },
   ];
@@ -961,11 +956,10 @@ function ProductsSection() {
               }}
               onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "#fff"; }}
               onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = C.cream; }}>
-              <div style={{
-                background: p.bg, height: "110px",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                {p.icon}
+              <div style={{ height: "110px", overflow: "hidden" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={p.img} alt={p.name}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
               </div>
               <div style={{ padding: "1.25rem 1.25rem 1.5rem",
                 display: "flex", flexDirection: "column", gap: "0.35rem", flex: 1 }}>
