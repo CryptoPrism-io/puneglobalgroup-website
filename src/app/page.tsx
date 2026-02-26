@@ -808,7 +808,8 @@ type PaperProduct = {
 function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
   const [idx, setIdx] = useState(0);
   const [hovered, setHovered] = useState(false);
-
+  /* taller default image for Paper & Board Grades */
+  const imgH = hovered ? "260px" : "180px";
   useEffect(() => {
     if (hovered) return;
     let intervalId: ReturnType<typeof setInterval> | undefined;
@@ -828,7 +829,7 @@ function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         background: hovered ? "#fff" : C.cream,
-        border: "none",
+        border: `1px solid ${C.border}`,
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
@@ -837,7 +838,7 @@ function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
       }}>
       {/* Image area — expands on hover */}
       <div style={{
-        height: hovered ? "190px" : "110px",
+        height: imgH,
         overflow: "hidden",
         position: "relative",
         transition: "height 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
@@ -884,23 +885,23 @@ function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
       </div>
 
       {/* Text body */}
-      <div style={{ padding: "1.25rem 1.25rem 1.5rem",
-        display: "flex", flexDirection: "column", gap: "0.35rem", flex: 1 }}>
+      <div style={{ padding: "1.5rem 1.5rem 1.75rem",
+        display: "flex", flexDirection: "column", gap: "0.4rem", flex: 1 }}>
         <span style={{ fontFamily: F.body, fontSize: "0.63rem", letterSpacing: "0.1em",
           textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>
           {p.spec}
         </span>
-        <h4 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "0.98rem",
+        <h4 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1.05rem",
           color: C.charcoal, lineHeight: 1.25 }}>
           {p.name}
         </h4>
-        <p style={{ fontFamily: F.body, fontSize: "0.79rem", color: C.taupe,
-          lineHeight: 1.7, flex: 1, fontWeight: 300 }}>
+        <p style={{ fontFamily: F.body, fontSize: "0.82rem", color: C.taupe,
+          lineHeight: 1.75, flex: 1, fontWeight: 300 }}>
           {p.desc}
         </p>
-        <span style={{ marginTop: "0.65rem", display: "inline-flex", alignItems: "center",
+        <span style={{ marginTop: "0.85rem", display: "inline-flex", alignItems: "center",
           gap: "4px", color: C.charcoal, fontFamily: F.body, fontWeight: 500,
-          fontSize: "0.72rem", letterSpacing: "0.04em", borderBottom: `1px solid ${C.borderMid}`,
+          fontSize: "0.74rem", letterSpacing: "0.04em", borderBottom: `1px solid ${C.borderMid}`,
           paddingBottom: "1px", alignSelf: "flex-start" }}>
           View Details <ChevronRight size={11} />
         </span>
@@ -1088,8 +1089,8 @@ function ProductsSection() {
         </div>
 
         <div className="products-detail-grid"
-          style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1px",
-            background: C.borderMid }}>
+          style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px",
+            background: "transparent" }}>
           {paperProducts.map((p, i) => (
             <PaperProductCard key={p.name} p={p} i={i} />
           ))}
