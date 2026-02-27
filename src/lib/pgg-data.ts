@@ -322,7 +322,7 @@ export const products: Product[] = [
       "ESD variant: ANSI/ESD S20.20 compatible",
     ],
     certifications: ["ISO 9001"],
-    image: "https://www.brotherspackaging.in/assets/images/products/ppbox/9.webp",
+    image: "/products/pp/pp-foldable-boxes-1.jpg",
   },
 
   // ——————————————————————————————————————————
@@ -366,7 +366,7 @@ export const products: Product[] = [
       "REACH compliant",
       "RoHS compliant for electronics-adjacent applications",
     ],
-    image: "https://jppack.in/products/ppcorrugatedsheetssunpaksheetshollowsheetsfluteboardsheets_24_07_25_09_23_01_102592.png",
+    image: "/products/pp/pp-corrugated-sheets-1.jpg",
   },
 
   // ——————————————————————————————————————————
@@ -411,7 +411,7 @@ export const products: Product[] = [
       "ISPM-15 not applicable (no wood content)",
       "EU Pallet standard (1200×800 mm) available",
     ],
-    image: "https://jppack.in/products/ppcorrugatedlayerpad_24_07_25_09_27_58_112075.png",
+    image: "/products/pp/pp-layer-pads-1.jpg",
   },
 
   // ——————————————————————————————————————————
@@ -457,9 +457,9 @@ export const products: Product[] = [
       "RoHS compliant for electronics-adjacent applications",
     ],
     certifications: ["ISO 9001"],
-    image: "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
+    image: "/products/pp/pp-corrugated-crates-1.jpg",
     images: [
-      "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
+      "/products/pp/pp-corrugated-crates-1.jpg",
       "/products/pp/pp-corrugated-crates-2.jpg",
       "/products/pp/pp-corrugated-crates-3.jpg",
     ],
@@ -509,7 +509,7 @@ export const products: Product[] = [
       "IEC 61340-5-1 guideline compatible",
     ],
     certifications: ["ISO 9001"],
-    image: "https://jppack.in/products/ppcorrugatedesdbin_24_07_25_09_29_20_111119.png",
+    image: "/products/pp/pp-esd-packaging-1.jpg",
   },
 ];
 

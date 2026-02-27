@@ -636,7 +636,7 @@ const PP_PRODUCTS = [
     spec: "Manufactured · Returnable",
     desc: "Custom-manufactured foldable PP boxes for automotive trays and returnable industrial logistics. Exported globally.",
     imgs: [
-      "https://www.brotherspackaging.in/assets/images/products/ppbox/9.webp",
+      "/products/pp/pp-foldable-boxes-1.jpg",
       "/products/pp/pp-foldable-boxes-2.jpg",
       "/products/pp/pp-foldable-boxes-3.jpg",
     ],
@@ -647,7 +647,7 @@ const PP_PRODUCTS = [
     spec: "Manufactured · Custom Sizes",
     desc: "Waterproof, UV-stable PP hollow corrugated sheets for layer pads, partition dividers and protective wrapping.",
     imgs: [
-      "https://jppack.in/products/ppcorrugatedsheetssunpaksheetshollowsheetsfluteboardsheets_24_07_25_09_23_01_102592.png",
+      "/products/pp/pp-corrugated-sheets-1.jpg",
       "/products/pp/pp-corrugated-sheets-2.jpg",
       "/products/pp/pp-corrugated-sheets-3.jpg",
     ],
@@ -658,7 +658,7 @@ const PP_PRODUCTS = [
     spec: "Manufactured · Heavy Duty",
     desc: "Stackable returnable crates for automotive OEMs, engineering components and industrial material handling.",
     imgs: [
-      "https://jppack.in/products/corrugatedplasticpackagebins_24_07_25_07_55_30_122853.png",
+      "/products/pp/pp-corrugated-crates-1.jpg",
       "/products/pp/pp-corrugated-crates-2.jpg",
       "/products/pp/pp-corrugated-crates-3.jpg",
     ],
@@ -669,7 +669,7 @@ const PP_PRODUCTS = [
     spec: "Manufactured · Pallet-Ready",
     desc: "PP layer pads and slip sheets for pallet stacking, product separation and surface protection in transit.",
     imgs: [
-      "https://jppack.in/products/ppcorrugatedlayerpad_24_07_25_09_27_58_112075.png",
+      "/products/pp/pp-layer-pads-1.jpg",
       "/products/pp/pp-layer-pads-2.jpg",
       "/products/pp/pp-layer-pads-3.jpg",
     ],
@@ -680,7 +680,7 @@ const PP_PRODUCTS = [
     spec: "Manufactured · Anti-Static",
     desc: "Anti-static PP bins and boxes for electronics manufacturers and PCB component handling. Export compliant.",
     imgs: [
-      "https://jppack.in/products/ppcorrugatedesdbin_24_07_25_09_29_20_111119.png",
+      "/products/pp/pp-esd-packaging-1.jpg",
       "/products/pp/pp-esd-packaging-2.jpg",
       "/products/pp/pp-esd-packaging-3.jpg",
     ],
