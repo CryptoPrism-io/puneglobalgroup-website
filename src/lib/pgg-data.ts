@@ -1386,7 +1386,7 @@ export const blogPosts: BlogPost[] = [
         text: "Need help specifying the right board GSM for your application? Contact our technical sales team at contact.puneglobalgroup@gmail.com or call +91 98233 83230.",
       },
     ],
-    relatedProducts: ["itc-fbb-boards", "duplex-board", "kraft-liner"],
+    relatedProducts: ["cyber-xlpac-gc1", "eco-natura", "eco-blanca"],
   },
 
   // ——————————————————————————————————————————
@@ -1489,7 +1489,7 @@ export const blogPosts: BlogPost[] = [
         text: "Talk to us about running a board specification audit for your packaging line. Call +91 98233 83230 or email contact.puneglobalgroup@gmail.com.",
       },
     ],
-    relatedProducts: ["itc-fbb-boards", "duplex-board", "white-top-kraft"],
+    relatedProducts: ["cyber-xlpac-gc1", "cyber-xlpac-gc2", "eco-natura"],
   },
 
   // ——————————————————————————————————————————

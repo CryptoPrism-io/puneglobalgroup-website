@@ -84,32 +84,31 @@ const GLOBAL_CSS = `
     animation: eyebrowSlide 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s both;
   }
 
-  /* ── Client logo strip ──────────────────────────────────── */
-  .clients-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 2.25rem 2.5rem;
-    align-items: center;
+  /* ── Client logo marquee ─────────────────────────────────── */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
   }
-  .client-logo {
-    height: 30px; width: auto; max-width: 108px;
+  .logo-track {
+    display: inline-flex; align-items: center;
+    flex-wrap: nowrap; white-space: nowrap;
+    animation: marquee 32s linear infinite;
+  }
+  .logo-track:hover { animation-play-state: paused; }
+  .logo-item {
+    flex: 0 0 auto;
+    padding: 0 3rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-img {
+    height: 36px; width: auto; max-width: 120px;
     object-fit: contain;
-    opacity: 0.32;
-    transition: opacity 0.3s ease;
+    filter: grayscale(1);
+    opacity: 0.5;
+    transition: filter 0.35s, opacity 0.35s;
     display: block;
   }
-  .client-logo-jpg {
-    height: 30px; width: auto; max-width: 108px;
-    object-fit: contain;
-    filter: grayscale(100%) brightness(3);
-    opacity: 0.3;
-    transition: opacity 0.3s ease;
-    display: block;
-  }
-  .client-logo:hover     { opacity: 0.78; }
-  .client-logo-jpg:hover { opacity: 0.7;  }
-  @media (max-width: 860px)  { .clients-grid { grid-template-columns: repeat(4, 1fr); } }
-  @media (max-width: 540px)  { .clients-grid { grid-template-columns: repeat(3, 1fr); } }
+  .logo-img:hover { filter: grayscale(0); opacity: 1; }
 
   /* ── Hero image carousel (Ken Burns crossfade) ──────────── */
   @keyframes heroSlide1 {
@@ -610,7 +609,7 @@ function Hero() {
             style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
             <span className="hero-eyebrow-text" style={{ fontFamily: F.italic, fontStyle: "italic",
               fontSize: "1.15rem", color: C.taupe }}>
-              PP Manufacturing · FBB Converting · Paper Trading
+              PP Manufacturing · Board Converting · Paper Trading
             </span>
             <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: C.border }} />
             <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: C.taupe,
@@ -746,7 +745,7 @@ function MarqueeTicker() {
     "Export Ready",
     "PP Crates · Layer Pads · ESD Bins",
     "Custom PP Manufacturing",
-    "FBB Converting",
+    "Board Converting",
     "Sheeting · Slitting · Rewinding",
     "ITC · TNPL · Imported Grades",
     "21 States · 500+ Customers",
@@ -1078,7 +1077,7 @@ function ProductsSection() {
       num: "01",
       eyebrow: "PP Manufacturing — Core Business",
       heading: "Trays · Separators · Boxes · Crates",
-      desc: "We manufacture precision polypropylene packaging for automotive, pharma and electronics industries — industrial trays, separators, foldable boxes, crates and layer pads. Custom sizes. Export-ready documentation on every order.",
+      desc: "Precision polypropylene packaging for automotive, pharma and electronics — custom sizes, export-ready documentation on every order.",
       tags: [
         { label: "PP Trays", href: "/products/pp-corrugated/pp-tray-folded-corner" },
         { label: "Separators", href: "/products/pp-corrugated/pp-sep-cross-partition" },
@@ -1092,9 +1091,9 @@ function ProductsSection() {
     },
     {
       num: "02",
-      eyebrow: "FBB Converting",
+      eyebrow: "Board Converting",
       heading: "Cut to Size. Press-Ready.",
-      desc: "We cut FBB and board reels to your exact press sheet dimensions — sheeting, slitting, rewinding. Fast turnaround for printers, carton manufacturers and packaging converters across India.",
+      desc: "Sheeting, slitting and rewinding to exact press dimensions. Fast turnaround, low MOQ, for printers and converters across India.",
       tags: [
         { label: "FBB Sheeting", href: "/infrastructure" },
         { label: "Duplex Cutting", href: "/infrastructure" },
@@ -1110,7 +1109,7 @@ function ProductsSection() {
       num: "03",
       eyebrow: "Paper & PP Sheet Trading",
       heading: "ITC · TNPL · Imported",
-      desc: "Authorised distributor of ITC PSPD and TNPL board grades — FBB, duplex, kraft liner and test liner. We also supply PP corrugated sheets in standard and custom sizes from our Pune warehouse.",
+      desc: "Authorised ITC PSPD and TNPL distributor — FBB, duplex, kraft and test liner. PP corrugated sheets also available ex-stock from our Pune warehouse.",
       tags: [
         { label: "Cyber XLPac", href: "/products/paper-board/cyber-xlpac-gc1" },
         { label: "Carte Lumina", href: "/products/paper-board/carte-lumina" },
@@ -1431,7 +1430,7 @@ function IndustriesSection() {
           <h2 style={{ fontFamily: F.display, fontWeight: 700,
             fontSize: "clamp(2rem, 4vw, 3.2rem)", color: C.charcoal,
             letterSpacing: "-0.02em", lineHeight: 1.1 }}>
-            The Full Paper Supply Chain.
+            Paper, Board &amp; PP Packaging.
           </h2>
           <p style={{ fontFamily: F.body, fontSize: "1rem", color: C.taupe,
             lineHeight: 1.8, maxWidth: "500px", marginTop: "1rem", fontWeight: 300 }}>
@@ -1515,20 +1514,6 @@ function IndustriesSection() {
 
 /* ─── Social Proof ───────────────────────────────────────────────────────────── */
 function SocialProofSection() {
-  const clients: { name: string; file: string; jpg?: boolean }[] = [
-    { name: "Asian Paints",   file: "asian-paints.svg"   },
-    { name: "Berger Paints",  file: "berger-paints.svg"  },
-    { name: "ITC",            file: "itc.svg"            },
-    { name: "TNPL",           file: "tnpl.svg"           },
-    { name: "Finolex",        file: "finolex.svg"        },
-    { name: "Volkswagen",     file: "volkswagen.svg"     },
-    { name: "General Motors", file: "general-motors.svg" },
-    { name: "Mitsubishi",     file: "mitsubishi.svg"     },
-    { name: "Venky's",        file: "venkys.svg"         },
-    { name: "Suguna",         file: "suguna.jpg", jpg: true },
-    { name: "Würth",          file: "wurth.svg"          },
-    { name: "Yojana",         file: "yojana.svg"         },
-  ];
   return (
     <section style={{ position: "relative", background: C.charcoal, padding: "100px clamp(1.5rem, 5vw, 4rem) 80px", overflow: "hidden" }}>
 
@@ -1580,29 +1565,6 @@ function SocialProofSection() {
           </footer>
         </blockquote>
 
-        {/* Client logos */}
-        <div className="sr" style={{ marginBottom: "5rem" }}>
-          <p style={{
-            fontFamily: F.body, fontSize: "0.56rem", fontWeight: 600,
-            letterSpacing: "0.22em", textTransform: "uppercase",
-            color: "rgba(250,247,242,0.2)", marginBottom: "2rem",
-          }}>
-            Trusted by
-          </p>
-          <div className="clients-grid">
-            {clients.map(({ name, file, jpg }) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={name}
-                src={`/clients/${file}`}
-                alt={name}
-                className={jpg ? "client-logo-jpg" : "client-logo"}
-                style={{ filter: jpg ? undefined : "brightness(0) invert(1)" }}
-              />
-            ))}
-          </div>
-        </div>
-
         {/* Stats — editorial, left-to-right */}
         <div className="sr" style={{
           display: "flex", flexWrap: "wrap",
@@ -1625,6 +1587,76 @@ function SocialProofSection() {
           ))}
         </div>
 
+      </div>
+    </section>
+  );
+}
+
+/* ─── Client Logo Band ───────────────────────────────────────────────────────── */
+function ClientLogoBand() {
+  // Only include logo files that exist in public/clients/
+  // Add berger-paints.png, tnpl.png, venkys.svg, wurth.svg, yojana.svg when ready
+  const clients = [
+    { name: "Asian Paints",   file: "asian-paints.svg"   },
+    { name: "ITC",            file: "itc.svg"            },
+    { name: "Finolex",        file: "finolex.svg"        },
+    { name: "Volkswagen",     file: "volkswagen.svg"     },
+    { name: "General Motors", file: "general-motors.svg" },
+    { name: "Mitsubishi",     file: "mitsubishi.svg"     },
+    { name: "Suguna",         file: "suguna.jpg"         },
+  ];
+  const doubled = [...clients, ...clients];
+
+  return (
+    <section style={{
+      background: C.parchment,
+      borderTop: `1px solid ${C.border}`,
+      borderBottom: `1px solid ${C.border}`,
+      padding: "3.5rem 0 3rem",
+      position: "relative",
+    }}>
+      {/* Section label */}
+      <p style={{
+        textAlign: "center",
+        fontFamily: F.body, fontSize: "0.58rem", fontWeight: 600,
+        letterSpacing: "0.24em", textTransform: "uppercase",
+        color: C.taupe, opacity: 0.55, marginBottom: "2.25rem",
+      }}>
+        Trusted by India&apos;s leading brands
+      </p>
+
+      {/* Marquee wrapper */}
+      <div style={{ position: "relative", overflow: "hidden", width: "100%" }}>
+        {/* Left fade */}
+        <div aria-hidden="true" style={{
+          position: "absolute", left: 0, top: 0, bottom: 0, width: "140px",
+          background: `linear-gradient(to right, ${C.parchment} 30%, transparent)`,
+          zIndex: 2, pointerEvents: "none",
+        }} />
+        {/* Right fade */}
+        <div aria-hidden="true" style={{
+          position: "absolute", right: 0, top: 0, bottom: 0, width: "140px",
+          background: `linear-gradient(to left, ${C.parchment} 30%, transparent)`,
+          zIndex: 2, pointerEvents: "none",
+        }} />
+
+        <div className="logo-track">
+          {doubled.map((c, i) => (
+            <div key={`${c.name}-${i}`} className="logo-item">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/clients/${c.file}`}
+                alt={c.name}
+                className="logo-img"
+                onError={(e) => {
+                  const el = e.currentTarget as HTMLImageElement;
+                  el.style.display = "none";
+                  if (el.parentElement) el.parentElement.style.display = "none";
+                }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -1653,6 +1685,13 @@ function BlogTeaser() {
       title: "Export Packaging Compliance for Indian Manufacturers in 2026",
       excerpt: "BIS, EU, US FDA and FSC — what Indian exporters need to know before their next shipment.",
       read: "8 min",
+    },
+    {
+      slug: "pp-corrugated-returnable-packaging",
+      category: "Industry Trends",
+      title: "Why PP Corrugated is Replacing Cardboard in Returnable Packaging",
+      excerpt: "Automotive OEMs and pharma companies are switching to PP corrugated for closed-loop logistics. Here's the economics.",
+      read: "5 min",
     },
   ];
 
@@ -1687,7 +1726,7 @@ function BlogTeaser() {
         </div>
 
         <div className="blog-teaser-grid"
-          style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
+          style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
             gap: "1px", background: C.borderMid }}>
           {posts.map((post, i) => (
             <Link key={post.slug} href={`/blog/${post.slug}`}
@@ -1734,12 +1773,6 @@ function BlogTeaser() {
 
 /* ─── About Section ──────────────────────────────────────────────────────────── */
 function AboutSection() {
-  const values = [
-    { label: "Integrity",   desc: "Honest pricing, transparent lead times, and commitments we keep." },
-    { label: "Reliability", desc: "Consistent quality across every batch, every order, every time." },
-    { label: "Quality",     desc: "BIS-aligned raw materials and rigorous in-house testing on every production run." },
-  ];
-
   return (
     <section id="about" style={{ background: C.cream, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
@@ -1783,20 +1816,6 @@ function AboutSection() {
               500+ clients across India.
             </p>
 
-            {/* Pull quote */}
-            <div style={{ borderLeft: `3px solid ${C.saffron}`, paddingLeft: "1.5rem",
-              marginBottom: "2.5rem" }}>
-              <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "1.1rem",
-                lineHeight: 1.7, color: C.warm }}>
-                &ldquo;We have been fortunate to serve the most exacting supply chains
-                in India for three decades. We intend to keep it that way.&rdquo;
-              </p>
-              <span style={{ fontFamily: F.body, fontSize: "1.15rem", color: C.taupe,
-                letterSpacing: "0.04em", marginTop: "8px", display: "block" }}>
-                — Yogesh Sahu, Director
-              </span>
-            </div>
-
             <Link href="/infrastructure" className="btn-outline" style={{ textDecoration: "none" }}>
               Our Converting Facility <IconArrowRight size={13} />
             </Link>
@@ -1811,14 +1830,14 @@ function AboutSection() {
               <span style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.68rem",
                 color: C.taupe, letterSpacing: "0.14em", textTransform: "uppercase",
                 display: "block", marginBottom: "1.5rem" }}>
-                Key Figures
+                At a Glance
               </span>
 
               {[
-                { stat: "1995", label: "Year Established" },
-                { stat: "500+", label: "Active Clients" },
-                { stat: "40+",  label: "Paper Grades in Stock" },
-                { stat: "2",    label: "Locations — Pune" },
+                { stat: "1995",    label: "Year Established" },
+                { stat: "500+",   label: "Active Clients" },
+                { stat: "40+",    label: "Paper Grades Stocked" },
+                { stat: "200 T",  label: "Daily Processing Capacity" },
               ].map((item) => (
                 <div key={item.label} style={{
                   display: "flex", justifyContent: "space-between",
@@ -1826,34 +1845,38 @@ function AboutSection() {
                   borderBottom: `1px solid ${C.border}`,
                 }}>
                   <span style={{ fontFamily: F.body, fontWeight: 400,
-                    fontSize: "1.1rem", color: C.warm }}>
+                    fontSize: "0.95rem", color: C.warm }}>
                     {item.label}
                   </span>
                   <span style={{ fontFamily: F.display, fontWeight: 700,
-                    fontSize: "1.5rem", color: C.saffron }}>
+                    fontSize: "1.4rem", color: C.saffron }}>
                     {item.stat}
                   </span>
                 </div>
               ))}
 
-              {/* Values */}
+              {/* Certifications */}
               <span style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.68rem",
                 color: C.taupe, letterSpacing: "0.14em", textTransform: "uppercase",
                 display: "block", marginBottom: "1rem", marginTop: "2rem" }}>
-                Our Values
+                Certifications
               </span>
-              {values.map((v) => (
+              {[
+                { label: "ISO 9001:2015", desc: "Quality Management System" },
+                { label: "FSC C064218",   desc: "Chain of Custody certified" },
+                { label: "BRC",           desc: "Packaging & Packaging Materials" },
+              ].map((v) => (
                 <div key={v.label} style={{
-                  display: "flex", gap: "0.75rem", alignItems: "flex-start", marginBottom: "0.9rem",
+                  display: "flex", gap: "0.75rem", alignItems: "flex-start", marginBottom: "0.85rem",
                 }}>
                   <IconCircleCheck size={15} style={{ color: C.saffron, marginTop: "2px", flexShrink: 0 }} />
                   <div>
-                    <div style={{ fontFamily: F.body, fontWeight: 600, fontSize: "1.08rem",
+                    <div style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.95rem",
                       color: C.charcoal, marginBottom: "2px" }}>
                       {v.label}
                     </div>
-                    <div style={{ fontFamily: F.body, fontSize: "0.98rem", color: C.taupe,
-                      lineHeight: 1.6, fontWeight: 300 }}>
+                    <div style={{ fontFamily: F.body, fontSize: "0.82rem", color: C.taupe,
+                      lineHeight: 1.5, fontWeight: 300 }}>
                       {v.desc}
                     </div>
                   </div>
@@ -2219,8 +2242,9 @@ export default function HomePage() {
         <InfraCallout />
         <IndustriesSection />
         <SocialProofSection />
-        <BlogTeaser />
+        <ClientLogoBand />
         <AboutSection />
+        <BlogTeaser />
         <ContactSection />
       </main>
       <Footer />
