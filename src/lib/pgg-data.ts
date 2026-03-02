@@ -76,6 +76,8 @@ export const products: Product[] = [
     certifications: ["ISO 9001", "FSC", "BRC"],
     images: [
       "/products/paper/cyber-xlpac-gc1-hero.jpg",
+      "/products/paper/cyber-xlpac-gc1-reel.jpg",
+      "/products/paper/cyber-xlpac-gc1-stack.jpg",
       "/products/paper/cyber-xlpac-gc1-engineering.jpg",
       "/products/paper/cyber-xlpac-gc1-usecase.jpg",
     ],
@@ -124,6 +126,8 @@ export const products: Product[] = [
     certifications: ["ISO 9001", "FSC", "BRC"],
     images: [
       "/products/paper/cyber-xlpac-gc2-hero.jpg",
+      "/products/paper/cyber-xlpac-gc2-reel.jpg",
+      "/products/paper/cyber-xlpac-gc2-stack.jpg",
       "/products/paper/cyber-xlpac-gc2-engineering.jpg",
       "/products/paper/cyber-xlpac-gc2-usecase.jpg",
     ],
@@ -171,6 +175,8 @@ export const products: Product[] = [
     certifications: ["ISO 9001", "FSC", "BRC"],
     images: [
       "/products/paper/cyber-premium-hero.jpg",
+      "/products/paper/cyber-premium-reel.jpg",
+      "/products/paper/cyber-premium-stack.jpg",
       "/products/paper/cyber-premium-engineering.jpg",
       "/products/paper/cyber-premium-usecase.jpg",
     ],
@@ -217,6 +223,8 @@ export const products: Product[] = [
     certifications: ["ISO 9001", "FSC"],
     images: [
       "/products/paper/pearlxl-packaging-hero.jpg",
+      "/products/paper/pearlxl-packaging-reel.jpg",
+      "/products/paper/pearlxl-packaging-stack.jpg",
       "/products/paper/pearlxl-packaging-engineering.jpg",
       "/products/paper/pearlxl-packaging-usecase.jpg",
     ],
@@ -264,6 +272,8 @@ export const products: Product[] = [
     certifications: ["ISO 9001", "FSC", "BRC"],
     images: [
       "/products/paper/carte-lumina-hero.jpg",
+      "/products/paper/carte-lumina-reel.jpg",
+      "/products/paper/carte-lumina-stack.jpg",
       "/products/paper/carte-lumina-engineering.jpg",
       "/products/paper/carte-lumina-usecase.jpg",
     ],
@@ -312,6 +322,8 @@ export const products: Product[] = [
     certifications: ["ISO 9001", "FSC", "BRC"],
     images: [
       "/products/paper/safire-graphik-hero.jpg",
+      "/products/paper/safire-graphik-reel.jpg",
+      "/products/paper/safire-graphik-stack.jpg",
       "/products/paper/safire-graphik-engineering.jpg",
       "/products/paper/safire-graphik-usecase.jpg",
     ],
@@ -358,6 +370,8 @@ export const products: Product[] = [
     certifications: ["ISO 9001", "FSC"],
     images: [
       "/products/paper/cyber-oak-hero.jpg",
+      "/products/paper/cyber-oak-reel.jpg",
+      "/products/paper/cyber-oak-stack.jpg",
       "/products/paper/cyber-oak-engineering.jpg",
       "/products/paper/cyber-oak-usecase.jpg",
     ],
@@ -408,6 +422,8 @@ export const products: Product[] = [
     certifications: ["ISO 9001", "FSC"],
     images: [
       "/products/paper/eco-natura-hero.jpg",
+      "/products/paper/eco-natura-reel.jpg",
+      "/products/paper/eco-natura-stack.jpg",
       "/products/paper/eco-natura-engineering.jpg",
       "/products/paper/eco-natura-usecase.jpg",
     ],
@@ -453,6 +469,8 @@ export const products: Product[] = [
     certifications: ["ISO 9001", "FSC"],
     images: [
       "/products/paper/eco-blanca-hero.jpg",
+      "/products/paper/eco-blanca-reel.jpg",
+      "/products/paper/eco-blanca-stack.jpg",
       "/products/paper/eco-blanca-engineering.jpg",
       "/products/paper/eco-blanca-usecase.jpg",
     ],
@@ -499,6 +517,8 @@ export const products: Product[] = [
     certifications: ["ISO 9001", "FSC"],
     images: [
       "/products/paper/neowhite-bliss-hero.jpg",
+      "/products/paper/neowhite-bliss-reel.jpg",
+      "/products/paper/neowhite-bliss-stack.jpg",
       "/products/paper/neowhite-bliss-engineering.jpg",
       "/products/paper/neowhite-bliss-usecase.jpg",
     ],

@@ -855,8 +855,8 @@ function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
     if (hovered) return;
     let intervalId: ReturnType<typeof setInterval> | undefined;
     const timeoutId = setTimeout(() => {
-      intervalId = setInterval(() => setIdx(c => (c + 1) % p.imgs.length), 1500);
-    }, i * 375);
+      intervalId = setInterval(() => setIdx(c => (c + 1) % p.imgs.length), 4500);
+    }, i * 600);
     return () => {
       clearTimeout(timeoutId);
       if (intervalId) clearInterval(intervalId);
@@ -1012,21 +1012,21 @@ function ProductsSection() {
       name: "Cyber XLPac GC1",
       spec: "ITC PSPD · Virgin FBB · GC1",
       desc: "India's benchmark FBB — coated both sides, virgin fibre, FSC certified. 200–400 GSM.",
-      imgs: ["/products/paper/cyber-xlpac-gc1-hero.jpg", "/products/paper/cyber-xlpac-gc1-engineering.jpg", "/products/paper/cyber-xlpac-gc1-usecase.jpg"],
+      imgs: ["/products/paper/cyber-xlpac-gc1-hero.jpg", "/products/paper/cyber-xlpac-gc1-reel.jpg", "/products/paper/cyber-xlpac-gc1-stack.jpg", "/products/paper/cyber-xlpac-gc1-usecase.jpg"],
       slug: "cyber-xlpac-gc1",
     },
     {
       name: "Carte Lumina",
       spec: "ITC PSPD · Luxury Virgin Board",
       desc: "Avant-garde luxury virgin board for cosmetics, perfumes and premium brand packaging. 200–400 GSM.",
-      imgs: ["/products/paper/carte-lumina-hero.jpg", "/products/paper/carte-lumina-engineering.jpg", "/products/paper/carte-lumina-usecase.jpg"],
+      imgs: ["/products/paper/carte-lumina-hero.jpg", "/products/paper/carte-lumina-reel.jpg", "/products/paper/carte-lumina-stack.jpg", "/products/paper/carte-lumina-usecase.jpg"],
       slug: "carte-lumina",
     },
     {
       name: "Eco Natura",
       spec: "ITC PSPD · Recycled Greyback",
       desc: "Best-in-class recycled greyback board — consistent caliper, smooth filling line performance. 230–400 GSM.",
-      imgs: ["/products/paper/eco-natura-hero.jpg", "/products/paper/eco-natura-engineering.jpg", "/products/paper/eco-natura-usecase.jpg"],
+      imgs: ["/products/paper/eco-natura-hero.jpg", "/products/paper/eco-natura-reel.jpg", "/products/paper/eco-natura-stack.jpg", "/products/paper/eco-natura-usecase.jpg"],
       slug: "eco-natura",
     },
   ];

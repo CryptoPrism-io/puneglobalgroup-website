@@ -106,7 +106,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · BRC · ISO 9001",
     useCases: ["Pharma cartons (primary & secondary)", "Premium FMCG and liquor packaging"],
-    images: ["/products/paper/cyber-xlpac-gc1-hero.jpg", "/products/paper/cyber-xlpac-gc1-engineering.jpg", "/products/paper/cyber-xlpac-gc1-usecase.jpg"],
+    images: ["/products/paper/cyber-xlpac-gc1-hero.jpg", "/products/paper/cyber-xlpac-gc1-reel.jpg", "/products/paper/cyber-xlpac-gc1-stack.jpg", "/products/paper/cyber-xlpac-gc1-engineering.jpg", "/products/paper/cyber-xlpac-gc1-usecase.jpg"],
   },
   {
     code: "GC2",
@@ -118,7 +118,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · BRC · ISO 9001",
     useCases: ["High-speed filling line applications", "FMCG products requiring reverse-side text"],
-    images: ["/products/paper/cyber-xlpac-gc2-hero.jpg", "/products/paper/cyber-xlpac-gc2-engineering.jpg", "/products/paper/cyber-xlpac-gc2-usecase.jpg"],
+    images: ["/products/paper/cyber-xlpac-gc2-hero.jpg", "/products/paper/cyber-xlpac-gc2-reel.jpg", "/products/paper/cyber-xlpac-gc2-stack.jpg", "/products/paper/cyber-xlpac-gc2-engineering.jpg", "/products/paper/cyber-xlpac-gc2-usecase.jpg"],
   },
   {
     code: "CPM",
@@ -130,7 +130,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · BRC · ISO 9001",
     useCases: ["Liquor and spirits cartons", "Glass bottle outer packaging"],
-    images: ["/products/paper/cyber-premium-hero.jpg", "/products/paper/cyber-premium-engineering.jpg", "/products/paper/cyber-premium-usecase.jpg"],
+    images: ["/products/paper/cyber-premium-hero.jpg", "/products/paper/cyber-premium-reel.jpg", "/products/paper/cyber-premium-stack.jpg", "/products/paper/cyber-premium-engineering.jpg", "/products/paper/cyber-premium-usecase.jpg"],
   },
   {
     code: "PXL",
@@ -142,7 +142,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · ISO 9001",
     useCases: ["FMCG everyday packaging", "Pharma secondary packaging"],
-    images: ["/products/paper/pearlxl-packaging-hero.jpg", "/products/paper/pearlxl-packaging-engineering.jpg", "/products/paper/pearlxl-packaging-usecase.jpg"],
+    images: ["/products/paper/pearlxl-packaging-hero.jpg", "/products/paper/pearlxl-packaging-reel.jpg", "/products/paper/pearlxl-packaging-stack.jpg", "/products/paper/pearlxl-packaging-engineering.jpg", "/products/paper/pearlxl-packaging-usecase.jpg"],
   },
   {
     code: "CLM",
@@ -154,7 +154,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · BRC · ISO 9001",
     useCases: ["Cosmetics and luxury brand packaging", "Perfume and fragrance cartons"],
-    images: ["/products/paper/carte-lumina-hero.jpg", "/products/paper/carte-lumina-engineering.jpg", "/products/paper/carte-lumina-usecase.jpg"],
+    images: ["/products/paper/carte-lumina-hero.jpg", "/products/paper/carte-lumina-reel.jpg", "/products/paper/carte-lumina-stack.jpg", "/products/paper/carte-lumina-engineering.jpg", "/products/paper/carte-lumina-usecase.jpg"],
   },
   {
     code: "SFG",
@@ -166,7 +166,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · BRC · ISO 9001",
     useCases: ["POP displays and retail shelf-ready packaging", "Greeting cards and book covers"],
-    images: ["/products/paper/safire-graphik-hero.jpg", "/products/paper/safire-graphik-engineering.jpg", "/products/paper/safire-graphik-usecase.jpg"],
+    images: ["/products/paper/safire-graphik-hero.jpg", "/products/paper/safire-graphik-reel.jpg", "/products/paper/safire-graphik-stack.jpg", "/products/paper/safire-graphik-engineering.jpg", "/products/paper/safire-graphik-usecase.jpg"],
   },
   {
     code: "COK",
@@ -178,7 +178,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · ISO 9001",
     useCases: ["FMCG brands with eco/sustainability positioning", "Consumer electronics cartons"],
-    images: ["/products/paper/cyber-oak-hero.jpg", "/products/paper/cyber-oak-engineering.jpg", "/products/paper/cyber-oak-usecase.jpg"],
+    images: ["/products/paper/cyber-oak-hero.jpg", "/products/paper/cyber-oak-reel.jpg", "/products/paper/cyber-oak-stack.jpg", "/products/paper/cyber-oak-engineering.jpg", "/products/paper/cyber-oak-usecase.jpg"],
   },
 ];
 
@@ -193,7 +193,7 @@ const RECYCLED_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · ISO 9001",
     useCases: ["FMCG and general-purpose carton packaging", "Cereal, dry food and toy boxes"],
-    images: ["/products/paper/eco-natura-hero.jpg", "/products/paper/eco-natura-engineering.jpg", "/products/paper/eco-natura-usecase.jpg"],
+    images: ["/products/paper/eco-natura-hero.jpg", "/products/paper/eco-natura-reel.jpg", "/products/paper/eco-natura-stack.jpg", "/products/paper/eco-natura-engineering.jpg", "/products/paper/eco-natura-usecase.jpg"],
   },
   {
     code: "EBL",
@@ -205,7 +205,7 @@ const RECYCLED_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · ISO 9001",
     useCases: ["Hosiery and garment packaging", "Retail cartons needing clean white reverse"],
-    images: ["/products/paper/eco-blanca-hero.jpg", "/products/paper/eco-blanca-engineering.jpg", "/products/paper/eco-blanca-usecase.jpg"],
+    images: ["/products/paper/eco-blanca-hero.jpg", "/products/paper/eco-blanca-reel.jpg", "/products/paper/eco-blanca-stack.jpg", "/products/paper/eco-blanca-engineering.jpg", "/products/paper/eco-blanca-usecase.jpg"],
   },
   {
     code: "NWB",
@@ -217,7 +217,7 @@ const RECYCLED_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · ISO 9001",
     useCases: ["Pharmaceutical blister card backing", "FMCG product packaging"],
-    images: ["/products/paper/neowhite-bliss-hero.jpg", "/products/paper/neowhite-bliss-engineering.jpg", "/products/paper/neowhite-bliss-usecase.jpg"],
+    images: ["/products/paper/neowhite-bliss-hero.jpg", "/products/paper/neowhite-bliss-reel.jpg", "/products/paper/neowhite-bliss-stack.jpg", "/products/paper/neowhite-bliss-engineering.jpg", "/products/paper/neowhite-bliss-usecase.jpg"],
   },
 ];
 
@@ -326,9 +326,9 @@ function GradeCarousel({ images, name }: { images: string[]; name: string }) {
     const len = images.length;
     const advance = (current: number) => {
       const isLast = current === len - 1;
-      t = setTimeout(() => { const next = (current + 1) % len; setIdx(next); advance(next); }, isLast ? 3000 : 2000);
+      t = setTimeout(() => { const next = (current + 1) % len; setIdx(next); advance(next); }, isLast ? 6000 : 4500);
     };
-    const init = setTimeout(() => advance(0), 1500);
+    const init = setTimeout(() => advance(0), 2500);
     return () => { clearTimeout(t); clearTimeout(init); };
   }, [paused, images.length]);
 
