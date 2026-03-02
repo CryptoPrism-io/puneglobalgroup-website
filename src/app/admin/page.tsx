@@ -6,9 +6,9 @@ import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, orderBy, query, Timestamp, deleteDoc, doc } from "firebase/firestore";
 import {
-  LogOut, Mail, Phone, Calendar, User, Loader2,
-  MessageSquare, Trash2, RefreshCw, Users, TrendingUp, Clock
-} from "lucide-react";
+  IconLogout, IconMail, IconPhone, IconCalendar, IconUser, IconLoader2,
+  IconMessage, IconTrash, IconRefresh, IconUsers, IconTrendingUp, IconClock
+} from "@tabler/icons-react";
 
 const T = {
   bg: "#08090a",
@@ -76,7 +76,7 @@ export default function AdminPage() {
   if (authLoading || !user) {
     return (
       <div style={{ minHeight: "100vh", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Loader2 size={32} color={T.accent} style={{ animation: "spin 1s linear infinite" }} />
+        <IconLoader2 size={32} color={T.accent} style={{ animation: "spin 1s linear infinite" }} />
         <style>{`@keyframes spin { from { transform:rotate(0) } to { transform:rotate(360deg) } }`}</style>
       </div>
     );
@@ -117,7 +117,7 @@ export default function AdminPage() {
               style={{ display: "flex", alignItems: "center", gap: "0.4rem", background: "none", border: `1px solid ${T.border}`, borderRadius: 7, padding: "0.45rem 0.85rem", cursor: "pointer", fontFamily: T.body, fontSize: "0.8rem", color: T.muted, transition: "all 0.2s" }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(220,38,38,0.4)"; e.currentTarget.style.color = "#f87171"; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.muted; }}
-            ><LogOut size={13} /> Sign out</button>
+            ><IconLogout size={13} /> Sign out</button>
           </div>
         </header>
 
@@ -125,9 +125,9 @@ export default function AdminPage() {
           {/* Stats */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "2rem" }}>
             {[
-              { icon: Users, label: "Total Enquiries", value: contacts.length, color: T.accent },
-              { icon: Clock, label: "Today", value: today, color: "#60a5fa" },
-              { icon: TrendingUp, label: "This Week", value: contacts.filter(c => { if (!c.createdAt) return false; const d = c.createdAt.toDate(); return (Date.now() - d.getTime()) < 7 * 86400000; }).length, color: "#a78bfa" },
+              { icon: IconUsers, label: "Total Enquiries", value: contacts.length, color: T.accent },
+              { icon: IconClock, label: "Today", value: today, color: "#60a5fa" },
+              { icon: IconTrendingUp, label: "This Week", value: contacts.filter(c => { if (!c.createdAt) return false; const d = c.createdAt.toDate(); return (Date.now() - d.getTime()) < 7 * 86400000; }).length, color: "#a78bfa" },
             ].map(({ icon: Icon, label, value, color }) => (
               <div key={label} style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 12, padding: "1.5rem" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.5rem" }}>
@@ -148,17 +148,17 @@ export default function AdminPage() {
                 <button onClick={fetchContacts} style={{ display: "flex", alignItems: "center", gap: "0.4rem", background: "none", border: `1px solid ${T.border}`, borderRadius: 7, padding: "0.4rem 0.8rem", cursor: "pointer", fontFamily: T.body, fontSize: "0.8rem", color: T.muted }}
                   onMouseEnter={e => e.currentTarget.style.borderColor = T.accent}
                   onMouseLeave={e => e.currentTarget.style.borderColor = T.border}
-                ><RefreshCw size={12} /> Refresh</button>
+                ><IconRefresh size={12} /> Refresh</button>
               </div>
 
               {loading ? (
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "4rem", gap: "0.75rem", color: T.muted }}>
-                  <Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} />
+                  <IconLoader2 size={18} style={{ animation: "spin 1s linear infinite" }} />
                   <span style={{ fontSize: "0.875rem" }}>Loading submissions…</span>
                 </div>
               ) : contacts.length === 0 ? (
                 <div style={{ textAlign: "center", padding: "4rem 2rem" }}>
-                  <MessageSquare size={36} color={T.muted} style={{ margin: "0 auto 1rem" }} />
+                  <IconMessage size={36} color={T.muted} style={{ margin: "0 auto 1rem" }} />
                   <div style={{ color: T.muted, fontSize: "0.9rem" }}>No contact submissions yet.</div>
                 </div>
               ) : (
@@ -199,7 +199,7 @@ export default function AdminPage() {
                                 onMouseEnter={e => (e.currentTarget.style.color = "#f87171")}
                                 onMouseLeave={e => (e.currentTarget.style.color = T.muted)}
                               >
-                                {deleting === c.id ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : <Trash2 size={14} />}
+                                {deleting === c.id ? <IconLoader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : <IconTrash size={14} />}
                               </button>
                             </td>
                           </tr>
@@ -226,10 +226,10 @@ export default function AdminPage() {
                 <h3 style={{ fontFamily: T.display, fontSize: "1.4rem", color: T.white, fontWeight: 600, marginBottom: "1.25rem" }}>{selected.name}</h3>
 
                 {[
-                  { icon: Mail, label: "Email", value: selected.email },
-                  { icon: Phone, label: "Phone", value: selected.phone || "Not provided" },
-                  { icon: Calendar, label: "Submitted", value: formatDate(selected.createdAt) },
-                  { icon: User, label: "Source", value: "Website Contact Form" },
+                  { icon: IconMail, label: "Email", value: selected.email },
+                  { icon: IconPhone, label: "Phone", value: selected.phone || "Not provided" },
+                  { icon: IconCalendar, label: "Submitted", value: formatDate(selected.createdAt) },
+                  { icon: IconUser, label: "Source", value: "Website Contact Form" },
                 ].map(({ icon: Icon, label, value }) => (
                   <div key={label} style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start", marginBottom: "1rem" }}>
                     <Icon size={14} color={T.accent} style={{ marginTop: 2, flexShrink: 0 }} />
@@ -248,11 +248,11 @@ export default function AdminPage() {
                 <div style={{ display: "flex", gap: "0.75rem", marginTop: "1.5rem" }}>
                   <a href={`mailto:${selected.email}`}
                     style={{ flex: 1, background: T.accent, color: "#000", border: "none", borderRadius: 8, padding: "0.7rem", cursor: "pointer", fontFamily: T.body, fontSize: "0.85rem", fontWeight: 600, textAlign: "center", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem" }}>
-                    <Mail size={14} /> Reply
+                    <IconMail size={14} /> Reply
                   </a>
                   <button onClick={() => handleDelete(selected.id)}
                     style={{ flex: 1, background: "rgba(220,38,38,0.1)", color: "#f87171", border: "1px solid rgba(220,38,38,0.3)", borderRadius: 8, padding: "0.7rem", cursor: "pointer", fontFamily: T.body, fontSize: "0.85rem", fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem" }}>
-                    <Trash2 size={14} /> Delete
+                    <IconTrash size={14} /> Delete
                   </button>
                 </div>
               </div>

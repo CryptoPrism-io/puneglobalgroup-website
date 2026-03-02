@@ -1260,6 +1260,8 @@ export interface BlogPost {
   date: string;
   readTime: string;
   excerpt: string;
+  /** Path to cover image, relative to /public, e.g. /blog/slug.jpg */
+  coverImage?: string;
   content: BlogSection[];
   /** Slugs of related products to cross-link at end of post */
   relatedProducts?: string[];
@@ -1283,6 +1285,7 @@ export const blogPosts: BlogPost[] = [
     categoryColor: "#2563EB",
     date: "February 2026",
     readTime: "6 min",
+    coverImage: "/blog/gsm-guide-paper-board.jpg",
     excerpt:
       "GSM is the most fundamental specification in paper and board buying. Get it wrong and you're either over-spending or watching your cartons fail on the shelf.",
     content: [
@@ -1381,6 +1384,7 @@ export const blogPosts: BlogPost[] = [
   // 2. FBB vs Duplex
   // ——————————————————————————————————————————
   {
+    coverImage: "/blog/fbb-vs-duplex-board.jpg",
     slug: "fbb-vs-duplex-board",
     title: "FBB vs Duplex Board: Which is Right for Your Packaging?",
     category: "Product Guide",
@@ -1484,6 +1488,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "export-packaging-compliance-india",
+    coverImage: "/blog/export-packaging-compliance-india.jpg",
     title: "Export Packaging Compliance for Indian Manufacturers in 2026",
     category: "Compliance",
     categoryColor: "#DC2626",
@@ -1598,6 +1603,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "pp-corrugated-returnable-packaging",
+    coverImage: "/blog/pp-corrugated-returnable-packaging.jpg",
     title: "Why PP Corrugated is Replacing Cardboard in Returnable Packaging",
     category: "Industry Trends",
     categoryColor: "#059669",

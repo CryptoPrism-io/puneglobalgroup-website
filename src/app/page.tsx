@@ -3,10 +3,10 @@
 import { useState, useEffect, FormEvent } from "react";
 import Link from "next/link";
 import {
-  Phone, Mail, MapPin, Factory, Package, Layers,
-  ChevronRight, Menu, X, ArrowRight, CheckCircle,
-  Loader2, Car, Pill, ShoppingCart, Wrench,
-} from "lucide-react";
+  IconPhone, IconMail, IconMapPin, IconBuildingFactory2, IconPackage, IconStack2,
+  IconChevronRight, IconMenu2, IconX, IconArrowRight, IconCircleCheck,
+  IconLoader2, IconCar, IconPill, IconShoppingCart, IconTool,
+} from "@tabler/icons-react";
 import { db } from "@/lib/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
@@ -82,6 +82,31 @@ const GLOBAL_CSS = `
   .hero-eyebrow-anim {
     animation: eyebrowSlide 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s both;
   }
+
+  /* ── Hero image carousel (Ken Burns crossfade) ──────────── */
+  @keyframes heroSlide1 {
+    0%        { opacity: 0; transform: scale(1.0)  translate(0%,    0%);    }
+    4%        { opacity: 1; transform: scale(1.03) translate(-0.2%, -0.1%); }
+    16%       { opacity: 1; transform: scale(1.11) translate(-1.8%, -1.3%); }
+    20%, 100% { opacity: 0; transform: scale(1.13) translate(-2%,   -1.5%); }
+  }
+  @keyframes heroSlide2 {
+    0%        { opacity: 0; transform: scale(1.0)  translate(-2%,   -1.5%); }
+    4%        { opacity: 1; transform: scale(1.03) translate(-1.7%, -1.3%); }
+    16%       { opacity: 1; transform: scale(1.11) translate(-0.2%, -0.1%); }
+    20%, 100% { opacity: 0; transform: scale(1.13) translate(0%,    0%);    }
+  }
+  .hero-carousel-wrap { position: absolute; inset: 0; }
+  .hero-carousel-img  {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover;
+    filter: blur(1px); display: block;
+  }
+  .hero-carousel-img:nth-child(1) { animation: heroSlide1 25s linear infinite 0s;   }
+  .hero-carousel-img:nth-child(2) { animation: heroSlide2 25s linear infinite -20s;  }
+  .hero-carousel-img:nth-child(3) { animation: heroSlide1 25s linear infinite -15s;  }
+  .hero-carousel-img:nth-child(4) { animation: heroSlide2 25s linear infinite -10s;  }
+  .hero-carousel-img:nth-child(5) { animation: heroSlide1 25s linear infinite -5s;   }
   @media (max-width: 768px) {
     .products-grid {
       display: flex !important;
@@ -459,12 +484,12 @@ function Navbar() {
             <button className="btn-primary desktop-nav"
               onClick={() => scrollTo("#contact")}
               style={{ padding: "9px 20px", fontSize: "0.76rem" }}>
-              Get Quote <ArrowRight size={13} />
+              Get Quote <IconArrowRight size={13} />
             </button>
             <button className="mobile-menu-btn" onClick={() => setMobileOpen(true)}
               style={{ display: "none", background: "none", border: "none",
                 cursor: "pointer", color: C.charcoal }}>
-              <Menu size={24} />
+              <IconMenu2 size={24} />
             </button>
           </div>
         </div>
@@ -474,7 +499,7 @@ function Navbar() {
         <button onClick={() => setMobileOpen(false)}
           style={{ position: "absolute", top: "22px", right: "22px",
             background: "none", border: "none", cursor: "pointer", color: C.cream }}>
-          <X size={26} />
+          <IconX size={26} />
         </button>
         <Logo inverted />
         {links.map((l) => l.href.startsWith("#") ? (
@@ -493,7 +518,7 @@ function Navbar() {
           </Link>
         ))}
         <button className="btn-primary" onClick={() => scrollTo("#contact")}>
-          Get Quote <ArrowRight size={14} />
+          Get Quote <IconArrowRight size={14} />
         </button>
       </div>
     </>
@@ -556,7 +581,7 @@ function Hero() {
           <div className="hero-eyebrow-anim"
             style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
             <span className="hero-eyebrow-text" style={{ fontFamily: F.italic, fontStyle: "italic",
-              fontSize: "1.15rem", color: C.taupe, whiteSpace: "nowrap" }}>
+              fontSize: "1.15rem", color: C.taupe }}>
               PP Manufacturing · FBB Converting · Paper Trading
             </span>
             <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: C.border }} />
@@ -605,10 +630,10 @@ function Hero() {
             </p>
             <div className="hero-cta-anim" style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
               <Link href="/products" className="btn-primary" style={{ textDecoration: "none" }}>
-                View Products <ArrowRight size={14} />
+                View Products <IconArrowRight size={14} />
               </Link>
               <button className="btn-outline" onClick={scrollToContact}>
-                Request RFQ <ChevronRight size={14} />
+                Request RFQ <IconChevronRight size={14} />
               </button>
             </div>
           </div>
@@ -638,12 +663,18 @@ function Hero() {
           overflow: "hidden",
           boxShadow: "0 8px 48px rgba(28,26,23,0.10)",
         }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/hero-homepage-v2.jpg"
-            alt="PGG industrial packaging facility — PP corrugated and paper reels, Pune"
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "blur(1.5px)", transform: "scale(1.03)" }}
-          />
+          <div className="hero-carousel-wrap">
+            {[
+              "/hero-homepage-v2.jpg",
+              "/hero-industry.jpg",
+              "/hero-infrastructure.jpg",
+              "/hero-paper-family.jpg",
+              "/hero-pp-family.jpg",
+            ].map((src) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={src} src={src} alt="" className="hero-carousel-img" />
+            ))}
+          </div>
 
           {/* Certification badge overlay */}
           <div style={{
@@ -656,7 +687,7 @@ function Hero() {
             display: "flex", alignItems: "center", gap: "0.75rem",
             border: "1px solid rgba(250,247,242,0.10)",
           }}>
-            <CheckCircle size={18} style={{ color: C.saffron, flexShrink: 0 }} />
+            <IconCircleCheck size={18} style={{ color: C.saffron, flexShrink: 0 }} />
             <div>
               <div style={{
                 fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
@@ -880,7 +911,7 @@ function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
           fontSize: "0.74rem", letterSpacing: "0.04em",
           borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "1px",
           alignSelf: "flex-start" }}>
-          View Details <ChevronRight size={11} />
+          View Details <IconChevronRight size={11} />
         </span>
       </div>
     </Link>
@@ -1002,7 +1033,7 @@ function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
           gap: "4px", color: C.charcoal, fontFamily: F.body, fontWeight: 500,
           fontSize: "0.74rem", letterSpacing: "0.04em", borderBottom: `1px solid ${C.borderMid}`,
           paddingBottom: "1px", alignSelf: "flex-start" }}>
-          View Details <ChevronRight size={11} />
+          View Details <IconChevronRight size={11} />
         </span>
       </div>
     </Link>
@@ -1176,7 +1207,7 @@ function ProductsSection() {
                 borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "2px",
                 alignSelf: "flex-start",
               }}>
-                {line.cta} <ArrowRight size={11} />
+                {line.cta} <IconArrowRight size={11} />
               </Link>
             </div>
           ))}
@@ -1197,7 +1228,7 @@ function ProductsSection() {
             color: C.taupe, textDecoration: "none", letterSpacing: "0.04em",
             display: "inline-flex", alignItems: "center", gap: "4px",
           }}>
-            View All <ChevronRight size={11} />
+            View All <IconChevronRight size={11} />
           </Link>
         </div>
         <div className="sr" data-delay="0.1"><PPProductGrid /></div>
@@ -1216,7 +1247,7 @@ function ProductsSection() {
             color: C.taupe, textDecoration: "none", letterSpacing: "0.04em",
             display: "inline-flex", alignItems: "center", gap: "4px", flexShrink: 0,
           }}>
-            View All <ChevronRight size={11} />
+            View All <IconChevronRight size={11} />
           </Link>
         </div>
 
@@ -1232,10 +1263,10 @@ function ProductsSection() {
         <div style={{ textAlign: "center", marginTop: "3.5rem",
           display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
           <Link href="/products" className="btn-outline" style={{ textDecoration: "none" }}>
-            View Full Catalogue <ArrowRight size={13} />
+            View Full Catalogue <IconArrowRight size={13} />
           </Link>
           <button className="btn-primary" onClick={scrollToContact}>
-            Request a Custom Quote <ArrowRight size={14} />
+            Request a Custom Quote <IconArrowRight size={14} />
           </button>
         </div>
       </div>
@@ -1284,7 +1315,7 @@ function InfraCallout() {
           }}
           onMouseEnter={e => { const a = e.currentTarget; a.style.borderColor = "rgba(250,247,242,0.5)"; a.style.background = "rgba(250,247,242,0.07)"; }}
           onMouseLeave={e => { const a = e.currentTarget; a.style.borderColor = "rgba(250,247,242,0.25)"; a.style.background = "transparent"; }}>
-            View Full Facility <ArrowRight size={13} />
+            View Full Facility <IconArrowRight size={13} />
           </Link>
         </div>
 
@@ -1318,19 +1349,19 @@ function IndustriesSection() {
   const tradeCustomers = [
     {
       num: "01",
-      icon: <Factory size={22} color={C.saffron} />,
+      icon: <IconBuildingFactory2 size={22} color={C.saffron} />,
       name: "Corrugators",
       desc: "Kraft liner, test liner and fluting medium in ready stock. Sheeted or in rolls. Reliable supply for high-volume corrugated board production.",
     },
     {
       num: "02",
-      icon: <Package size={22} color={C.saffron} />,
+      icon: <IconPackage size={22} color={C.saffron} />,
       name: "Box Makers",
       desc: "Pre-cut corrugated sheets and boards delivered to size. Reduce waste and lead times for small and mid-size box manufacturers.",
     },
     {
       num: "03",
-      icon: <Layers size={22} color={C.saffron} />,
+      icon: <IconStack2 size={22} color={C.saffron} />,
       name: "Printers & Converters",
       desc: "FBB, duplex, coated and specialty boards sheeted to press-ready sizes. ITC and TNPL grades with consistent caliper and whiteness.",
     },
@@ -1339,25 +1370,25 @@ function IndustriesSection() {
   const endIndustries = [
     {
       num: "04",
-      icon: <Car size={22} color={C.saffron} />,
+      icon: <IconCar size={22} color={C.saffron} />,
       name: "Automotive",
       desc: "Returnable PP boxes, component trays and corrugated packaging for OEMs and Tier-1 suppliers across Pune and MIDC belt.",
     },
     {
       num: "05",
-      icon: <Pill size={22} color={C.saffron} />,
+      icon: <IconPill size={22} color={C.saffron} />,
       name: "Pharmaceutical",
       desc: "FBB cartons, duplex board and PP trays meeting pharma packaging compliance requirements.",
     },
     {
       num: "06",
-      icon: <ShoppingCart size={22} color={C.saffron} />,
+      icon: <IconShoppingCart size={22} color={C.saffron} />,
       name: "E-Commerce & FMCG",
       desc: "Transit-ready corrugated boxes, retail cartons and shelf-ready packaging for consumer brands and last-mile delivery.",
     },
     {
       num: "07",
-      icon: <Wrench size={22} color={C.saffron} />,
+      icon: <IconTool size={22} color={C.saffron} />,
       name: "Engineering",
       desc: "Heavy-duty 7-ply corrugated crates and export-standard packaging for precision machinery and industrial goods.",
     },
@@ -1477,66 +1508,62 @@ function SocialProofSection() {
         }}
       />
 
-      <div style={{ position: "relative", maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
+      <div style={{ position: "relative", maxWidth: "760px", margin: "0 auto" }}>
 
-        {/* Oversized decorative quote mark */}
-        <div style={{
-          fontFamily: F.display, fontSize: "clamp(6rem, 12vw, 10rem)",
-          lineHeight: 0.7, color: C.saffron, opacity: 0.18,
-          marginBottom: "-1rem", userSelect: "none",
-        }} aria-hidden="true">&ldquo;</div>
+        {/* Entry rule */}
+        <div style={{ width: "36px", height: "1px", background: C.saffron, opacity: 0.45, marginBottom: "3.5rem" }} />
 
         {/* Quote */}
-        <p className="sr" style={{
-          fontFamily: F.italic, fontStyle: "italic",
-          fontSize: "clamp(1.4rem, 2.8vw, 2rem)",
-          fontWeight: 400, lineHeight: 1.65, color: C.cream,
-          margin: "0 0 2.5rem", letterSpacing: "-0.01em",
-        }}>
-          The right paper grade, cut to size, delivered on time —
-          that is the foundation everything else is built on.
-        </p>
-
-        {/* Attribution */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginBottom: "5rem" }}>
-          <div style={{ width: "40px", height: "1px", background: C.saffron, opacity: 0.4 }} />
-          <span style={{
-            fontFamily: F.body, fontSize: "0.75rem", fontWeight: 600,
-            color: "rgba(250,247,242,0.5)", letterSpacing: "0.14em", textTransform: "uppercase",
+        <blockquote style={{ margin: 0 }}>
+          <p className="sr" style={{
+            fontFamily: F.italic, fontStyle: "italic",
+            fontSize: "clamp(1.45rem, 2.6vw, 2.1rem)",
+            fontWeight: 400, lineHeight: 1.62, color: C.cream,
+            margin: "0 0 3rem", letterSpacing: "-0.015em",
           }}>
-            Umesh Sahu &mdash; Managing Director, Pune Global Group
-          </span>
-          <div style={{ width: "40px", height: "1px", background: C.saffron, opacity: 0.4 }} />
-        </div>
+            We have been fortunate to serve the most exacting
+            supply chains in India for three decades.
+            We intend to keep it that way.
+          </p>
 
-        {/* Industry tags — clean text, no emoji */}
+          {/* Attribution */}
+          <footer style={{ marginBottom: "5rem" }}>
+            <div style={{
+              fontFamily: F.display, fontWeight: 600, fontSize: "1.05rem",
+              color: "rgba(250,247,242,0.88)", letterSpacing: "0.01em", marginBottom: "0.3rem",
+            }}>
+              Yogesh Sahu
+            </div>
+            <div style={{
+              fontFamily: F.body, fontSize: "0.62rem", fontWeight: 500,
+              color: "rgba(250,247,242,0.3)", letterSpacing: "0.2em", textTransform: "uppercase",
+            }}>
+              Director &middot; Pune Global Group
+            </div>
+          </footer>
+        </blockquote>
+
+        {/* Industries — flowing prose, no pills */}
         <div className="sr" style={{ marginBottom: "5rem" }}>
           <p style={{
-            fontFamily: F.body, fontSize: "0.6rem", fontWeight: 600,
-            letterSpacing: "0.2em", textTransform: "uppercase",
-            color: "rgba(250,247,242,0.28)", marginBottom: "1.25rem",
+            fontFamily: F.body, fontSize: "0.56rem", fontWeight: 600,
+            letterSpacing: "0.22em", textTransform: "uppercase",
+            color: "rgba(250,247,242,0.2)", marginBottom: "1rem",
           }}>
-            Trusted across industries
+            Trusted across
           </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", justifyContent: "center" }}>
-            {industries.map(label => (
-              <span key={label} style={{
-                fontFamily: F.body, fontSize: "0.76rem", fontWeight: 400,
-                color: "rgba(250,247,242,0.5)",
-                border: "1px solid rgba(250,247,242,0.12)",
-                borderRadius: "2px", padding: "0.4rem 0.9rem",
-                letterSpacing: "0.02em",
-              }}>
-                {label}
-              </span>
-            ))}
-          </div>
+          <p style={{
+            fontFamily: F.body, fontSize: "0.85rem", fontWeight: 300,
+            color: "rgba(250,247,242,0.42)", lineHeight: 2.1, letterSpacing: "0.015em",
+          }}>
+            {industries.join("  ·  ")}
+          </p>
         </div>
 
-        {/* Stats */}
+        {/* Stats — editorial, left-to-right */}
         <div className="sr" style={{
-          display: "flex", justifyContent: "center", flexWrap: "wrap",
-          borderTop: "1px solid rgba(250,247,242,0.08)", paddingTop: "2.5rem",
+          display: "flex", flexWrap: "wrap",
+          borderTop: "1px solid rgba(250,247,242,0.06)", paddingTop: "2.5rem",
         }}>
           {[
             { val: "500+",   lbl: "Active Clients" },
@@ -1545,11 +1572,12 @@ function SocialProofSection() {
             { val: "200 T",  lbl: "Daily Capacity" },
           ].map(({ val, lbl }, i) => (
             <div key={lbl} style={{
-              flex: "1 1 120px", textAlign: "center", padding: "0 2rem",
-              borderLeft: i > 0 ? "1px solid rgba(250,247,242,0.08)" : "none",
+              paddingRight: "3rem", marginRight: i < 3 ? "3rem" : 0,
+              borderRight: i < 3 ? "1px solid rgba(250,247,242,0.06)" : "none",
+              marginBottom: "1rem",
             }}>
-              <div style={{ fontFamily: F.display, fontSize: "clamp(1.6rem,3vw,2.2rem)", fontWeight: 700, color: C.saffron, lineHeight: 1 }}>{val}</div>
-              <div style={{ fontFamily: F.body, fontSize: "0.67rem", fontWeight: 500, color: "rgba(250,247,242,0.38)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: "0.5rem" }}>{lbl}</div>
+              <div style={{ fontFamily: F.display, fontSize: "clamp(1.5rem,2.6vw,2rem)", fontWeight: 700, color: C.cream, lineHeight: 1 }}>{val}</div>
+              <div style={{ fontFamily: F.body, fontSize: "0.6rem", fontWeight: 500, color: "rgba(250,247,242,0.28)", letterSpacing: "0.14em", textTransform: "uppercase", marginTop: "0.45rem" }}>{lbl}</div>
             </div>
           ))}
         </div>
@@ -1611,7 +1639,7 @@ function BlogTeaser() {
             borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "3px",
             whiteSpace: "nowrap",
           }}>
-            All Articles <ArrowRight size={12} />
+            All Articles <IconArrowRight size={12} />
           </Link>
         </div>
 
@@ -1651,7 +1679,7 @@ function BlogTeaser() {
                 color: C.charcoal, letterSpacing: "0.05em", display: "inline-flex",
                 alignItems: "center", gap: "4px",
                 borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "1px" }}>
-                Read Article <ChevronRight size={11} />
+                Read Article <IconChevronRight size={11} />
               </span>
             </Link>
           ))}
@@ -1696,8 +1724,8 @@ function AboutSection() {
 
             <p style={{ fontFamily: F.body, fontSize: "1rem", lineHeight: 1.9,
               color: C.taupe, marginBottom: "1.25rem", fontWeight: 300 }}>
-              Founded in 1995 by Managing Director{" "}
-              <strong style={{ color: C.charcoal, fontWeight: 600 }}>Umesh Sahu</strong>,
+              Founded in 1995 by Director{" "}
+              <strong style={{ color: C.charcoal, fontWeight: 600 }}>Yogesh Sahu</strong>,
               Pune Global Group has been a trusted paper and board trader in Pune,
               Maharashtra — supplying corrugators, printers and box makers with ITC, TNPL
               and imported grades. Over three decades, we built in-house converting
@@ -1717,17 +1745,17 @@ function AboutSection() {
               marginBottom: "2.5rem" }}>
               <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "1.1rem",
                 lineHeight: 1.7, color: C.warm }}>
-                &ldquo;The right paper grade, cut to size, delivered on time — that is the
-                foundation everything else is built on.&rdquo;
+                &ldquo;We have been fortunate to serve the most exacting supply chains
+                in India for three decades. We intend to keep it that way.&rdquo;
               </p>
               <span style={{ fontFamily: F.body, fontSize: "1.15rem", color: C.taupe,
                 letterSpacing: "0.04em", marginTop: "8px", display: "block" }}>
-                — Umesh Sahu, Managing Director
+                — Yogesh Sahu, Director
               </span>
             </div>
 
             <Link href="/infrastructure" className="btn-outline" style={{ textDecoration: "none" }}>
-              Our Converting Facility <ArrowRight size={13} />
+              Our Converting Facility <IconArrowRight size={13} />
             </Link>
           </div>
 
@@ -1775,7 +1803,7 @@ function AboutSection() {
                 <div key={v.label} style={{
                   display: "flex", gap: "0.75rem", alignItems: "flex-start", marginBottom: "0.9rem",
                 }}>
-                  <CheckCircle size={15} style={{ color: C.saffron, marginTop: "2px", flexShrink: 0 }} />
+                  <IconCircleCheck size={15} style={{ color: C.saffron, marginTop: "2px", flexShrink: 0 }} />
                   <div>
                     <div style={{ fontFamily: F.body, fontWeight: 600, fontSize: "1.08rem",
                       color: C.charcoal, marginBottom: "2px" }}>
@@ -1820,13 +1848,13 @@ function ContactSection() {
   };
 
   const contactItems = [
-    { icon: <Phone size={16} color={C.saffron} />, label: "Phone",
+    { icon: <IconPhone size={16} color={C.saffron} />, label: "Phone",
       value: "+91 98233 83230", href: "tel:+919823383230" },
-    { icon: <Mail size={16} color={C.saffron} />, label: "Email",
+    { icon: <IconMail size={16} color={C.saffron} />, label: "Email",
       value: "contact.puneglobalgroup@gmail.com", href: "mailto:contact.puneglobalgroup@gmail.com" },
-    { icon: <MapPin size={16} color={C.saffron} />, label: "Office",
+    { icon: <IconMapPin size={16} color={C.saffron} />, label: "Office",
       value: "206 Gulmohar Center Point, Pune 411006, Maharashtra", href: null },
-    { icon: <Factory size={16} color={C.saffron} />, label: "Factory",
+    { icon: <IconBuildingFactory2 size={16} color={C.saffron} />, label: "Factory",
       value: "108 BU Bhandari MIDC, Sanaswadi 412208, Pune", href: null },
   ];
 
@@ -1918,7 +1946,7 @@ function ContactSection() {
               {status === "success" ? (
                 <div style={{ background: "rgba(212,134,14,0.06)", border: `1px solid rgba(212,134,14,0.25)`,
                   padding: "2rem", textAlign: "center" }}>
-                  <CheckCircle size={38} style={{ color: C.saffron, marginBottom: "1rem" }} />
+                  <IconCircleCheck size={38} style={{ color: C.saffron, marginBottom: "1rem" }} />
                   <div style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1.15rem",
                     color: C.charcoal, marginBottom: "0.5rem" }}>
                     Message Received
@@ -1988,8 +2016,8 @@ function ContactSection() {
                     disabled={status === "submitting"}
                     style={{ alignSelf: "flex-start", opacity: status === "submitting" ? 0.7 : 1 }}>
                     {status === "submitting"
-                      ? <><Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> Sending...</>
-                      : <>Send Request <ArrowRight size={14} /></>}
+                      ? <><IconLoader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> Sending...</>
+                      : <>Send Request <IconArrowRight size={14} /></>}
                   </button>
 
                   <p style={{ fontFamily: F.italic, fontStyle: "italic",
@@ -2048,7 +2076,7 @@ function Footer() {
               alignItems: "center", gap: "6px", marginTop: "1.5rem",
               fontFamily: F.body, fontSize: "0.82rem",
               color: "rgba(250,247,242,0.75)", textDecoration: "none" }}>
-              <Phone size={13} /> +91 98233 83230
+              <IconPhone size={13} /> +91 98233 83230
             </a>
           </div>
 
@@ -2097,12 +2125,12 @@ function Footer() {
                     color: "rgba(250,247,242,0.55)", transition: "color 0.2s", marginBottom: "0.5rem" }}
                   onMouseEnter={e => (e.currentTarget.style.color = C.cream)}
                   onMouseLeave={e => (e.currentTarget.style.color = "rgba(250,247,242,0.55)")}>
-                  <Mail size={12} /> contact.puneglobalgroup@gmail.com
+                  <IconMail size={12} /> contact.puneglobalgroup@gmail.com
                 </a>
                 <div style={{ fontFamily: F.body, fontSize: "0.76rem",
                   color: "rgba(250,247,242,0.55)",
                   display: "flex", alignItems: "flex-start", gap: "6px" }}>
-                  <MapPin size={12} style={{ marginTop: "2px", flexShrink: 0 }} />
+                  <IconMapPin size={12} style={{ marginTop: "2px", flexShrink: 0 }} />
                   <span>206 Gulmohar Center Point,<br />Pune 411006</span>
                 </div>
               </div>

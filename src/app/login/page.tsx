@@ -4,7 +4,7 @@ import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { Loader2, Lock, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { IconLoader2, IconLock, IconEye, IconEyeOff, IconAlertCircle } from "@tabler/icons-react";
 
 const T = {
   bg: "#08090a",
@@ -66,7 +66,7 @@ export default function LoginPage() {
           {/* Brand */}
           <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
             <div style={{ width: 52, height: 52, borderRadius: 12, background: `linear-gradient(135deg, ${T.accent}, #00a857)`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1rem", boxShadow: `0 0 32px rgba(0,196,106,0.3)` }}>
-              <Lock size={22} color="#000" />
+              <IconLock size={22} color="#000" />
             </div>
             <h1 style={{ fontFamily: T.display, fontSize: "2rem", fontWeight: 600, color: T.white, marginBottom: "0.25rem" }}>Admin Portal</h1>
             <p style={{ fontSize: "0.85rem", color: T.muted }}>Pune Global Group — Secure Access</p>
@@ -98,14 +98,14 @@ export default function LoginPage() {
                   />
                   <button type="button" onClick={() => setShowPassword(!showPassword)}
                     style={{ position: "absolute", right: "0.75rem", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex" }}>
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    {showPassword ? <IconEyeOff size={16} /> : <IconEye size={16} />}
                   </button>
                 </div>
               </div>
 
               {error && (
                 <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginBottom: "1.25rem", padding: "0.75rem 1rem", background: "rgba(220,38,38,0.1)", border: "1px solid rgba(220,38,38,0.3)", borderRadius: 8, fontSize: "0.875rem", color: "#f87171" }}>
-                  <AlertCircle size={15} />
+                  <IconAlertCircle size={15} />
                   {error}
                 </div>
               )}
@@ -115,7 +115,7 @@ export default function LoginPage() {
                 onMouseEnter={e => { if (!loading) e.currentTarget.style.background = "#00e07a"; }}
                 onMouseLeave={e => { e.currentTarget.style.background = T.accent; }}
               >
-                {loading ? <><Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Signing in…</> : "Sign In"}
+                {loading ? <><IconLoader2 size={16} style={{ animation: "spin 1s linear infinite" }} /> Signing in…</> : "Sign In"}
               </button>
             </form>
           </div>
