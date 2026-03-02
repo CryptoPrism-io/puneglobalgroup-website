@@ -287,6 +287,18 @@ const GLOBAL_CSS = `
   @media (max-width: 1024px) {
     .pp-product-grid { grid-template-columns: repeat(3, 1fr) !important; }
   }
+  /* Hero 2-col grid */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+  }
+  @media (max-width: 960px) {
+    .hero-grid { grid-template-columns: 1fr !important; }
+    .hero-img-col { display: none !important; }
+  }
+
   @media (max-width: 768px) {
     .desktop-nav { display: none !important; }
     .mobile-menu-btn { display: flex !important; }
@@ -536,52 +548,49 @@ function Hero() {
       display: "flex", flexDirection: "column", justifyContent: "center",
       padding: "clamp(50px, 8vh, 90px) clamp(1.5rem, 5vw, 4rem) clamp(48px, 8vh, 80px)",
     }}>
-      <div style={{ maxWidth: "1400px", margin: "0 auto", width: "100%" }}>
+      <div className="hero-grid" style={{ maxWidth: "1400px", margin: "0 auto", width: "100%" }}>
 
-        {/* Eyebrow — CSS animation */}
-        <div className="hero-eyebrow-anim"
-          style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
-          <span className="hero-eyebrow-text" style={{ fontFamily: F.italic, fontStyle: "italic",
-            fontSize: "1.15rem", color: C.taupe, whiteSpace: "nowrap" }}>
-            PP Manufacturing · FBB Converting · Paper Trading
-          </span>
-          <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: C.border }} />
-          <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: C.taupe,
-            letterSpacing: "0.12em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
-            Pune, India · Est. 1995
-          </span>
-        </div>
+        {/* ── LEFT COLUMN ─────────────────────────────────────── */}
+        <div>
+          {/* Eyebrow */}
+          <div className="hero-eyebrow-anim"
+            style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
+            <span className="hero-eyebrow-text" style={{ fontFamily: F.italic, fontStyle: "italic",
+              fontSize: "1.15rem", color: C.taupe, whiteSpace: "nowrap" }}>
+              PP Manufacturing · FBB Converting · Paper Trading
+            </span>
+            <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: C.border }} />
+            <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: C.taupe,
+              letterSpacing: "0.12em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+              Pune, India · Est. 1995
+            </span>
+          </div>
 
-        {/* Headline — staggered lines */}
-        <h1 className="hero-headline" style={{
-          fontFamily: F.display, fontWeight: 700,
-          fontSize: "clamp(2.8rem, 5vw, 5rem)",
-          lineHeight: 1.08, color: C.charcoal,
-          letterSpacing: "-0.02em", maxWidth: "820px", marginBottom: "0",
-        }}>
-          <span className="hero-h1-line1" style={{ display: "block" }}>
-            Engineered for Industry.
-          </span>
-          <span className="hero-h1-line2" style={{
-            display: "block",
-            fontSize: "0.72em",
-            fontWeight: 400,
-            letterSpacing: "0em",
-            color: C.charcoal,
-            marginTop: "0.18em",
+          {/* Headline */}
+          <h1 className="hero-headline" style={{
+            fontFamily: F.display, fontWeight: 700,
+            fontSize: "clamp(2.8rem, 5vw, 5rem)",
+            lineHeight: 1.08, color: C.charcoal,
+            letterSpacing: "-0.02em", marginBottom: "0",
           }}>
-            Trusted{" "}
-            <span style={{ color: C.saffron, fontWeight: 600 }}>Across India.</span>
-          </span>
-        </h1>
+            <span className="hero-h1-line1" style={{ display: "block" }}>
+              Engineered for Industry.
+            </span>
+            <span className="hero-h1-line2" style={{
+              display: "block", fontSize: "0.72em", fontWeight: 400,
+              letterSpacing: "0em", color: C.charcoal, marginTop: "0.18em",
+            }}>
+              Trusted{" "}
+              <span style={{ color: C.saffron, fontWeight: 600 }}>Across India.</span>
+            </span>
+          </h1>
 
-        {/* Rule — grows from left */}
-        <div className="hero-rule-anim"
-          style={{ height: "1px", background: C.borderMid, margin: "2.75rem 0" }} />
+          {/* Rule */}
+          <div className="hero-rule-anim"
+            style={{ height: "1px", background: C.borderMid, margin: "2.75rem 0" }} />
 
-        {/* Body */}
-        <div style={{ display: "flex", gap: "4rem", alignItems: "flex-start", flexWrap: "wrap" }}>
-          <div className="hero-body-anim" style={{ flex: "1 1 400px", maxWidth: "520px" }}>
+          {/* Body + CTAs */}
+          <div className="hero-body-anim">
             <p style={{ fontFamily: F.body, fontSize: "1.05rem", lineHeight: 1.85,
               color: C.taupe, marginBottom: "2.5rem", fontWeight: 300 }}>
               Pune Global Group manufactures precision PP trays, separators, boxes
@@ -599,9 +608,8 @@ function Hero() {
             </div>
           </div>
 
-          {/* Stats — animated counters */}
-          <div className="hero-stats-row"
-            style={{ display: "flex", flex: "0 0 auto", alignSelf: "flex-end" }}>
+          {/* Stats */}
+          <div className="hero-stats-row" style={{ display: "flex", marginTop: "3rem" }}>
             {stats.map((stat, i) => (
               <div key={stat.label} className="hero-stat-box" style={{
                 padding: "0 2.25rem",
@@ -616,6 +624,51 @@ function Hero() {
             ))}
           </div>
         </div>
+
+        {/* ── RIGHT COLUMN — industry image + cert badge ───────── */}
+        <div className="hero-img-col" style={{
+          position: "relative",
+          height: "clamp(440px, 68vh, 700px)",
+          borderRadius: "10px",
+          overflow: "hidden",
+          boxShadow: "0 8px 48px rgba(28,26,23,0.10)",
+        }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/hero-industry.jpg"
+            alt="PGG industrial PP packaging facility — Pune"
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          />
+
+          {/* Certification badge overlay */}
+          <div style={{
+            position: "absolute", bottom: "1.5rem", right: "1.5rem",
+            background: "rgba(20,18,16,0.88)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            borderRadius: "8px",
+            padding: "0.8rem 1.1rem",
+            display: "flex", alignItems: "center", gap: "0.75rem",
+            border: "1px solid rgba(250,247,242,0.10)",
+          }}>
+            <CheckCircle size={18} style={{ color: C.saffron, flexShrink: 0 }} />
+            <div>
+              <div style={{
+                fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
+                textTransform: "uppercase", color: "rgba(250,247,242,0.45)", marginBottom: "3px",
+              }}>
+                Certified Quality
+              </div>
+              <div style={{
+                fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
+                color: "#FAF7F2", letterSpacing: "0.01em",
+              }}>
+                ISO 9001:2015 · FSC · BRC
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   );
