@@ -1016,27 +1016,6 @@ function ProductsSection() {
       slug: "cyber-xlpac-gc1",
     },
     {
-      name: "Cyber XLPac GC2",
-      spec: "ITC PSPD · Virgin FBB · GC2",
-      desc: "Higher bulk, uncoated manila back — better yield and filling line slip resistance. 200–400 GSM.",
-      imgs: ["/products/paper/cyber-xlpac-gc2-hero.jpg", "/products/paper/cyber-xlpac-gc2-engineering.jpg", "/products/paper/cyber-xlpac-gc2-usecase.jpg"],
-      slug: "cyber-xlpac-gc2",
-    },
-    {
-      name: "Cyber Premium",
-      spec: "ITC PSPD · High-Bulk FBB",
-      desc: "High-bulk FBB for glass bottles and heavy-content cartons. Deep-freeze variant available. 200–400 GSM.",
-      imgs: ["/products/paper/cyber-premium-hero.jpg", "/products/paper/cyber-premium-engineering.jpg", "/products/paper/cyber-premium-usecase.jpg"],
-      slug: "cyber-premium",
-    },
-    {
-      name: "PearlXL Packaging",
-      spec: "ITC PSPD · Economy FBB",
-      desc: "Value-packed FBB — cost-effective upgrade from recycled boards for everyday packaging. 200–400 GSM.",
-      imgs: ["/products/paper/pearlxl-packaging-hero.jpg", "/products/paper/pearlxl-packaging-engineering.jpg", "/products/paper/pearlxl-packaging-usecase.jpg"],
-      slug: "pearlxl-packaging",
-    },
-    {
       name: "Carte Lumina",
       spec: "ITC PSPD · Luxury Virgin Board",
       desc: "Avant-garde luxury virgin board for cosmetics, perfumes and premium brand packaging. 200–400 GSM.",
@@ -1044,39 +1023,11 @@ function ProductsSection() {
       slug: "carte-lumina",
     },
     {
-      name: "Safire Graphik",
-      spec: "ITC PSPD · SBS Board",
-      desc: "India's first SBS — brilliant white, silky texture for cards, cartons and personal care. 200–400 GSM.",
-      imgs: ["/products/paper/safire-graphik-hero.jpg", "/products/paper/safire-graphik-engineering.jpg", "/products/paper/safire-graphik-usecase.jpg"],
-      slug: "safire-graphik",
-    },
-    {
-      name: "Cyber Oak",
-      spec: "ITC PSPD · Brownback FBB",
-      desc: "Virgin fibre brownback FBB — natural organic aesthetic with premium print topside. 230–370 GSM.",
-      imgs: ["/products/paper/cyber-oak-hero.jpg", "/products/paper/cyber-oak-engineering.jpg", "/products/paper/cyber-oak-usecase.jpg"],
-      slug: "cyber-oak",
-    },
-    {
       name: "Eco Natura",
       spec: "ITC PSPD · Recycled Greyback",
       desc: "Best-in-class recycled greyback board — consistent caliper, smooth filling line performance. 230–400 GSM.",
       imgs: ["/products/paper/eco-natura-hero.jpg", "/products/paper/eco-natura-engineering.jpg", "/products/paper/eco-natura-usecase.jpg"],
       slug: "eco-natura",
-    },
-    {
-      name: "Eco Blanca",
-      spec: "ITC PSPD · Recycled Whiteback",
-      desc: "Recycled whiteback board — C2S coated, low dirt count, excellent two-side print reproduction. 210–390 GSM.",
-      imgs: ["/products/paper/eco-blanca-hero.jpg", "/products/paper/eco-blanca-engineering.jpg", "/products/paper/eco-blanca-usecase.jpg"],
-      slug: "eco-blanca",
-    },
-    {
-      name: "NeoWhite Bliss",
-      spec: "ITC PSPD · Blister Grade",
-      desc: "High-performance recovered fibre board — engineered for blister card packaging. 220–390 GSM.",
-      imgs: ["/products/paper/neowhite-bliss-hero.jpg", "/products/paper/neowhite-bliss-engineering.jpg", "/products/paper/neowhite-bliss-usecase.jpg"],
-      slug: "neowhite-bliss",
     },
   ];
 
