@@ -65,6 +65,21 @@ const GLOBAL_CSS = `
     border-color: ${C.borderMid};
     box-shadow: 0 8px 24px rgba(28,26,23,0.07);
   }
+
+  /* === Mobile responsive === */
+  @media(max-width: 768px) {
+    .blog-nav { padding: 0 1rem !important; }
+    .blog-content-wrap { padding: 0 1.25rem 3rem !important; }
+    .blog-related-products { grid-template-columns: 1fr 1fr !important; }
+    .blog-sidebar-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
+  }
+  @media(max-width: 480px) {
+    .blog-related-products { grid-template-columns: 1fr 1fr !important; }
+    .blog-related-reading { grid-template-columns: 1fr !important; }
+  }
+  @media(max-width: 360px) {
+    .blog-related-products { grid-template-columns: 1fr !important; }
+  }
 `;
 
 // ————————————————————————————————————————————
@@ -80,6 +95,7 @@ function Navbar() {
 
   return (
     <nav
+      className="blog-nav"
       style={{
         position: "sticky",
         top: 0,
@@ -90,7 +106,7 @@ function Navbar() {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "0 2.5rem",
+        padding: "0 clamp(1rem, 3vw, 2.5rem)",
         height: "64px",
         transition: "border-color 0.3s ease, background 0.3s ease",
       }}
@@ -396,7 +412,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
       </header>
 
       {/* ——— Article Body ——— */}
-      <main style={{ maxWidth: "760px", margin: "0 auto", padding: "3.5rem 2.5rem 5rem" }}>
+      <main className="blog-content-wrap" style={{ maxWidth: "760px", margin: "0 auto", padding: "3.5rem clamp(1rem, 4vw, 2.5rem) 5rem" }}>
         {/* Lead excerpt */}
         <div
           style={{
@@ -465,7 +481,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
                   Explore Related Products
                 </h3>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "0.875rem" }}>
+              <div className="blog-related-products" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "0.875rem" }}>
                 {related.map(p => {
                   const thumb = (p.images?.[0]) ?? p.image ?? null;
                   const isPP = p.category === "PP Packaging";
@@ -563,7 +579,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
             >
               Related Reading
             </h3>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div className="blog-related-reading" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
               {relatedPosts.map((related) => (
                 <Link key={related.slug} href={`/blog/${related.slug}`} className="related-card">
                   <div style={{ height: "3px", background: related.categoryColor, borderRadius: "2px", marginBottom: "0.875rem" }} />

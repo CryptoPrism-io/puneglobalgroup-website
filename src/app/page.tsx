@@ -280,6 +280,9 @@ const GLOBAL_CSS = `
     .infra-metrics-grid { grid-template-columns: repeat(2, 1fr) !important; }
     .blog-teaser-header { flex-direction: column !important; align-items: flex-start !important; gap: 1rem !important; }
   }
+  @media (max-width: 640px) {
+    .contact-form-grid { grid-template-columns: 1fr !important; }
+  }
 `;
 
 /* ─── Turiya Logo ─────────────────────────────────────────────────────────── */
@@ -1436,7 +1439,7 @@ function SocialProofSection() {
             { val: "200 T",   lbl: "Daily Capacity"   },
           ].map(({ val, lbl }, i) => (
             <div key={lbl} style={{
-              flex: "1 1 140px", textAlign: "center",
+              flex: "1 1 120px", textAlign: "center",
               padding: "0 2rem",
               borderLeft: i > 0 ? "1px solid rgba(250,247,242,0.1)" : "none",
             }}>
@@ -1826,7 +1829,7 @@ function ContactSection() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
+                  <div className="contact-form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
                     <div>
                       <label style={{ display: "block", fontFamily: F.body, fontWeight: 500,
                         fontSize: "0.72rem", color: C.warm, letterSpacing: "0.06em",

@@ -114,6 +114,21 @@ const GLOBAL_CSS = `
   .fac-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.55s ease; }
   .fac-item:hover img { transform: scale(1.04); }
   .fac-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 0.55rem 0.8rem; font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(250,247,242,0.9); background: linear-gradient(to top, rgba(20,18,16,0.68) 0%, transparent 100%); }
+
+  /* === Mobile responsive === */
+  @media(max-width: 768px) {
+    .infra-nav { padding: 0 1rem !important; }
+    .infra-quality-grid { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
+    .infra-locations-grid { grid-template-columns: 1fr !important; }
+    .infra-workflow { grid-template-columns: repeat(3, 1fr) !important; gap: 1.5rem 0 !important; }
+    .infra-bridge-grid { grid-template-columns: 1fr !important; }
+    .fac-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .infra-section { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+  }
+  @media(max-width: 480px) {
+    .infra-workflow { grid-template-columns: repeat(2, 1fr) !important; }
+    .fac-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  }
 `;
 
 // ————————————————————————————————————————————
@@ -151,6 +166,7 @@ function Navbar() {
 
   return (
     <nav
+      className="infra-nav"
       style={{
         position: "sticky",
         top: 0,
@@ -161,7 +177,7 @@ function Navbar() {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "0 2.5rem",
+        padding: "0 clamp(1rem, 3vw, 2.5rem)",
         height: "64px",
         transition: "border-color 0.3s ease, background 0.3s ease",
       }}
@@ -459,7 +475,7 @@ export default function InfrastructurePage() {
       </section>
 
       {/* ——— Machines Section ——— */}
-      <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "5rem 2.5rem" }}>
+      <section className="infra-section" style={{ maxWidth: "1200px", margin: "0 auto", padding: "5rem 2.5rem" }}>
         <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="sr">
           <p
             style={{
@@ -527,6 +543,7 @@ export default function InfrastructurePage() {
 
       {/* ——— Quality Section ——— */}
       <section
+        className="infra-section"
         style={{
           background: C.parchment,
           borderTop: `1px solid ${C.border}`,
@@ -536,6 +553,7 @@ export default function InfrastructurePage() {
       >
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
           <div
+            className="infra-quality-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
@@ -680,7 +698,7 @@ export default function InfrastructurePage() {
       </section>
 
       {/* ——— Locations ——— */}
-      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "5rem 2.5rem" }}>
+      <section className="infra-section" style={{ maxWidth: "1100px", margin: "0 auto", padding: "5rem 2.5rem" }}>
         <div style={{ textAlign: "center", marginBottom: "3rem" }} className="sr">
           <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "1rem", color: C.taupe, margin: "0 0 0.75rem" }}>
             Our Locations
@@ -701,7 +719,7 @@ export default function InfrastructurePage() {
           </h2>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
+        <div className="infra-locations-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
           {/* Converting Facility — dark card */}
           <div
             className="sr"
@@ -855,6 +873,7 @@ export default function InfrastructurePage() {
 
       {/* ——— Processing Workflow ——— */}
       <section
+        className="infra-section"
         style={{
           background: C.parchment,
           borderTop: `1px solid ${C.border}`,
@@ -884,6 +903,7 @@ export default function InfrastructurePage() {
           </div>
 
           <div
+            className="infra-workflow"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(5, 1fr)",
@@ -974,7 +994,7 @@ export default function InfrastructurePage() {
           <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "1rem", color: C.taupe, margin: "0 0 0.5rem" }}>See what we make with it</p>
           <div style={{ width: "28px", height: "2px", background: C.charcoal, margin: "0 auto" }} />
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }} className="sr">
+        <div className="infra-bridge-grid sr" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
           <Link href="/products/pp-corrugated" style={{ textDecoration: "none", background: C.dark, borderRadius: "6px", padding: "2.5rem", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px", position: "relative", overflow: "hidden" }}>
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: C.saffron }} />
             <div>
@@ -998,6 +1018,7 @@ export default function InfrastructurePage() {
 
       {/* ——— CTA ——— */}
       <section
+        className="infra-section"
         style={{
           background: C.dark,
           padding: "5rem 2.5rem",

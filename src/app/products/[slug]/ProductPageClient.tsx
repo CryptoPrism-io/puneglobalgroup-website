@@ -91,6 +91,23 @@ const GLOBAL_CSS = `
   .related-card-body { padding: 1rem 1.25rem 1.25rem; }
   .related-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
   @media(max-width: 640px) { .related-grid { grid-template-columns: 1fr 1fr; } }
+
+  /* === Mobile responsive === */
+  @media(max-width: 768px) {
+    .prod-hero-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
+    .prod-main-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
+    .prod-apps-grid { grid-template-columns: 1fr 1fr !important; }
+    .prod-nav { padding: 0 1rem !important; }
+    .prod-breadcrumb { overflow-x: auto; white-space: nowrap; }
+  }
+  @media(max-width: 480px) {
+    .prod-apps-grid { grid-template-columns: 1fr !important; }
+    .related-grid { grid-template-columns: 1fr 1fr !important; }
+    .prod-cta-inner { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+  }
+  @media(max-width: 360px) {
+    .related-grid { grid-template-columns: 1fr !important; }
+  }
 `;
 
 // ————————————————————————————————————————————
@@ -128,6 +145,7 @@ function SubpageNav() {
 
   return (
     <nav
+      className="prod-nav"
       style={{
         position: "sticky",
         top: 0,
@@ -138,7 +156,7 @@ function SubpageNav() {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "0 2.5rem",
+        padding: "0 clamp(1rem, 3vw, 2.5rem)",
         height: "64px",
         transition: "border-color 0.3s ease, background 0.3s ease",
       }}
@@ -348,7 +366,7 @@ function ProductPageContent({ product }: { product: Product }) {
           const sep = <span style={{ color: C.taupe, margin: "0 0.35rem", fontSize: "0.7rem" }}>›</span>;
           const lk: React.CSSProperties = { fontFamily: F.body, fontSize: "0.72rem", color: C.taupe, textDecoration: "none" };
           return (
-            <nav aria-label="breadcrumb" style={{ position: "relative", maxWidth: "1100px", margin: "0 auto 1.75rem", display: "flex", alignItems: "center", animation: "fadeUp 0.5s ease both" }}>
+            <nav aria-label="breadcrumb" className="prod-breadcrumb" style={{ position: "relative", maxWidth: "1100px", margin: "0 auto 1.75rem", display: "flex", alignItems: "center", animation: "fadeUp 0.5s ease both" }}>
               <Link href="/" style={lk}>Home</Link>{sep}
               <Link href="/products" style={lk}>Products</Link>{sep}
               <Link href={catHref} style={lk}>{catLabel}</Link>{sep}
@@ -358,6 +376,7 @@ function ProductPageContent({ product }: { product: Product }) {
         })()}
 
         <div
+          className="prod-hero-grid"
           style={{
             position: "relative",
             maxWidth: "1100px",
@@ -512,7 +531,7 @@ function ProductPageContent({ product }: { product: Product }) {
 
       {/* ——— Main Content ——— */}
       <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "3.5rem 2.5rem 5rem" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3.5rem" }}>
+        <div className="prod-main-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3.5rem" }}>
           {/* Features */}
           <section className="sr">
             <h2
@@ -580,7 +599,7 @@ function ProductPageContent({ product }: { product: Product }) {
             >
               Applications
             </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem" }}>
+            <div className="prod-apps-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem" }}>
               {product.applications.map((app, i) => (
                 <div key={i} className="app-card">
                   {app}
@@ -736,6 +755,7 @@ function ProductPageContent({ product }: { product: Product }) {
 
         {/* CTA */}
         <section
+          className="sr prod-cta-inner"
           style={{
             marginTop: "3.5rem",
             background: C.dark,
@@ -746,7 +766,6 @@ function ProductPageContent({ product }: { product: Product }) {
             gap: "2rem",
             alignItems: "center",
           }}
-          className="sr"
         >
           <div>
             <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "0.95rem", color: "rgba(250,247,242,0.5)", margin: "0 0 0.75rem" }}>
