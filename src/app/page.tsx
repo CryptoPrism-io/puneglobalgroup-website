@@ -1490,8 +1490,8 @@ function IndustriesSection() {
 function SocialProofSection() {
   const industries = [
     "Automotive OEMs", "Pharmaceutical", "E-Commerce Fulfilment",
-    "FMCG Manufacturers", "Engineering & Capital", "Print & Packaging",
-    "Corrugators", "Export Brands",
+    "Asian Paints", "Berger Paints", "Finolex", "ITC", "TNPL",
+    "Volkswagen", "General Motors", "Mitsubishi", "Yojana", "Venky's", "Suguna", "Würth",
   ];
   return (
     <section style={{ position: "relative", background: C.charcoal, padding: "100px clamp(1.5rem, 5vw, 4rem) 80px", overflow: "hidden" }}>
@@ -1551,7 +1551,7 @@ function SocialProofSection() {
             letterSpacing: "0.22em", textTransform: "uppercase",
             color: "rgba(250,247,242,0.2)", marginBottom: "1rem",
           }}>
-            Trusted across
+            Trusted by
           </p>
           <p style={{
             fontFamily: F.body, fontSize: "0.85rem", fontWeight: 300,
