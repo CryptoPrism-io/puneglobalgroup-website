@@ -968,6 +968,34 @@ export default function InfrastructurePage() {
         </div>
       </section>
 
+      {/* ——— Products Bridge ——— */}
+      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 2.5rem 5rem" }}>
+        <div style={{ textAlign: "center", marginBottom: "2rem" }} className="sr">
+          <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "1rem", color: C.taupe, margin: "0 0 0.5rem" }}>See what we make with it</p>
+          <div style={{ width: "28px", height: "2px", background: C.charcoal, margin: "0 auto" }} />
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }} className="sr">
+          <Link href="/products/pp-corrugated" style={{ textDecoration: "none", background: C.dark, borderRadius: "6px", padding: "2.5rem", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px", position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: C.saffron }} />
+            <div>
+              <p style={{ fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(250,247,242,0.45)", margin: "0 0 0.75rem" }}>Manufactured</p>
+              <h3 style={{ fontFamily: F.display, fontSize: "clamp(1.4rem,2.5vw,1.9rem)", fontWeight: 700, color: C.cream, margin: "0 0 0.6rem", lineHeight: 1.15 }}>PP Corrugated Systems</h3>
+              <p style={{ fontFamily: F.body, fontSize: "0.83rem", color: "rgba(250,247,242,0.55)", margin: 0, lineHeight: 1.6 }}>Boxes, trays, bins, separators — custom to ±1 mm, made at this facility.</p>
+            </div>
+            <span style={{ fontFamily: F.body, fontSize: "0.74rem", fontWeight: 500, color: C.saffron, marginTop: "1.5rem", letterSpacing: "0.04em" }}>Explore PP Systems →</span>
+          </Link>
+          <Link href="/products/paper-board" style={{ textDecoration: "none", background: "#fff", border: `1px solid ${C.borderMid}`, borderRadius: "6px", padding: "2.5rem", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px", position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: C.charcoal }} />
+            <div>
+              <p style={{ fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: C.taupe, margin: "0 0 0.75rem" }}>Traded &amp; Converted</p>
+              <h3 style={{ fontFamily: F.display, fontSize: "clamp(1.4rem,2.5vw,1.9rem)", fontWeight: 700, color: C.charcoal, margin: "0 0 0.6rem", lineHeight: 1.15 }}>Paper &amp; Board Grades</h3>
+              <p style={{ fontFamily: F.body, fontSize: "0.83rem", color: C.taupe, margin: 0, lineHeight: 1.6 }}>ITC FBB, Duplex, Kraft, TNPL — sheeted and rewound here to your spec.</p>
+            </div>
+            <span style={{ fontFamily: F.body, fontSize: "0.74rem", fontWeight: 500, color: C.charcoal, marginTop: "1.5rem", letterSpacing: "0.04em" }}>Browse Board Grades →</span>
+          </Link>
+        </div>
+      </section>
+
       {/* ——— CTA ——— */}
       <section
         style={{

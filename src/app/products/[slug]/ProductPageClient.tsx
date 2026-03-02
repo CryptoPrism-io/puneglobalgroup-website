@@ -72,15 +72,25 @@ const GLOBAL_CSS = `
     background: #fff;
     border: 1px solid ${C.border};
     border-radius: 4px;
-    padding: 1.25rem;
+    padding: 0;
     text-decoration: none;
     display: block;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
   }
   .related-card:hover {
     border-color: ${C.borderMid};
-    box-shadow: 0 8px 24px rgba(28,26,23,0.07);
+    box-shadow: 0 10px 28px rgba(28,26,23,0.09);
+    transform: translateY(-2px);
   }
+  .related-card-img {
+    width: 100%; height: 160px; object-fit: cover; display: block;
+    transition: transform 0.45s ease;
+  }
+  .related-card:hover .related-card-img { transform: scale(1.04); }
+  .related-card-body { padding: 1rem 1.25rem 1.25rem; }
+  .related-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+  @media(max-width: 640px) { .related-grid { grid-template-columns: 1fr 1fr; } }
 `;
 
 // ————————————————————————————————————————————
@@ -329,6 +339,23 @@ function ProductPageContent({ product }: { product: Product }) {
           <filter id="grain-prod"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
           <rect width="100%" height="100%" filter="url(#grain-prod)" />
         </svg>
+
+        {/* Breadcrumb */}
+        {(() => {
+          const isPP = product.category === "PP Packaging";
+          const catLabel = isPP ? "PP Corrugated Systems" : "Paper & Board Grades";
+          const catHref  = isPP ? "/products/pp-corrugated" : "/products/paper-board";
+          const sep = <span style={{ color: C.taupe, margin: "0 0.35rem", fontSize: "0.7rem" }}>›</span>;
+          const lk: React.CSSProperties = { fontFamily: F.body, fontSize: "0.72rem", color: C.taupe, textDecoration: "none" };
+          return (
+            <nav aria-label="breadcrumb" style={{ position: "relative", maxWidth: "1100px", margin: "0 auto 1.75rem", display: "flex", alignItems: "center", animation: "fadeUp 0.5s ease both" }}>
+              <Link href="/" style={lk}>Home</Link>{sep}
+              <Link href="/products" style={lk}>Products</Link>{sep}
+              <Link href={catHref} style={lk}>{catLabel}</Link>{sep}
+              <span style={{ fontFamily: F.body, fontSize: "0.72rem", color: C.charcoal, fontWeight: 500 }}>{product.name}</span>
+            </nav>
+          );
+        })()}
 
         <div
           style={{
@@ -662,6 +689,50 @@ function ProductPageContent({ product }: { product: Product }) {
             </ul>
           </div>
         </section>
+
+        {/* Related Products */}
+        {(() => {
+          const related = products
+            .filter(p => p.category === product.category && p.slug !== product.slug)
+            .slice(0, 3);
+          if (related.length === 0) return null;
+          const isPP = product.category === "PP Packaging";
+          const sectionLabel = isPP ? "More PP Systems" : "More Board Grades";
+          const sectionHref  = isPP ? "/products/pp-corrugated" : "/products/paper-board";
+          return (
+            <section style={{ marginTop: "3.5rem" }} className="sr">
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+                <div>
+                  <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "0.95rem", color: C.taupe, margin: "0 0 0.25rem" }}>You may also like</p>
+                  <h3 style={{ fontFamily: F.display, fontSize: "1.35rem", fontWeight: 700, color: C.charcoal, margin: 0 }}>{sectionLabel}</h3>
+                </div>
+                <Link href={sectionHref} style={{ fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500, color: C.charcoal, textDecoration: "none", borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "1px", whiteSpace: "nowrap" }}>
+                  View all →
+                </Link>
+              </div>
+              <div className="related-grid">
+                {related.map(p => {
+                  const thumb = (p.images?.[0]) ?? p.image ?? null;
+                  return (
+                    <Link key={p.slug} href={`/products/${p.slug}`} className="related-card">
+                      {thumb && (
+                        <div style={{ overflow: "hidden" }}>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={thumb} alt={p.name} className="related-card-img" />
+                        </div>
+                      )}
+                      <div className="related-card-body">
+                        <p style={{ fontFamily: F.body, fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: C.taupe, margin: "0 0 0.4rem" }}>{p.category}</p>
+                        <h4 style={{ fontFamily: F.display, fontSize: "1rem", fontWeight: 600, color: C.charcoal, margin: "0 0 0.35rem", lineHeight: 1.25 }}>{p.name}</h4>
+                        <p style={{ fontFamily: F.body, fontSize: "0.78rem", color: C.taupe, margin: 0, lineHeight: 1.5 }}>{p.tagline}</p>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })()}
 
         {/* CTA */}
         <section

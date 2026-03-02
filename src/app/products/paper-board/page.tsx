@@ -201,6 +201,7 @@ function Navbar() {
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
         <Link href="/infrastructure" className="nav-link">Infrastructure</Link>
+        <Link href="/blog" className="nav-link">Blog</Link>
         <Link href="/#contact" className="btn-kraft" style={{ padding: "9px 22px", fontSize: "0.74rem" }}>
           Request a Quote →
         </Link>
@@ -461,7 +462,7 @@ export default function PaperBoardPage() {
             }}>
               Get Pricing →
             </Link>
-            <a href="https://wa.me/919999999999" style={{
+            <a href="https://wa.me/919823383230" style={{
               display: "inline-flex", alignItems: "center", gap: "8px", justifyContent: "center",
               background: "rgba(250,247,242,0.12)", color: C.cream,
               fontFamily: F.body, fontSize: "0.78rem", fontWeight: 400,

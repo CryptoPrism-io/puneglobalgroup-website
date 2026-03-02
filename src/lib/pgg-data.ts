@@ -1249,6 +1249,8 @@ export interface BlogPost {
   readTime: string;
   excerpt: string;
   content: BlogSection[];
+  /** Slugs of related products to cross-link at end of post */
+  relatedProducts?: string[];
 }
 
 export interface BlogSection {
@@ -1360,6 +1362,7 @@ export const blogPosts: BlogPost[] = [
         text: "Need help specifying the right board GSM for your application? Contact our technical sales team at contact.puneglobalgroup@gmail.com or call +91 98233 83230.",
       },
     ],
+    relatedProducts: ["itc-fbb-boards", "duplex-board", "kraft-liner"],
   },
 
   // ——————————————————————————————————————————
@@ -1461,6 +1464,7 @@ export const blogPosts: BlogPost[] = [
         text: "Talk to us about running a board specification audit for your packaging line. Call +91 98233 83230 or email contact.puneglobalgroup@gmail.com.",
       },
     ],
+    relatedProducts: ["itc-fbb-boards", "duplex-board", "white-top-kraft"],
   },
 
   // ——————————————————————————————————————————
@@ -1574,6 +1578,7 @@ export const blogPosts: BlogPost[] = [
         text: "Need compliance documentation for your current board supply? Email contact.puneglobalgroup@gmail.com with your board grade and destination market.",
       },
     ],
+    relatedProducts: ["pp-box-open-top-riveted", "pp-layer-pad-heavy-duty", "pp-tray-esd-antistatic"],
   },
 
   // ——————————————————————————————————————————
@@ -1676,6 +1681,7 @@ export const blogPosts: BlogPost[] = [
         text: "Interested in a returnable packaging cost analysis for your facility? Contact us at +91 98233 83230 or contact.puneglobalgroup@gmail.com.",
       },
     ],
+    relatedProducts: ["pp-bin-hopper-front", "pp-tray-folded-corner", "pp-bin-scrap-open-top"],
   },
 ];
 

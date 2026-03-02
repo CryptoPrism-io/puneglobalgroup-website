@@ -1365,6 +1365,92 @@ function IndustriesSection() {
   );
 }
 
+/* ─── Social Proof ───────────────────────────────────────────────────────────── */
+function SocialProofSection() {
+  const industries = [
+    { icon: "🚗", label: "Automotive OEMs"       },
+    { icon: "💊", label: "Pharmaceutical"         },
+    { icon: "📦", label: "E-Commerce Fulfilment"  },
+    { icon: "🏭", label: "FMCG Manufacturers"     },
+    { icon: "⚙️",  label: "Engineering & Capital"  },
+    { icon: "🖨️", label: "Print & Packaging"      },
+    { icon: "📋",  label: "Corrugators"            },
+    { icon: "🌿", label: "Export Brands"           },
+  ];
+  return (
+    <section style={{ background: C.charcoal, padding: "80px clamp(1.5rem, 5vw, 4rem)", overflow: "hidden" }}>
+      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+
+        {/* Pull quote */}
+        <div className="sr" style={{ maxWidth: "760px", margin: "0 auto 4.5rem", textAlign: "center" }}>
+          <div style={{ width: "2px", height: "48px", background: C.saffron, margin: "0 auto 2rem" }} />
+          <p style={{
+            fontFamily: F.italic, fontStyle: "italic",
+            fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+            fontWeight: 400, lineHeight: 1.6, color: C.cream,
+            margin: "0 0 1.5rem",
+          }}>
+            &ldquo;The right paper grade, cut to size, delivered on time — that is the
+            foundation everything else is built on.&rdquo;
+          </p>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem" }}>
+            <div style={{ width: "32px", height: "1px", background: "rgba(250,247,242,0.25)" }} />
+            <span style={{ fontFamily: F.body, fontSize: "0.78rem", fontWeight: 500, color: "rgba(250,247,242,0.55)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+              Umesh Sahu — Managing Director, Pune Global Group
+            </span>
+            <div style={{ width: "32px", height: "1px", background: "rgba(250,247,242,0.25)" }} />
+          </div>
+        </div>
+
+        {/* Divider label */}
+        <div className="sr" style={{ display: "flex", alignItems: "center", gap: "1.25rem", marginBottom: "1.5rem" }}>
+          <div style={{ flex: 1, height: "1px", background: "rgba(250,247,242,0.1)" }} />
+          <span style={{ fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(250,247,242,0.35)", whiteSpace: "nowrap" }}>
+            Trusted across industries
+          </span>
+          <div style={{ flex: 1, height: "1px", background: "rgba(250,247,242,0.1)" }} />
+        </div>
+
+        {/* Industry badges */}
+        <div className="sr" style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem", justifyContent: "center" }}>
+          {industries.map(({ icon, label }) => (
+            <div key={label} style={{
+              display: "inline-flex", alignItems: "center", gap: "0.5rem",
+              background: "rgba(250,247,242,0.06)", border: "1px solid rgba(250,247,242,0.1)",
+              borderRadius: "2px", padding: "0.5rem 1rem",
+              fontFamily: F.body, fontSize: "0.78rem", fontWeight: 400,
+              color: "rgba(250,247,242,0.65)", letterSpacing: "0.02em",
+              transition: "background 0.2s, border-color 0.2s",
+            }}>
+              <span style={{ fontSize: "0.9rem" }}>{icon}</span> {label}
+            </div>
+          ))}
+        </div>
+
+        {/* Stat strip */}
+        <div className="sr" style={{ display: "flex", justifyContent: "center", gap: "0", marginTop: "3.5rem", flexWrap: "wrap", borderTop: "1px solid rgba(250,247,242,0.08)", paddingTop: "2.5rem" }}>
+          {[
+            { val: "500+",    lbl: "Active Clients"   },
+            { val: "30 yrs",  lbl: "In Operation"     },
+            { val: "21",      lbl: "States Served"    },
+            { val: "200 T",   lbl: "Daily Capacity"   },
+          ].map(({ val, lbl }, i) => (
+            <div key={lbl} style={{
+              flex: "1 1 140px", textAlign: "center",
+              padding: "0 2rem",
+              borderLeft: i > 0 ? "1px solid rgba(250,247,242,0.1)" : "none",
+            }}>
+              <div style={{ fontFamily: F.display, fontSize: "clamp(1.6rem,3vw,2.2rem)", fontWeight: 700, color: C.saffron, lineHeight: 1 }}>{val}</div>
+              <div style={{ fontFamily: F.body, fontSize: "0.68rem", fontWeight: 500, color: "rgba(250,247,242,0.4)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: "0.4rem" }}>{lbl}</div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
 /* ─── Blog Teaser ────────────────────────────────────────────────────────────── */
 function BlogTeaser() {
   const posts = [
@@ -1815,10 +1901,11 @@ function ContactSection() {
 /* ─── Footer ─────────────────────────────────────────────────────────────────── */
 function Footer() {
   const productLinks = [
-    { label: "ITC Paper & Boards", href: "/products/itc-fbb-boards/" },
-    { label: "PP Boxes & Sheets",  href: "/products/pp-foldable-boxes/" },
-    { label: "Duplex Boards",      href: "/products/duplex-board/" },
-    { label: "Kraft Liner",        href: "/products/kraft-liner/" },
+    { label: "PP Corrugated Systems", href: "/products/pp-corrugated" },
+    { label: "Paper & Board Grades",  href: "/products/paper-board" },
+    { label: "ITC FBB Boards",        href: "/products/itc-fbb-boards" },
+    { label: "Duplex Board",          href: "/products/duplex-board" },
+    { label: "Kraft Liner",           href: "/products/kraft-liner" },
   ];
   const industryLinks = [
     { label: "Automotive",     href: "/#industries" },
@@ -1952,6 +2039,7 @@ export default function HomePage() {
         <ProductsSection />
         <InfraCallout />
         <IndustriesSection />
+        <SocialProofSection />
         <BlogTeaser />
         <AboutSection />
         <ContactSection />

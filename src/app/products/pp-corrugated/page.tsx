@@ -200,7 +200,7 @@ function Navbar() {
       </div>
       <div className="nav-desktop-links" style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
         <Link href="/infrastructure" className="nav-link">Infrastructure</Link>
-        <Link href="/blog" className="nav-link">Insights</Link>
+        <Link href="/blog" className="nav-link">Blog</Link>
         <Link href="/#contact" className="btn-pp" style={{ padding: "9px 22px", fontSize: "0.74rem" }}>
           Request a Quote →
         </Link>
@@ -786,7 +786,7 @@ export default function PPCorrugatedPage() {
             }}>
               Get a System Quote →
             </Link>
-            <a href="https://wa.me/919999999999" style={{
+            <a href="https://wa.me/919823383230" style={{
               display: "inline-flex", alignItems: "center", gap: "8px", justifyContent: "center",
               background: "rgba(250,247,242,0.12)", color: C.cream,
               fontFamily: F.body, fontSize: "0.78rem", fontWeight: 400,

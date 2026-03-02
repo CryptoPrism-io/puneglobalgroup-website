@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { blogPosts, BlogPost, BlogSection } from "@/lib/pgg-data";
+import { blogPosts, BlogPost, BlogSection, products } from "@/lib/pgg-data";
 import { SiteLogo } from "@/components/SiteLogo";
 
 // ————————————————————————————————————————————
@@ -450,6 +450,47 @@ function BlogPostContent({ post }: { post: BlogPost }) {
             ))}
           </div>
         </div>
+
+        {/* Related Products */}
+        {post.relatedProducts && post.relatedProducts.length > 0 && (() => {
+          const related = post.relatedProducts!
+            .map(slug => products.find(p => p.slug === slug))
+            .filter(Boolean) as typeof products;
+          if (related.length === 0) return null;
+          return (
+            <div style={{ marginTop: "3rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.25rem" }}>
+                <div style={{ width: "28px", height: "2px", background: C.charcoal, flexShrink: 0 }} />
+                <h3 style={{ fontFamily: F.display, fontSize: "1.15rem", fontWeight: 700, color: C.charcoal, margin: 0 }}>
+                  Explore Related Products
+                </h3>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "0.875rem" }}>
+                {related.map(p => {
+                  const thumb = (p.images?.[0]) ?? p.image ?? null;
+                  const isPP = p.category === "PP Packaging";
+                  return (
+                    <Link key={p.slug} href={`/products/${p.slug}`} style={{ textDecoration: "none", background: "#fff", border: `1px solid ${C.border}`, borderRadius: "4px", overflow: "hidden", display: "block", transition: "box-shadow 0.2s, transform 0.2s" }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(28,26,23,0.09)"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; (e.currentTarget as HTMLElement).style.transform = "none"; }}>
+                      {thumb && (
+                        <div style={{ height: "130px", overflow: "hidden" }}>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={thumb} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                        </div>
+                      )}
+                      <div style={{ padding: "0.875rem 1rem 1rem" }}>
+                        <p style={{ fontFamily: F.body, fontSize: "0.58rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: isPP ? "#8B1A1A" : C.saffron, margin: "0 0 0.3rem" }}>{p.category}</p>
+                        <h4 style={{ fontFamily: F.display, fontSize: "0.95rem", fontWeight: 600, color: C.charcoal, margin: "0 0 0.25rem", lineHeight: 1.25 }}>{p.name}</h4>
+                        <p style={{ fontFamily: F.body, fontSize: "0.74rem", color: C.taupe, margin: 0, lineHeight: 1.5 }}>{p.tagline}</p>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Enquiry CTA */}
         <div
