@@ -1163,7 +1163,7 @@ function ProductsSection() {
         </div>
 
         <div className="products-detail-grid"
-          style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px",
+          style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px",
             background: "transparent" }}>
           {paperProducts.map((p, i) => (
             <PaperProductCard key={p.name} p={p} i={i} />
