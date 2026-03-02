@@ -233,7 +233,7 @@ export const ppFamilies: PPFamily[] = [
     variants: [
       {
         code: "PAD-01",
-        slug: "pp-layer-pads",
+        slug: "pp-layer-pad-heavy-duty",
         name: "Standard Pallet Layer Pad",
         joining: "Single sheet — no join",
         dimensions: "1200×1000 mm",
