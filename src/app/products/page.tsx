@@ -70,22 +70,15 @@ const CSS = `
   }
   .cat-paper:hover { flex: 1.18; }
 
-  /* Mosaic grid — fills card absolutely */
-  .img-mosaic {
-    position: absolute; inset: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 2px;
-  }
-  .mosaic-cell { overflow: hidden; }
-  .mosaic-cell img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
+  /* Full-bleed composite image fills card */
+  .cat-bg-img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; display: block;
     transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .cat-pp:hover .mosaic-cell img,
-  .cat-paper:hover .mosaic-cell img {
-    transform: scale(1.06);
+  .cat-pp:hover .cat-bg-img,
+  .cat-paper:hover .cat-bg-img {
+    transform: scale(1.04);
   }
 
   /* Overlay — tinted gradient lifting text from image */
@@ -172,7 +165,6 @@ const CSS = `
     .cat-row { flex-direction: column; min-height: auto; }
     .cat-pp, .cat-paper { flex: 1 !important; min-height: 78vw; }
     .cat-divider { width: 100%; height: 2px; }
-    .img-mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
   }
 
   /* Navbar */
@@ -191,19 +183,8 @@ const CSS = `
   }
 `;
 
-const PP_IMGS = [
-  "/products/pp/boxes/box-01-hero.jpg",
-  "/products/pp-corrugated-crates-1.jpg",
-  "/products/pp-layer-pads-1.jpg",
-  "/products/pp/bins/bin-01-hero.jpg",
-];
-
-const PAPER_IMGS = [
-  "/products/paper/cyber-xlpac-gc1-hero.jpg",
-  "/products/paper/carte-lumina-hero.jpg",
-  "/products/paper/eco-natura-hero.jpg",
-  "/products/paper/safire-graphik-hero.jpg",
-];
+const PP_COMPOSITE   = "/products-pp-composite.jpg";
+const PAPER_COMPOSITE = "/products-paper-composite.jpg";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -291,15 +272,8 @@ export default function ProductsPage() {
 
         {/* ── 01 PP Corrugated Systems — NAVY ── */}
         <Link href="/products/pp-corrugated" className="cat-pp">
-          {/* Multi-product mosaic */}
-          <div className="img-mosaic">
-            {PP_IMGS.map((src, i) => (
-              <div key={i} className="mosaic-cell">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={src} alt="" />
-              </div>
-            ))}
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={PP_COMPOSITE} alt="" className="cat-bg-img" />
 
           {/* Navy gradient overlay lifting text */}
           <div className="pp-overlay" />
@@ -333,15 +307,8 @@ export default function ProductsPage() {
 
         {/* ── 02 Paper & Board Grades — CREAM ── */}
         <Link href="/products/paper-board" className="cat-paper">
-          {/* Multi-grade mosaic */}
-          <div className="img-mosaic">
-            {PAPER_IMGS.map((src, i) => (
-              <div key={i} className="mosaic-cell">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={src} alt="" />
-              </div>
-            ))}
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={PAPER_COMPOSITE} alt="" className="cat-bg-img" />
 
           {/* Cream gradient overlay */}
           <div className="paper-overlay" />
