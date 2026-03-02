@@ -84,6 +84,33 @@ const GLOBAL_CSS = `
     animation: eyebrowSlide 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s both;
   }
 
+  /* ── Client logo strip ──────────────────────────────────── */
+  .clients-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 2.25rem 2.5rem;
+    align-items: center;
+  }
+  .client-logo {
+    height: 30px; width: auto; max-width: 108px;
+    object-fit: contain;
+    opacity: 0.32;
+    transition: opacity 0.3s ease;
+    display: block;
+  }
+  .client-logo-jpg {
+    height: 30px; width: auto; max-width: 108px;
+    object-fit: contain;
+    filter: grayscale(100%) brightness(3);
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+    display: block;
+  }
+  .client-logo:hover     { opacity: 0.78; }
+  .client-logo-jpg:hover { opacity: 0.7;  }
+  @media (max-width: 860px)  { .clients-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 540px)  { .clients-grid { grid-template-columns: repeat(3, 1fr); } }
+
   /* ── Hero image carousel (Ken Burns crossfade) ──────────── */
   @keyframes heroSlide1 {
     0%        { opacity: 0; transform: scale(1.0)  translate(0%,    0%);    }
@@ -1488,10 +1515,19 @@ function IndustriesSection() {
 
 /* ─── Social Proof ───────────────────────────────────────────────────────────── */
 function SocialProofSection() {
-  const industries = [
-    "Automotive OEMs", "Pharmaceutical", "E-Commerce Fulfilment",
-    "Asian Paints", "Berger Paints", "Finolex", "ITC", "TNPL",
-    "Volkswagen", "General Motors", "Mitsubishi", "Yojana", "Venky's", "Suguna", "Würth",
+  const clients: { name: string; file: string; jpg?: boolean }[] = [
+    { name: "Asian Paints",   file: "asian-paints.svg"   },
+    { name: "Berger Paints",  file: "berger-paints.svg"  },
+    { name: "ITC",            file: "itc.svg"            },
+    { name: "TNPL",           file: "tnpl.svg"           },
+    { name: "Finolex",        file: "finolex.svg"        },
+    { name: "Volkswagen",     file: "volkswagen.svg"     },
+    { name: "General Motors", file: "general-motors.svg" },
+    { name: "Mitsubishi",     file: "mitsubishi.svg"     },
+    { name: "Venky's",        file: "venkys.svg"         },
+    { name: "Suguna",         file: "suguna.jpg", jpg: true },
+    { name: "Würth",          file: "wurth.svg"          },
+    { name: "Yojana",         file: "yojana.svg"         },
   ];
   return (
     <section style={{ position: "relative", background: C.charcoal, padding: "100px clamp(1.5rem, 5vw, 4rem) 80px", overflow: "hidden" }}>
@@ -1544,21 +1580,27 @@ function SocialProofSection() {
           </footer>
         </blockquote>
 
-        {/* Industries — flowing prose, no pills */}
+        {/* Client logos */}
         <div className="sr" style={{ marginBottom: "5rem" }}>
           <p style={{
             fontFamily: F.body, fontSize: "0.56rem", fontWeight: 600,
             letterSpacing: "0.22em", textTransform: "uppercase",
-            color: "rgba(250,247,242,0.2)", marginBottom: "1rem",
+            color: "rgba(250,247,242,0.2)", marginBottom: "2rem",
           }}>
             Trusted by
           </p>
-          <p style={{
-            fontFamily: F.body, fontSize: "0.85rem", fontWeight: 300,
-            color: "rgba(250,247,242,0.42)", lineHeight: 2.1, letterSpacing: "0.015em",
-          }}>
-            {industries.join("  ·  ")}
-          </p>
+          <div className="clients-grid">
+            {clients.map(({ name, file, jpg }) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={name}
+                src={`/clients/${file}`}
+                alt={name}
+                className={jpg ? "client-logo-jpg" : "client-logo"}
+                style={{ filter: jpg ? undefined : "brightness(0) invert(1)" }}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Stats — editorial, left-to-right */}
