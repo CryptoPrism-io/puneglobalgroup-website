@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { SiteLogo } from "@/components/SiteLogo";
 
@@ -10,7 +10,8 @@ const C = {
   charcoal:  "#1C1A17",
   warm:      "#4A4540",
   taupe:     "#7A736D",
-  dark:      "#141210",
+  navy:      "#0D1B2E",
+  navyMid:   "#132238",
   border:    "rgba(28,26,23,0.10)",
   borderMid: "rgba(28,26,23,0.16)",
 };
@@ -31,10 +32,11 @@ const CSS = `
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
   }
 
-  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-  .fade-up { animation: fadeUp 0.8s ease both; }
-  .d1 { animation-delay: 0.08s; } .d2 { animation-delay: 0.2s; } .d3 { animation-delay: 0.34s; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+  .fade-up { animation: fadeUp 0.72s ease both; }
+  .d1 { animation-delay: 0.06s; } .d2 { animation-delay: 0.18s; } .d3 { animation-delay: 0.3s; }
 
+  /* Navbar */
   .nav-link { font-family:${F.body}; font-size:0.875rem; color:${C.warm}; text-decoration:none;
     position:relative; padding:4px 0; transition:color 0.2s; }
   .nav-link::after { content:''; position:absolute; left:0; bottom:-2px; width:0; height:1px;
@@ -42,40 +44,138 @@ const CSS = `
   .nav-link:hover { color:${C.charcoal}; }
   .nav-link:hover::after { width:100%; }
 
-  /* Category panels — expand on hover */
-  .cat-panel {
+  /* ── Category Cards ─────────────────────────────── */
+  .cat-row {
+    display: flex;
+    flex: 1;
+    min-height: 72vh;
+  }
+  .cat-divider { width: 2px; background: ${C.cream}; flex-shrink: 0; z-index: 2; }
+
+  /* PP card — navy */
+  .cat-pp {
     position: relative; overflow: hidden; cursor: pointer; text-decoration: none;
     display: flex; flex-direction: column; justify-content: flex-end;
-    flex: 1; transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    flex: 1; transition: flex 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    background: ${C.navy};
   }
-  .cat-panel:hover { flex: 1.22; }
-  .cat-panel .cat-img {
-    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-    filter: brightness(0.62);
-    transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1), filter 0.5s ease;
+  .cat-pp:hover { flex: 1.18; }
+
+  /* Paper card — warm cream */
+  .cat-paper {
+    position: relative; overflow: hidden; cursor: pointer; text-decoration: none;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    flex: 1; transition: flex 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    background: ${C.parchment};
   }
-  .cat-panel:hover .cat-img { transform: scale(1.05); filter: brightness(0.52); }
-  .cat-panel::after {
-    content: ''; position: absolute; left: 0; right: 0; bottom: 0;
-    height: 75%; pointer-events: none; z-index: 1;
-    background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.82) 100%);
+  .cat-paper:hover { flex: 1.18; }
+
+  /* Mosaic grid — fills card absolutely */
+  .img-mosaic {
+    position: absolute; inset: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 2px;
   }
-  .cat-divider { width: 1px; background: rgba(250,247,242,0.12); flex-shrink: 0; }
+  .mosaic-cell { overflow: hidden; }
+  .mosaic-cell img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .cat-pp:hover .mosaic-cell img,
+  .cat-paper:hover .mosaic-cell img {
+    transform: scale(1.06);
+  }
+
+  /* Overlay — tinted gradient lifting text from image */
+  .pp-overlay {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(to top,  rgba(13,27,46,0.96) 0%, rgba(13,27,46,0.72) 38%, rgba(13,27,46,0.22) 68%, rgba(13,27,46,0.04) 100%),
+      linear-gradient(to right, rgba(13,27,46,0.55) 0%, rgba(13,27,46,0.0) 55%);
+  }
+  .paper-overlay {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(to top,  rgba(240,234,224,0.98) 0%, rgba(240,234,224,0.80) 36%, rgba(240,234,224,0.32) 62%, rgba(240,234,224,0.0) 100%),
+      linear-gradient(to right, rgba(240,234,224,0.65) 0%, rgba(240,234,224,0.0) 55%);
+  }
+
+  /* Text content */
+  .cat-content {
+    position: relative; z-index: 2;
+    padding: clamp(1.4rem, 4.5vw, 3.5rem);
+  }
+
+  .cat-index-row {
+    display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;
+  }
+  .cat-index-num { font-family: ${F.mono}; font-size: 0.58rem; letter-spacing: 0.22em; }
+  .cat-index-rule { flex: 1; height: 1px; }
+  .cat-index-tag { font-family: ${F.body}; font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; }
+
+  .cat-eyebrow { font-family: ${F.mono}; font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.65rem; display: block; }
+
+  .cat-title {
+    font-family: ${F.display}; font-weight: 700;
+    font-size: clamp(1.55rem, 3.4vw, 3.2rem);
+    line-height: 1.04; letter-spacing: -0.025em; margin-bottom: 1.4rem;
+  }
+
+  .cat-stats {
+    display: flex; gap: 0; flex-wrap: wrap;
+    margin-bottom: 2rem;
+    border-top: 1px solid; padding-top: 1rem;
+  }
+  .cat-stat {
+    font-family: ${F.mono}; font-size: 0.62rem; letter-spacing: 0.06em;
+    padding-right: 1.4rem; margin-right: 1.4rem;
+    border-right: 1px solid;
+  }
+  .cat-stat:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+
   .cat-cta {
-    display: inline-flex; align-items: center; gap: 8px; margin-top: 2rem;
+    display: inline-flex; align-items: center; gap: 8px;
     font-family: ${F.body}; font-size: 0.78rem; font-weight: 500;
     letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(250,247,242,0.6); border-bottom: 1px solid rgba(250,247,242,0.25);
-    padding-bottom: 3px; transition: color 0.25s, border-color 0.25s;
+    border-bottom: 1px solid; padding-bottom: 3px;
+    transition: gap 0.25s, opacity 0.25s;
   }
-  .cat-panel:hover .cat-cta { color: #FAF7F2; border-color: rgba(250,247,242,0.65); }
+  .cat-pp:hover .cat-cta,
+  .cat-paper:hover .cat-cta { gap: 14px; }
 
+  /* PP text: white */
+  .cat-pp .cat-index-num   { color: rgba(250,247,242,0.35); }
+  .cat-pp .cat-index-rule  { background: rgba(250,247,242,0.12); }
+  .cat-pp .cat-index-tag   { color: rgba(250,247,242,0.40); }
+  .cat-pp .cat-eyebrow     { color: rgba(250,247,242,0.48); }
+  .cat-pp .cat-title       { color: #FAF7F2; }
+  .cat-pp .cat-stats       { border-color: rgba(250,247,242,0.14); }
+  .cat-pp .cat-stat        { color: rgba(250,247,242,0.50); border-color: rgba(250,247,242,0.14); }
+  .cat-pp .cat-cta         { color: rgba(250,247,242,0.65); border-color: rgba(250,247,242,0.30); }
+  .cat-pp:hover .cat-cta   { color: #FAF7F2; border-color: rgba(250,247,242,0.7); }
+
+  /* Paper text: dark charcoal */
+  .cat-paper .cat-index-num  { color: rgba(28,26,23,0.30); }
+  .cat-paper .cat-index-rule { background: rgba(28,26,23,0.12); }
+  .cat-paper .cat-index-tag  { color: rgba(28,26,23,0.38); }
+  .cat-paper .cat-eyebrow    { color: rgba(28,26,23,0.48); }
+  .cat-paper .cat-title      { color: ${C.charcoal}; }
+  .cat-paper .cat-stats      { border-color: rgba(28,26,23,0.14); }
+  .cat-paper .cat-stat       { color: rgba(28,26,23,0.50); border-color: rgba(28,26,23,0.14); }
+  .cat-paper .cat-cta        { color: rgba(28,26,23,0.60); border-color: rgba(28,26,23,0.28); }
+  .cat-paper:hover .cat-cta  { color: ${C.charcoal}; border-color: rgba(28,26,23,0.65); }
+
+  /* Mobile */
   @media(max-width: 680px) {
-    .cat-row { flex-direction: column !important; min-height: auto !important; }
-    .cat-panel { min-height: 56vw !important; flex: 1 !important; }
-    .cat-panel:hover { flex: 1 !important; }
-    .cat-divider { width: 100%; height: 1px; }
+    .cat-row { flex-direction: column; min-height: auto; }
+    .cat-pp, .cat-paper { flex: 1 !important; min-height: 78vw; }
+    .cat-divider { width: 100%; height: 2px; }
+    .img-mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
   }
+
+  /* Navbar */
   .prod-nav-links { display: flex; align-items: center; gap: 2rem; }
   .prod-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer;
     background: none; border: none; padding: 4px; }
@@ -90,6 +190,20 @@ const CSS = `
     .prod-hamburger { display: flex !important; }
   }
 `;
+
+const PP_IMGS = [
+  "/products/pp/boxes/box-01-hero.jpg",
+  "/products/pp-corrugated-crates-1.jpg",
+  "/products/pp-layer-pads-1.jpg",
+  "/products/pp/bins/bin-01-hero.jpg",
+];
+
+const PAPER_IMGS = [
+  "/products/paper/cyber-xlpac-gc1-hero.jpg",
+  "/products/paper/carte-lumina-hero.jpg",
+  "/products/paper/eco-natura-hero.jpg",
+  "/products/paper/safire-graphik-hero.jpg",
+];
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -147,11 +261,11 @@ export default function ProductsPage() {
       <Navbar />
 
       {/* Page header */}
-      <div style={{ padding: "3.5rem clamp(1.5rem, 5vw, 4rem) 2.25rem", borderBottom: `1px solid ${C.border}` }}>
+      <div style={{ padding: "3.25rem clamp(1.5rem, 5vw, 4rem) 2rem", borderBottom: `1px solid ${C.border}` }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
           <p className="fade-up d1" style={{
-            fontFamily: F.mono, fontSize: "0.64rem", fontWeight: 500,
-            color: C.taupe, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "0.7rem",
+            fontFamily: F.mono, fontSize: "0.63rem", fontWeight: 500,
+            color: C.taupe, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "0.65rem",
           }}>
             Pune Global Group · Product Range
           </p>
@@ -165,49 +279,49 @@ export default function ProductsPage() {
           </h1>
           <p className="fade-up d3" style={{
             fontFamily: F.body, fontSize: "0.92rem", color: C.taupe,
-            lineHeight: 1.75, fontWeight: 300, marginTop: "0.85rem", maxWidth: "440px",
+            lineHeight: 1.75, fontWeight: 300, marginTop: "0.8rem", maxWidth: "440px",
           }}>
-            We manufacture PP corrugated systems and trade paper & board grades.
-            Select a category below.
+            We manufacture PP corrugated systems and trade premium paper &amp; board grades.
           </p>
         </div>
       </div>
 
-      {/* Two full-height category panels */}
-      <div className="cat-row" style={{
-        display: "flex", flex: 1, minHeight: "68vh",
-        borderBottom: `1px solid ${C.border}`,
-      }}>
+      {/* Two category panels */}
+      <div className="cat-row" style={{ borderBottom: `1px solid ${C.border}` }}>
 
-        {/* ── 01 PP Corrugated Systems ────────────────────────── */}
-        <Link href="/products/pp-corrugated" className="cat-panel">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/products/pp/boxes/box-01-hero.jpg" alt="PP Corrugated Systems" className="cat-img" />
+        {/* ── 01 PP Corrugated Systems — NAVY ── */}
+        <Link href="/products/pp-corrugated" className="cat-pp">
+          {/* Multi-product mosaic */}
+          <div className="img-mosaic">
+            {PP_IMGS.map((src, i) => (
+              <div key={i} className="mosaic-cell">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt="" />
+              </div>
+            ))}
+          </div>
 
-          <div style={{ position: "relative", zIndex: 2, padding: "clamp(1.1rem, 4vw, 3.5rem)" }}>
-            {/* Top rule */}
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.75rem" }}>
-              <span style={{ fontFamily: F.mono, fontSize: "0.6rem", color: "rgba(250,247,242,0.38)", letterSpacing: "0.22em" }}>01</span>
-              <div style={{ flex: 1, height: "1px", background: "rgba(250,247,242,0.12)" }} />
-              <span style={{ fontFamily: F.body, fontSize: "0.6rem", color: "rgba(250,247,242,0.42)", letterSpacing: "0.14em", textTransform: "uppercase" }}>Manufactured</span>
+          {/* Navy gradient overlay lifting text */}
+          <div className="pp-overlay" />
+
+          {/* Text */}
+          <div className="cat-content">
+            <div className="cat-index-row">
+              <span className="cat-index-num">01</span>
+              <div className="cat-index-rule" />
+              <span className="cat-index-tag">Manufactured</span>
             </div>
 
-            <p style={{ fontFamily: F.mono, fontSize: "0.63rem", color: "rgba(250,247,242,0.48)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "0.6rem" }}>
-              PP Corrugated Systems
-            </p>
+            <span className="cat-eyebrow">PP Corrugated Systems</span>
 
-            <h2 style={{
-              fontFamily: F.display, fontWeight: 700,
-              fontSize: "clamp(1.4rem, 3.2vw, 3rem)",
-              color: "#FAF7F2", lineHeight: 1.05, letterSpacing: "-0.024em", marginBottom: "1.25rem",
-            }}>
+            <h2 className="cat-title">
               Boxes · Trays<br />
               <em style={{ fontWeight: 400 }}>Bins · Separators</em>
             </h2>
 
-            <div style={{ display: "flex", gap: "1.25rem", flexWrap: "wrap", marginBottom: "0.5rem" }}>
-              {["7 families", "20+ variants", "Custom to ±1 mm"].map(s => (
-                <span key={s} style={{ fontFamily: F.mono, fontSize: "0.62rem", color: "rgba(250,247,242,0.48)", letterSpacing: "0.06em" }}>{s}</span>
+            <div className="cat-stats">
+              {["7 product families", "20+ variants", "Custom to ±1 mm"].map(s => (
+                <span key={s} className="cat-stat">{s}</span>
               ))}
             </div>
 
@@ -217,35 +331,39 @@ export default function ProductsPage() {
 
         <div className="cat-divider" />
 
-        {/* ── 02 Paper & Board Grades ─────────────────────────── */}
-        <Link href="/products/paper-board" className="cat-panel">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/products/paper/fbb-board.jpg" alt="Paper & Board Grades" className="cat-img" />
+        {/* ── 02 Paper & Board Grades — CREAM ── */}
+        <Link href="/products/paper-board" className="cat-paper">
+          {/* Multi-grade mosaic */}
+          <div className="img-mosaic">
+            {PAPER_IMGS.map((src, i) => (
+              <div key={i} className="mosaic-cell">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt="" />
+              </div>
+            ))}
+          </div>
 
-          <div style={{ position: "relative", zIndex: 2, padding: "clamp(1.1rem, 4vw, 3.5rem)" }}>
-            {/* Top rule */}
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.75rem" }}>
-              <span style={{ fontFamily: F.mono, fontSize: "0.6rem", color: "rgba(250,247,242,0.38)", letterSpacing: "0.22em" }}>02</span>
-              <div style={{ flex: 1, height: "1px", background: "rgba(250,247,242,0.12)" }} />
-              <span style={{ fontFamily: F.body, fontSize: "0.6rem", color: "rgba(250,247,242,0.42)", letterSpacing: "0.14em", textTransform: "uppercase" }}>Traded</span>
+          {/* Cream gradient overlay */}
+          <div className="paper-overlay" />
+
+          {/* Text */}
+          <div className="cat-content">
+            <div className="cat-index-row">
+              <span className="cat-index-num">02</span>
+              <div className="cat-index-rule" />
+              <span className="cat-index-tag">Traded</span>
             </div>
 
-            <p style={{ fontFamily: F.mono, fontSize: "0.63rem", color: "rgba(250,247,242,0.48)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "0.6rem" }}>
-              Paper & Board Grades
-            </p>
+            <span className="cat-eyebrow">Paper &amp; Board Grades</span>
 
-            <h2 style={{
-              fontFamily: F.display, fontWeight: 700,
-              fontSize: "clamp(1.4rem, 3.2vw, 3rem)",
-              color: "#FAF7F2", lineHeight: 1.05, letterSpacing: "-0.024em", marginBottom: "1.25rem",
-            }}>
+            <h2 className="cat-title">
               ITC · TNPL<br />
               <em style={{ fontWeight: 400 }}>· Imported</em>
             </h2>
 
-            <div style={{ display: "flex", gap: "1.25rem", flexWrap: "wrap", marginBottom: "0.5rem" }}>
-              {["5 board grades", "230–450 GSM", "Ready stock · Pune"].map(s => (
-                <span key={s} style={{ fontFamily: F.mono, fontSize: "0.62rem", color: "rgba(250,247,242,0.48)", letterSpacing: "0.06em" }}>{s}</span>
+            <div className="cat-stats">
+              {["10 ITC PSPD grades", "200–400 GSM", "Ready stock · Pune"].map(s => (
+                <span key={s} className="cat-stat">{s}</span>
               ))}
             </div>
 
