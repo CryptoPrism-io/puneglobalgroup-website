@@ -133,6 +133,7 @@ const CSS = `
   .lc-table tr.pp-row td:first-child { border-left:3px solid ${C.pp}; }
 
   /* Responsive */
+  @media(max-width:960px) { .hero-img-col { display: none !important; } .pp-hero-grid { grid-template-columns: 1fr !important; } }
   @media(max-width:900px) {
     .family-grid { grid-template-columns: repeat(2,1fr) !important; }
     .cap-grid { grid-template-columns: repeat(2,1fr) !important; }
@@ -592,52 +593,93 @@ function LifecycleTable() {
 function Hero() {
   return (
     <section className="hero-section" style={{ padding: "48px clamp(1.5rem, 5vw, 4rem) 40px", background: C.cream }}>
-      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-        {/* Breadcrumb tag */}
-        <div className="fade-up d1" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}>
-          <span style={{
-            fontFamily: F.mono, fontSize: "0.65rem", fontWeight: 500,
-            color: C.pp, background: C.ppLight, border: `1px solid ${C.ppMid}`,
-            padding: "4px 10px", borderRadius: "1px", letterSpacing: "0.1em",
+      <div className="pp-hero-grid" style={{ maxWidth: "1400px", margin: "0 auto",
+        display: "grid", gridTemplateColumns: "1fr 1fr",
+        gap: "clamp(2rem,5vw,5rem)", alignItems: "center" }}>
+
+        {/* LEFT */}
+        <div>
+          <div className="fade-up d1" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}>
+            <span style={{
+              fontFamily: F.mono, fontSize: "0.65rem", fontWeight: 500,
+              color: C.pp, background: C.ppLight, border: `1px solid ${C.ppMid}`,
+              padding: "4px 10px", borderRadius: "1px", letterSpacing: "0.1em",
+            }}>
+              PP CORRUGATED SYSTEMS
+            </span>
+            <div className="rule-grow" style={{ flex: 1, height: "1px", background: C.border, maxWidth: "300px" }} />
+            <span style={{ fontFamily: F.body, fontSize: "0.65rem", color: C.taupe,
+              letterSpacing: "0.12em", textTransform: "uppercase" }}>
+              Single-flute · 7 families · 20+ variants
+            </span>
+          </div>
+
+          <h1 className="fade-up d2" style={{
+            fontFamily: F.display, fontWeight: 700,
+            fontSize: "clamp(2rem, 4vw, 3.8rem)",
+            lineHeight: 1.05, color: C.charcoal, letterSpacing: "-0.028em",
           }}>
-            PP CORRUGATED SYSTEMS
-          </span>
-          <div className="rule-grow" style={{ flex: 1, height: "1px", background: C.border, maxWidth: "300px" }} />
-          <span style={{
-            fontFamily: F.body, fontSize: "0.65rem", color: C.taupe,
-            letterSpacing: "0.12em", textTransform: "uppercase",
+            Industrial handling
+            <br />
+            <em style={{ fontWeight: 400, color: C.warm }}>&amp; protection systems.</em>
+          </h1>
+
+          <div style={{ height: "1px", background: C.borderMid, margin: "2rem 0" }} />
+
+          <p className="fade-up d3" style={{
+            fontFamily: F.body, fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)",
+            color: C.taupe, lineHeight: 1.85, maxWidth: "580px", fontWeight: 300,
           }}>
-            Single-flute · 7 families · 20+ variants
-          </span>
+            We convert single-flute PP corrugated sheet into returnable
+            industrial packaging — boxes, trays, separators, layer pads,
+            bins, and flooring — engineered for your plant, not your catalogue.
+          </p>
+
+          <div className="fade-up d4" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "2.5rem" }}>
+            <Link href="/#contact" className="btn-pp">Request a System Quote →</Link>
+            <Link href="/products" className="btn-ghost">← All Products</Link>
+          </div>
         </div>
 
-        {/* Headline */}
-        <h1 className="fade-up d2" style={{
-          fontFamily: F.display, fontWeight: 700,
-          fontSize: "clamp(2rem, 4vw, 3.8rem)",
-          lineHeight: 1.05, color: C.charcoal,
-          letterSpacing: "-0.028em", maxWidth: "860px",
+        {/* RIGHT — PP product image + badge */}
+        <div className="hero-img-col" style={{
+          position: "relative",
+          height: "clamp(380px, 55vh, 560px)",
+          borderRadius: "10px",
+          overflow: "hidden",
+          boxShadow: "0 8px 48px rgba(28,26,23,0.10)",
         }}>
-          Industrial handling
-          <br />
-          <em style={{ fontWeight: 400, color: C.warm }}>& protection systems.</em>
-        </h1>
-
-        <div style={{ height: "1px", background: C.borderMid, margin: "2rem 0", maxWidth: "860px" }} />
-
-        <p className="fade-up d3" style={{
-          fontFamily: F.body, fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)",
-          color: C.taupe, lineHeight: 1.85, maxWidth: "580px", fontWeight: 300,
-        }}>
-          We convert single-flute PP corrugated sheet into returnable
-          industrial packaging — boxes, trays, separators, layer pads,
-          bins, and flooring — engineered for your plant, not your catalogue.
-        </p>
-
-        <div className="fade-up d4" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "2.5rem" }}>
-          <Link href="/#contact" className="btn-pp">Request a System Quote →</Link>
-          <Link href="/products" className="btn-ghost">← All Products</Link>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/products/pp/boxes/box-01-hero.jpg"
+            alt="PP corrugated box — precision industrial packaging"
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          />
+          <div style={{
+            position: "absolute", bottom: "1.5rem", right: "1.5rem",
+            background: "rgba(20,18,16,0.88)",
+            backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+            borderRadius: "8px", padding: "0.8rem 1.1rem",
+            display: "flex", alignItems: "center", gap: "0.75rem",
+            border: "1px solid rgba(250,247,242,0.10)",
+          }}>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="8" stroke="#F5A623" strokeWidth="1.5"/>
+              <polyline points="5,9 8,12 13,6" stroke="#F5A623" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <div>
+              <div style={{ fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
+                textTransform: "uppercase", color: "rgba(250,247,242,0.45)", marginBottom: "3px" }}>
+                Precision Manufacturing
+              </div>
+              <div style={{ fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
+                color: "#FAF7F2", letterSpacing: "0.01em" }}>
+                Custom to ±1 mm · Export Ready
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
     </section>
   );
