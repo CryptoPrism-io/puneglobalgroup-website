@@ -19,6 +19,7 @@ const C = {
   pp:        "#1A3A5C",     // deep engineering blue — PP accent
   ppLight:   "rgba(26,58,92,0.08)",
   ppMid:     "rgba(26,58,92,0.18)",
+  saffron:   "#F5A623",
 };
 const F = {
   display: "'Playfair Display', Georgia, serif",
