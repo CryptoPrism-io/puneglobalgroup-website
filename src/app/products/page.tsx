@@ -234,6 +234,49 @@ export default function ProductsPage() {
         </div>
       </div>
 
+      {/* PP Systems banner — shown when PP tab is active or All */}
+      {(activeTab === "PP Packaging" || activeTab === "All") && (
+        <div style={{
+          maxWidth: "1400px", margin: "0 auto",
+          padding: "1.5rem clamp(1.5rem, 5vw, 4rem) 0",
+        }}>
+          <Link href="/products/pp-corrugated" style={{ textDecoration: "none" }}>
+            <div style={{
+              background: "#1A3A5C", borderRadius: "1px",
+              padding: "1.25rem 2rem",
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              gap: "1rem", flexWrap: "wrap",
+              transition: "opacity 0.2s",
+            }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = "0.92")}
+              onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                <span style={{
+                  fontFamily: "'DM Mono', monospace", fontSize: "0.62rem", fontWeight: 500,
+                  color: "rgba(250,247,242,0.5)", background: "rgba(250,247,242,0.08)",
+                  border: "1px solid rgba(250,247,242,0.15)", padding: "3px 8px", borderRadius: "1px",
+                  letterSpacing: "0.1em",
+                }}>
+                  PP CORRUGATED SYSTEMS
+                </span>
+                <span style={{
+                  fontFamily: F.body, fontSize: "0.92rem", fontWeight: 500, color: C.cream,
+                }}>
+                  7 product families · 20+ variants · Boxes, Trays, Separators, Layer Pads, Bins
+                </span>
+              </div>
+              <span style={{
+                fontFamily: F.body, fontSize: "0.78rem", fontWeight: 500,
+                color: "rgba(250,247,242,0.75)", letterSpacing: "0.06em", whiteSpace: "nowrap",
+              }}>
+                Explore PP Systems →
+              </span>
+            </div>
+          </Link>
+        </div>
+      )}
+
       {/* Grid */}
       <main style={{ maxWidth: "1400px", margin: "0 auto", padding: "3rem clamp(1.5rem, 5vw, 4rem) 5rem" }}>
         <p style={{ fontFamily: F.body, fontSize: "0.82rem", color: C.taupe, marginBottom: "2rem" }}>
