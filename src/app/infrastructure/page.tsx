@@ -115,9 +115,23 @@ const GLOBAL_CSS = `
   .fac-item:hover img { transform: scale(1.04); }
   .fac-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 0.55rem 0.8rem; font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(250,247,242,0.9); background: linear-gradient(to top, rgba(20,18,16,0.68) 0%, transparent 100%); }
 
+  .infra-nav-links { display: flex; gap: 2rem; align-items: center; }
+  .infra-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer;
+    background: none; border: none; padding: 4px; }
+  .infra-hamburger span { display: block; width: 22px; height: 1.5px; background: ${C.charcoal}; }
+  .infra-dropdown { display: none; position: absolute; top: 64px; left: 0; right: 0;
+    background: ${C.cream}; border-bottom: 1px solid ${C.borderMid};
+    padding: 1rem clamp(1rem, 3vw, 2.5rem); flex-direction: column; gap: 0.85rem;
+    box-shadow: 0 4px 20px rgba(28,26,23,0.07); z-index: 99; }
+  .infra-dropdown.open { display: flex; }
+
   /* === Mobile responsive === */
+  @media(max-width: 600px) {
+    .infra-nav-links { display: none !important; }
+    .infra-hamburger { display: flex !important; }
+  }
   @media(max-width: 768px) {
-    .infra-nav { padding: 0 1rem !important; }
+    .infra-nav { padding: 0 1rem !important; position: relative; }
     .infra-quality-grid { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
     .infra-locations-grid { grid-template-columns: 1fr !important; }
     .infra-workflow { grid-template-columns: repeat(3, 1fr) !important; gap: 1.5rem 0 !important; }
@@ -158,51 +172,44 @@ function useScrollReveal() {
 // ————————————————————————————————————————————
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", h);
     return () => window.removeEventListener("scroll", h);
   }, []);
 
-  return (
-    <nav
-      className="infra-nav"
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-        background: scrolled ? "rgba(250,247,242,0.97)" : C.cream,
-        backdropFilter: "blur(8px)",
-        borderBottom: `1px solid ${scrolled ? C.borderMid : C.border}`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0 clamp(1rem, 3vw, 2.5rem)",
-        height: "64px",
-        transition: "border-color 0.3s ease, background 0.3s ease",
-      }}
-    >
-      <SiteLogo href="/" />
+  const ctaStyle = {
+    fontFamily: F.body, background: C.charcoal, color: C.cream,
+    textDecoration: "none", fontSize: "0.82rem", fontWeight: 500,
+    padding: "0.5rem 1.25rem", borderRadius: "3px", letterSpacing: "0.03em",
+  } as const;
 
-      <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
-        <Link href="/products" className="infra-nav-link">Products</Link>
-        <Link href="/blog" className="infra-nav-link">Insights</Link>
-        <Link
-          href="/#contact"
-          style={{
-            fontFamily: F.body,
-            background: C.charcoal,
-            color: C.cream,
-            textDecoration: "none",
-            fontSize: "0.82rem",
-            fontWeight: 500,
-            padding: "0.5rem 1.25rem",
-            borderRadius: "3px",
-            letterSpacing: "0.03em",
-          }}
-        >
-          Get a Quote
-        </Link>
+  return (
+    <nav className="infra-nav" style={{
+      position: "sticky", top: 0, zIndex: 100,
+      background: scrolled ? "rgba(250,247,242,0.97)" : C.cream,
+      backdropFilter: "blur(8px)",
+      borderBottom: `1px solid ${scrolled ? C.borderMid : C.border}`,
+      transition: "border-color 0.3s ease, background 0.3s ease",
+    }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "0 clamp(1rem, 3vw, 2.5rem)", height: "64px" }}>
+        <SiteLogo href="/" />
+        <div className="infra-nav-links">
+          <Link href="/products" className="infra-nav-link">Products</Link>
+          <Link href="/blog" className="infra-nav-link">Insights</Link>
+          <Link href="/#contact" style={ctaStyle}>Get a Quote</Link>
+        </div>
+        <button className="infra-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
+          <span /><span /><span />
+        </button>
+      </div>
+      <div className={`infra-dropdown${menuOpen ? " open" : ""}`}>
+        <Link href="/products" className="infra-nav-link" onClick={() => setMenuOpen(false)}>Products</Link>
+        <Link href="/blog" className="infra-nav-link" onClick={() => setMenuOpen(false)}>Insights</Link>
+        <Link href="/#contact" onClick={() => setMenuOpen(false)}
+          style={{ ...ctaStyle, alignSelf: "flex-start" }}>Get a Quote</Link>
       </div>
     </nav>
   );
