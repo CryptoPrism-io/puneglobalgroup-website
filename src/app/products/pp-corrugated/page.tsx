@@ -43,8 +43,6 @@ const CSS = `
   @keyframes fadeUp   { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
   @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
   @keyframes ruleGrow { from { transform:scaleX(0); transform-origin:left; } to { transform:scaleX(1); transform-origin:left; } }
-  @keyframes slideImg { from { opacity:0; transform:scale(1.03); } to { opacity:1; transform:scale(1); } }
-
   .fade-up   { animation: fadeUp 0.85s ease both; }
   .fade-in   { animation: fadeIn 0.6s ease both; }
   .rule-grow { animation: ruleGrow 0.9s cubic-bezier(0.22,1,0.36,1) 0.4s both; }
@@ -87,8 +85,22 @@ const CSS = `
   .variant-card:hover { border-color:${C.pp} !important; transform:translateY(-4px);
     box-shadow:0 12px 32px rgba(26,58,92,0.10); }
 
-  /* Image slide */
-  .img-slide { animation: slideImg 0.5s ease both; }
+  /* Image crossfade — all 3 images stacked, opacity toggled via .active */
+  .carousel-img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: 0;
+    transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+  .carousel-img.active { opacity: 1; }
+
+  /* Dot touch area — invisible padding for 44px tap target */
+  .dot-wrap { display:flex; gap:5px; padding: 8px 12px; cursor:pointer; }
+  .dot-pip {
+    height: 6px; border-radius: 3px; border: none; cursor: pointer;
+    transition: width 0.35s cubic-bezier(0.4,0,0.2,1), background 0.3s ease;
+    padding: 0; display: block;
+  }
 
   /* Spec pills */
   .spec-pill { font-family:${F.mono}; font-size:0.65rem; font-weight:400; color:${C.taupe};
@@ -133,6 +145,19 @@ const CSS = `
   @media(max-width:580px) {
     .family-grid { grid-template-columns: 1fr !important; }
     .cap-grid { grid-template-columns: 1fr 1fr !important; }
+    /* Nav: hide non-essential desktop links */
+    .nav-desktop-links { display: none !important; }
+    /* Carousel: taller hit area on small screens */
+    .carousel-wrap { height: 248px !important; }
+    /* CTA: stack vertically */
+    .cta-grid { grid-template-columns: 1fr !important; }
+    .cta-btn-group { flex-direction: column !important; }
+    /* Hero: tighter vertical rhythm */
+    .hero-section { padding-top: 48px !important; padding-bottom: 44px !important; }
+    /* Cap bar: single column on very small */
+  }
+  @media(max-width:380px) {
+    .cap-grid { grid-template-columns: 1fr !important; }
   }
 `;
 
@@ -173,7 +198,7 @@ function Navbar() {
         <span style={{ color: C.border, fontSize: "1.2rem" }}>|</span>
         <SiteLogo href="/" />
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+      <div className="nav-desktop-links" style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
         <Link href="/infrastructure" className="nav-link">Infrastructure</Link>
         <Link href="/blog" className="nav-link">Insights</Link>
         <Link href="/#contact" className="btn-pp" style={{ padding: "9px 22px", fontSize: "0.74rem" }}>
@@ -188,14 +213,11 @@ function Navbar() {
 function VariantCarousel({ images, name }: { images: [string, string, string]; name: string }) {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [key, setKey] = useState(0);
+  const touchStartX = useRef<number>(0);
 
   useEffect(() => {
     if (paused) return;
-    const t = setInterval(() => {
-      setIdx(c => (c + 1) % 3);
-      setKey(k => k + 1);
-    }, 1800);
+    const t = setInterval(() => setIdx(c => (c + 1) % 3), 4000);
     return () => clearInterval(t);
   }, [paused]);
 
@@ -203,36 +225,47 @@ function VariantCarousel({ images, name }: { images: [string, string, string]; n
 
   return (
     <div
+      className="carousel-wrap"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+      onTouchEnd={(e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX.current;
+        if (Math.abs(dx) > 36) setIdx(c => dx < 0 ? (c + 1) % 3 : (c + 2) % 3);
+      }}
       style={{ position: "relative", height: "220px", overflow: "hidden", background: C.parchment }}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        key={key}
-        src={images[idx]}
-        alt={`${name} — ${labels[idx]}`}
-        className="img-slide"
-        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-      />
-      {/* Dot indicators */}
+      {/* All 3 images stacked — crossfade via CSS opacity transition */}
+      {images.map((src, i) => (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          key={i}
+          src={src}
+          alt={`${name} — ${labels[i]}`}
+          className={`carousel-img${i === idx ? " active" : ""}`}
+        />
+      ))}
+
+      {/* Dot indicators — large touch target via .dot-wrap padding */}
       <div style={{
-        position: "absolute", bottom: "10px", left: "50%", transform: "translateX(-50%)",
-        display: "flex", gap: "5px",
+        position: "absolute", bottom: "2px", left: "50%", transform: "translateX(-50%)",
       }}>
-        {[0, 1, 2].map(i => (
-          <button
-            key={i}
-            onClick={(e) => { e.preventDefault(); setIdx(i); setKey(k => k + 1); }}
-            style={{
-              width: i === idx ? "18px" : "6px", height: "6px",
-              borderRadius: "3px", border: "none", cursor: "pointer",
-              background: i === idx ? C.cream : "rgba(255,255,255,0.5)",
-              transition: "all 0.3s ease", padding: 0,
-            }}
-          />
-        ))}
+        <div className="dot-wrap">
+          {[0, 1, 2].map(i => (
+            <button
+              key={i}
+              className="dot-pip"
+              onClick={(e) => { e.preventDefault(); setIdx(i); }}
+              aria-label={labels[i]}
+              style={{
+                width: i === idx ? "18px" : "6px",
+                background: i === idx ? C.cream : "rgba(255,255,255,0.5)",
+              }}
+            />
+          ))}
+        </div>
       </div>
+
       {/* Label badge */}
       <div style={{
         position: "absolute", top: "10px", right: "10px",
@@ -618,7 +651,7 @@ function LifecycleTable() {
 /* ─── Hero ───────────────────────────────────────────────────────────────────── */
 function Hero() {
   return (
-    <section style={{ padding: "80px clamp(1.5rem, 5vw, 4rem) 72px", background: C.cream }}>
+    <section className="hero-section" style={{ padding: "80px clamp(1.5rem, 5vw, 4rem) 72px", background: C.cream }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
         {/* Breadcrumb tag */}
         <div className="fade-up d1" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}>
@@ -720,7 +753,7 @@ export default function PPCorrugatedPage() {
         padding: "5rem clamp(1.5rem, 5vw, 4rem)",
         background: C.pp,
       }}>
-        <div style={{ maxWidth: "1400px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr auto", gap: "2rem", alignItems: "center" }}>
+        <div className="cta-grid" style={{ maxWidth: "1400px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr auto", gap: "2rem", alignItems: "center" }}>
           <div>
             <p style={{
               fontFamily: F.italic, fontStyle: "italic", fontSize: "0.9rem",
@@ -742,7 +775,7 @@ export default function PPCorrugatedPage() {
               We will quote the full system — box, insert, tray, and layer pad — in one proposal.
             </p>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", flexShrink: 0 }}>
+          <div className="cta-btn-group" style={{ display: "flex", flexDirection: "column", gap: "0.75rem", flexShrink: 0 }}>
             <Link href="/#contact" style={{
               display: "inline-flex", alignItems: "center", gap: "8px",
               background: C.cream, color: C.pp,
