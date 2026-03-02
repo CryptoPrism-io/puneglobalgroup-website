@@ -1,9 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { machines, capabilities } from "@/lib/pgg-data";
 import { SiteLogo } from "@/components/SiteLogo";
+
+// ————————————————————————————————————————————
+// Image data
+// ————————————————————————————————————————————
+const MACHINE_IMAGES: Record<string, string[]> = {
+  "Rewinder":         ["/infrastructure/machines/rewinder-wide.jpg",        "/infrastructure/machines/rewinder-detail.jpg",        "/infrastructure/machines/rewinder-operation.jpg"],
+  "Sheeter":          ["/infrastructure/machines/sheeter-wide.jpg",         "/infrastructure/machines/sheeter-detail.jpg",         "/infrastructure/machines/sheeter-operation.jpg"],
+  "Synchro Sheeter":  ["/infrastructure/machines/synchro-sheeter-wide.jpg", "/infrastructure/machines/synchro-sheeter-detail.jpg", "/infrastructure/machines/synchro-sheeter-operation.jpg"],
+  "Guillotine":       ["/infrastructure/machines/guillotine-wide.jpg",      "/infrastructure/machines/guillotine-detail.jpg",      "/infrastructure/machines/guillotine-operation.jpg"],
+  "Heat Shrink Wrap": ["/infrastructure/machines/shrink-wrap-wide.jpg",     "/infrastructure/machines/shrink-wrap-detail.jpg",     "/infrastructure/machines/shrink-wrap-operation.jpg"],
+  "Stretch Wrap":     ["/infrastructure/machines/stretch-wrap-wide.jpg",    "/infrastructure/machines/stretch-wrap-detail.jpg",    "/infrastructure/machines/stretch-wrap-operation.jpg"],
+};
+const MC_LABELS = ["Wide View", "Detail", "In Operation"];
+
+const FACILITY_SHOTS = [
+  { src: "/infrastructure/facility/converting-floor.jpg",  label: "Converting Floor"    },
+  { src: "/infrastructure/facility/storage-warehouse.jpg", label: "Storage & Warehouse" },
+  { src: "/infrastructure/facility/dispatch-area.jpg",     label: "Dispatch Area"       },
+  { src: "/infrastructure/facility/quality-control.jpg",   label: "Quality Control"     },
+  { src: "/infrastructure/facility/freight-lift.jpg",      label: "Freight Lift"        },
+  { src: "/infrastructure/facility/forklift.jpg",          label: "Forklift"            },
+];
 
 // ————————————————————————————————————————————
 // The Merchant — Design Tokens
@@ -73,6 +95,25 @@ const GLOBAL_CSS = `
   }
 
   .cap-item + .cap-item { border-left: 1px solid ${C.border}; }
+
+  /* Machine card carousel */
+  .machine-card.has-carousel { padding: 0; }
+  .machine-card.has-carousel .mc-content { padding: 1.5rem 1.75rem 1.75rem; }
+  .mc-carousel { position: relative; width: 100%; height: 210px; overflow: hidden; border-radius: 5px 5px 0 0; background: ${C.parchment}; }
+  .mc-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1); pointer-events: none; }
+  .mc-img.active { opacity: 1; }
+  .mc-label { position: absolute; bottom: 8px; left: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.58rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(250,247,242,0.85); background: rgba(20,18,16,0.5); padding: 2px 8px; border-radius: 2px; }
+  .mc-dots { display: flex; gap: 5px; align-items: center; justify-content: center; padding: 8px 0 2px; }
+  .mc-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(28,26,23,0.18); border: none; padding: 0; cursor: pointer; transition: background 0.25s, width 0.25s, border-radius 0.25s; }
+  .mc-dot.active { background: ${C.charcoal}; width: 14px; border-radius: 3px; }
+
+  /* Facility gallery */
+  .fac-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  @media(max-width: 768px) { .fac-grid { grid-template-columns: repeat(2, 1fr); } }
+  .fac-item { position: relative; border-radius: 4px; overflow: hidden; aspect-ratio: 4/3; }
+  .fac-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.55s ease; }
+  .fac-item:hover img { transform: scale(1.04); }
+  .fac-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 0.55rem 0.8rem; font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(250,247,242,0.9); background: linear-gradient(to top, rgba(20,18,16,0.68) 0%, transparent 100%); }
 `;
 
 // ————————————————————————————————————————————
@@ -152,76 +193,100 @@ function Navbar() {
 }
 
 // ————————————————————————————————————————————
-// Machine Card
+// Machine Card (with image carousel)
 // ————————————————————————————————————————————
 function MachineCard({ machine, delay }: { machine: typeof machines[0]; delay: number }) {
+  const imgs = MACHINE_IMAGES[machine.name] ?? [];
+  const [idx, setIdx] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (imgs.length < 2) return;
+    timerRef.current = setInterval(() => setIdx(p => (p + 1) % imgs.length), 3500);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [imgs.length]);
+
+  const hasImgs = imgs.length > 0;
+
   return (
-    <div
-      className="machine-card sr"
-      style={{ animationDelay: `${delay}s` }}
-    >
-      <div
-        style={{
-          width: "44px",
-          height: "44px",
-          background: C.parchment,
-          borderRadius: "4px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "1.3rem",
-          marginBottom: "1.25rem",
-          border: `1px solid ${C.border}`,
-        }}
-      >
-        {machine.icon}
+    <div className={`machine-card sr${hasImgs ? " has-carousel" : ""}`} style={{ animationDelay: `${delay}s` }}>
+      {hasImgs && (
+        <div className="mc-carousel">
+          {imgs.map((src, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={src} src={src} alt={`${machine.name} — ${MC_LABELS[i]}`} className={`mc-img${i === idx ? " active" : ""}`} />
+          ))}
+          <span className="mc-label">{MC_LABELS[idx]}</span>
+        </div>
+      )}
+
+      <div className={hasImgs ? "mc-content" : ""}>
+        {hasImgs && (
+          <div className="mc-dots">
+            {imgs.map((_, i) => (
+              <button
+                key={i}
+                className={`mc-dot${i === idx ? " active" : ""}`}
+                onClick={() => { setIdx(i); if (timerRef.current) clearInterval(timerRef.current); }}
+                aria-label={MC_LABELS[i]}
+              />
+            ))}
+          </div>
+        )}
+
+        {!hasImgs && (
+          <div style={{ width: "44px", height: "44px", background: C.parchment, borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.3rem", marginBottom: "1.25rem", border: `1px solid ${C.border}` }}>
+            {machine.icon}
+          </div>
+        )}
+
+        <h3 style={{ fontFamily: F.display, fontSize: "1.2rem", fontWeight: 600, color: C.charcoal, margin: "0 0 0.5rem", lineHeight: 1.25 }}>
+          {machine.name}
+        </h3>
+
+        <p style={{ fontFamily: F.body, fontSize: "0.84rem", color: C.taupe, margin: "0 0 1.25rem", lineHeight: 1.65 }}>
+          {machine.description}
+        </p>
+
+        <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+          {machine.specs.map((spec, i) => (
+            <li key={i} style={{ fontFamily: F.body, fontSize: "0.77rem", color: C.warm, display: "flex", alignItems: "flex-start", gap: "0.5rem", lineHeight: 1.5 }}>
+              <span style={{ color: C.saffron, fontWeight: 700, marginTop: "1px", flexShrink: 0 }}>·</span>
+              {spec}
+            </li>
+          ))}
+        </ul>
       </div>
-
-      <h3
-        style={{
-          fontFamily: F.display,
-          fontSize: "1.2rem",
-          fontWeight: 600,
-          color: C.charcoal,
-          margin: "0 0 0.5rem",
-          lineHeight: 1.25,
-        }}
-      >
-        {machine.name}
-      </h3>
-
-      <p
-        style={{
-          fontFamily: F.body,
-          fontSize: "0.84rem",
-          color: C.taupe,
-          margin: "0 0 1.25rem",
-          lineHeight: 1.65,
-        }}
-      >
-        {machine.description}
-      </p>
-
-      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-        {machine.specs.map((spec, i) => (
-          <li
-            key={i}
-            style={{
-              fontFamily: F.body,
-              fontSize: "0.77rem",
-              color: C.warm,
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "0.5rem",
-              lineHeight: 1.5,
-            }}
-          >
-            <span style={{ color: C.saffron, fontWeight: 700, marginTop: "1px", flexShrink: 0 }}>·</span>
-            {spec}
-          </li>
-        ))}
-      </ul>
     </div>
+  );
+}
+
+// ————————————————————————————————————————————
+// Facility Gallery
+// ————————————————————————————————————————————
+function FacilityGallery() {
+  return (
+    <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2.5rem 5rem" }}>
+      <div style={{ textAlign: "center", marginBottom: "2.5rem" }} className="sr">
+        <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "1rem", color: C.taupe, margin: "0 0 0.75rem" }}>
+          Inside the Facility
+        </p>
+        <div style={{ width: "32px", height: "2px", background: C.charcoal, margin: "0 auto 1.25rem" }} />
+        <h2 style={{ fontFamily: F.display, fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)", fontWeight: 700, color: C.charcoal, margin: 0, lineHeight: 1.15 }}>
+          10,000 sq ft.{" "}
+          <em style={{ fontStyle: "italic", fontWeight: 500 }}>Purpose-Built.</em>
+        </h2>
+      </div>
+      <div className="fac-grid sr">
+        {FACILITY_SHOTS.map(({ src, label }) => (
+          <div key={src} className="fac-item">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={src} alt={label} loading="lazy" />
+            <div className="fac-caption">{label}</div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -457,6 +522,8 @@ export default function InfrastructurePage() {
           ))}
         </div>
       </section>
+
+      <FacilityGallery />
 
       {/* ——— Quality Section ——— */}
       <section
