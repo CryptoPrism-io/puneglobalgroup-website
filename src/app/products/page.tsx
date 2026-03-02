@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { SiteLogo } from "@/components/SiteLogo";
 
@@ -71,32 +71,62 @@ const CSS = `
     .cat-panel:hover { flex: 1 !important; }
     .cat-divider { width: 100%; height: 1px; }
   }
+  .prod-nav-links { display: flex; align-items: center; gap: 2rem; }
+  .prod-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer;
+    background: none; border: none; padding: 4px; }
+  .prod-hamburger span { display: block; width: 22px; height: 1.5px; background: ${C.charcoal}; transition: opacity 0.2s; }
+  .prod-dropdown { display: none; position: absolute; top: 68px; right: 0; left: 0;
+    background: ${C.cream}; border-bottom: 1px solid ${C.borderMid};
+    padding: 1rem clamp(1.5rem, 4vw, 3rem); flex-direction: column; gap: 0.85rem;
+    box-shadow: 0 4px 20px rgba(28,26,23,0.07); }
+  .prod-dropdown.open { display: flex; }
+  @media (max-width: 600px) {
+    .prod-nav-links { display: none !important; }
+    .prod-hamburger { display: flex !important; }
+  }
 `;
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", h, { passive: true });
     return () => window.removeEventListener("scroll", h);
   }, []);
   return (
-    <nav style={{
-      position: "sticky", top: 0, zIndex: 100, background: C.cream,
+    <nav style={{ position: "sticky", top: 0, zIndex: 100, background: C.cream,
       borderBottom: `1px solid ${scrolled ? C.borderMid : C.border}`,
       boxShadow: scrolled ? "0 1px 20px rgba(28,26,23,0.05)" : "none",
-      display: "flex", alignItems: "center", justifyContent: "space-between",
-      padding: "0 clamp(1.5rem, 4vw, 3rem)", height: "68px", transition: "all 0.3s ease",
-    }}>
-      <SiteLogo href="/" />
-      <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
-        <Link href="/infrastructure" className="nav-link">Infrastructure</Link>
-        <Link href="/blog" className="nav-link">Insights</Link>
-        <Link href="/#contact" style={{
+      transition: "all 0.3s ease" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "0 clamp(1.5rem, 4vw, 3rem)", height: "68px" }}>
+        <SiteLogo href="/" />
+        <div className="prod-nav-links">
+          <Link href="/infrastructure" className="nav-link">Infrastructure</Link>
+          <Link href="/blog" className="nav-link">Insights</Link>
+          <Link href="/#contact" style={{
+            fontFamily: F.body, fontSize: "0.78rem", fontWeight: 500,
+            letterSpacing: "0.09em", textTransform: "uppercase",
+            background: C.charcoal, color: C.cream,
+            padding: "9px 22px", borderRadius: "1px", textDecoration: "none",
+          }}>
+            Request a Quote →
+          </Link>
+        </div>
+        <button className="prod-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
+          <span /><span /><span />
+        </button>
+      </div>
+      <div className={`prod-dropdown${menuOpen ? " open" : ""}`}>
+        <Link href="/infrastructure" className="nav-link" onClick={() => setMenuOpen(false)}>Infrastructure</Link>
+        <Link href="/blog" className="nav-link" onClick={() => setMenuOpen(false)}>Insights</Link>
+        <Link href="/#contact" onClick={() => setMenuOpen(false)} style={{
           fontFamily: F.body, fontSize: "0.78rem", fontWeight: 500,
           letterSpacing: "0.09em", textTransform: "uppercase",
           background: C.charcoal, color: C.cream,
           padding: "9px 22px", borderRadius: "1px", textDecoration: "none",
+          alignSelf: "flex-start",
         }}>
           Request a Quote →
         </Link>
