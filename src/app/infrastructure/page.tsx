@@ -109,6 +109,7 @@ const GLOBAL_CSS = `
 
   /* Facility gallery */
   .fac-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  @media(max-width: 960px) { .hero-img-col { display: none !important; } .infra-hero-grid { grid-template-columns: 1fr !important; } }
   @media(max-width: 768px) { .fac-grid { grid-template-columns: repeat(2, 1fr); } }
   .fac-item { position: relative; border-radius: 4px; overflow: hidden; aspect-ratio: 4/3; }
   .fac-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.55s ease; }
@@ -341,93 +342,91 @@ export default function InfrastructurePage() {
           <rect width="100%" height="100%" filter="url(#grain-infra)" />
         </svg>
 
-        <div style={{ position: "relative", maxWidth: "860px", margin: "0 auto" }}>
-          {/* Eyebrow */}
-          <p
-            style={{
-              fontFamily: F.italic,
-              fontStyle: "italic",
-              fontSize: "1rem",
-              fontWeight: 400,
-              color: C.taupe,
-              margin: "0 0 1.5rem",
-              animation: "eyebrowIn 0.8s ease both",
-            }}
-          >
-            Converting Infrastructure
-          </p>
+        <div className="infra-hero-grid" style={{
+          position: "relative", maxWidth: "1400px", margin: "0 auto",
+          display: "grid", gridTemplateColumns: "1fr 1fr",
+          gap: "clamp(2rem,5vw,5rem)", alignItems: "center",
+        }}>
 
-          {/* Rule */}
-          <div
-            style={{
-              width: "48px",
-              height: "2px",
-              background: C.charcoal,
-              marginBottom: "1.5rem",
-              transformOrigin: "left",
-              animation: "ruleGrow 0.6s ease 0.2s both",
-            }}
-          />
+          {/* LEFT */}
+          <div>
+            <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "1rem",
+              fontWeight: 400, color: C.taupe, margin: "0 0 1.5rem",
+              animation: "eyebrowIn 0.8s ease both" }}>
+              Converting Infrastructure
+            </p>
 
-          <h1
-            style={{
-              fontFamily: F.display,
-              fontSize: "clamp(2.4rem, 5vw, 3.75rem)",
-              fontWeight: 700,
-              color: C.charcoal,
-              margin: "0 0 1.5rem",
-              lineHeight: 1.08,
-              animation: "fadeUp 0.8s ease 0.3s both",
-            }}
-          >
-            Built for Speed.{" "}
-            <br />
-            <em style={{ fontStyle: "italic", fontWeight: 500 }}>Engineered for Precision.</em>
-          </h1>
+            <div style={{ width: "48px", height: "2px", background: C.charcoal,
+              marginBottom: "1.5rem", transformOrigin: "left",
+              animation: "ruleGrow 0.6s ease 0.2s both" }} />
 
-          <p
-            style={{
-              fontFamily: F.body,
-              fontSize: "1.05rem",
-              color: C.warm,
-              lineHeight: 1.75,
-              margin: "0 0 2rem",
-              maxWidth: "620px",
-              animation: "fadeUp 0.8s ease 0.45s both",
-            }}
-          >
-            Our dedicated converting facility at BU Bhandari MIDC, Sanaswadi, Pune
-            processes up to{" "}
-            <strong style={{ color: C.saffron, fontFamily: F.display, fontWeight: 700 }}>200 tons per day</strong>
-            {" "}— rewinding, sheeting, slitting, and pallet wrapping for same-city
-            delivery or pan-India dispatch.
-          </p>
+            <h1 style={{ fontFamily: F.display, fontSize: "clamp(2.4rem, 5vw, 3.75rem)",
+              fontWeight: 700, color: C.charcoal, margin: "0 0 1.5rem",
+              lineHeight: 1.08, animation: "fadeUp 0.8s ease 0.3s both" }}>
+              Built for Speed.{" "}<br />
+              <em style={{ fontStyle: "italic", fontWeight: 500 }}>Engineered for Precision.</em>
+            </h1>
 
-          {/* Location badge */}
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.6rem",
-              background: C.parchment,
-              border: `1px solid ${C.borderMid}`,
-              borderRadius: "3px",
-              padding: "0.65rem 1.25rem",
-              animation: "fadeUp 0.7s ease 0.6s both",
-            }}
-          >
-            <span style={{ fontSize: "0.9rem" }}>📍</span>
-            <span
-              style={{
-                fontFamily: F.body,
-                fontSize: "0.84rem",
-                fontWeight: 500,
-                color: C.charcoal,
-              }}
-            >
-              108 BU Bhandari MIDC, Sanaswadi, Pune 412208
-            </span>
+            <p style={{ fontFamily: F.body, fontSize: "1.05rem", color: C.warm,
+              lineHeight: 1.75, margin: "0 0 2rem", maxWidth: "560px",
+              animation: "fadeUp 0.8s ease 0.45s both" }}>
+              Our dedicated converting facility at BU Bhandari MIDC, Sanaswadi, Pune
+              processes up to{" "}
+              <strong style={{ color: C.saffron, fontFamily: F.display, fontWeight: 700 }}>200 tons per day</strong>
+              {" "}— rewinding, sheeting, slitting, and pallet wrapping for same-city
+              delivery or pan-India dispatch.
+            </p>
+
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem",
+              background: C.parchment, border: `1px solid ${C.borderMid}`,
+              borderRadius: "3px", padding: "0.65rem 1.25rem",
+              animation: "fadeUp 0.7s ease 0.6s both" }}>
+              <span style={{ fontSize: "0.9rem" }}>📍</span>
+              <span style={{ fontFamily: F.body, fontSize: "0.84rem", fontWeight: 500, color: C.charcoal }}>
+                108 BU Bhandari MIDC, Sanaswadi, Pune 412208
+              </span>
+            </div>
           </div>
+
+          {/* RIGHT — rewinder image + capacity badge */}
+          <div className="hero-img-col" style={{
+            position: "relative",
+            height: "clamp(380px, 55vh, 560px)",
+            borderRadius: "10px",
+            overflow: "hidden",
+            boxShadow: "0 8px 48px rgba(28,26,23,0.10)",
+          }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/infrastructure/machines/rewinder-wide.jpg"
+              alt="PGG converting facility — rewinding machine, Pune"
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            />
+            <div style={{
+              position: "absolute", bottom: "1.5rem", right: "1.5rem",
+              background: "rgba(20,18,16,0.88)",
+              backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+              borderRadius: "8px", padding: "0.8rem 1.1rem",
+              display: "flex", alignItems: "center", gap: "0.75rem",
+              border: "1px solid rgba(250,247,242,0.10)",
+            }}>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <circle cx="9" cy="9" r="8" stroke="#F5A623" strokeWidth="1.5"/>
+                <polyline points="5,9 8,12 13,6" stroke="#F5A623" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <div>
+                <div style={{ fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
+                  textTransform: "uppercase", color: "rgba(250,247,242,0.45)", marginBottom: "3px" }}>
+                  Certified Facility
+                </div>
+                <div style={{ fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
+                  color: "#FAF7F2", letterSpacing: "0.01em" }}>
+                  ISO 9001:2015 · 200 TPD · MIDC Pune
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 

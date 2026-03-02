@@ -82,6 +82,7 @@ const CSS = `
   .btn-ghost:hover { background:${C.charcoal}; color:${C.cream}; }
 
   /* Responsive */
+  @media(max-width:960px) { .hero-img-col { display: none !important; } .hero-grid-paper { grid-template-columns: 1fr !important; } }
   @media(max-width:900px) { .grade-grid { grid-template-columns: repeat(2,1fr) !important; } }
   @media(max-width:580px) {
     .grade-grid { grid-template-columns: 1fr !important; }
@@ -439,43 +440,89 @@ export default function PaperBoardPage() {
 
       {/* Hero */}
       <section style={{ padding: "44px clamp(1.5rem, 5vw, 4rem) 36px", background: C.cream }}>
-        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-          <div className="fade-up d1" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "1.5rem" }}>
-            <span style={{
-              fontFamily: F.mono, fontSize: "0.65rem", fontWeight: 500,
-              color: C.kraft, background: C.kraftLight, border: `1px solid ${C.kraftMid}`,
-              padding: "4px 10px", borderRadius: "1px", letterSpacing: "0.1em",
-            }}>PAPER & BOARD GRADES</span>
-            <div className="rule-grow" style={{ flex: 1, height: "1px", background: C.border, maxWidth: "300px" }} />
-            <span style={{ fontFamily: F.body, fontSize: "0.65rem", color: C.taupe, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-              10 grades · 200–400 GSM · Ready stock
-            </span>
+        <div className="hero-grid-paper" style={{ maxWidth: "1400px", margin: "0 auto",
+          display: "grid", gridTemplateColumns: "1fr 1fr",
+          gap: "clamp(2rem,5vw,5rem)", alignItems: "center" }}>
+
+          {/* LEFT */}
+          <div>
+            <div className="fade-up d1" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "1.5rem" }}>
+              <span style={{
+                fontFamily: F.mono, fontSize: "0.65rem", fontWeight: 500,
+                color: C.kraft, background: C.kraftLight, border: `1px solid ${C.kraftMid}`,
+                padding: "4px 10px", borderRadius: "1px", letterSpacing: "0.1em",
+              }}>PAPER & BOARD GRADES</span>
+              <div className="rule-grow" style={{ flex: 1, height: "1px", background: C.border, maxWidth: "300px" }} />
+              <span style={{ fontFamily: F.body, fontSize: "0.65rem", color: C.taupe, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                10 grades · 200–400 GSM · Ready stock
+              </span>
+            </div>
+
+            <h1 className="fade-up d2" style={{
+              fontFamily: F.display, fontWeight: 700,
+              fontSize: "clamp(2rem, 4vw, 3.8rem)",
+              lineHeight: 1.05, color: C.charcoal, letterSpacing: "-0.028em",
+            }}>
+              Paper grades,
+              <br /><em style={{ fontWeight: 400, color: C.warm }}>press-ready.</em>
+            </h1>
+
+            <div style={{ height: "1px", background: C.borderMid, margin: "2rem 0" }} />
+
+            <p className="fade-up d3" style={{
+              fontFamily: F.body, fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)",
+              color: C.taupe, lineHeight: 1.85, maxWidth: "560px", fontWeight: 300,
+            }}>
+              Authorised distributor of ITC PSPD and TNPL board grades — FBB, duplex, kraft liner,
+              test liner and white top. Sheeted from reel to your exact press dimensions out of our
+              Pune warehouse.
+            </p>
+
+            <div className="fade-up d4" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "2.5rem" }}>
+              <Link href="/#contact" className="btn-kraft">Request Samples &amp; Pricing →</Link>
+              <Link href="/products" className="btn-ghost">← All Products</Link>
+            </div>
           </div>
 
-          <h1 className="fade-up d2" style={{
-            fontFamily: F.display, fontWeight: 700,
-            fontSize: "clamp(2rem, 4vw, 3.8rem)",
-            lineHeight: 1.05, color: C.charcoal, letterSpacing: "-0.028em", maxWidth: "820px",
+          {/* RIGHT — paper reel image + badge */}
+          <div className="hero-img-col" style={{
+            position: "relative",
+            height: "clamp(380px, 55vh, 560px)",
+            borderRadius: "10px",
+            overflow: "hidden",
+            boxShadow: "0 8px 48px rgba(28,26,23,0.10)",
           }}>
-            Paper grades,
-            <br /><em style={{ fontWeight: 400, color: C.warm }}>press-ready.</em>
-          </h1>
-
-          <div style={{ height: "1px", background: C.borderMid, margin: "2rem 0", maxWidth: "820px" }} />
-
-          <p className="fade-up d3" style={{
-            fontFamily: F.body, fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)",
-            color: C.taupe, lineHeight: 1.85, maxWidth: "560px", fontWeight: 300,
-          }}>
-            Authorised distributor of ITC PSPD and TNPL board grades — FBB, duplex, kraft liner,
-            test liner and white top. Sheeted from reel to your exact press dimensions out of our
-            Pune warehouse.
-          </p>
-
-          <div className="fade-up d4" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "2.5rem" }}>
-            <Link href="/#contact" className="btn-kraft">Request Samples & Pricing →</Link>
-            <Link href="/products" className="btn-ghost">← All Products</Link>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/products/paper/cyber-xlpac-gc1-reel.jpg"
+              alt="ITC PSPD paper board reel — ready for sheeting"
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            />
+            <div style={{
+              position: "absolute", bottom: "1.5rem", right: "1.5rem",
+              background: "rgba(20,18,16,0.88)",
+              backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+              borderRadius: "8px", padding: "0.8rem 1.1rem",
+              display: "flex", alignItems: "center", gap: "0.75rem",
+              border: "1px solid rgba(250,247,242,0.10)",
+            }}>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <circle cx="9" cy="9" r="8" stroke="#F5A623" strokeWidth="1.5"/>
+                <polyline points="5,9 8,12 13,6" stroke="#F5A623" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <div>
+                <div style={{ fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
+                  textTransform: "uppercase", color: "rgba(250,247,242,0.45)", marginBottom: "3px" }}>
+                  ITC PSPD Authorised Distributor
+                </div>
+                <div style={{ fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
+                  color: "#FAF7F2", letterSpacing: "0.01em" }}>
+                  FSC · BRC · ISO 9001:2015
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
       </section>
 
