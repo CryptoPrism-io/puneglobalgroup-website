@@ -221,71 +221,9 @@ const RECYCLED_GRADES = [
   },
 ];
 
-const OTHER_GRADES = [
-  {
-    code: "FBB",
-    slug: "itc-fbb-boards",
-    name: "ITC FBB Boards",
-    source: "Traded · ITC PSPD",
-    gsmRange: "230–400 GSM",
-    brands: "Cyber Oak · Cyber XLPac · PearlXL",
-    origin: "India (ITC)",
-    certifications: "FSC · ISO 9001 · BRC",
-    useCases: ["Pharma cartons (primary & secondary)", "FMCG retail packaging and POS displays"],
-    images: ["/products/paper/fbb-board.jpg", "/products/paper/fbb-board-2.jpg", "/products/paper/fbb-board-3.jpg"],
-  },
-  {
-    code: "DPX",
-    slug: "duplex-board",
-    name: "Duplex Board",
-    source: "Traded · Cut to Size",
-    gsmRange: "200–450 GSM",
-    brands: "Standard & premium grades",
-    origin: "India",
-    certifications: "BIS compliant",
-    useCases: ["Pharmaceutical secondary cartons", "FMCG mono-carton converting"],
-    images: ["/products/paper/duplex-board.jpg", "/products/paper/duplex-board-2.jpg", "/products/paper/duplex-board-3.jpg"],
-  },
-  {
-    code: "KLB",
-    slug: "kraft-liner",
-    name: "Kraft Liner Board",
-    source: "Traded · Imported",
-    gsmRange: "100–440 GSM",
-    brands: "Virgin kraft · Recycled kraft",
-    origin: "Imported (EU / SE Asia)",
-    certifications: "ISPM-15 exempt",
-    useCases: ["Heavy-duty export corrugated boxes", "Industrial packaging requiring high burst strength"],
-    images: ["/products/paper/kraft-liner.jpg", "/products/paper/kraft-liner-2.jpg", "/products/paper/kraft-liner-3.jpg"],
-  },
-  {
-    code: "TLF",
-    slug: "test-liners-fluting",
-    name: "Test Liners & Fluting",
-    source: "Traded · Recycled Fibre",
-    gsmRange: "80–400 GSM",
-    brands: "Standard recycled grades",
-    origin: "India",
-    certifications: "BIS IS 1763",
-    useCases: ["Corrugator feed for box manufacturers", "Secondary and tertiary transit packaging"],
-    images: ["/products/paper/test-liner.jpg", "/products/paper/test-liner-2.jpg", "/products/paper/test-liner-3.jpg"],
-  },
-  {
-    code: "WTK",
-    slug: "white-top-kraft-liner",
-    name: "White Top Kraft Liner",
-    source: "Traded · Print-Ready",
-    gsmRange: "120–200 GSM",
-    brands: "FSC certified grades",
-    origin: "Imported (Scandinavia)",
-    certifications: "FSC · EU food contact",
-    useCases: ["Retail-facing printed corrugated outers", "FMCG display-ready shipper cases"],
-    images: ["/products/paper/kraft-liner.jpg", "/products/paper/kraft-liner-2.jpg", "/products/paper/kraft-liner-3.jpg"],
-  },
-];
 
 const CAPS = [
-  { stat: "15",         label: "Board grades",    sub: "Virgin FBB · Recycled · Kraft · Duplex" },
+  { stat: "10",         label: "Board grades",    sub: "ITC PSPD Virgin FBB · Recycled" },
   { stat: "80–450",     label: "GSM range",        sub: "across all grades" },
   { stat: "Ready stock",label: "Pune warehouse",   sub: "fast turnaround" },
   { stat: "2–5 days",   label: "Lead time",        sub: "sheeted to size" },
@@ -510,7 +448,7 @@ export default function PaperBoardPage() {
             }}>PAPER & BOARD GRADES</span>
             <div className="rule-grow" style={{ flex: 1, height: "1px", background: C.border, maxWidth: "300px" }} />
             <span style={{ fontFamily: F.body, fontSize: "0.65rem", color: C.taupe, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-              15 grades · 80–450 GSM · Ready stock
+              10 grades · 200–400 GSM · Ready stock
             </span>
           </div>
 
@@ -602,21 +540,6 @@ export default function PaperBoardPage() {
           </div>
           <div className="grade-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.5rem", marginBottom: "3.5rem" }}>
             {RECYCLED_GRADES.map((g, i) => (
-              <GradeCard key={g.code} grade={g} delay={i * 0.07} />
-            ))}
-          </div>
-
-          {/* Other Grades */}
-          <div className="sr" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2rem" }}>
-            <span style={{
-              fontFamily: F.body, fontSize: "0.68rem", fontWeight: 600,
-              letterSpacing: "0.18em", textTransform: "uppercase", color: C.kraft, whiteSpace: "nowrap",
-            }}>Kraft · Duplex · Test Liner</span>
-            <div style={{ flex: 1, height: "1px", background: C.border }} />
-            <span style={{ fontFamily: F.mono, fontSize: "0.65rem", color: C.taupe, whiteSpace: "nowrap" }}>5 grades</span>
-          </div>
-          <div className="grade-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.5rem" }}>
-            {OTHER_GRADES.map((g, i) => (
               <GradeCard key={g.code} grade={g} delay={i * 0.07} />
             ))}
           </div>

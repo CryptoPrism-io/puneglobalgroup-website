@@ -995,10 +995,10 @@ function ProductsSection() {
       heading: "ITC · TNPL · Imported",
       desc: "Authorised distributor of ITC PSPD and TNPL board grades — FBB, duplex, kraft liner and test liner. We also supply PP corrugated sheets in standard and custom sizes from our Pune warehouse.",
       tags: [
-        { label: "ITC FBB", href: "/products/itc-fbb-boards" },
-        { label: "TNPL Grades", href: "/products/white-top-kraft-liner" },
-        { label: "Kraft Liner", href: "/products/kraft-liner" },
-        { label: "Duplex Board", href: "/products/duplex-board" },
+        { label: "Cyber XLPac", href: "/products/cyber-xlpac-gc1" },
+        { label: "Carte Lumina", href: "/products/carte-lumina" },
+        { label: "Safire Graphik", href: "/products/safire-graphik" },
+        { label: "Eco Natura", href: "/products/eco-natura" },
         { label: "PP Sheets", href: "/products/pp-corrugated" },
         { label: "Ready Stock", href: "/#contact" },
       ],
@@ -1077,34 +1077,6 @@ function ProductsSection() {
       desc: "High-performance recovered fibre board — engineered for blister card packaging. 220–390 GSM.",
       imgs: ["/products/paper/neowhite-bliss-hero.jpg", "/products/paper/neowhite-bliss-engineering.jpg", "/products/paper/neowhite-bliss-usecase.jpg"],
       slug: "neowhite-bliss",
-    },
-    {
-      name: "ITC FBB Boards",
-      spec: "Traded · Cyber Oak · Cyber XLPac",
-      desc: "ITC PSPD folding box boards — high stiffness, FSC certified, sheeted to press-ready sizes. 230–400 GSM.",
-      imgs: ["/products/paper/fbb-board.jpg", "/products/paper/fbb-board-2.jpg", "/products/paper/fbb-board-3.jpg"],
-      slug: "itc-fbb-boards",
-    },
-    {
-      name: "Duplex Board",
-      spec: "Traded · Cut to Size",
-      desc: "Coated duplex boards 200–450 GSM for pharma cartons and retail packaging. Sheeted from reel.",
-      imgs: ["/products/paper/duplex-board.jpg", "/products/paper/duplex-board-2.jpg", "/products/paper/duplex-board-3.jpg"],
-      slug: "duplex-board",
-    },
-    {
-      name: "Kraft Liner",
-      spec: "Traded · 100–440 GSM",
-      desc: "100% fresh fibre imported kraft liner for heavy-duty corrugated and export packaging.",
-      imgs: ["/products/paper/kraft-liner.jpg", "/products/paper/kraft-liner-2.jpg", "/products/paper/kraft-liner-3.jpg"],
-      slug: "kraft-liner",
-    },
-    {
-      name: "Test Liners & Fluting",
-      spec: "Traded · 80–400 GSM",
-      desc: "Recycled fibre test liners and fluting medium for corrugators and box manufacturers.",
-      imgs: ["/products/paper/test-liner.jpg", "/products/paper/test-liner-2.jpg", "/products/paper/test-liner-3.jpg"],
-      slug: "test-liners-fluting",
     },
   ];
 
@@ -2011,9 +1983,9 @@ function Footer() {
   const productLinks = [
     { label: "PP Corrugated Systems", href: "/products/pp-corrugated" },
     { label: "Paper & Board Grades",  href: "/products/paper-board" },
-    { label: "ITC FBB Boards",        href: "/products/itc-fbb-boards" },
-    { label: "Duplex Board",          href: "/products/duplex-board" },
-    { label: "Kraft Liner",           href: "/products/kraft-liner" },
+    { label: "Cyber XLPac GC1",       href: "/products/cyber-xlpac-gc1" },
+    { label: "Carte Lumina",          href: "/products/carte-lumina" },
+    { label: "Eco Natura",            href: "/products/eco-natura" },
   ];
   const industryLinks = [
     { label: "Automotive",     href: "/#industries" },
