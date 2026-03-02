@@ -82,6 +82,27 @@ const GLOBAL_CSS = `
   .hero-eyebrow-anim {
     animation: eyebrowSlide 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s both;
   }
+  @media (max-width: 768px) {
+    .products-grid {
+      display: flex !important;
+      flex-direction: column !important;
+      background: transparent !important;
+      gap: 12px !important;
+    }
+    .svc-card {
+      position: sticky;
+      border-radius: 10px !important;
+      box-shadow: 0 -2px 20px rgba(0,0,0,0.07);
+      padding: 1.5rem !important;
+    }
+    .svc-card:nth-child(1) { top: 58px; z-index: 1; }
+    .svc-card:nth-child(2) { top: 66px; z-index: 2; }
+    .svc-card:nth-child(3) { top: 74px; z-index: 3; }
+    .svc-num  { font-size: 2rem !important; margin-bottom: 0.75rem !important; line-height: 1 !important; }
+    .svc-heading { font-size: 1.05rem !important; margin-bottom: 0.6rem !important; }
+    .svc-desc { font-size: 0.86rem !important; line-height: 1.65 !important; margin-bottom: 1rem !important; }
+    .svc-cta  { font-size: 0.82rem !important; }
+  }
   @media (max-width: 520px) {
     .hero-eyebrow-anim { gap: 0.5rem !important; margin-bottom: 2rem !important; }
     .hero-eyebrow-divider { display: none !important; }
@@ -1042,7 +1063,7 @@ function ProductsSection() {
           style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px",
             background: C.borderMid, marginBottom: "4rem" }}>
           {lines.map((line, i) => (
-            <div key={line.eyebrow} className="sr" data-delay={`${0.1 * i}`}
+            <div key={line.eyebrow} className="sr svc-card" data-delay={`${0.1 * i}`}
               style={{
                 background: C.cream,
                 padding: "2.75rem",
@@ -1052,7 +1073,7 @@ function ProductsSection() {
               onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = "#fff"; }}
               onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = C.cream; }}>
 
-              <div className="sr prod-num-anim" data-delay={`${0.05 + 0.1 * i}`}
+              <div className="sr prod-num-anim svc-num" data-delay={`${0.05 + 0.1 * i}`}
                 style={{ fontFamily: F.display, fontWeight: 700, fontSize: "3.5rem",
                   color: C.saffron, lineHeight: 1, marginBottom: "1.5rem" }}>
                 {line.num}
@@ -1064,12 +1085,12 @@ function ProductsSection() {
                 {line.eyebrow}
               </span>
 
-              <h3 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1.4rem",
+              <h3 className="svc-heading" style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1.4rem",
                 color: C.charcoal, letterSpacing: "-0.01em", lineHeight: 1.2, marginBottom: "1rem" }}>
                 {line.heading}
               </h3>
 
-              <p style={{ fontFamily: F.body, fontSize: "1.08rem", color: C.warm,
+              <p className="svc-desc" style={{ fontFamily: F.body, fontSize: "1.08rem", color: C.warm,
                 lineHeight: 1.78, marginBottom: "1.5rem", flex: 1, fontWeight: 300 }}>
                 {line.desc}
               </p>
@@ -1097,7 +1118,7 @@ function ProductsSection() {
                 ))}
               </div>
 
-              <Link href={line.href} style={{
+              <Link href={line.href} className="svc-cta" style={{
                 display: "inline-flex", alignItems: "center", gap: "6px",
                 fontFamily: F.body, fontSize: "1.15rem", fontWeight: 500,
                 letterSpacing: "0.06em", color: C.charcoal, textDecoration: "none",
