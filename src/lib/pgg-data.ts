@@ -1248,6 +1248,15 @@ export const products: Product[] = [
   },
 ];
 
+/** Returns the canonical URL path for a product detail page. */
+export function productPath(slug: string): string {
+  const p = products.find(x => x.slug === slug);
+  if (!p) return `/products/${slug}`;
+  return p.category === "Paper & Board"
+    ? `/products/paper-board/${slug}`
+    : `/products/pp-corrugated/${slug}`;
+}
+
 // ============================================================
 // Blog Posts
 // ============================================================

@@ -320,7 +320,7 @@ function VariantCarousel({ images, name }: { images: [string, string, string]; n
 /* ─── Variant Card ───────────────────────────────────────────────────────────── */
 function VariantCard({ variant, delay }: { variant: PPVariant; delay: number }) {
   return (
-    <Link href={`/products/${variant.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column" }}>
+    <Link href={`/products/pp-corrugated/${variant.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column" }}>
       <div
         className="variant-card sr"
         style={{

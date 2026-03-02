@@ -486,7 +486,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
                   const thumb = (p.images?.[0]) ?? p.image ?? null;
                   const isPP = p.category === "PP Packaging";
                   return (
-                    <Link key={p.slug} href={`/products/${p.slug}`} style={{ textDecoration: "none", background: "#fff", border: `1px solid ${C.border}`, borderRadius: "4px", overflow: "hidden", display: "block", transition: "box-shadow 0.2s, transform 0.2s" }}
+                    <Link key={p.slug} href={p.category === "Paper & Board" ? `/products/paper-board/${p.slug}` : `/products/pp-corrugated/${p.slug}`} style={{ textDecoration: "none", background: "#fff", border: `1px solid ${C.border}`, borderRadius: "4px", overflow: "hidden", display: "block", transition: "box-shadow 0.2s, transform 0.2s" }}
                       onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(28,26,23,0.09)"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
                       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; (e.currentTarget as HTMLElement).style.transform = "none"; }}>
                       {thumb && (

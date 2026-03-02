@@ -365,7 +365,7 @@ function GradeCarousel({ images, name }: { images: string[]; name: string }) {
 /* ─── Grade Card ─────────────────────────────────────────────────────────────── */
 function GradeCard({ grade, delay }: { grade: typeof VIRGIN_GRADES[0]; delay: number }) {
   return (
-    <Link href={`/products/${grade.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column" }}>
+    <Link href={`/products/paper-board/${grade.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column" }}>
       <div
         className="grade-card sr"
         style={{

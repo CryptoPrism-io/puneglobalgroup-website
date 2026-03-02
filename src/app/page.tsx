@@ -7,6 +7,7 @@ import {
   IconChevronRight, IconMenu2, IconX, IconArrowRight, IconCircleCheck,
   IconLoader2, IconCar, IconPill, IconShoppingCart, IconTool,
 } from "@tabler/icons-react";
+import { productPath } from "@/lib/pgg-data";
 import { db } from "@/lib/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
@@ -831,7 +832,7 @@ function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
   }, [hovered, i, p.imgs.length]);
 
   return (
-    <Link href={`/products/${p.slug}`}
+    <Link href={productPath(p.slug)}
       className="sr product-card" data-delay={`${0.07 * i}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -953,7 +954,7 @@ function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
   }, [hovered, i, p.imgs.length]);
 
   return (
-    <Link href={`/products/${p.slug}`}
+    <Link href={productPath(p.slug)}
       className="sr product-card" data-delay={`${0.07 * i}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -1052,12 +1053,12 @@ function ProductsSection() {
       heading: "Trays · Separators · Boxes · Crates",
       desc: "We manufacture precision polypropylene packaging for automotive, pharma and electronics industries — industrial trays, separators, foldable boxes, crates and layer pads. Custom sizes. Export-ready documentation on every order.",
       tags: [
-        { label: "PP Trays", href: "/products/pp-tray-folded-corner" },
-        { label: "Separators", href: "/products/pp-sep-cross-partition" },
-        { label: "Foldable Boxes", href: "/products/pp-box-collapsible" },
-        { label: "PP Crates", href: "/products/pp-bin-scrap-open-top" },
-        { label: "Layer Pads", href: "/products/pp-layer-pad-heavy-duty" },
-        { label: "ESD Bins", href: "/products/pp-tray-esd-antistatic" },
+        { label: "PP Trays", href: "/products/pp-corrugated/pp-tray-folded-corner" },
+        { label: "Separators", href: "/products/pp-corrugated/pp-sep-cross-partition" },
+        { label: "Foldable Boxes", href: "/products/pp-corrugated/pp-box-collapsible" },
+        { label: "PP Crates", href: "/products/pp-corrugated/pp-bin-scrap-open-top" },
+        { label: "Layer Pads", href: "/products/pp-corrugated/pp-layer-pad-heavy-duty" },
+        { label: "ESD Bins", href: "/products/pp-corrugated/pp-tray-esd-antistatic" },
       ],
       href: "/products/pp-corrugated",
       cta: "View PP Products",
@@ -1084,10 +1085,10 @@ function ProductsSection() {
       heading: "ITC · TNPL · Imported",
       desc: "Authorised distributor of ITC PSPD and TNPL board grades — FBB, duplex, kraft liner and test liner. We also supply PP corrugated sheets in standard and custom sizes from our Pune warehouse.",
       tags: [
-        { label: "Cyber XLPac", href: "/products/cyber-xlpac-gc1" },
-        { label: "Carte Lumina", href: "/products/carte-lumina" },
-        { label: "Safire Graphik", href: "/products/safire-graphik" },
-        { label: "Eco Natura", href: "/products/eco-natura" },
+        { label: "Cyber XLPac", href: "/products/paper-board/cyber-xlpac-gc1" },
+        { label: "Carte Lumina", href: "/products/paper-board/carte-lumina" },
+        { label: "Safire Graphik", href: "/products/paper-board/safire-graphik" },
+        { label: "Eco Natura", href: "/products/paper-board/eco-natura" },
         { label: "PP Sheets", href: "/products/pp-corrugated" },
         { label: "Ready Stock", href: "/#contact" },
       ],
@@ -2039,9 +2040,9 @@ function Footer() {
   const productLinks = [
     { label: "PP Corrugated Systems", href: "/products/pp-corrugated" },
     { label: "Paper & Board Grades",  href: "/products/paper-board" },
-    { label: "Cyber XLPac GC1",       href: "/products/cyber-xlpac-gc1" },
-    { label: "Carte Lumina",          href: "/products/carte-lumina" },
-    { label: "Eco Natura",            href: "/products/eco-natura" },
+    { label: "Cyber XLPac GC1",       href: "/products/paper-board/cyber-xlpac-gc1" },
+    { label: "Carte Lumina",          href: "/products/paper-board/carte-lumina" },
+    { label: "Eco Natura",            href: "/products/paper-board/eco-natura" },
   ];
   const industryLinks = [
     { label: "Automotive",     href: "/#industries" },
