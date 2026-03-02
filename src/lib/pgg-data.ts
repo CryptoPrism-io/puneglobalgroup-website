@@ -798,6 +798,442 @@ export const products: Product[] = [
     certifications: ["ISO 9001"],
     image: "/products/pp/pp-esd-packaging-1.jpg",
   },
+
+  // ——————————————————————————————————————————
+  // PAD-02 — Heavy Duty Layer Pad
+  // ——————————————————————————————————————————
+  {
+    slug: "pp-layer-pad-heavy-duty",
+    name: "PP Heavy Duty Layer Pad",
+    category: "PP Packaging",
+    tagline: "4 mm PP corrugated layer pad for glass, automotive and high-load pallet stacking",
+    thickness: "4 mm single flute",
+    features: [
+      "Load capacity: up to 2 tonnes per layer",
+      "4 mm flute — higher compression resistance than standard 3 mm",
+      "Anti-slip embossed surface available",
+      "ISPM-15 exempt — no wood content, no fumigation required",
+    ],
+    applications: [
+      "Glass sheet and automotive component stacking",
+      "Heavy FMCG pallet separation",
+      "Export load building with high static loads",
+      "Cold chain pallet insulation layer",
+    ],
+    specsTable: [
+      { label: "Dimensions", value: "1000×1000 mm (custom available)" },
+      { label: "Sheet Thickness", value: "4 mm single flute PP corrugated" },
+      { label: "Colour", value: "Black (standard)" },
+      { label: "Reuse Cycles", value: "300–500 trips" },
+      { label: "Load per Layer", value: "Up to 2 tonnes" },
+      { label: "Weight", value: "~310 g per pad" },
+      { label: "MOQ", value: "100 units" },
+    ],
+    exportCompliance: [
+      "ISPM-15 exempt (no wood content)",
+      "REACH compliant",
+      "RoHS compliant",
+    ],
+    images: [
+      "/products/pp/layer-pads/layerpad-alt.jpg",
+      "/products/pp/layer-pads/layerpad-stacked.jpg",
+      "/products/pp/layer-pads/layerpad-hero.jpg",
+    ],
+  },
+
+  // ——————————————————————————————————————————
+  // TRY-01 — Folded Corner Tray
+  // ——————————————————————————————————————————
+  {
+    slug: "pp-tray-folded-corner",
+    name: "PP Folded Corner Tray",
+    category: "PP Packaging",
+    tagline: "No-tooling-cost PP corrugated fold-and-cut tray for assembly staging and WIP transfer",
+    thickness: "4 mm single flute",
+    features: [
+      "No tooling cost — fold-and-cut construction, no die required",
+      "Custom depth: 60–180 mm to order",
+      "Stackable open configuration for line-side storage",
+      "Printable base for part identification and barcode",
+    ],
+    applications: [
+      "Assembly line staging trays",
+      "WIP component transfer between cells",
+      "Inbound goods receiving trays",
+      "Returnable packaging for sub-assemblies",
+    ],
+    specsTable: [
+      { label: "Dimensions", value: "600×400×120 mm (custom available)" },
+      { label: "Sheet Thickness", value: "4 mm single flute PP corrugated" },
+      { label: "Joining", value: "Folded corner — no fastener" },
+      { label: "Colour", value: "Grey (standard)" },
+      { label: "Reuse Cycles", value: "60–100 trips" },
+      { label: "Custom Depth", value: "60–180 mm" },
+      { label: "MOQ", value: "50 units" },
+    ],
+    exportCompliance: ["REACH compliant", "RoHS compliant"],
+    images: [
+      "/products/pp/trays/tray-folded-corner-hero.jpg",
+      "/products/pp/trays/tray-folded-corner-cad.jpg",
+      "/products/pp/trays/tray-folded-corner-usecase1.jpg",
+    ],
+  },
+
+  // ——————————————————————————————————————————
+  // TRY-02 — Stackable Interlock Tray
+  // ——————————————————————————————————————————
+  {
+    slug: "pp-tray-stackable-interlock",
+    name: "PP Stackable Interlock Tray",
+    category: "PP Packaging",
+    tagline: "Interlocking rib PP tray engineered for 8-high pallet stacking and 20 kg dynamic loads",
+    thickness: "5 mm single flute",
+    features: [
+      "Interlock ribs prevent lateral shift at 6G — tested to 8-high stack",
+      "Load per tray: up to 20 kg dynamic",
+      "Fork/hand truck compatible reinforced base",
+      "5 mm flute for maximum compression resistance",
+    ],
+    applications: [
+      "Multi-level pallet stacking",
+      "Automotive component transport",
+      "Stacked storage in AS/RS racking systems",
+      "Returnable transit packaging for exports",
+    ],
+    specsTable: [
+      { label: "Dimensions", value: "600×400×120 mm (custom available)" },
+      { label: "Sheet Thickness", value: "5 mm single flute PP corrugated" },
+      { label: "Joining", value: "Interlock ribs" },
+      { label: "Max Stack Height", value: "8 trays loaded" },
+      { label: "Dynamic Load", value: "Up to 20 kg per tray" },
+      { label: "Colour", value: "Blue (standard)" },
+      { label: "Reuse Cycles", value: "80–150 trips" },
+      { label: "MOQ", value: "50 units" },
+    ],
+    exportCompliance: ["REACH compliant", "RoHS compliant"],
+    images: [
+      "/products/pp/trays/tray-stackable-interlocking-hero.jpg",
+      "/products/pp/trays/tray-stackable-interlocking-cad.jpg",
+      "/products/pp/trays/tray-stackable-interlocking-usecase1.jpg",
+    ],
+  },
+
+  // ——————————————————————————————————————————
+  // TRY-03 — Fixed Divider Tray
+  // ——————————————————————————————————————————
+  {
+    slug: "pp-tray-fixed-divider",
+    name: "PP Fixed Divider Tray",
+    category: "PP Packaging",
+    tagline: "Colour-coded PP corrugated kitting tray with rivet-and-slot fixed grid dividers",
+    thickness: "4 mm single flute",
+    features: [
+      "Fixed grid: 2×2 to 4×4 compartments — specify at order",
+      "Divider height: 80–110 mm to suit component depth",
+      "Colour-coded per BOM position for visual management",
+      "Compatible with SEP-01 cross partition inserts",
+    ],
+    applications: [
+      "Kitting and BOM assembly staging",
+      "Inspection and quality hold trays",
+      "Supermarket/line-feed systems",
+      "Component despatch in fixed-quantity sets",
+    ],
+    specsTable: [
+      { label: "Dimensions", value: "600×400×120 mm (custom available)" },
+      { label: "Sheet Thickness", value: "4 mm single flute PP corrugated" },
+      { label: "Joining", value: "Rivet + slot dividers" },
+      { label: "Grid Options", value: "2×2, 3×3, 4×4 (custom)" },
+      { label: "Divider Height", value: "80–110 mm" },
+      { label: "Colour", value: "Yellow (standard)" },
+      { label: "Reuse Cycles", value: "60–100 trips" },
+      { label: "MOQ", value: "50 units" },
+    ],
+    exportCompliance: ["REACH compliant", "RoHS compliant"],
+    images: [
+      "/products/pp/trays/tray-fixed-dividers-hero.jpg",
+      "/products/pp/trays/tray-fixed-dividers-cad.jpg",
+      "/products/pp/trays/tray-fixed-dividers-usecase1.jpg",
+    ],
+  },
+
+  // ——————————————————————————————————————————
+  // TRY-04 — Foam Laminated Tray
+  // ——————————————————————————————————————————
+  {
+    slug: "pp-tray-foam-laminated",
+    name: "PP Foam Laminated Tray",
+    category: "PP Packaging",
+    tagline: "EVA foam-laminated PP corrugated tray for vibration-sensitive optical and precision components",
+    thickness: "4 mm PP + 3 mm EVA",
+    features: [
+      "EVA foam: 30 Shore A — calibrated vibration damping",
+      "Shock absorption rating: up to 50G",
+      "CNC routed custom foam profile to component shape",
+      "Meets MIL-STD-2073 transit packaging requirements",
+    ],
+    applications: [
+      "Optical component and lens protection",
+      "Export vibration control for precision instruments",
+      "Medical device transit trays",
+      "Defence and aerospace component packaging",
+    ],
+    specsTable: [
+      { label: "Dimensions", value: "500×400×80 mm (custom available)" },
+      { label: "Shell Thickness", value: "4 mm single flute PP corrugated" },
+      { label: "Foam Layer", value: "3 mm EVA, 30 Shore A" },
+      { label: "Shock Rating", value: "Up to 50G absorption" },
+      { label: "Foam Profile", value: "CNC routed to component" },
+      { label: "Colour", value: "Grey + Black foam" },
+      { label: "Reuse Cycles", value: "50–80 trips" },
+      { label: "MOQ", value: "25 units" },
+    ],
+    exportCompliance: [
+      "MIL-STD-2073 compatible",
+      "REACH compliant",
+      "RoHS compliant",
+    ],
+    images: [
+      "/products/pp/trays/tray-foam-laminated-hero.jpg",
+      "/products/pp/trays/tray-foam-laminated-cad.jpg",
+      "/products/pp/trays/tray-foam-laminated-usecase1.jpg",
+    ],
+  },
+
+  // ——————————————————————————————————————————
+  // TRY-05 — ESD Anti-Static Tray
+  // ——————————————————————————————————————————
+  {
+    slug: "pp-tray-esd-antistatic",
+    name: "PP ESD Anti-Static Tray",
+    category: "PP Packaging",
+    tagline: "Conductive PP corrugated tray with 10⁴–10⁶ Ω/sq surface resistivity for PCB and electronics handling",
+    thickness: "4 mm conductive flute",
+    surfaceResistivity: "10⁴–10⁶ Ω/sq",
+    features: [
+      "Surface resistivity: 10⁴–10⁶ Ω/sq — ANSI/ESD S20.20 compatible",
+      "Conductive through-sheet — not a surface coating, does not wear off",
+      "Compatible with ESD-safe conveyor and grounded racking systems",
+      "Die-cut to tray form — no assembly seams",
+    ],
+    applications: [
+      "PCB and bare die transit",
+      "Electronics sub-assembly handling",
+      "Semiconductor component staging",
+      "ESD-controlled warehouse picking",
+    ],
+    specsTable: [
+      { label: "Dimensions", value: "450×350×50 mm (custom available)" },
+      { label: "Sheet Thickness", value: "4 mm conductive flute PP corrugated" },
+      { label: "Surface Resistivity", value: "10⁴–10⁶ Ω/sq" },
+      { label: "ESD Standard", value: "ANSI/ESD S20.20 compatible" },
+      { label: "Colour", value: "Black" },
+      { label: "Reuse Cycles", value: "60–100 trips" },
+      { label: "MOQ", value: "50 units" },
+    ],
+    exportCompliance: [
+      "ANSI/ESD S20.20 compatible",
+      "RoHS compliant",
+      "REACH compliant",
+      "IEC 61340-5-1 guideline compatible",
+    ],
+    certifications: ["ISO 9001"],
+    images: [
+      "/products/pp/trays/tray-esd-antistatic-hero.jpg",
+      "/products/pp/trays/tray-esd-antistatic-cad.jpg",
+      "/products/pp/trays/tray-esd-antistatic-usecase1.jpg",
+    ],
+  },
+
+  // ——————————————————————————————————————————
+  // BIN-01 — Open Top Scrap Bin
+  // ——————————————————————————————————————————
+  {
+    slug: "pp-bin-scrap-open-top",
+    name: "PP Open Top Scrap Bin",
+    category: "PP Packaging",
+    tagline: "900 mm tall riveted PP corrugated scrap bin for forklift environments and dry waste segregation",
+    thickness: "5 mm single flute",
+    features: [
+      "900 mm tall — high-volume scrap capacity for shift-end collection",
+      "Base plate reinforced for forklift tine entry",
+      "Printable surface for waste stream labelling and GHS compliance",
+      "Stacks 3-high when empty for return logistics",
+    ],
+    applications: [
+      "Factory scrap and swarf collection",
+      "Dry waste segregation at source",
+      "Recyclable material collection points",
+      "Warehouse returns and damaged goods segregation",
+    ],
+    specsTable: [
+      { label: "Dimensions", value: "500×500×900 mm (custom available)" },
+      { label: "Sheet Thickness", value: "5 mm single flute PP corrugated" },
+      { label: "Joining", value: "Rivet" },
+      { label: "Colour", value: "Green (standard)" },
+      { label: "Reuse Cycles", value: "100–200 trips" },
+      { label: "Base Reinforcement", value: "Forklift tine rated" },
+      { label: "MOQ", value: "25 units" },
+    ],
+    exportCompliance: ["REACH compliant", "RoHS compliant"],
+    images: [
+      "/products/pp/bins/bin-01-hero.jpg",
+      "/products/pp/bins/bin-01-engineering.jpg",
+      "/products/pp/bins/bin-01-usecase.jpg",
+    ],
+  },
+
+  // ——————————————————————————————————————————
+  // BIN-02 — Hopper Front Bin
+  // ——————————————————————————————————————————
+  {
+    slug: "pp-bin-hopper-front",
+    name: "PP Hopper Front Bin",
+    category: "PP Packaging",
+    tagline: "Kanban-compatible PP corrugated hopper bin for assembly line small-part picking and shelving",
+    thickness: "5 mm single flute",
+    features: [
+      "Hopper front panel — ergonomic part extraction without tipping",
+      "Label holder slot on front face — kanban and barcode compatible",
+      "Racking and shelving compatible — standard footprint",
+      "Modular: same footprint as BIN-03 for mixed-bin shelving rows",
+    ],
+    applications: [
+      "Assembly line small-part storage and picking",
+      "Kanban supermarket shelving",
+      "Warehouse bin racking systems",
+      "Maintenance spare parts storage",
+    ],
+    specsTable: [
+      { label: "Dimensions", value: "600×400×400 mm (custom available)" },
+      { label: "Sheet Thickness", value: "5 mm single flute PP corrugated" },
+      { label: "Joining", value: "Rivet" },
+      { label: "Colour", value: "Yellow (standard)" },
+      { label: "Reuse Cycles", value: "100–200 trips" },
+      { label: "Label Slot", value: "80×40 mm front face" },
+      { label: "MOQ", value: "25 units" },
+    ],
+    exportCompliance: ["REACH compliant", "RoHS compliant"],
+    images: [
+      "/products/pp/bins/bin-02-hero.jpg",
+      "/products/pp/bins/bin-02-engineering.jpg",
+      "/products/pp/bins/bin-02-usecase.jpg",
+    ],
+  },
+
+  // ——————————————————————————————————————————
+  // BIN-03 — Nesting Tapered Bin
+  // ——————————————————————————————————————————
+  {
+    slug: "pp-bin-nesting-tapered",
+    name: "PP Nesting Tapered Bin",
+    category: "PP Packaging",
+    tagline: "30% space-saving tapered PP corrugated bin — 10 units nest in 3× single-bin height for reverse logistics",
+    thickness: "5 mm single flute",
+    features: [
+      "Tapered walls — 30% nesting space saving vs straight-wall bins",
+      "Nest ratio: 10 bins in 3× single-bin height",
+      "Colour-coded for material stream segregation",
+      "Compatible with standard 1200×1000 mm pallet grid",
+    ],
+    applications: [
+      "Bulk scrap sorting and material segregation",
+      "Returnable logistics with high empty return volumes",
+      "Colour-coded waste streams (ISO 14001 compliant systems)",
+      "Inbound goods and goods-in receiving bins",
+    ],
+    specsTable: [
+      { label: "Dimensions", value: "600×450×400 mm (custom available)" },
+      { label: "Sheet Thickness", value: "5 mm single flute PP corrugated" },
+      { label: "Joining", value: "Rivet" },
+      { label: "Nest Ratio", value: "10 bins in 3× single-bin height" },
+      { label: "Colour", value: "Blue (standard); custom available" },
+      { label: "Reuse Cycles", value: "100–200 trips" },
+      { label: "MOQ", value: "25 units" },
+    ],
+    exportCompliance: ["REACH compliant", "RoHS compliant"],
+    images: [
+      "/products/pp/bins/bin-03-hero.jpg",
+      "/products/pp/bins/bin-03-engineering.jpg",
+      "/products/pp/bins/bin-03-usecase.jpg",
+    ],
+  },
+
+  // ——————————————————————————————————————————
+  // PKG-01 — Picking Bin
+  // ——————————————————————————————————————————
+  {
+    slug: "pp-picking-bin-open-front",
+    name: "PP Stackable Open Front Picking Bin",
+    category: "PP Packaging",
+    tagline: "Shelving-rail compatible PP corrugated open-front bin with interlocking stack for warehouse inventory picking",
+    thickness: "4 mm single flute",
+    features: [
+      "Open front — full contents visibility without removing from shelf",
+      "Interlocking stack — no lateral slip under vibration",
+      "Label window: 80×40 mm on front face for kanban or barcode",
+      "Shelving rail compatible — mounts directly to standard warehouse racking",
+    ],
+    applications: [
+      "Warehouse inventory shelving and order picking",
+      "Component picking in assembly supermarkets",
+      "Pharmacy and medical consumable storage",
+      "E-commerce fulfilment picking faces",
+    ],
+    specsTable: [
+      { label: "Dimensions", value: "500×350×300 mm (custom available)" },
+      { label: "Sheet Thickness", value: "4 mm single flute PP corrugated" },
+      { label: "Joining", value: "Rivet" },
+      { label: "Colour", value: "Industrial Blue (standard)" },
+      { label: "Reuse Cycles", value: "150–300 trips" },
+      { label: "Label Window", value: "80×40 mm front face" },
+      { label: "MOQ", value: "50 units" },
+    ],
+    exportCompliance: ["REACH compliant", "RoHS compliant"],
+    images: [
+      "/products/pp/picking-bins/pkgbin-01-hero.jpg",
+      "/products/pp/picking-bins/pkgbin-01-engineering.jpg",
+      "/products/pp/picking-bins/pkgbin-01-usecase.jpg",
+    ],
+  },
+
+  // ——————————————————————————————————————————
+  // FLR-01 — Flooring Protection Sheet
+  // ——————————————————————————————————————————
+  {
+    slug: "pp-flooring-protection-sheet",
+    name: "PP Temporary Floor Protection Sheet",
+    category: "PP Packaging",
+    tagline: "2.4 m × 1.2 m forklift-rated PP corrugated floor protection for construction, fit-out and warehouse paths",
+    thickness: "5 mm single flute",
+    features: [
+      "Covers 2.88 m² per sheet — fast full-floor coverage",
+      "Forklift rated: 2-tonne wheel load per sheet",
+      "Tape-jointed edge-to-edge for seamless large-area protection",
+      "Lightweight at ~800 g — one-person install, no cutting required",
+    ],
+    applications: [
+      "Construction site floor protection during fit-out",
+      "Warehouse forklift traffic path protection",
+      "Event and exhibition floor covering",
+      "Temporary protection over finished tiles and hardwood",
+    ],
+    specsTable: [
+      { label: "Dimensions", value: "2400×1200 mm (standard)" },
+      { label: "Sheet Thickness", value: "5 mm single flute PP corrugated" },
+      { label: "Coverage", value: "2.88 m² per sheet" },
+      { label: "Wheel Load Rating", value: "2 tonnes (forklift rated)" },
+      { label: "Colour", value: "Light Grey" },
+      { label: "Reuse Cycles", value: "10–30 trips" },
+      { label: "MOQ", value: "10 sheets" },
+    ],
+    exportCompliance: ["REACH compliant", "RoHS compliant"],
+    images: [
+      "/products/pp/flooring/flr-01-hero.jpg",
+      "/products/pp/flooring/flr-01-engineering.jpg",
+      "/products/pp/flooring/flr-01-usecase.jpg",
+    ],
+  },
 ];
 
 // ============================================================

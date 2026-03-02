@@ -255,7 +255,7 @@ export const ppFamilies: PPFamily[] = [
       },
       {
         code: "PAD-02",
-        slug: "pp-layer-pads",
+        slug: "pp-layer-pad-heavy-duty",
         name: "Heavy Duty Layer Pad",
         joining: "Single sheet — no join",
         dimensions: "1000×1000 mm",
@@ -288,7 +288,7 @@ export const ppFamilies: PPFamily[] = [
     variants: [
       {
         code: "TRY-01",
-        slug: "pp-corrugated-sheets",
+        slug: "pp-tray-folded-corner",
         name: "Folded Corner Tray",
         joining: "Folded corner",
         dimensions: "600×400×120 mm",
@@ -310,7 +310,7 @@ export const ppFamilies: PPFamily[] = [
       },
       {
         code: "TRY-02",
-        slug: "pp-corrugated-sheets",
+        slug: "pp-tray-stackable-interlock",
         name: "Stackable Interlock Tray",
         joining: "Interlock ribs",
         dimensions: "600×400×120 mm",
@@ -332,7 +332,7 @@ export const ppFamilies: PPFamily[] = [
       },
       {
         code: "TRY-03",
-        slug: "pp-corrugated-sheets",
+        slug: "pp-tray-fixed-divider",
         name: "Fixed Divider Tray",
         joining: "Rivet + slot dividers",
         dimensions: "600×400×120 mm",
@@ -354,7 +354,7 @@ export const ppFamilies: PPFamily[] = [
       },
       {
         code: "TRY-04",
-        slug: "pp-corrugated-sheets",
+        slug: "pp-tray-foam-laminated",
         name: "Foam Laminated Tray",
         joining: "Adhesive lamination",
         dimensions: "500×400×80 mm",
@@ -376,7 +376,7 @@ export const ppFamilies: PPFamily[] = [
       },
       {
         code: "TRY-05",
-        slug: "pp-corrugated-sheets",
+        slug: "pp-tray-esd-antistatic",
         name: "ESD Anti-Static Tray",
         joining: "Die-cut",
         dimensions: "450×350×50 mm",
@@ -409,7 +409,7 @@ export const ppFamilies: PPFamily[] = [
     variants: [
       {
         code: "BIN-01",
-        slug: "pp-corrugated-crates",
+        slug: "pp-bin-scrap-open-top",
         name: "Open Top Scrap Bin",
         joining: "Rivet",
         dimensions: "500×500×900 mm",
@@ -431,7 +431,7 @@ export const ppFamilies: PPFamily[] = [
       },
       {
         code: "BIN-02",
-        slug: "pp-corrugated-crates",
+        slug: "pp-bin-hopper-front",
         name: "Hopper Front Bin",
         joining: "Rivet",
         dimensions: "600×400×400 mm",
@@ -453,7 +453,7 @@ export const ppFamilies: PPFamily[] = [
       },
       {
         code: "BIN-03",
-        slug: "pp-corrugated-crates",
+        slug: "pp-bin-nesting-tapered",
         name: "Nesting Tapered Bin",
         joining: "Rivet",
         dimensions: "600×450×400 mm",
@@ -486,7 +486,7 @@ export const ppFamilies: PPFamily[] = [
     variants: [
       {
         code: "PKG-01",
-        slug: "pp-corrugated-crates",
+        slug: "pp-picking-bin-open-front",
         name: "Stackable Open Front Picking Bin",
         joining: "Rivet",
         dimensions: "500×350×300 mm",
@@ -519,7 +519,7 @@ export const ppFamilies: PPFamily[] = [
     variants: [
       {
         code: "FLR-01",
-        slug: "pp-corrugated-sheets",
+        slug: "pp-flooring-protection-sheet",
         name: "Temporary Protection Sheet",
         joining: "Single sheet",
         dimensions: "2400×1200 mm",
