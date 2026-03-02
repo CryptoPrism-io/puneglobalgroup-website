@@ -24,7 +24,7 @@ const F = {
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: ${C.cream}; color: ${C.charcoal}; font-family: ${F.body}; -webkit-font-smoothing: antialiased; }
+  body { background: ${C.cream}; color: ${C.charcoal}; font-family: ${F.body}; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
   body::before {
     content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9998; opacity: 0.018;
@@ -184,7 +184,7 @@ export default function ProductsPage() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/products/pp/boxes/box-01-hero.jpg" alt="PP Corrugated Systems" className="cat-img" />
 
-          <div style={{ position: "relative", zIndex: 2, padding: "clamp(2rem, 4vw, 3.5rem)" }}>
+          <div style={{ position: "relative", zIndex: 2, padding: "clamp(1.1rem, 4vw, 3.5rem)" }}>
             {/* Top rule */}
             <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.75rem" }}>
               <span style={{ fontFamily: F.mono, fontSize: "0.6rem", color: "rgba(250,247,242,0.38)", letterSpacing: "0.22em" }}>01</span>
@@ -198,7 +198,7 @@ export default function ProductsPage() {
 
             <h2 style={{
               fontFamily: F.display, fontWeight: 700,
-              fontSize: "clamp(2rem, 3.2vw, 3rem)",
+              fontSize: "clamp(1.4rem, 3.2vw, 3rem)",
               color: "#FAF7F2", lineHeight: 1.05, letterSpacing: "-0.024em", marginBottom: "1.25rem",
             }}>
               Boxes · Trays<br />
@@ -222,7 +222,7 @@ export default function ProductsPage() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/products/paper/fbb-board.jpg" alt="Paper & Board Grades" className="cat-img" />
 
-          <div style={{ position: "relative", zIndex: 2, padding: "clamp(2rem, 4vw, 3.5rem)" }}>
+          <div style={{ position: "relative", zIndex: 2, padding: "clamp(1.1rem, 4vw, 3.5rem)" }}>
             {/* Top rule */}
             <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.75rem" }}>
               <span style={{ fontFamily: F.mono, fontSize: "0.6rem", color: "rgba(250,247,242,0.38)", letterSpacing: "0.22em" }}>02</span>
@@ -236,7 +236,7 @@ export default function ProductsPage() {
 
             <h2 style={{
               fontFamily: F.display, fontWeight: 700,
-              fontSize: "clamp(2rem, 3.2vw, 3rem)",
+              fontSize: "clamp(1.4rem, 3.2vw, 3rem)",
               color: "#FAF7F2", lineHeight: 1.05, letterSpacing: "-0.024em", marginBottom: "1.25rem",
             }}>
               ITC · TNPL<br />
