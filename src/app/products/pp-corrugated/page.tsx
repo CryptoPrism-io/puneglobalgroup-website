@@ -111,10 +111,7 @@ const CSS = `
     white-space:nowrap; }
 
   /* Systems diagram */
-  .sys-node { transition: background 0.2s, border-color 0.2s, transform 0.18s; cursor:pointer; }
-  .sys-node:hover { background:${C.pp} !important; border-color:${C.pp} !important;
-    transform:translateY(-2px); }
-  .sys-node:hover * { color:${C.cream} !important; }
+  .sys-node-card { transition: background 0.2s, border-color 0.2s; }
 
   /* Family divider */
   .family-rule { display:flex; align-items:center; gap:1.5rem; margin-bottom:2.5rem; }
@@ -138,8 +135,8 @@ const CSS = `
   @media(max-width:900px) {
     .family-grid { grid-template-columns: repeat(2,1fr) !important; }
     .cap-grid { grid-template-columns: repeat(2,1fr) !important; }
-    .sys-flow { flex-direction:column !important; align-items:flex-start !important; }
-    .sys-arrow { transform:rotate(90deg); }
+    .sys-flow { flex-direction:column !important; align-items:stretch !important; }
+    .sys-flow > div { flex: 1 0 auto !important; width: 100%; }
     .lc-wrap { overflow-x:auto; }
   }
   @media(max-width:580px) {
@@ -450,83 +447,98 @@ function FamilySection({ family, index }: { family: typeof ppFamilies[0]; index:
 
 /* ─── Systems Diagram ────────────────────────────────────────────────────────── */
 const SYS_NODES = [
-  { label: "Raw Part",   sub: "Component in",  anchor: null },
-  { label: "Separator", sub: "SEP family",      anchor: "separators" },
-  { label: "Tray",      sub: "TRY family",      anchor: "trays" },
-  { label: "Box",       sub: "BOX family",      anchor: "boxes" },
-  { label: "Layer Pad", sub: "PAD family",      anchor: "layer-pads" },
-  { label: "Export",    sub: "Pallet out",      anchor: null },
+  { num: null,  label: "Your Part",   sub: "arrives at line",    desc: null,                              anchor: null,         endpoint: true  },
+  { num: "01",  label: "Separator",   sub: "SEP family",         desc: "Keeps parts isolated, scratch-free between layers",   anchor: "separators",  endpoint: false },
+  { num: "02",  label: "Tray",        sub: "TRY family",         desc: "Holds & organises components for transit",            anchor: "trays",       endpoint: false },
+  { num: "03",  label: "Box",         sub: "BOX family",         desc: "Contains trays — foldable, riveted or open-top",      anchor: "boxes",       endpoint: false },
+  { num: "04",  label: "Layer Pad",   sub: "PAD family",         desc: "Cushions & separates stacked pallet layers",          anchor: "layer-pads",  endpoint: false },
+  { num: null,  label: "Pallet Out",  sub: "export-ready",       desc: null,                              anchor: null,         endpoint: true  },
 ];
 
 function SystemsDiagram() {
   const scrollTo = (anchor: string | null) => {
     if (!anchor) return;
-    const el = document.getElementById(anchor);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
     <section style={{
-      padding: "4rem clamp(1.5rem, 5vw, 4rem)",
-      background: C.parchment, borderTop: `1px solid ${C.borderMid}`,
-      borderBottom: `1px solid ${C.borderMid}`,
+      padding: "4.5rem clamp(1.5rem, 5vw, 4rem)",
+      background: C.charcoal,
     }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-        <div className="sr" style={{ marginBottom: "0.75rem" }}>
-          <span style={{
-            fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600,
-            letterSpacing: "0.18em", textTransform: "uppercase", color: C.taupe,
-          }}>
-            How it works together
-          </span>
-        </div>
-        <h2 className="sr" style={{
-          fontFamily: F.display, fontSize: "clamp(1.5rem, 2.5vw, 2rem)",
-          fontWeight: 600, color: C.charcoal, marginBottom: "0.75rem", lineHeight: 1.2,
-        }}>
-          A Complete Component Library
-        </h2>
-        <p className="sr" style={{
-          fontFamily: F.body, fontSize: "0.9rem", color: C.taupe, lineHeight: 1.7,
-          maxWidth: "540px", fontWeight: 300, marginBottom: "2.5rem",
-        }}>
-          Every product family in our PP range is engineered to work with every other.
-          A single plant can run the full system.
-        </p>
 
-        {/* Flow */}
-        <div className="sys-flow sr" style={{ display: "flex", alignItems: "center", gap: "0", flexWrap: "wrap" }}>
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between",
+          flexWrap: "wrap", gap: "1rem", marginBottom: "3rem" }}>
+          <div>
+            <span style={{ fontFamily: F.body, fontSize: "0.62rem", fontWeight: 600,
+              letterSpacing: "0.2em", textTransform: "uppercase", color: C.saffron,
+              display: "block", marginBottom: "0.6rem" }}>
+              PP System Overview
+            </span>
+            <h2 style={{ fontFamily: F.display, fontSize: "clamp(1.5rem, 2.5vw, 2.1rem)",
+              fontWeight: 600, color: C.cream, lineHeight: 1.15, margin: 0 }}>
+              From Component to Export.<br />
+              <em style={{ fontWeight: 400, color: "rgba(250,247,242,0.55)" }}>One PP System.</em>
+            </h2>
+          </div>
+          <p style={{ fontFamily: F.body, fontSize: "0.88rem", color: "rgba(250,247,242,0.5)",
+            lineHeight: 1.75, fontWeight: 300, maxWidth: "380px", margin: 0 }}>
+            Every product family interlocks — separators nest in trays, trays stack in boxes,
+            boxes layer on pads. One supplier. Zero gaps.
+          </p>
+        </div>
+
+        {/* Flow row */}
+        <div className="sys-flow" style={{ display: "flex", alignItems: "stretch", gap: "0" }}>
           {SYS_NODES.map((node, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center" }}>
-              <div
-                className="sys-node"
-                onClick={() => scrollTo(node.anchor)}
-                style={{
-                  background: node.anchor ? "#fff" : C.parchment,
-                  border: `1px solid ${node.anchor ? C.borderStr : C.border}`,
-                  borderRadius: "2px",
-                  padding: "0.85rem 1.2rem",
-                  textAlign: "center",
-                  minWidth: "100px",
-                  cursor: node.anchor ? "pointer" : "default",
-                  opacity: node.anchor ? 1 : 0.55,
-                }}
-              >
-                <div style={{ fontFamily: F.body, fontSize: "0.82rem", fontWeight: 600, color: C.charcoal, lineHeight: 1.2 }}>
-                  {node.label}
+            <div key={i} style={{ display: "flex", alignItems: "center", flex: node.endpoint ? "0 0 auto" : 1 }}>
+
+              {/* Endpoint pill */}
+              {node.endpoint ? (
+                <div style={{ padding: "0.5rem 0.9rem", border: `1px solid rgba(250,247,242,0.15)`,
+                  borderRadius: "20px", textAlign: "center", opacity: 0.5 }}>
+                  <div style={{ fontFamily: F.body, fontSize: "0.72rem", fontWeight: 500,
+                    color: C.cream, whiteSpace: "nowrap" }}>{node.label}</div>
+                  <div style={{ fontFamily: F.mono, fontSize: "0.56rem", color: "rgba(250,247,242,0.45)",
+                    marginTop: "2px", whiteSpace: "nowrap" }}>{node.sub}</div>
                 </div>
-                <div style={{ fontFamily: F.mono, fontSize: "0.6rem", color: node.anchor ? C.pp : C.taupe, marginTop: "3px" }}>
-                  {node.sub}
+              ) : (
+                /* Product card */
+                <div className="sys-node-card" onClick={() => scrollTo(node.anchor)}
+                  style={{ flex: 1, cursor: "pointer", padding: "1.25rem 1rem",
+                    background: "rgba(250,247,242,0.04)", border: `1px solid rgba(250,247,242,0.1)`,
+                    borderRadius: "4px", display: "flex", flexDirection: "column", gap: "0.4rem",
+                    transition: "background 0.2s, border-color 0.2s",
+                    margin: "0 2px",
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLDivElement).style.background = "rgba(245,166,35,0.08)";
+                    (e.currentTarget as HTMLDivElement).style.borderColor = `rgba(245,166,35,0.45)`;
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLDivElement).style.background = "rgba(250,247,242,0.04)";
+                    (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(250,247,242,0.1)";
+                  }}>
+                  <span style={{ fontFamily: F.display, fontSize: "1.1rem", fontWeight: 700,
+                    color: C.saffron, lineHeight: 1 }}>{node.num}</span>
+                  <div style={{ fontFamily: F.body, fontSize: "0.88rem", fontWeight: 600,
+                    color: C.cream, lineHeight: 1.2 }}>{node.label}</div>
+                  <div style={{ fontFamily: F.mono, fontSize: "0.58rem", color: C.saffron,
+                    letterSpacing: "0.08em", textTransform: "uppercase" }}>{node.sub}</div>
+                  <div style={{ fontFamily: F.body, fontSize: "0.76rem", color: "rgba(250,247,242,0.5)",
+                    lineHeight: 1.5, fontWeight: 300, marginTop: "0.25rem" }}>{node.desc}</div>
                 </div>
-              </div>
+              )}
+
+              {/* Arrow */}
               {i < SYS_NODES.length - 1 && (
-                <div className="sys-arrow" style={{
-                  width: "32px", display: "flex", alignItems: "center", justifyContent: "center",
-                  flexShrink: 0,
-                }}>
-                  <svg width="24" height="10" viewBox="0 0 24 10" fill="none">
-                    <line x1="0" y1="5" x2="18" y2="5" stroke={C.borderStr} strokeWidth="1.5" />
-                    <polyline points="14,1 20,5 14,9" stroke={C.borderStr} strokeWidth="1.5" fill="none" strokeLinejoin="round" />
+                <div style={{ width: "28px", flexShrink: 0, display: "flex",
+                  alignItems: "center", justifyContent: "center" }}>
+                  <svg width="20" height="8" viewBox="0 0 20 8" fill="none">
+                    <line x1="0" y1="4" x2="14" y2="4" stroke="rgba(245,166,35,0.4)" strokeWidth="1.5"/>
+                    <polyline points="10,1 16,4 10,7" stroke="rgba(245,166,35,0.4)" strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
                   </svg>
                 </div>
               )}
@@ -534,11 +546,9 @@ function SystemsDiagram() {
           ))}
         </div>
 
-        <p className="sr" style={{
-          fontFamily: F.italic, fontStyle: "italic", fontSize: "0.84rem",
-          color: C.taupe, marginTop: "1.5rem",
-        }}>
-          Click any component above to jump to that product family.
+        <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "0.8rem",
+          color: "rgba(250,247,242,0.3)", marginTop: "1.5rem" }}>
+          Click any card to jump to that product family ↓
         </p>
       </div>
     </section>
