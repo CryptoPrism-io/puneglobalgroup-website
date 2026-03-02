@@ -581,7 +581,12 @@ function Hero() {
               letterSpacing: "0em", color: C.charcoal, marginTop: "0.18em",
             }}>
               Trusted{" "}
-              <span style={{ color: C.saffron, fontWeight: 600 }}>Across India.</span>
+              <span style={{
+                background: C.charcoal, color: C.cream,
+                fontWeight: 700, fontStyle: "normal",
+                padding: "0 10px 2px", borderRadius: "2px",
+                display: "inline-block",
+              }}>Across India.</span>
             </span>
           </h1>
 
