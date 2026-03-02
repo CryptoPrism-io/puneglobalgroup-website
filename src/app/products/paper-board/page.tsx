@@ -94,7 +94,134 @@ const CSS = `
 `;
 
 /* ─── Grade data ─────────────────────────────────────────────────────────────── */
-const GRADES = [
+
+const VIRGIN_GRADES = [
+  {
+    code: "GC1",
+    slug: "cyber-xlpac-gc1",
+    name: "Cyber XLPac GC1",
+    source: "ITC PSPD · Virgin FBB",
+    gsmRange: "200–400 GSM",
+    brands: "Cyber XLPac GC1",
+    origin: "India (ITC PSPD)",
+    certifications: "FSC · BRC · ISO 9001",
+    useCases: ["Pharma cartons (primary & secondary)", "Premium FMCG and liquor packaging"],
+    images: ["/products/paper/cyber-xlpac-gc1-hero.jpg", "/products/paper/cyber-xlpac-gc1-engineering.jpg", "/products/paper/cyber-xlpac-gc1-usecase.jpg"],
+  },
+  {
+    code: "GC2",
+    slug: "cyber-xlpac-gc2",
+    name: "Cyber XLPac GC2",
+    source: "ITC PSPD · Virgin FBB",
+    gsmRange: "200–400 GSM",
+    brands: "Cyber XLPac GC2",
+    origin: "India (ITC PSPD)",
+    certifications: "FSC · BRC · ISO 9001",
+    useCases: ["High-speed filling line applications", "FMCG products requiring reverse-side text"],
+    images: ["/products/paper/cyber-xlpac-gc2-hero.jpg", "/products/paper/cyber-xlpac-gc2-engineering.jpg", "/products/paper/cyber-xlpac-gc2-usecase.jpg"],
+  },
+  {
+    code: "CPM",
+    slug: "cyber-premium",
+    name: "Cyber Premium",
+    source: "ITC PSPD · Virgin FBB",
+    gsmRange: "200–400 GSM",
+    brands: "Cyber Premium",
+    origin: "India (ITC PSPD)",
+    certifications: "FSC · BRC · ISO 9001",
+    useCases: ["Liquor and spirits cartons", "Glass bottle outer packaging"],
+    images: ["/products/paper/cyber-premium-hero.jpg", "/products/paper/cyber-premium-engineering.jpg", "/products/paper/cyber-premium-usecase.jpg"],
+  },
+  {
+    code: "PXL",
+    slug: "pearlxl-packaging",
+    name: "PearlXL Packaging",
+    source: "ITC PSPD · Virgin FBB",
+    gsmRange: "200–400 GSM",
+    brands: "PearlXL",
+    origin: "India (ITC PSPD)",
+    certifications: "FSC · ISO 9001",
+    useCases: ["FMCG everyday packaging", "Pharma secondary packaging"],
+    images: ["/products/paper/pearlxl-packaging-hero.jpg", "/products/paper/pearlxl-packaging-engineering.jpg", "/products/paper/pearlxl-packaging-usecase.jpg"],
+  },
+  {
+    code: "CLM",
+    slug: "carte-lumina",
+    name: "Carte Lumina",
+    source: "ITC PSPD · Luxury Board",
+    gsmRange: "200–400 GSM",
+    brands: "Carte Lumina",
+    origin: "India (ITC PSPD)",
+    certifications: "FSC · BRC · ISO 9001",
+    useCases: ["Cosmetics and luxury brand packaging", "Perfume and fragrance cartons"],
+    images: ["/products/paper/carte-lumina-hero.jpg", "/products/paper/carte-lumina-engineering.jpg", "/products/paper/carte-lumina-usecase.jpg"],
+  },
+  {
+    code: "SFG",
+    slug: "safire-graphik",
+    name: "Safire Graphik",
+    source: "ITC PSPD · SBS Board",
+    gsmRange: "200–400 GSM",
+    brands: "Safire Graphik · Safire Graphik Duo",
+    origin: "India (ITC PSPD)",
+    certifications: "FSC · BRC · ISO 9001",
+    useCases: ["POP displays and retail shelf-ready packaging", "Greeting cards and book covers"],
+    images: ["/products/paper/safire-graphik-hero.jpg", "/products/paper/safire-graphik-engineering.jpg", "/products/paper/safire-graphik-usecase.jpg"],
+  },
+  {
+    code: "COK",
+    slug: "cyber-oak",
+    name: "Cyber Oak",
+    source: "ITC PSPD · Brownback FBB",
+    gsmRange: "230–370 GSM",
+    brands: "Cyber Oak · Cyber Oak Duo",
+    origin: "India (ITC PSPD)",
+    certifications: "FSC · ISO 9001",
+    useCases: ["FMCG brands with eco/sustainability positioning", "Consumer electronics cartons"],
+    images: ["/products/paper/cyber-oak-hero.jpg", "/products/paper/cyber-oak-engineering.jpg", "/products/paper/cyber-oak-usecase.jpg"],
+  },
+];
+
+const RECYCLED_GRADES = [
+  {
+    code: "ENT",
+    slug: "eco-natura",
+    name: "Eco Natura",
+    source: "ITC PSPD · Recycled Greyback",
+    gsmRange: "230–400 GSM",
+    brands: "Eco Natura · Fusion Eco Natura",
+    origin: "India (ITC PSPD)",
+    certifications: "FSC · ISO 9001",
+    useCases: ["FMCG and general-purpose carton packaging", "Cereal, dry food and toy boxes"],
+    images: ["/products/paper/eco-natura-hero.jpg", "/products/paper/eco-natura-engineering.jpg", "/products/paper/eco-natura-usecase.jpg"],
+  },
+  {
+    code: "EBL",
+    slug: "eco-blanca",
+    name: "Eco Blanca",
+    source: "ITC PSPD · Recycled Whiteback",
+    gsmRange: "210–390 GSM",
+    brands: "Eco Blanca",
+    origin: "India (ITC PSPD)",
+    certifications: "FSC · ISO 9001",
+    useCases: ["Hosiery and garment packaging", "Retail cartons needing clean white reverse"],
+    images: ["/products/paper/eco-blanca-hero.jpg", "/products/paper/eco-blanca-engineering.jpg", "/products/paper/eco-blanca-usecase.jpg"],
+  },
+  {
+    code: "NWB",
+    slug: "neowhite-bliss",
+    name: "NeoWhite Bliss",
+    source: "ITC PSPD · Recycled Blister Grade",
+    gsmRange: "220–390 GSM",
+    brands: "NeoWhite Bliss",
+    origin: "India (ITC PSPD)",
+    certifications: "FSC · ISO 9001",
+    useCases: ["Pharmaceutical blister card backing", "FMCG product packaging"],
+    images: ["/products/paper/neowhite-bliss-hero.jpg", "/products/paper/neowhite-bliss-engineering.jpg", "/products/paper/neowhite-bliss-usecase.jpg"],
+  },
+];
+
+const OTHER_GRADES = [
   {
     code: "FBB",
     slug: "itc-fbb-boards",
@@ -104,7 +231,6 @@ const GRADES = [
     brands: "Cyber Oak · Cyber XLPac · PearlXL",
     origin: "India (ITC)",
     certifications: "FSC · ISO 9001 · BRC",
-    desc: "Premium folding box board for pharma cartons, FMCG retail and luxury packaging. Virgin fibre, consistent brightness, press-ready sheeted sizes.",
     useCases: ["Pharma cartons (primary & secondary)", "FMCG retail packaging and POS displays"],
     images: ["/products/paper/fbb-board.jpg", "/products/paper/fbb-board-2.jpg", "/products/paper/fbb-board-3.jpg"],
   },
@@ -117,7 +243,6 @@ const GRADES = [
     brands: "Standard & premium grades",
     origin: "India",
     certifications: "BIS compliant",
-    desc: "Coated duplex board for pharmaceutical packaging, carton manufacturing and retail secondary packaging. Sheeted from reel to press-ready dimensions.",
     useCases: ["Pharmaceutical secondary cartons", "FMCG mono-carton converting"],
     images: ["/products/paper/duplex-board.jpg", "/products/paper/duplex-board-2.jpg", "/products/paper/duplex-board-3.jpg"],
   },
@@ -130,7 +255,6 @@ const GRADES = [
     brands: "Virgin kraft · Recycled kraft",
     origin: "Imported (EU / SE Asia)",
     certifications: "ISPM-15 exempt",
-    desc: "100% fresh fibre imported kraft liner for heavy-duty corrugated and export packaging. High burst and SCT strength for demanding transit applications.",
     useCases: ["Heavy-duty export corrugated boxes", "Industrial packaging requiring high burst strength"],
     images: ["/products/paper/kraft-liner.jpg", "/products/paper/kraft-liner-2.jpg", "/products/paper/kraft-liner-3.jpg"],
   },
@@ -143,7 +267,6 @@ const GRADES = [
     brands: "Standard recycled grades",
     origin: "India",
     certifications: "BIS IS 1763",
-    desc: "Recycled fibre test liners and fluting medium for corrugators and box manufacturers. Cost-effective choice for secondary and tertiary packaging.",
     useCases: ["Corrugator feed for box manufacturers", "Secondary and tertiary transit packaging"],
     images: ["/products/paper/test-liner.jpg", "/products/paper/test-liner-2.jpg", "/products/paper/test-liner-3.jpg"],
   },
@@ -156,14 +279,13 @@ const GRADES = [
     brands: "FSC certified grades",
     origin: "Imported (Scandinavia)",
     certifications: "FSC · EU food contact",
-    desc: "White coated top surface on kraft base — ideal for printed corrugated outer cases where retail shelf appeal matters. Direct print, offset and flexo compatible.",
     useCases: ["Retail-facing printed corrugated outers", "FMCG display-ready shipper cases"],
     images: ["/products/paper/kraft-liner.jpg", "/products/paper/kraft-liner-2.jpg", "/products/paper/kraft-liner-3.jpg"],
   },
 ];
 
 const CAPS = [
-  { stat: "5",          label: "Board grades",    sub: "FBB · Duplex · Kraft · Test · White Top" },
+  { stat: "15",         label: "Board grades",    sub: "Virgin FBB · Recycled · Kraft · Duplex" },
   { stat: "80–450",     label: "GSM range",        sub: "across all grades" },
   { stat: "Ready stock",label: "Pune warehouse",   sub: "fast turnaround" },
   { stat: "2–5 days",   label: "Lead time",        sub: "sheeted to size" },
@@ -388,7 +510,7 @@ export default function PaperBoardPage() {
             }}>PAPER & BOARD GRADES</span>
             <div className="rule-grow" style={{ flex: 1, height: "1px", background: C.border, maxWidth: "300px" }} />
             <span style={{ fontFamily: F.body, fontSize: "0.65rem", color: C.taupe, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-              5 grades · 80–450 GSM · Ready stock
+              15 grades · 80–450 GSM · Ready stock
             </span>
           </div>
 
@@ -453,22 +575,52 @@ export default function PaperBoardPage() {
       {/* Grade cards */}
       <section style={{ padding: "2.5rem clamp(1.5rem, 5vw, 4rem) 4rem", background: C.cream, borderTop: `1px solid ${C.border}` }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-          <div className="sr" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}>
+
+          {/* ITC PSPD Virgin Boards */}
+          <div className="sr" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2rem" }}>
             <span style={{
               fontFamily: F.body, fontSize: "0.68rem", fontWeight: 600,
               letterSpacing: "0.18em", textTransform: "uppercase", color: C.kraft, whiteSpace: "nowrap",
-            }}>Paper & Board Grades</span>
+            }}>ITC PSPD — Virgin Boards</span>
             <div style={{ flex: 1, height: "1px", background: C.border }} />
-            <span style={{ fontFamily: F.mono, fontSize: "0.65rem", color: C.taupe, whiteSpace: "nowrap" }}>
-              5 grades
-            </span>
+            <span style={{ fontFamily: F.mono, fontSize: "0.65rem", color: C.taupe, whiteSpace: "nowrap" }}>7 grades</span>
           </div>
-
-          <div className="grade-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.5rem" }}>
-            {GRADES.map((g, i) => (
-              <GradeCard key={g.code} grade={g} delay={i * 0.08} />
+          <div className="grade-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.5rem", marginBottom: "3.5rem" }}>
+            {VIRGIN_GRADES.map((g, i) => (
+              <GradeCard key={g.code} grade={g} delay={i * 0.07} />
             ))}
           </div>
+
+          {/* ITC PSPD Recycled Boards */}
+          <div className="sr" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2rem" }}>
+            <span style={{
+              fontFamily: F.body, fontSize: "0.68rem", fontWeight: 600,
+              letterSpacing: "0.18em", textTransform: "uppercase", color: C.kraft, whiteSpace: "nowrap",
+            }}>ITC PSPD — Recycled Boards</span>
+            <div style={{ flex: 1, height: "1px", background: C.border }} />
+            <span style={{ fontFamily: F.mono, fontSize: "0.65rem", color: C.taupe, whiteSpace: "nowrap" }}>3 grades</span>
+          </div>
+          <div className="grade-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.5rem", marginBottom: "3.5rem" }}>
+            {RECYCLED_GRADES.map((g, i) => (
+              <GradeCard key={g.code} grade={g} delay={i * 0.07} />
+            ))}
+          </div>
+
+          {/* Other Grades */}
+          <div className="sr" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2rem" }}>
+            <span style={{
+              fontFamily: F.body, fontSize: "0.68rem", fontWeight: 600,
+              letterSpacing: "0.18em", textTransform: "uppercase", color: C.kraft, whiteSpace: "nowrap",
+            }}>Kraft · Duplex · Test Liner</span>
+            <div style={{ flex: 1, height: "1px", background: C.border }} />
+            <span style={{ fontFamily: F.mono, fontSize: "0.65rem", color: C.taupe, whiteSpace: "nowrap" }}>5 grades</span>
+          </div>
+          <div className="grade-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.5rem" }}>
+            {OTHER_GRADES.map((g, i) => (
+              <GradeCard key={g.code} grade={g} delay={i * 0.07} />
+            ))}
+          </div>
+
         </div>
       </section>
 
