@@ -632,59 +632,59 @@ function MarqueeTicker() {
 /* ─── PP Product Grid (multi-image carousel + hover expand, matches Paper cards) ── */
 const PP_PRODUCTS = [
   {
-    name: "PP Foldable Boxes",
+    name: "PP Corrugated Boxes",
     spec: "Manufactured · Returnable",
-    desc: "Custom-manufactured foldable PP boxes for automotive trays and returnable industrial logistics. Exported globally.",
+    desc: "Six closure systems — riveted, ultrasonic weld, interlock, detachable lid, velcro and collapsible. Custom dimensions for automotive and pharma.",
     imgs: [
-      "/products/pp/pp-foldable-boxes-1.jpg",
-      "/products/pp/pp-foldable-boxes-2.jpg",
-      "/products/pp/pp-foldable-boxes-3.jpg",
+      "/products/pp/boxes/box-01-hero.jpg",
+      "/products/pp/boxes/box-01-engineering.jpg",
+      "/products/pp/boxes/box-01-usecase.jpg",
     ],
-    slug: "pp-foldable-boxes",
+    slug: "pp-box-open-top-riveted",
   },
   {
-    name: "PP Corrugated Sheets",
-    spec: "Manufactured · Custom Sizes",
-    desc: "Waterproof, UV-stable PP hollow corrugated sheets for layer pads, partition dividers and protective wrapping.",
+    name: "Separators & Inserts",
+    spec: "Manufactured · Precision Die-Cut",
+    desc: "Cross-partition grids and contour die-cut inserts — engineered to ±1 mm for glass, automotive and pharma component separation.",
     imgs: [
-      "/products/pp/pp-corrugated-sheets-1.jpg",
-      "/products/pp/pp-corrugated-sheets-2.jpg",
-      "/products/pp/pp-corrugated-sheets-3.jpg",
+      "/products/pp/separators/sep-01-hero.jpg",
+      "/products/pp/separators/sep-01-engineering.jpg",
+      "/products/pp/separators/sep-01-usecase.jpg",
     ],
-    slug: "pp-corrugated-sheets",
+    slug: "pp-sep-cross-partition",
   },
   {
-    name: "PP Corrugated Crates",
-    spec: "Manufactured · Heavy Duty",
-    desc: "Stackable returnable crates for automotive OEMs, engineering components and industrial material handling.",
+    name: "Industrial Bins",
+    spec: "Manufactured · Factory Floor",
+    desc: "Open top scrap bins, hopper front picking bins and nesting tapered bins — colour-coded, forklift-rated, kanban-compatible.",
     imgs: [
-      "/products/pp/pp-corrugated-crates-1.jpg",
-      "/products/pp/pp-corrugated-crates-2.jpg",
-      "/products/pp/pp-corrugated-crates-3.jpg",
+      "/products/pp/bins/bin-02-hero.jpg",
+      "/products/pp/bins/bin-02-engineering.jpg",
+      "/products/pp/bins/bin-02-usecase.jpg",
     ],
-    slug: "pp-corrugated-crates",
+    slug: "pp-bin-hopper-front",
   },
   {
     name: "PP Layer Pads",
     spec: "Manufactured · Pallet-Ready",
-    desc: "PP layer pads and slip sheets for pallet stacking, product separation and surface protection in transit.",
+    desc: "3–4 mm single-flute layer pads for pallet stacking, load separation and surface protection. 200–500 trip reuse cycle.",
     imgs: [
-      "/products/pp/pp-layer-pads-1.jpg",
-      "/products/pp/pp-layer-pads-2.jpg",
-      "/products/pp/pp-layer-pads-3.jpg",
+      "/products/pp/layer-pads/layerpad-hero.jpg",
+      "/products/pp/layer-pads/layerpad-engineering.jpg",
+      "/products/pp/layer-pads/layerpad-usecase.jpg",
     ],
     slug: "pp-layer-pads",
   },
   {
-    name: "ESD Packaging",
+    name: "ESD Anti-Static Trays",
     spec: "Manufactured · Anti-Static",
-    desc: "Anti-static PP bins and boxes for electronics manufacturers and PCB component handling. Export compliant.",
+    desc: "Conductive PP corrugated trays with 10⁴–10⁶ Ω/sq surface resistivity. ANSI/ESD S20.20 compatible for PCB and electronics handling.",
     imgs: [
-      "/products/pp/pp-esd-packaging-1.jpg",
-      "/products/pp/pp-esd-packaging-2.jpg",
-      "/products/pp/pp-esd-packaging-3.jpg",
+      "/products/pp/trays/tray-esd-antistatic-hero.jpg",
+      "/products/pp/trays/tray-esd-antistatic-cad.jpg",
+      "/products/pp/trays/tray-esd-antistatic-usecase1.jpg",
     ],
-    slug: "esd-packaging",
+    slug: "pp-tray-esd-antistatic",
   },
 ];
 
@@ -694,14 +694,21 @@ function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
 
   useEffect(() => {
     if (hovered) return;
-    let intervalId: ReturnType<typeof setInterval> | undefined;
-    const timeoutId = setTimeout(() => {
-      intervalId = setInterval(() => setIdx(c => (c + 1) % p.imgs.length), 1500);
-    }, i * 375);
-    return () => {
-      clearTimeout(timeoutId);
-      if (intervalId) clearInterval(intervalId);
+    let t: ReturnType<typeof setTimeout>;
+    const len = p.imgs.length;
+
+    const advance = (current: number) => {
+      const isLast = current === len - 1;
+      t = setTimeout(() => {
+        const next = (current + 1) % len;
+        setIdx(next);
+        advance(next);
+      }, isLast ? 3000 : 2000);
     };
+
+    // Stagger initial start so cards don't all switch simultaneously
+    const initT = setTimeout(() => advance(0), i * 700);
+    return () => { clearTimeout(t); clearTimeout(initT); };
   }, [hovered, i, p.imgs.length]);
 
   return (
@@ -720,10 +727,10 @@ function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
       }}>
       {/* Image area — expands on hover */}
       <div style={{
-        height: hovered ? "190px" : "110px",
+        height: hovered ? "240px" : "160px",
         overflow: "hidden",
         position: "relative",
-        transition: "height 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+        transition: "height 0.45s cubic-bezier(0.4, 0, 0.2, 1)",
         flexShrink: 0,
       }}>
         {p.imgs.map((src, j) => (
@@ -737,29 +744,28 @@ function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
               objectFit: "cover",
               display: "block",
               opacity: j === idx ? 1 : 0,
-              transition: "opacity 0.55s ease",
+              transition: "opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1)",
             }} />
         ))}
-        {/* Dot indicators — visible on hover */}
+        {/* Image index dots — always visible, subtler when not hovered */}
         <div style={{
           position: "absolute",
-          bottom: "8px",
+          bottom: "10px",
           left: "50%",
           transform: "translateX(-50%)",
           display: "flex",
-          gap: "4px",
-          opacity: hovered ? 1 : 0,
+          gap: "5px",
+          opacity: hovered ? 1 : 0.55,
           transition: "opacity 0.3s",
           zIndex: 2,
         }}>
           {p.imgs.map((_, j) => (
             <span key={j} style={{
-              width: "5px",
+              width: j === idx ? "16px" : "5px",
               height: "5px",
-              borderRadius: "50%",
-              background: j === idx ? "#fff" : "rgba(255,255,255,0.45)",
-              transition: "background 0.2s, transform 0.2s",
-              transform: j === idx ? "scale(1.3)" : "scale(1)",
+              borderRadius: "3px",
+              background: j === idx ? "#fff" : "rgba(255,255,255,0.5)",
+              transition: "width 0.35s ease, background 0.25s ease",
               display: "block",
             }} />
           ))}
@@ -926,8 +932,15 @@ function ProductsSection() {
       eyebrow: "PP Manufacturing — Core Business",
       heading: "Trays · Separators · Boxes · Crates",
       desc: "We manufacture precision polypropylene packaging for automotive, pharma and electronics industries — industrial trays, separators, foldable boxes, crates and layer pads. Custom sizes. Export-ready documentation on every order.",
-      tags: ["PP Trays", "Separators", "Foldable Boxes", "PP Crates", "Layer Pads", "ESD Bins"],
-      href: "/products",
+      tags: [
+        { label: "PP Trays", href: "/products/pp-tray-folded-corner" },
+        { label: "Separators", href: "/products/pp-sep-cross-partition" },
+        { label: "Foldable Boxes", href: "/products/pp-box-collapsible" },
+        { label: "PP Crates", href: "/products/pp-bin-scrap-open-top" },
+        { label: "Layer Pads", href: "/products/pp-layer-pads" },
+        { label: "ESD Bins", href: "/products/pp-tray-esd-antistatic" },
+      ],
+      href: "/products/pp-corrugated",
       cta: "View PP Products",
     },
     {
@@ -935,7 +948,14 @@ function ProductsSection() {
       eyebrow: "FBB Converting",
       heading: "Cut to Size. Press-Ready.",
       desc: "We cut FBB and board reels to your exact press sheet dimensions — sheeting, slitting, rewinding. Fast turnaround for printers, carton manufacturers and packaging converters across India.",
-      tags: ["FBB Sheeting", "Duplex Cutting", "Slitting", "Rewinding", "Custom Dimensions", "Low MOQ"],
+      tags: [
+        { label: "FBB Sheeting", href: "/infrastructure" },
+        { label: "Duplex Cutting", href: "/infrastructure" },
+        { label: "Slitting", href: "/infrastructure" },
+        { label: "Rewinding", href: "/infrastructure" },
+        { label: "Custom Dimensions", href: "/infrastructure" },
+        { label: "Low MOQ", href: "/#contact" },
+      ],
       href: "/infrastructure",
       cta: "See Converting Facility",
     },
@@ -944,7 +964,14 @@ function ProductsSection() {
       eyebrow: "Paper & PP Sheet Trading",
       heading: "ITC · TNPL · Imported",
       desc: "Authorised distributor of ITC PSPD and TNPL board grades — FBB, duplex, kraft liner and test liner. We also supply PP corrugated sheets in standard and custom sizes from our Pune warehouse.",
-      tags: ["ITC FBB", "TNPL Grades", "Kraft Liner", "Duplex Board", "PP Sheets", "Ready Stock"],
+      tags: [
+        { label: "ITC FBB", href: "/products/itc-fbb-boards" },
+        { label: "TNPL Grades", href: "/products/white-top-kraft-liner" },
+        { label: "Kraft Liner", href: "/products/kraft-liner" },
+        { label: "Duplex Board", href: "/products/duplex-board" },
+        { label: "PP Sheets", href: "/products/pp-corrugated-sheets" },
+        { label: "Ready Stock", href: "/#contact" },
+      ],
       href: "/products",
       cta: "Browse All Grades",
     },
@@ -1040,13 +1067,24 @@ function ProductsSection() {
 
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "2rem" }}>
                 {line.tags.map((t) => (
-                  <span key={t} style={{
+                  <Link key={t.label} href={t.href} onClick={(e) => e.stopPropagation()} style={{
                     fontFamily: F.body, fontSize: "0.68rem", padding: "3px 10px",
                     border: `1px solid ${C.borderMid}`, color: C.warm, borderRadius: "1px",
-                    letterSpacing: "0.02em",
+                    letterSpacing: "0.02em", textDecoration: "none",
+                    transition: "background 0.18s, border-color 0.18s, color 0.18s",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = C.charcoal;
+                    (e.currentTarget as HTMLAnchorElement).style.color = C.cream;
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = C.charcoal;
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "";
+                    (e.currentTarget as HTMLAnchorElement).style.color = C.warm;
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = C.borderMid;
                   }}>
-                    {t}
-                  </span>
+                    {t.label}
+                  </Link>
                 ))}
               </div>
 
