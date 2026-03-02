@@ -700,7 +700,7 @@ function LifecycleTable() {
 /* ─── Hero ───────────────────────────────────────────────────────────────────── */
 function Hero() {
   return (
-    <section className="hero-section" style={{ padding: "80px clamp(1.5rem, 5vw, 4rem) 72px", background: C.cream }}>
+    <section className="hero-section" style={{ padding: "48px clamp(1.5rem, 5vw, 4rem) 40px", background: C.cream }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
         {/* Breadcrumb tag */}
         <div className="fade-up d1" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}>
@@ -723,8 +723,8 @@ function Hero() {
         {/* Headline */}
         <h1 className="fade-up d2" style={{
           fontFamily: F.display, fontWeight: 700,
-          fontSize: "clamp(2.6rem, 6vw, 5.5rem)",
-          lineHeight: 1.0, color: C.charcoal,
+          fontSize: "clamp(2rem, 4vw, 3.8rem)",
+          lineHeight: 1.05, color: C.charcoal,
           letterSpacing: "-0.028em", maxWidth: "860px",
         }}>
           Industrial handling
@@ -788,14 +788,14 @@ export default function PPCorrugatedPage() {
       <Navbar />
       <Hero />
       <CapabilityBar />
-      <SystemsDiagram />
 
-      {/* Product families */}
+      {/* Product families — above the fold priority */}
       {ppFamilies.map((family, i) => (
         <FamilySection key={family.id} family={family} index={i} />
       ))}
 
       <LifecycleTable />
+      <SystemsDiagram />
 
       {/* Final CTA */}
       <section style={{

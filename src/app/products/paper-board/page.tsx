@@ -378,9 +378,9 @@ export default function PaperBoardPage() {
       <Navbar />
 
       {/* Hero */}
-      <section style={{ padding: "80px clamp(1.5rem, 5vw, 4rem) 72px", background: C.cream }}>
+      <section style={{ padding: "44px clamp(1.5rem, 5vw, 4rem) 36px", background: C.cream }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-          <div className="fade-up d1" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}>
+          <div className="fade-up d1" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "1.5rem" }}>
             <span style={{
               fontFamily: F.mono, fontSize: "0.65rem", fontWeight: 500,
               color: C.kraft, background: C.kraftLight, border: `1px solid ${C.kraftMid}`,
@@ -394,8 +394,8 @@ export default function PaperBoardPage() {
 
           <h1 className="fade-up d2" style={{
             fontFamily: F.display, fontWeight: 700,
-            fontSize: "clamp(2.6rem, 6vw, 5.5rem)",
-            lineHeight: 1.0, color: C.charcoal, letterSpacing: "-0.028em", maxWidth: "820px",
+            fontSize: "clamp(2rem, 4vw, 3.8rem)",
+            lineHeight: 1.05, color: C.charcoal, letterSpacing: "-0.028em", maxWidth: "820px",
           }}>
             Paper grades,
             <br /><em style={{ fontWeight: 400, color: C.warm }}>press-ready.</em>
@@ -451,7 +451,7 @@ export default function PaperBoardPage() {
       </section>
 
       {/* Grade cards */}
-      <section style={{ padding: "4rem clamp(1.5rem, 5vw, 4rem)", background: C.cream, borderTop: `1px solid ${C.border}` }}>
+      <section style={{ padding: "2.5rem clamp(1.5rem, 5vw, 4rem) 4rem", background: C.cream, borderTop: `1px solid ${C.border}` }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
           <div className="sr" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}>
             <span style={{
