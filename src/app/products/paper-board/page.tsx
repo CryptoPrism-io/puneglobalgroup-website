@@ -494,9 +494,9 @@ export default function PaperBoardPage() {
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/products/paper/cyber-xlpac-gc1-reel.jpg"
-              alt="ITC PSPD paper board reel — ready for sheeting"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              src="/hero-paper-family.jpg"
+              alt="Premium paper and board grades — ITC PSPD reels and cut sheets"
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "blur(1.5px)", transform: "scale(1.03)" }}
             />
             <div style={{
               position: "absolute", bottom: "1.5rem", right: "1.5rem",

@@ -398,9 +398,9 @@ export default function InfrastructurePage() {
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/infrastructure/machines/rewinder-wide.jpg"
-              alt="PGG converting facility — rewinding machine, Pune"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              src="/hero-infrastructure.jpg"
+              alt="PGG converting facility — rewinder, sheeter and guillotine, MIDC Pune"
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "blur(1.5px)", transform: "scale(1.03)" }}
             />
             <div style={{
               position: "absolute", bottom: "1.5rem", right: "1.5rem",

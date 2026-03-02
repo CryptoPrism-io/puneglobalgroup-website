@@ -640,9 +640,9 @@ function Hero() {
         }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/hero-industry.jpg"
-            alt="PGG industrial PP packaging facility — Pune"
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            src="/hero-homepage-v2.jpg"
+            alt="PGG industrial packaging facility — PP corrugated and paper reels, Pune"
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "blur(1.5px)", transform: "scale(1.03)" }}
           />
 
           {/* Certification badge overlay */}

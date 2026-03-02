@@ -651,9 +651,9 @@ function Hero() {
         }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/products/pp/boxes/box-01-hero.jpg"
-            alt="PP corrugated box — precision industrial packaging"
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            src="/hero-pp-family.jpg"
+            alt="PP corrugated product family — boxes, trays, bins, layer pads, separators"
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "blur(1.5px)", transform: "scale(1.03)" }}
           />
           <div style={{
             position: "absolute", bottom: "1.5rem", right: "1.5rem",
