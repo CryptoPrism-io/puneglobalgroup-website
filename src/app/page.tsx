@@ -82,6 +82,12 @@ const GLOBAL_CSS = `
   .hero-eyebrow-anim {
     animation: eyebrowSlide 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s both;
   }
+  @media (max-width: 520px) {
+    .hero-eyebrow-anim { gap: 0.5rem !important; margin-bottom: 2rem !important; }
+    .hero-eyebrow-divider { display: none !important; }
+    .hero-eyebrow-est { display: none !important; }
+    .hero-eyebrow-text { white-space: normal !important; font-size: 0.95rem !important; }
+  }
   .hero-h1-line1 {
     display: block;
     animation: heroFadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.22s both;
