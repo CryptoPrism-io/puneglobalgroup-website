@@ -51,14 +51,14 @@ const CSS = `
   .cat-panel:hover { flex: 1.22; }
   .cat-panel .cat-img {
     position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-    filter: brightness(0.38);
+    filter: brightness(0.62);
     transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1), filter 0.5s ease;
   }
-  .cat-panel:hover .cat-img { transform: scale(1.05); filter: brightness(0.30); }
+  .cat-panel:hover .cat-img { transform: scale(1.05); filter: brightness(0.52); }
   .cat-panel::after {
     content: ''; position: absolute; left: 0; right: 0; bottom: 0;
-    height: 65%; pointer-events: none; z-index: 1;
-    background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.33) 100%);
+    height: 75%; pointer-events: none; z-index: 1;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.82) 100%);
   }
   .cat-divider { width: 1px; background: rgba(250,247,242,0.12); flex-shrink: 0; }
   .cat-cta {
