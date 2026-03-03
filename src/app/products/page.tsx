@@ -184,7 +184,7 @@ const CSS = `
 `;
 
 const PP_COMPOSITE   = "/hero-pp-family.jpg";
-const PAPER_COMPOSITE = "/products-paper-composite.jpg";
+const PAPER_COMPOSITE = "/hero-paper-family.jpg";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);

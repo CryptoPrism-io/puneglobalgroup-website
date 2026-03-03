@@ -1212,7 +1212,7 @@ function ProductsSection() {
 /* ─── Infrastructure Callout ─────────────────────────────────────────────────── */
 function InfraCallout() {
   const metrics = [
-    { value: "200 T/Day", label: "Processing Capacity" },
+    { value: "50 T/Day", label: "Processing Capacity" },
     { value: "±0.3 mm",  label: "Sheet Tolerance" },
     { value: "2500 mm",  label: "Max Reel Width" },
     { value: "15400 mm", label: "Max Sheet Length" },
@@ -1482,7 +1482,7 @@ function SocialProofSection() {
             { val: "500+",   lbl: "Active Clients" },
             { val: "30 yrs", lbl: "In Operation"   },
             { val: "21",     lbl: "States Served"  },
-            { val: "200 T",  lbl: "Daily Capacity" },
+            { val: "50 T",  lbl: "Daily Capacity" },
           ].map(({ val, lbl }, i) => (
             <div key={lbl} style={{
               paddingRight: "3rem", marginRight: i < 3 ? "3rem" : 0,
@@ -1750,7 +1750,7 @@ function AboutSection() {
                 { stat: "1995",    label: "Year Established" },
                 { stat: "500+",   label: "Active Clients" },
                 { stat: "40+",    label: "Paper Grades Stocked" },
-                { stat: "200 T",  label: "Daily Processing Capacity" },
+                { stat: "50 T",  label: "Daily Processing Capacity" },
               ].map((item) => (
                 <div key={item.label} style={{
                   display: "flex", justifyContent: "space-between",
