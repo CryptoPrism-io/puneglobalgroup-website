@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { SiteLogo } from "@/components/SiteLogo";
 
 const C = {
   cream:     "#FAF7F2",
@@ -243,78 +242,6 @@ function useScrollReveal() {
   }, []);
 }
 
-/* ─── Navbar ─────────────────────────────────────────────────────────────────── */
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", h, { passive: true });
-    return () => window.removeEventListener("scroll", h);
-  }, []);
-  return (
-    <nav style={{
-      position: "sticky", top: 0, zIndex: 100, background: C.cream,
-      borderBottom: `1px solid ${scrolled ? C.borderMid : C.border}`,
-      boxShadow: scrolled ? "0 1px 20px rgba(28,26,23,0.05)" : "none",
-      transition: "all 0.3s ease",
-    }}>
-      <div style={{
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 clamp(1rem, 3vw, 2.5rem)", height: "68px",
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
-          <Link href="/products" style={{ display: "flex", alignItems: "center", gap: "0.4rem", textDecoration: "none" }}>
-            <span style={{ fontFamily: F.body, fontSize: "0.82rem", color: C.taupe }}>←</span>
-            <span style={{ fontFamily: F.body, fontSize: "0.82rem", color: C.taupe }}>Products</span>
-          </Link>
-          <span style={{ color: C.border, fontSize: "1.2rem" }}>|</span>
-          <SiteLogo href="/" />
-        </div>
-        <div className="nav-desktop-links" style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
-          <Link href="/infrastructure" className="nav-link">Infrastructure</Link>
-          <Link href="/blog" className="nav-link">Blog</Link>
-          <Link href="/#contact" className="btn-kraft" style={{ padding: "9px 22px", fontSize: "0.74rem" }}>
-            Request a Quote →
-          </Link>
-        </div>
-        {/* Hamburger button — visible only when nav-desktop-links is hidden */}
-        <button
-          className="nav-hamburger"
-          onClick={() => setMenuOpen(o => !o)}
-          aria-label="Toggle menu"
-          style={{
-            display: "none", background: "none", border: `1px solid ${C.borderMid}`,
-            borderRadius: "2px", padding: "7px 9px", cursor: "pointer", flexDirection: "column",
-            gap: "4px", alignItems: "center", justifyContent: "center",
-          }}
-        >
-          <span style={{ display: "block", width: "18px", height: "1.5px", background: C.charcoal }} />
-          <span style={{ display: "block", width: "18px", height: "1.5px", background: C.charcoal }} />
-          <span style={{ display: "block", width: "18px", height: "1.5px", background: C.charcoal }} />
-        </button>
-      </div>
-      {/* Mobile dropdown */}
-      {menuOpen && (
-        <div style={{
-          position: "absolute", top: "68px", left: 0, right: 0,
-          background: C.cream, borderBottom: `1px solid ${C.borderMid}`,
-          boxShadow: "0 8px 24px rgba(28,26,23,0.08)",
-          display: "flex", flexDirection: "column", padding: "1rem clamp(1rem, 3vw, 2.5rem)",
-          gap: "1rem", zIndex: 99,
-        }}>
-          <Link href="/infrastructure" className="nav-link" onClick={() => setMenuOpen(false)}>Infrastructure</Link>
-          <Link href="/blog" className="nav-link" onClick={() => setMenuOpen(false)}>Blog</Link>
-          <Link href="/#contact" className="btn-kraft" onClick={() => setMenuOpen(false)}
-            style={{ padding: "11px 22px", fontSize: "0.74rem", textAlign: "center" }}>
-            Request a Quote →
-          </Link>
-        </div>
-      )}
-    </nav>
-  );
-}
-
 /* ─── Grade Image Carousel ───────────────────────────────────────────────────── */
 function GradeCarousel({ images, name }: { images: string[]; name: string }) {
   const [idx, setIdx] = useState(0);
@@ -434,9 +361,8 @@ export default function PaperBoardPage() {
   useScrollReveal();
 
   return (
-    <div style={{ background: C.cream, minHeight: "100vh" }}>
+    <div style={{ background: C.cream, minHeight: "100vh", paddingTop: "70px" }}>
       <style>{CSS}</style>
-      <Navbar />
 
       {/* Hero */}
       <section style={{ padding: "44px clamp(1.5rem, 5vw, 4rem) 36px", background: C.cream }}>

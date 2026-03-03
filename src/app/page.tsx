@@ -4,7 +4,7 @@ import { useState, useEffect, FormEvent } from "react";
 import Link from "next/link";
 import {
   IconPhone, IconMail, IconMapPin, IconBuildingFactory2, IconPackage, IconStack2,
-  IconChevronRight, IconMenu2, IconX, IconArrowRight, IconCircleCheck,
+  IconChevronRight, IconArrowRight, IconCircleCheck,
   IconLoader2, IconCar, IconPill, IconShoppingCart, IconTool,
 } from "@tabler/icons-react";
 import { productPath } from "@/lib/pgg-data";
@@ -129,11 +129,17 @@ const GLOBAL_CSS = `
     width: 100%; height: 100%; object-fit: cover;
     display: block;
   }
-  .hero-carousel-img:nth-child(1) { animation: heroSlide1 25s linear infinite 0s;   }
-  .hero-carousel-img:nth-child(2) { animation: heroSlide2 25s linear infinite -20s;  }
-  .hero-carousel-img:nth-child(3) { animation: heroSlide1 25s linear infinite -15s;  }
-  .hero-carousel-img:nth-child(4) { animation: heroSlide2 25s linear infinite -10s;  }
-  .hero-carousel-img:nth-child(5) { animation: heroSlide1 25s linear infinite -5s;   }
+  /* 10-image carousel — 50s cycle, 5s stagger each */
+  .hero-carousel-img:nth-child(1)  { animation: heroSlide1 50s linear infinite 0s;   }
+  .hero-carousel-img:nth-child(2)  { animation: heroSlide2 50s linear infinite -45s;  }
+  .hero-carousel-img:nth-child(3)  { animation: heroSlide1 50s linear infinite -40s;  }
+  .hero-carousel-img:nth-child(4)  { animation: heroSlide2 50s linear infinite -35s;  }
+  .hero-carousel-img:nth-child(5)  { animation: heroSlide1 50s linear infinite -30s;  }
+  .hero-carousel-img:nth-child(6)  { animation: heroSlide2 50s linear infinite -25s;  }
+  .hero-carousel-img:nth-child(7)  { animation: heroSlide1 50s linear infinite -20s;  }
+  .hero-carousel-img:nth-child(8)  { animation: heroSlide2 50s linear infinite -15s;  }
+  .hero-carousel-img:nth-child(9)  { animation: heroSlide1 50s linear infinite -10s;  }
+  .hero-carousel-img:nth-child(10) { animation: heroSlide2 50s linear infinite -5s;   }
   @media (max-width: 768px) {
     .products-grid {
       display: flex !important;
@@ -452,106 +458,6 @@ function useScrollReveal() {
   }, []);
 }
 
-/* ─── Navbar ─────────────────────────────────────────────────────────────────── */
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", handler, { passive: true });
-    return () => window.removeEventListener("scroll", handler);
-  }, []);
-
-  const links = [
-    { label: "Products",       href: "/products" },
-    { label: "Infrastructure", href: "/infrastructure" },
-    { label: "Blog",           href: "/blog" },
-    { label: "About",          href: "#about" },
-    { label: "Contact",        href: "#contact" },
-  ];
-
-  const scrollTo = (href: string) => {
-    setMobileOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  return (
-    <>
-      <nav
-        className={scrolled ? "navbar-scrolled" : ""}
-        style={{
-          position: "fixed", top: 0, left: 0, right: 0, zIndex: 900,
-          background: C.cream,
-          borderBottom: scrolled ? undefined : `1px solid ${C.border}`,
-          transition: "all 0.3s ease",
-          height: "70px", display: "flex", alignItems: "center",
-          padding: "0 clamp(1.5rem, 5vw, 4rem)",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
-          width: "100%", maxWidth: "1400px", margin: "0 auto" }}>
-          <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-            <Logo />
-          </button>
-
-          <div className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: "2.5rem" }}>
-            {links.map((l) => l.href.startsWith("#") ? (
-              <button key={l.href} className="nav-link"
-                onClick={() => scrollTo(l.href)} style={{ background: "none", border: "none" }}>
-                {l.label}
-              </button>
-            ) : (
-              <Link key={l.href} href={l.href} className="nav-link">{l.label}</Link>
-            ))}
-          </div>
-
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <button className="btn-primary desktop-nav"
-              onClick={() => scrollTo("#contact")}
-              style={{ padding: "9px 20px", fontSize: "0.76rem" }}>
-              Get Quote <IconArrowRight size={13} />
-            </button>
-            <button className="mobile-menu-btn" onClick={() => setMobileOpen(true)}
-              style={{ display: "none", background: "none", border: "none",
-                cursor: "pointer", color: C.charcoal }}>
-              <IconMenu2 size={24} />
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      <div className={`mobile-nav ${mobileOpen ? "open" : ""}`}>
-        <button onClick={() => setMobileOpen(false)}
-          style={{ position: "absolute", top: "22px", right: "22px",
-            background: "none", border: "none", cursor: "pointer", color: C.cream }}>
-          <IconX size={26} />
-        </button>
-        <Logo inverted />
-        {links.map((l) => l.href.startsWith("#") ? (
-          <button key={l.href}
-            onClick={() => { setMobileOpen(false); scrollTo(l.href); }}
-            style={{ background: "none", border: "none", cursor: "pointer",
-              fontFamily: F.display, fontStyle: "italic", fontSize: "1.8rem",
-              fontWeight: 400, color: C.cream, letterSpacing: "0.03em" }}>
-            {l.label}
-          </button>
-        ) : (
-          <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}
-            style={{ fontFamily: F.display, fontStyle: "italic", fontSize: "1.8rem",
-              fontWeight: 400, color: C.cream, letterSpacing: "0.03em" }}>
-            {l.label}
-          </Link>
-        ))}
-        <button className="btn-primary" onClick={() => scrollTo("#contact")}>
-          Get Quote <IconArrowRight size={14} />
-        </button>
-      </div>
-    </>
-  );
-}
-
 /* ─── Animated stat ──────────────────────────────────────────────────────────── */
 function AnimatedStat({ raw, label, note, animClass }: {
   raw: string; label: string; note: string; animClass: string;
@@ -693,10 +599,15 @@ function Hero() {
           <div className="hero-carousel-wrap">
             {[
               "/hero-homepage-v2.jpg",
+              "/infrastructure/facility/converting-floor.jpg",
               "/hero-industry.jpg",
+              "/infrastructure/machines/flat-bed-punch-press-wide.jpg",
               "/hero-infrastructure.jpg",
-              "/hero-paper-family.jpg",
+              "/infrastructure/facility/dispatch-area.jpg",
               "/hero-pp-family.jpg",
+              "/infrastructure/facility/quality-control.jpg",
+              "/hero-paper-family.jpg",
+              "/infrastructure/machines/screen-printing-wide.jpg",
             ].map((src) => (
               // eslint-disable-next-line @next/next/no-img-element
               <img key={src} src={src} alt="" className="hero-carousel-img" />
@@ -2239,8 +2150,7 @@ export default function HomePage() {
       <style dangerouslySetInnerHTML={{ __html: GLOBAL_CSS }} />
       <style dangerouslySetInnerHTML={{ __html:
         `@keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }` }} />
-      <Navbar />
-      <main>
+      <main style={{ paddingTop: "70px" }}>
         <Hero />
         <MarqueeTicker />
         <ProductsSection />

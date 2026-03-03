@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { blogPosts, BlogPost } from "@/lib/pgg-data";
-import { SiteLogo } from "@/components/SiteLogo";
 
 // ————————————————————————————————————————————
 // The Merchant — Design Tokens
@@ -98,60 +97,6 @@ function useScrollReveal() {
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, []);
-}
-
-// ————————————————————————————————————————————
-// Navbar
-// ————————————————————————————————————————————
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", h);
-    return () => window.removeEventListener("scroll", h);
-  }, []);
-
-  return (
-    <nav
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-        background: scrolled ? "rgba(250,247,242,0.97)" : C.cream,
-        backdropFilter: "blur(8px)",
-        borderBottom: `1px solid ${scrolled ? C.borderMid : C.border}`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0 2.5rem",
-        height: "64px",
-        transition: "border-color 0.3s ease, background 0.3s ease",
-      }}
-    >
-      <SiteLogo href="/" />
-
-      <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
-        <Link href="/products" className="blog-nav-link">Products</Link>
-        <Link href="/infrastructure" className="blog-nav-link">Infrastructure</Link>
-        <Link
-          href="/#contact"
-          style={{
-            fontFamily: F.body,
-            background: C.charcoal,
-            color: C.cream,
-            textDecoration: "none",
-            fontSize: "0.82rem",
-            fontWeight: 500,
-            padding: "0.5rem 1.25rem",
-            borderRadius: "3px",
-            letterSpacing: "0.03em",
-          }}
-        >
-          Get a Quote
-        </Link>
-      </div>
-    </nav>
-  );
 }
 
 // ————————————————————————————————————————————
@@ -256,10 +201,8 @@ export default function BlogPage() {
   useScrollReveal();
 
   return (
-    <div style={{ background: C.cream, minHeight: "100vh", fontFamily: F.body }}>
+    <div style={{ background: C.cream, minHeight: "100vh", fontFamily: F.body, paddingTop: "70px" }}>
       <style>{GLOBAL_CSS}</style>
-
-      <Navbar />
 
       {/* ——— Hero ——— */}
       <section

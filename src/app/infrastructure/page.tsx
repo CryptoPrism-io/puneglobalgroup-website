@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { machines, capabilities } from "@/lib/pgg-data";
-import { SiteLogo } from "@/components/SiteLogo";
 
 // ————————————————————————————————————————————
 // Image data
@@ -169,54 +168,6 @@ function useScrollReveal() {
 }
 
 // ————————————————————————————————————————————
-// Navbar
-// ————————————————————————————————————————————
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", h);
-    return () => window.removeEventListener("scroll", h);
-  }, []);
-
-  const ctaStyle = {
-    fontFamily: F.body, background: C.charcoal, color: C.cream,
-    textDecoration: "none", fontSize: "0.82rem", fontWeight: 500,
-    padding: "0.5rem 1.25rem", borderRadius: "3px", letterSpacing: "0.03em",
-  } as const;
-
-  return (
-    <nav className="infra-nav" style={{
-      position: "sticky", top: 0, zIndex: 100,
-      background: scrolled ? "rgba(250,247,242,0.97)" : C.cream,
-      backdropFilter: "blur(8px)",
-      borderBottom: `1px solid ${scrolled ? C.borderMid : C.border}`,
-      transition: "border-color 0.3s ease, background 0.3s ease",
-    }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 clamp(1rem, 3vw, 2.5rem)", height: "64px" }}>
-        <SiteLogo href="/" />
-        <div className="infra-nav-links">
-          <Link href="/products" className="infra-nav-link">Products</Link>
-          <Link href="/blog" className="infra-nav-link">Insights</Link>
-          <Link href="/#contact" style={ctaStyle}>Get a Quote</Link>
-        </div>
-        <button className="infra-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
-          <span /><span /><span />
-        </button>
-      </div>
-      <div className={`infra-dropdown${menuOpen ? " open" : ""}`}>
-        <Link href="/products" className="infra-nav-link" onClick={() => setMenuOpen(false)}>Products</Link>
-        <Link href="/blog" className="infra-nav-link" onClick={() => setMenuOpen(false)}>Insights</Link>
-        <Link href="/#contact" onClick={() => setMenuOpen(false)}
-          style={{ ...ctaStyle, alignSelf: "flex-start" }}>Get a Quote</Link>
-      </div>
-    </nav>
-  );
-}
-
-// ————————————————————————————————————————————
 // Machine Card (with image carousel)
 // ————————————————————————————————————————————
 function MachineCard({ machine, delay }: { machine: typeof machines[0]; delay: number }) {
@@ -321,10 +272,8 @@ export default function InfrastructurePage() {
   useScrollReveal();
 
   return (
-    <div style={{ background: C.cream, minHeight: "100vh", fontFamily: F.body }}>
+    <div style={{ background: C.cream, minHeight: "100vh", fontFamily: F.body, paddingTop: "70px" }}>
       <style>{GLOBAL_CSS}</style>
-
-      <Navbar />
 
       {/* ——— Hero ——— */}
       <section
