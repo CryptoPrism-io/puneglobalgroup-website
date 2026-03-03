@@ -1269,7 +1269,7 @@ export interface BlogPost {
   date: string;
   readTime: string;
   excerpt: string;
-  /** Path to cover image, relative to /public, e.g. /blog/slug.jpg */
+  /** Path to cover image, relative to /public, e.g. /blog/slug.webp */
   coverImage?: string;
   content: BlogSection[];
   /** Slugs of related products to cross-link at end of post */
@@ -1294,7 +1294,7 @@ export const blogPosts: BlogPost[] = [
     categoryColor: "#2563EB",
     date: "February 2026",
     readTime: "6 min",
-    coverImage: "/blog/gsm-guide-paper-board.jpg",
+    coverImage: "/blog/gsm-guide-paper-board.webp",
     excerpt:
       "GSM is the most fundamental specification in paper and board buying. Get it wrong and you're either over-spending or watching your cartons fail on the shelf.",
     content: [
@@ -1393,7 +1393,7 @@ export const blogPosts: BlogPost[] = [
   // 2. FBB vs Duplex
   // ——————————————————————————————————————————
   {
-    coverImage: "/blog/fbb-vs-duplex-board.jpg",
+    coverImage: "/blog/fbb-vs-duplex-board.webp",
     slug: "fbb-vs-duplex-board",
     title: "FBB vs Duplex Board: Which is Right for Your Packaging?",
     category: "Product Guide",
@@ -1497,7 +1497,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "export-packaging-compliance-india",
-    coverImage: "/blog/export-packaging-compliance-india.jpg",
+    coverImage: "/blog/export-packaging-compliance-india.webp",
     title: "Export Packaging Compliance for Indian Manufacturers in 2026",
     category: "Compliance",
     categoryColor: "#DC2626",
@@ -1612,7 +1612,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "pp-corrugated-returnable-packaging",
-    coverImage: "/blog/pp-corrugated-returnable-packaging.jpg",
+    coverImage: "/blog/pp-corrugated-returnable-packaging.webp",
     title: "Why PP Corrugated is Replacing Cardboard in Returnable Packaging",
     category: "Industry Trends",
     categoryColor: "#059669",
@@ -1709,6 +1709,447 @@ export const blogPosts: BlogPost[] = [
       },
     ],
     relatedProducts: ["pp-bin-hopper-front", "pp-tray-folded-corner", "pp-bin-scrap-open-top"],
+  },
+
+  // ——————————————————————————————————————————
+  // 5. Sheet vs Reel
+  // ——————————————————————————————————————————
+  {
+    slug: "sheet-vs-reel-paper-supply",
+    coverImage: "/blog/sheet-vs-reel-paper-supply.webp",
+    title: "Sheet vs Reel: How to Choose Your Paper Supply Format",
+    category: "Industry Guide",
+    categoryColor: "#2563EB",
+    date: "May 2025",
+    readTime: "6 min",
+    excerpt:
+      "Whether you take your board in reel or sheet form affects your waste percentage, storage footprint, minimum order quantity, and lead time. Most buyers default to sheets — here's when that's wrong.",
+    content: [
+      {
+        type: "paragraph",
+        text: "Paper and board can be supplied in two fundamental formats: reels (sometimes called rolls or jumbo rolls) and sheets. For most folding carton converters and label printers, this decision is made once during equipment investment and rarely revisited. But for industrial buyers, distributors, and converters upgrading their equipment, the format decision carries significant cost implications that compound at scale.",
+      },
+      {
+        type: "heading",
+        text: "What is a Reel Supply?",
+      },
+      {
+        type: "paragraph",
+        text: "A reel is the base format in which paper and board leaves the mill. Master jumbo rolls can be 2,000–3,000 mm wide and several tonnes in weight. These are slit and rewound at processing facilities — like Pune Global Group's plant — into narrower parent reels sized to the converting machine's web width. A reel supply is continuous and fed directly into web-fed offset, flexo, or gravure presses, or into sheeter/die-cut machines.",
+      },
+      {
+        type: "paragraph",
+        text: "Reel supply is the most material-efficient format. There is no cross-cut trim loss, and if your machine width is matched to a standard reel width (typically 860 mm, 1000 mm, 1270 mm, or 1524 mm), your conversion efficiency can reach 97–99%. For high-volume operations, this efficiency advantage compounds significantly.",
+      },
+      {
+        type: "heading",
+        text: "What is a Sheet Supply?",
+      },
+      {
+        type: "paragraph",
+        text: "Sheets are produced by processing reels through a sheeter or synchro sheeter, cutting to a specified finished dimension. Standard sheet formats — SRA3, SRA2, SRA1, 70×100 cm — are stocked by most distributors. Custom sheet sizes are cut to order at processing facilities. Sheets are the standard supply format for sheet-fed offset presses and for converters without in-house sheeting capability.",
+      },
+      {
+        type: "paragraph",
+        text: "The advantage of sheet supply is lower capital requirement and simpler material handling. A roll-fed press costs 40–60% more than a comparable sheet-fed machine. For converters at lower volumes, or those producing a wide variety of formats and sizes, sheet-fed operation with sheet supply is the rational choice.",
+      },
+      {
+        type: "heading",
+        text: "The Waste and Cost Comparison",
+      },
+      {
+        type: "table",
+        rows: [
+          { label: "Criterion", value: "Reel vs Sheet" },
+          { label: "Material efficiency", value: "Reel: 97–99% | Sheet: 88–95%" },
+          { label: "Storage footprint", value: "Reel: Compact (vertical) | Sheet: High (pallet stacks)" },
+          { label: "Minimum order", value: "Reel: 500 kg + | Sheet: 50 kg (stocked sizes)" },
+          { label: "Lead time (custom)", value: "Reel: 2–5 days | Sheet: 1–3 days" },
+          { label: "Capital cost (press)", value: "Reel: Higher | Sheet: Lower" },
+          { label: "Suitable press types", value: "Reel: Web-fed | Sheet: Sheet-fed offset" },
+          { label: "Setup time per job", value: "Reel: Longer (web-up) | Sheet: Shorter" },
+        ],
+      },
+      {
+        type: "heading",
+        text: "When Reel Supply is the Right Choice",
+      },
+      {
+        type: "list",
+        items: [
+          "High-volume, long-run jobs on a single size or narrow range of sizes",
+          "Web-fed gravure or flexo operations producing flexible packaging or labels",
+          "Integrated sheeting: facilities that sheet in-house to exact job sizes, eliminating distributor sheet margins",
+          "Narrow-web digital or flexo label converters requiring consistent tension properties",
+          "Where material cost per tonne is the primary driver and capital is available for web-fed equipment",
+        ],
+      },
+      {
+        type: "heading",
+        text: "When Sheet Supply is the Right Choice",
+      },
+      {
+        type: "list",
+        items: [
+          "Sheet-fed offset operations (the majority of folding carton converters in India)",
+          "Short to medium runs with frequent format changes",
+          "Buyers who lack sheeting equipment or space for reel storage",
+          "Trial orders and sampling — minimum quantities are lower for standard sheet sizes",
+          "Operations with space constraints: sheet pallets on floor-level racking vs reel storage requiring mandrel/A-frame systems",
+        ],
+      },
+      {
+        type: "heading",
+        text: "The Hybrid Approach: Reel Supply, In-House Sheeting",
+      },
+      {
+        type: "paragraph",
+        text: "The most cost-effective model for mid-to-large converters is reel supply processed through an in-house sheeter or at a processing facility like Pune Global Group. In this model, you purchase board in reel format at reel pricing (which carries no sheet processing margin), and convert to exact job sizes at our plant. Our synchro sheeter produces print-quality sheets to ±0.5 mm tolerance from reels up to 1800 mm wide, with a 24–36 hour processing turnaround.",
+      },
+      {
+        type: "paragraph",
+        text: "Compared to buying pre-cut standard sheets from a distributor, this approach typically reduces board cost by 8–15% on equivalent grades, because the sheet processing margin and standard-size waste are eliminated. For a converter consuming 100 tonnes per month of board, this is a material saving worth evaluating.",
+      },
+      {
+        type: "callout",
+        text: "Pune Global Group supplies both reels and sheets across all major board grades. Call +91 98233 83230 or email contact.puneglobalgroup@gmail.com to discuss which format suits your operation.",
+      },
+    ],
+    relatedProducts: ["cyber-xlpac-gc1", "eco-natura", "eco-blanca"],
+  },
+
+  // ——————————————————————————————————————————
+  // 6. ITC PSPD vs Imported Board
+  // ——————————————————————————————————————————
+  {
+    slug: "itc-pspd-vs-imported-board",
+    coverImage: "/blog/itc-pspd-vs-imported-board.webp",
+    title: "ITC PSPD vs Imported Board: A Total Cost of Ownership Analysis",
+    category: "Product Guide",
+    categoryColor: "#7C3AED",
+    date: "July 2025",
+    readTime: "7 min",
+    excerpt:
+      "Indian buyers pay 20–35% less at the invoice level for ITC FBB compared to equivalent European imports. But is that the full picture? A realistic total cost of ownership comparison.",
+    content: [
+      {
+        type: "paragraph",
+        text: "Every few years, a major FMCG or pharmaceutical company's procurement team runs a global board sourcing exercise and comes back with a question: why are we paying a premium for imported FBB when ITC's domestic board is so much cheaper? It's the right question to ask. The answer, once you account for all the costs and risks, is usually more nuanced than the invoice price suggests — but the conclusion often still favours domestic supply.",
+      },
+      {
+        type: "heading",
+        text: "The Import Premium: Where It Comes From",
+      },
+      {
+        type: "paragraph",
+        text: "Premium European FBB grades — products from Metsä Board, Iggesund, Koehler, or Sappi — command a 25–40% price premium over equivalent ITC FBB grades at landed cost. This premium is built on genuine technical differences: Nordic and Central European mills process long-fibre virgin pulp from certified forests, producing boards with consistently higher stiffness-to-weight ratios, more predictable surface energy, and tighter caliper tolerances than mixed tropical-fibre Indian production.",
+      },
+      {
+        type: "paragraph",
+        text: "For certain applications — high-speed packaging lines running above 600 cartons per minute, luxury retail packaging requiring perfect emboss registration, or pharmaceutical production under EU GMP annexe 11 — these technical advantages are real and the premium may be justified. For the majority of Indian packaging applications, they are not.",
+      },
+      {
+        type: "heading",
+        text: "ITC PSPD: The Domestic Benchmark",
+      },
+      {
+        type: "paragraph",
+        text: "ITC's Paperboards and Specialty Papers Division (PSPD) operates four integrated mills in India — at Bhadrachalam, Tribeni, Kovai, and Bollaram — producing over 800,000 tonnes of paper and board annually. ITC FBB (Cyber XLPac, Cyber Premium, PearlXL, Cyber Oak) is manufactured from a combination of plantation-grown hardwood pulp and mechanical groundwood. BEF (Bleached Eucalyptus Fibre) gives the board surface brightness; groundwood provides caliper at lower fibre cost.",
+      },
+      {
+        type: "paragraph",
+        text: "ITC's FBB meets IS 14927 (Indian Standard for Folding Box Board) and carries food contact compliance under both US FDA 21 CFR 176 and EU Regulation 1935/2004. FSC Chain of Custody certification covers all premium FBB grades. For the majority of pharmaceutical, FMCG, and cosmetics applications in India and for export markets, ITC FBB is a fully compliant, technically proven substrate.",
+      },
+      {
+        type: "heading",
+        text: "Total Cost of Ownership: A Real Comparison",
+      },
+      {
+        type: "table",
+        rows: [
+          { label: "Cost Factor", value: "ITC FBB vs European Import" },
+          { label: "Invoice price (per tonne)", value: "ITC: Lower by 25–40%" },
+          { label: "Import duty (12% basic + GST)", value: "ITC: Nil | Import: +12–18%" },
+          { label: "Freight & insurance (CIF India)", value: "ITC: Nil | Import: +4–7%" },
+          { label: "Port clearing & CHA charges", value: "ITC: Nil | Import: +1–2%" },
+          { label: "Lead time (order to delivery)", value: "ITC: 5–10 days | Import: 45–75 days" },
+          { label: "Working capital lock-in", value: "ITC: Low | Import: Very High" },
+          { label: "Minimum order quantity", value: "ITC: 1–5 tonnes | Import: 20–40 tonnes" },
+          { label: "Documentation complexity", value: "ITC: Simple | Import: Complex" },
+          { label: "Currency risk (USD/EUR)", value: "ITC: None | Import: Significant" },
+        ],
+      },
+      {
+        type: "heading",
+        text: "The Hidden Cost: Working Capital",
+      },
+      {
+        type: "paragraph",
+        text: "The most frequently underestimated cost in import purchasing is working capital. A 40-tonne import shipment at 60-day lead time means you have paid for 40 tonnes of board 60 days before it reaches your factory floor — and potentially another 30 days before it converts and becomes billable product. For a buyer paying Rs 85,000 per tonne for imported FBB, that's Rs 34 lakh in transit, tied up for two months, at 12–15% cost of capital. That works out to Rs 85,000–1,05,000 in financing cost per shipment — before any price or currency risk.",
+      },
+      {
+        type: "paragraph",
+        text: "Domestic supply from ITC via authorized distributors like Pune Global Group offers 5–10 day lead times on most grades. Minimum order quantities of 1–5 tonnes mean you can hold 2–3 weeks of stock rather than 3–4 months. The cash flow difference is material, particularly for mid-sized converters where working capital is constrained.",
+      },
+      {
+        type: "heading",
+        text: "When Imports Still Make Sense",
+      },
+      {
+        type: "list",
+        items: [
+          "Ultra-premium luxury packaging where surface perfection justifies 50%+ board cost premium",
+          "Specific technical grades not produced domestically (e.g., very high-caliper boards above 480 GSM)",
+          "Large corporates with treasury teams that can hedge currency risk and manage import compliance",
+          "Applications where a specific international mill's certification is mandated by a global brand owner",
+          "Trial volumes to qualify alternate substrates before any domestic equivalent is sourced",
+        ],
+      },
+      {
+        type: "heading",
+        text: "The Practical Conclusion",
+      },
+      {
+        type: "paragraph",
+        text: "For the vast majority of Indian packaging buyers — pharmaceutical secondary cartons, FMCG folding cartons, cosmetics, processed foods — ITC FBB at domestic pricing delivers total cost of ownership that is 35–55% below equivalent imported board once all costs are accounted for. The technical performance gap, which was real a decade ago, has narrowed considerably as ITC has invested in surface treatment and coating technology.",
+      },
+      {
+        type: "paragraph",
+        text: "Pune Global Group is an authorized distributor for ITC PSPD across all FBB and kraft liner grades. We hold stocked inventory of the top 15 grades by volume at our Pune warehouse, and can fulfil most orders within 48 hours.",
+      },
+      {
+        type: "callout",
+        text: "Benchmarking your current board source against ITC supply? We can provide comparative pricing and samples. Contact us at +91 98233 83230 or contact.puneglobalgroup@gmail.com.",
+      },
+    ],
+    relatedProducts: ["cyber-xlpac-gc1", "cyber-xlpac-gc2", "cyber-premium"],
+  },
+
+  // ——————————————————————————————————————————
+  // 7. Pharma Packaging Board Specifications
+  // ——————————————————————————————————————————
+  {
+    slug: "pharma-packaging-board-specs",
+    coverImage: "/blog/pharma-packaging-board-specs.webp",
+    title: "Pharma Packaging Board Specifications: What Your QA Team Needs to Know",
+    category: "Compliance",
+    categoryColor: "#DC2626",
+    date: "September 2025",
+    readTime: "8 min",
+    excerpt:
+      "Pharmaceutical folding cartons are regulated components — not just boxes. Specifying the wrong board grade or accepting a non-compliant Certificate of Analysis can put your regulatory status at risk.",
+    content: [
+      {
+        type: "paragraph",
+        text: "Pharmaceutical packaging quality control sits at the intersection of engineering and regulatory compliance in a way that no other packaging sector matches. A folding carton for a blister pack of antibiotics is not just a cardboard box — it is a primary component of a regulated pharmaceutical product. Its board specification, print quality, dimensional accuracy, and compliance documentation are subject to Schedule D of India's Drugs and Cosmetics Act, WHO GMP guidelines, and increasingly, ICH Q10 pharmaceutical quality system requirements.",
+      },
+      {
+        type: "paragraph",
+        text: "Yet board procurement for pharma is frequently handled by commercial teams with limited technical input from QA. The result is that boards are sourced against price and availability, with compliance documentation collected after the fact — a workflow that creates audit risk and has resulted in FDA warning letters for overseas facilities in documented cases.",
+      },
+      {
+        type: "heading",
+        text: "The Critical Board Parameters for Pharma Applications",
+      },
+      {
+        type: "subheading",
+        text: "GSM and Caliper",
+      },
+      {
+        type: "paragraph",
+        text: "Pharmaceutical carton specifications typically define both GSM (±5% tolerance is common) and caliper (minimum, typically 350–400 µm for a 300 GSM FBB). Caliper directly determines stiffness, which is the critical parameter for automated packing line performance. Under-caliper board — even if nominally within GSM specification — will cause jams on high-speed carton erectors at the speeds (400–600 CPM) used in pharma packing.",
+      },
+      {
+        type: "subheading",
+        text: "Stiffness: MD and CD",
+      },
+      {
+        type: "paragraph",
+        text: "Machine Direction (MD) and Cross Direction (CD) stiffness are measured in mN·m (Taber stiffness). Pharma converters typically specify minimum MD stiffness of 400–600 mN·m and CD stiffness of 200–350 mN·m for a 300 GSM FBB. CD stiffness is the direction most relevant to carton erection — it determines whether the scored blank springs open correctly on the packing line. Mill test certificates must report stiffness values for both directions.",
+      },
+      {
+        type: "subheading",
+        text: "Moisture Content and Moisture Barrier",
+      },
+      {
+        type: "paragraph",
+        text: "Board moisture content at delivery should be 6–8% for stable dimensional performance. Boards delivered above 9% moisture — common during monsoon season if storage is inadequate — will expand by 0.3–0.8% in the CD dimension, causing crease and fold registration errors at the converter and downstream dimensional non-conformances. Heat shrink wrapped reams and pallets with moisture-barrier slip-sheets are essential for monsoon-season deliveries.",
+      },
+      {
+        type: "subheading",
+        text: "Brightness and Whiteness",
+      },
+      {
+        type: "paragraph",
+        text: "Pharma packaging regulations require legible text — batch numbers, expiry dates, and drug names must be printed with sufficient contrast. ISO brightness below 82% on the top ply creates print contrast issues. For FBB, ISO brightness of 86–92% is typical. CIE whiteness (D65 illuminant) above 110 is standard for premium FBB used in pharma. These values should be declared on the mill Certificate of Analysis.",
+      },
+      {
+        type: "heading",
+        text: "Required Documentation for Pharma Board Supply",
+      },
+      {
+        type: "list",
+        items: [
+          "Mill Certificate of Analysis (COA) — issued per batch, declaring GSM, caliper, moisture, brightness, stiffness MD/CD, burst factor, and smoothness",
+          "Declaration of compliance with IS 14927 (Folding Box Board) or IS 1397 (Duplex Board) as applicable",
+          "Food contact compliance declaration under the Food Safety and Standards (Packaging) Regulations, 2018",
+          "Heavy metal migration test report (required for EU and US export pharma packaging)",
+          "FSC Chain of Custody certificate (if FSC logo appears on carton)",
+          "REACH compliance declaration for boards used in export to EU markets",
+          "Batch traceability record linking the board batch to the COA",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Incoming Quality Control for Pharma Board",
+      },
+      {
+        type: "paragraph",
+        text: "Most pharmaceutical manufacturers' QA procedures require incoming board inspection against a Board Specification Sheet (BSS) before release to the converter or in-house printing department. The minimum incoming QC tests typically include: visual inspection for surface defects (contamination, coating peel, blade streaks), GSM verification by weighing a 100 cm² sample, caliper measurement at 5 points across the sheet width, and moisture content by conductance meter.",
+      },
+      {
+        type: "paragraph",
+        text: "A common gap in pharma board IQC is the absence of stiffness testing. QA teams rely on the mill COA for stiffness values without physical verification. For GMP-critical applications, periodic physical stiffness testing — or at minimum, a qualification batch test when changing suppliers — is best practice.",
+      },
+      {
+        type: "heading",
+        text: "Grade Selection for Pharma Applications",
+      },
+      {
+        type: "table",
+        rows: [
+          { label: "Application", value: "Recommended Grade" },
+          { label: "Branded pharma secondary cartons (domestic)", value: "ITC Cyber XLPac GC1, 300–350 GSM" },
+          { label: "Export pharma secondary cartons", value: "ITC PearlXL or Cyber Premium, 300–350 GSM" },
+          { label: "Generic institutional supply cartons", value: "Duplex White Back, 300–350 GSM" },
+          { label: "Outer shipper cartons", value: "Duplex Grey Back, 350–400 GSM" },
+          { label: "Primary packaging (blister backer)", value: "Speciality coated board, 250–300 GSM" },
+          { label: "Luxury OTC products", value: "ITC Carte Lumina / Safire Graphik, 300–350 GSM" },
+        ],
+      },
+      {
+        type: "heading",
+        text: "Supplier Qualification for Pharma Board",
+      },
+      {
+        type: "paragraph",
+        text: "Under WHO GMP guidelines, critical material suppliers — including board suppliers for primary and secondary packaging — should be qualified through a supplier audit or documented assessment. For board distributors, this qualification should verify: quality management system (ISO 9001 or equivalent), document control (COA retention and traceability), storage conditions (covered warehouse, pallets off the floor, humidity monitoring), and supply chain integrity (no substitution of non-declared grades).",
+      },
+      {
+        type: "callout",
+        text: "Pune Global Group is a pharma-qualified board supplier with full COA documentation for every lot. We support supplier qualification audits and can provide all required compliance documentation. Contact us at contact.puneglobalgroup@gmail.com.",
+      },
+    ],
+    relatedProducts: ["cyber-xlpac-gc1", "cyber-premium", "pearlxl-packaging"],
+  },
+
+  // ——————————————————————————————————————————
+  // 8. India Paper & Board Market Outlook
+  // ——————————————————————————————————————————
+  {
+    slug: "india-paper-board-market-2026",
+    coverImage: "/blog/india-paper-board-market-2026.webp",
+    title: "India Paper & Board Market Outlook: Trends Shaping 2025–2026",
+    category: "Industry Trends",
+    categoryColor: "#059669",
+    date: "November 2025",
+    readTime: "7 min",
+    excerpt:
+      "India's paper and packaging board market is growing at 6–8% annually, driven by pharma exports, FMCG premiumisation, and the e-commerce packaging boom. Here's what buyers need to understand about the demand and pricing environment ahead.",
+    content: [
+      {
+        type: "paragraph",
+        text: "India's paper and board industry is at an inflection point. Domestic demand is growing at 6–8% annually — double the global average — while new capacity additions from ITC PSPD, JK Paper, and Tamil Nadu Newsprint and Papers (TNPL) have not kept pace with demand growth in premium grades. The result is a market where buyers who understood the supply dynamics in advance have secured better pricing and availability than those who waited.",
+      },
+      {
+        type: "heading",
+        text: "Demand Drivers in 2025–2026",
+      },
+      {
+        type: "subheading",
+        text: "Pharmaceutical Exports",
+      },
+      {
+        type: "paragraph",
+        text: "India's pharmaceutical sector — the world's third-largest by volume — is a structural demand driver for FBB and duplex board. India exports over $25 billion in pharmaceuticals annually, and every export unit requires compliant secondary packaging. As Indian pharma companies upgrade manufacturing facilities to US FDA and EU GMP standards, demand for premium FBB (over duplex) for pharma cartons has grown faster than the overall sector. The PLI scheme for pharmaceuticals, announced in 2020 and now delivering measurable capacity additions, is accelerating this trend.",
+      },
+      {
+        type: "subheading",
+        text: "FMCG Premiumisation",
+      },
+      {
+        type: "paragraph",
+        text: "The shift from loose or commodity retail to branded, packaged goods continues in India's tier 2 and tier 3 cities. FMCG companies report that packaged goods penetration in smaller cities is growing at 3–4x the rate of metro markets. Each new packaged SKU requires board packaging. Simultaneously, established FMCG brands are trading packaging up — moving from duplex to FBB, adding embossing and foil to differentiate on shelf. This premiumisation drives disproportionate growth in FBB demand.",
+      },
+      {
+        type: "subheading",
+        text: "E-Commerce Packaging",
+      },
+      {
+        type: "paragraph",
+        text: "E-commerce packaging in India — corrugated boxes, inner cartons, protective board partitions — is a high-growth segment consuming kraft liner, test liner, and duplex board. India's e-commerce market is projected to reach $300 billion by 2030. Current corrugated box demand growth of 10–12% annually is placing pressure on kraft liner availability, particularly for higher GSM export-quality liner.",
+      },
+      {
+        type: "heading",
+        text: "Supply Dynamics and Pricing",
+      },
+      {
+        type: "paragraph",
+        text: "ITC PSPD's Bhadrachalam mill — India's largest single integrated paper and board facility — underwent significant capacity expansion in 2023–24, adding approximately 150,000 tonnes of FBB capacity. This expansion has partially offset demand growth and moderated FBB price increases, but has not created oversupply. Domestic FBB prices have moved in a 5–12% range annually over the past three years, broadly tracking pulp price movements and energy costs.",
+      },
+      {
+        type: "paragraph",
+        text: "Imported board prices are subject to additional volatility from EUR/USD exchange movements and container freight rates. The 2021–2023 container freight surge — when a 40-foot container from Europe to India cost $8,000–12,000 versus a historical norm of $1,500–2,500 — was a structural shock that accelerated many buyers' shift to domestic supply. Freight rates have normalized but remain above pre-pandemic levels and subject to disruption.",
+      },
+      {
+        type: "heading",
+        text: "Grade Trends to Watch",
+      },
+      {
+        type: "list",
+        items: [
+          "GC1 FBB gaining share over GC2: Brands are specifying GC1 (grey back) over GC2 (white back) for inner surface printability as regulations require inner carton labelling in pharma",
+          "Coated duplex growing in cosmetics: Premium duplex with triple coating is taking share from FBB in cosmetics, where cost pressure is high but print quality requirements are medium",
+          "Recycled-content FBB emerging: Mills experimenting with 15–20% recycled content in FBB to meet ESG supplier criteria from multinational brand owners",
+          "Lightweight trends: Consumer goods companies targeting 5–8% board weight reduction per carton to meet ESG targets, driving demand for high-stiffness, lower-caliper grades",
+          "PP corrugated in secondary logistics: Displacing corrugated in internal factory logistics at an accelerating rate as returnable packaging ROI is well-understood",
+        ],
+      },
+      {
+        type: "heading",
+        text: "What This Means for Buyers",
+      },
+      {
+        type: "paragraph",
+        text: "In a market growing faster than new supply, buyers benefit from stronger supplier relationships and longer-term supply agreements. Spot buying in a tight market pays a 5–12% premium over contracted supply. For grades where ITC PSPD is the dominant or sole domestic supplier — particularly premium FBB grades — authorized distributors with direct mill allocations provide supply security that open-market sourcing cannot.",
+      },
+      {
+        type: "paragraph",
+        text: "Buyers should also be monitoring the environmental cost trajectory. Carbon border adjustment mechanisms in the EU, FSC certification requirements from global brand owners, and domestic EPR (Extended Producer Responsibility) regulations are all adding compliance costs to packaging procurement. Building compliant supply chains now — with certified grades and documented COA processes — is a hedge against future regulatory cost.",
+      },
+      {
+        type: "heading",
+        text: "Key Market Indicators to Track",
+      },
+      {
+        type: "table",
+        rows: [
+          { label: "Indicator", value: "Current Trend (2025)" },
+          { label: "BHKP pulp prices (global)", value: "Elevated, moderate volatility" },
+          { label: "India FBB domestic price trend", value: "+6–9% YoY, stable near-term" },
+          { label: "Container freight (Europe→India)", value: "Normalizing, above pre-2020 baseline" },
+          { label: "INR/USD movement", value: "Gradual depreciation pressure" },
+          { label: "Domestic paper board capacity utilization", value: "85–90%, supply tight in premium FBB" },
+          { label: "E-commerce corrugated demand growth", value: "+10–12% annually" },
+          { label: "Pharma FBB demand growth", value: "+8–11% annually" },
+        ],
+      },
+      {
+        type: "callout",
+        text: "Pune Global Group publishes regular market updates for our clients. To receive pricing alerts and availability updates for your grades, contact us at contact.puneglobalgroup@gmail.com or +91 98233 83230.",
+      },
+    ],
+    relatedProducts: ["cyber-xlpac-gc1", "cyber-xlpac-gc2", "eco-natura"],
   },
 ];
 
