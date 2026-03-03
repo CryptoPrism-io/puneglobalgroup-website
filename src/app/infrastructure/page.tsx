@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { machines, capabilities } from "@/lib/pgg-data";
 import { SiteLogo } from "@/components/SiteLogo";
-import { LogoWatermark } from "@/components/LogoWatermark";
+import { LOGO_MASK_STYLE } from "@/components/LogoWatermark";
 
 // ————————————————————————————————————————————
 // Image data
@@ -397,13 +397,21 @@ export default function InfrastructurePage() {
             overflow: "hidden",
             boxShadow: "0 8px 48px rgba(28,26,23,0.10)",
           }}>
+            {/* Layer 1 — blurred (outside logo) */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/hero-infrastructure.jpg"
               alt="PGG converting facility — rewinder, sheeter and guillotine, MIDC Pune"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "blur(1.5px)", transform: "scale(1.03)" }}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "blur(4px)", transform: "scale(1.08)" }}
             />
-            <LogoWatermark />
+            {/* Layer 2 — sharp, masked to logo shape */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/hero-infrastructure.jpg"
+              alt=""
+              aria-hidden="true"
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block", ...LOGO_MASK_STYLE, zIndex: 1 }}
+            />
             <div style={{
               position: "absolute", bottom: "1.5rem", right: "1.5rem",
               background: "rgba(20,18,16,0.88)",
