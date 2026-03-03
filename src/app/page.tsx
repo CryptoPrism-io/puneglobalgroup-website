@@ -2020,14 +2020,14 @@ function Footer() {
     { label: "Eco Natura",            href: "/products/paper-board/eco-natura" },
   ];
   const industryLinks = [
-    { label: "Automotive",     href: "/#industries" },
-    { label: "Pharmaceutical", href: "/#industries" },
-    { label: "E-Commerce",     href: "/#industries" },
-    { label: "FMCG",           href: "/#industries" },
-    { label: "Engineering",    href: "/#industries" },
+    { label: "Automotive",     href: "/about#industries" },
+    { label: "Pharmaceutical", href: "/about#industries" },
+    { label: "E-Commerce",     href: "/about#industries" },
+    { label: "FMCG",           href: "/about#industries" },
+    { label: "Engineering",    href: "/about#industries" },
   ];
   const companyLinks = [
-    { label: "About Us",    href: "/#about" },
+    { label: "About Us",    href: "/about" },
     { label: "Contact",     href: "/#contact" },
     { label: "Get a Quote", href: "/#contact" },
   ];
@@ -2149,10 +2149,8 @@ export default function HomePage() {
         <MarqueeTicker />
         <ProductsSection />
         <InfraCallout />
-        <IndustriesSection />
         <SocialProofSection />
         <ClientLogoBand />
-        <AboutSection />
         <BlogTeaser />
         <ContactSection />
       </main>

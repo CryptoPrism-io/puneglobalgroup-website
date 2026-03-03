@@ -1062,6 +1062,101 @@ export default function InfrastructurePage() {
         </div>
       </section>
 
+      {/* ——— Three Business Lines ——— */}
+      <section style={{ background: C.cream, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
+        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+
+          <div style={{ marginBottom: "4rem" }}>
+            <span style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.68rem",
+              letterSpacing: "0.16em", textTransform: "uppercase",
+              color: C.taupe, display: "block", marginBottom: "1rem" }}>
+              Three Business Lines
+            </span>
+            <h2 style={{ fontFamily: F.display, fontWeight: 700,
+              fontSize: "clamp(2rem, 4vw, 3.4rem)", color: C.charcoal,
+              letterSpacing: "-0.02em", lineHeight: 1.1, margin: "0 0 1.25rem" }}>
+              Manufacture. Convert. Trade.
+            </h2>
+            <p style={{ fontFamily: F.body, fontSize: "1rem", color: C.taupe,
+              lineHeight: 1.8, maxWidth: "520px", margin: 0, fontWeight: 300 }}>
+              We manufacture industrial PP packaging to export spec. We convert FBB into
+              press-ready sheets. We trade ITC, TNPL and imported board grades.
+              One facility. One partner. 30 years.
+            </p>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)",
+            gap: "1px", background: C.borderMid }}>
+            {[
+              {
+                num: "01",
+                eyebrow: "PP Manufacturing — Core Business",
+                heading: "Trays · Separators · Boxes · Crates",
+                desc: "Precision polypropylene packaging for automotive, pharma and electronics — custom sizes, export-ready documentation on every order.",
+                tags: ["PP Trays", "Separators", "Foldable Boxes", "PP Crates", "Layer Pads", "ESD Bins"],
+                href: "/products/pp-corrugated",
+                cta: "View PP Products",
+              },
+              {
+                num: "02",
+                eyebrow: "Board Converting",
+                heading: "Cut to Size. Press-Ready.",
+                desc: "Sheeting, slitting and rewinding to exact press dimensions. Fast turnaround, low MOQ, for printers and converters across India.",
+                tags: ["FBB Sheeting", "Duplex Cutting", "Slitting", "Rewinding", "Custom Dimensions", "Low MOQ"],
+                href: "/infrastructure",
+                cta: "See Converting Facility",
+              },
+              {
+                num: "03",
+                eyebrow: "Paper & PP Sheet Trading",
+                heading: "ITC · TNPL · Imported",
+                desc: "Trusted traders of ITC PSPD and TNPL — FBB, duplex, kraft and test liner. PP corrugated sheets also available ex-stock from our Pune warehouse.",
+                tags: ["Cyber XLPac", "Carte Lumina", "Safire Graphik", "Eco Natura", "PP Sheets", "Ready Stock"],
+                href: "/products",
+                cta: "Browse All Grades",
+              },
+            ].map((line) => (
+              <div key={line.num} style={{ background: C.cream, padding: "2.75rem",
+                display: "flex", flexDirection: "column" }}>
+                <div style={{ fontFamily: F.display, fontWeight: 700, fontSize: "3.5rem",
+                  color: C.saffron, lineHeight: 1, marginBottom: "1.5rem" }}>
+                  {line.num}
+                </div>
+                <span style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.64rem",
+                  letterSpacing: "0.15em", textTransform: "uppercase",
+                  color: C.taupe, display: "block", marginBottom: "0.5rem" }}>
+                  {line.eyebrow}
+                </span>
+                <h3 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1.25rem",
+                  color: C.charcoal, marginBottom: "1rem", lineHeight: 1.3 }}>
+                  {line.heading}
+                </h3>
+                <p style={{ fontFamily: F.body, fontSize: "0.9rem", lineHeight: 1.8,
+                  color: C.taupe, fontWeight: 300, marginBottom: "1.5rem", flex: 1 }}>
+                  {line.desc}
+                </p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "2rem" }}>
+                  {line.tags.map((tag) => (
+                    <span key={tag} style={{ fontFamily: F.body, fontSize: "0.72rem",
+                      fontWeight: 500, color: C.warm, background: C.parchment,
+                      border: `1px solid ${C.border}`, borderRadius: "2px",
+                      padding: "0.3rem 0.6rem" }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <Link href={line.href} style={{ fontFamily: F.body, fontWeight: 600,
+                  fontSize: "0.8rem", color: C.charcoal, textDecoration: "none",
+                  letterSpacing: "0.05em", borderBottom: `1px solid ${C.charcoal}`,
+                  paddingBottom: "2px", alignSelf: "flex-start" }}>
+                  {line.cta} →
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ——— Footer ——— */}
       <footer
         style={{
