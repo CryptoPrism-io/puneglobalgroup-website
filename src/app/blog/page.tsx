@@ -471,8 +471,8 @@ export default function BlogPage() {
           color: "rgba(250,247,242,0.3)", margin: 0,
         }}>
           © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO ·{" "}
-          <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ color: "rgba(250,247,242,0.3)", textDecoration: "none" }}>
-            contact.puneglobalgroup@gmail.com
+          <a href="mailto:yogesh.sahu@puneglobalgroup.in" style={{ color: "rgba(250,247,242,0.3)", textDecoration: "none" }}>
+            yogesh.sahu@puneglobalgroup.in
           </a>
         </p>
       </footer>

@@ -797,10 +797,10 @@ function ProductPageContent({ product }: { product: Product }) {
               Request Sample →
             </a>
             <a
-              href={`mailto:contact.puneglobalgroup@gmail.com?subject=Enquiry: ${product.name}`}
+              href={`mailto:yogesh.sahu@puneglobalgroup.in?subject=Enquiry: ${product.name}`}
               style={{ fontFamily: F.body, fontSize: "0.8rem", color: "rgba(250,247,242,0.4)", textDecoration: "none", textAlign: "center" }}
             >
-              contact.puneglobalgroup@gmail.com
+              yogesh.sahu@puneglobalgroup.in
             </a>
           </div>
         </section>
@@ -815,8 +815,8 @@ function ProductPageContent({ product }: { product: Product }) {
           <p style={{ fontFamily: F.body, fontSize: "0.78rem", color: "rgba(250,247,242,0.35)", margin: 0 }}>
             © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO · +91 98233 83230
           </p>
-          <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ fontFamily: F.body, fontSize: "0.78rem", color: "rgba(250,247,242,0.4)", textDecoration: "none" }}>
-            contact.puneglobalgroup@gmail.com
+          <a href="mailto:yogesh.sahu@puneglobalgroup.in" style={{ fontFamily: F.body, fontSize: "0.78rem", color: "rgba(250,247,242,0.4)", textDecoration: "none" }}>
+            yogesh.sahu@puneglobalgroup.in
           </a>
         </div>
       </footer>

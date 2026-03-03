@@ -1827,7 +1827,7 @@ function ContactSection() {
     { icon: <IconPhone size={16} color={C.saffron} />, label: "Phone",
       value: "+91 98233 83230", href: "tel:+919823383230" },
     { icon: <IconMail size={16} color={C.saffron} />, label: "Email",
-      value: "contact.puneglobalgroup@gmail.com", href: "mailto:contact.puneglobalgroup@gmail.com" },
+      value: "yogesh.sahu@puneglobalgroup.in", href: "mailto:yogesh.sahu@puneglobalgroup.in" },
     { icon: <IconMapPin size={16} color={C.saffron} />, label: "Office",
       value: "206 Gulmohar Center Point, Pune 411006, Maharashtra", href: null },
     { icon: <IconBuildingFactory2 size={16} color={C.saffron} />, label: "Factory",
@@ -2095,13 +2095,13 @@ function Footer() {
                 </Link>
               ))}
               <div style={{ marginTop: "1.5rem" }}>
-                <a href="mailto:contact.puneglobalgroup@gmail.com"
+                <a href="mailto:yogesh.sahu@puneglobalgroup.in"
                   style={{ display: "flex", alignItems: "center", gap: "6px",
                     fontFamily: F.body, fontSize: "0.76rem",
                     color: "rgba(250,247,242,0.55)", transition: "color 0.2s", marginBottom: "0.5rem" }}
                   onMouseEnter={e => (e.currentTarget.style.color = C.cream)}
                   onMouseLeave={e => (e.currentTarget.style.color = "rgba(250,247,242,0.55)")}>
-                  <IconMail size={12} /> contact.puneglobalgroup@gmail.com
+                  <IconMail size={12} /> yogesh.sahu@puneglobalgroup.in
                 </a>
                 <div style={{ fontFamily: F.body, fontSize: "0.76rem",
                   color: "rgba(250,247,242,0.55)",

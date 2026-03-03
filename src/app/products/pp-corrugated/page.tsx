@@ -628,9 +628,9 @@ function Footer() {
           <Link href="/products" style={{ fontFamily: F.body, fontSize: "0.76rem", color: "rgba(250,247,242,0.38)", textDecoration: "none" }}>
             All Products
           </Link>
-          <a href="mailto:contact.puneglobalgroup@gmail.com"
+          <a href="mailto:yogesh.sahu@puneglobalgroup.in"
             style={{ fontFamily: F.body, fontSize: "0.76rem", color: "rgba(250,247,242,0.38)", textDecoration: "none" }}>
-            contact.puneglobalgroup@gmail.com
+            yogesh.sahu@puneglobalgroup.in
           </a>
         </div>
       </div>

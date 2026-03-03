@@ -628,8 +628,8 @@ function BlogPostContent({ post }: { post: BlogPost }) {
           <p style={{ fontFamily: F.body, fontSize: "0.78rem", color: "rgba(250,247,242,0.35)", margin: 0 }}>
             © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO
           </p>
-          <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ fontFamily: F.body, fontSize: "0.78rem", color: "rgba(250,247,242,0.4)", textDecoration: "none" }}>
-            contact.puneglobalgroup@gmail.com
+          <a href="mailto:yogesh.sahu@puneglobalgroup.in" style={{ fontFamily: F.body, fontSize: "0.78rem", color: "rgba(250,247,242,0.4)", textDecoration: "none" }}>
+            yogesh.sahu@puneglobalgroup.in
           </a>
         </div>
       </footer>

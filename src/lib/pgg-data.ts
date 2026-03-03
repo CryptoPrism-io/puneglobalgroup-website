@@ -1383,7 +1383,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "callout",
-        text: "Need help specifying the right board GSM for your application? Contact our technical sales team at contact.puneglobalgroup@gmail.com or call +91 98233 83230.",
+        text: "Need help specifying the right board GSM for your application? Contact our technical sales team at yogesh.sahu@puneglobalgroup.in or call +91 98233 83230.",
       },
     ],
     relatedProducts: ["cyber-xlpac-gc1", "eco-natura", "eco-blanca"],
@@ -1486,7 +1486,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "callout",
-        text: "Talk to us about running a board specification audit for your packaging line. Call +91 98233 83230 or email contact.puneglobalgroup@gmail.com.",
+        text: "Talk to us about running a board specification audit for your packaging line. Call +91 98233 83230 or email yogesh.sahu@puneglobalgroup.in.",
       },
     ],
     relatedProducts: ["cyber-xlpac-gc1", "cyber-xlpac-gc2", "eco-natura"],
@@ -1601,7 +1601,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "callout",
-        text: "Need compliance documentation for your current board supply? Email contact.puneglobalgroup@gmail.com with your board grade and destination market.",
+        text: "Need compliance documentation for your current board supply? Email yogesh.sahu@puneglobalgroup.in with your board grade and destination market.",
       },
     ],
     relatedProducts: ["pp-box-open-top-riveted", "pp-layer-pad-heavy-duty", "pp-tray-esd-antistatic"],
@@ -1705,7 +1705,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "callout",
-        text: "Interested in a returnable packaging cost analysis for your facility? Contact us at +91 98233 83230 or contact.puneglobalgroup@gmail.com.",
+        text: "Interested in a returnable packaging cost analysis for your facility? Contact us at +91 98233 83230 or yogesh.sahu@puneglobalgroup.in.",
       },
     ],
     relatedProducts: ["pp-bin-hopper-front", "pp-tray-folded-corner", "pp-bin-scrap-open-top"],
@@ -1812,7 +1812,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "callout",
-        text: "Pune Global Group supplies both reels and sheets across all major board grades. Call +91 98233 83230 or email contact.puneglobalgroup@gmail.com to discuss which format suits your operation.",
+        text: "Pune Global Group supplies both reels and sheets across all major board grades. Call +91 98233 83230 or email yogesh.sahu@puneglobalgroup.in to discuss which format suits your operation.",
       },
     ],
     relatedProducts: ["cyber-xlpac-gc1", "eco-natura", "eco-blanca"],
@@ -1919,7 +1919,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "callout",
-        text: "Benchmarking your current board source against ITC supply? We can provide comparative pricing and samples. Contact us at +91 98233 83230 or contact.puneglobalgroup@gmail.com.",
+        text: "Benchmarking your current board source against ITC supply? We can provide comparative pricing and samples. Contact us at +91 98233 83230 or yogesh.sahu@puneglobalgroup.in.",
       },
     ],
     relatedProducts: ["cyber-xlpac-gc1", "cyber-xlpac-gc2", "cyber-premium"],
@@ -2037,7 +2037,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "callout",
-        text: "Pune Global Group is a pharma-qualified board supplier with full COA documentation for every lot. We support supplier qualification audits and can provide all required compliance documentation. Contact us at contact.puneglobalgroup@gmail.com.",
+        text: "Pune Global Group is a pharma-qualified board supplier with full COA documentation for every lot. We support supplier qualification audits and can provide all required compliance documentation. Contact us at yogesh.sahu@puneglobalgroup.in.",
       },
     ],
     relatedProducts: ["cyber-xlpac-gc1", "cyber-premium", "pearlxl-packaging"],
@@ -2146,7 +2146,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "callout",
-        text: "Pune Global Group publishes regular market updates for our clients. To receive pricing alerts and availability updates for your grades, contact us at contact.puneglobalgroup@gmail.com or +91 98233 83230.",
+        text: "Pune Global Group publishes regular market updates for our clients. To receive pricing alerts and availability updates for your grades, contact us at yogesh.sahu@puneglobalgroup.in or +91 98233 83230.",
       },
     ],
     relatedProducts: ["cyber-xlpac-gc1", "cyber-xlpac-gc2", "eco-natura"],

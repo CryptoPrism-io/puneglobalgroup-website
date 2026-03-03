@@ -815,8 +815,8 @@ export default function InfrastructurePage() {
               <a href="tel:+919823383230" style={{ fontFamily: F.body, fontSize: "0.875rem", color: C.charcoal, textDecoration: "none", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: 500 }}>
                 <span>📞</span> +91 98233 83230
               </a>
-              <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ fontFamily: F.body, fontSize: "0.875rem", color: C.charcoal, textDecoration: "none", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: 500 }}>
-                <span>✉</span> contact.puneglobalgroup@gmail.com
+              <a href="mailto:yogesh.sahu@puneglobalgroup.in" style={{ fontFamily: F.body, fontSize: "0.875rem", color: C.charcoal, textDecoration: "none", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: 500 }}>
+                <span>✉</span> yogesh.sahu@puneglobalgroup.in
               </a>
               <div style={{ fontFamily: F.body, fontSize: "0.78rem", color: C.taupe }}>
                 GSTIN: 27FYYPS5999K1ZO
@@ -1080,8 +1080,8 @@ export default function InfrastructurePage() {
           }}
         >
           © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO ·{" "}
-          <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ color: "rgba(250,247,242,0.35)", textDecoration: "none" }}>
-            contact.puneglobalgroup@gmail.com
+          <a href="mailto:yogesh.sahu@puneglobalgroup.in" style={{ color: "rgba(250,247,242,0.35)", textDecoration: "none" }}>
+            yogesh.sahu@puneglobalgroup.in
           </a>{" "}
           · +91 98233 83230
         </p>
