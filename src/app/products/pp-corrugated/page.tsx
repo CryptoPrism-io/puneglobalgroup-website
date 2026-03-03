@@ -653,7 +653,7 @@ function Hero() {
           <img
             src="/hero-pp-family.jpg"
             alt="PP corrugated product family — boxes, trays, bins, layer pads, separators"
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "blur(1.5px)", transform: "scale(1.03)" }}
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
           />
           <div style={{
             position: "absolute", bottom: "1.5rem", right: "1.5rem",

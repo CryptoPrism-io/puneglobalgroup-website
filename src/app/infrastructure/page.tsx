@@ -9,12 +9,12 @@ import { SiteLogo } from "@/components/SiteLogo";
 // Image data
 // ————————————————————————————————————————————
 const MACHINE_IMAGES: Record<string, string[]> = {
-  "Flat Bed Punch Press":          ["/infrastructure/machines/rewinder-wide.jpg",        "/infrastructure/machines/rewinder-detail.jpg",        "/infrastructure/machines/rewinder-operation.jpg"],
-  "Plastic Ultrasonic Welder":     ["/infrastructure/machines/sheeter-wide.jpg",         "/infrastructure/machines/sheeter-detail.jpg",         "/infrastructure/machines/sheeter-operation.jpg"],
-  "Screen Printing Unit":          ["/infrastructure/machines/shrink-wrap-wide.jpg",     "/infrastructure/machines/shrink-wrap-detail.jpg",     "/infrastructure/machines/shrink-wrap-operation.jpg"],
-  "Guillotine Sheeter":            ["/infrastructure/machines/guillotine-wide.jpg",      "/infrastructure/machines/guillotine-detail.jpg",      "/infrastructure/machines/guillotine-operation.jpg"],
-  "Synchro Sheeter":               ["/infrastructure/machines/synchro-sheeter-wide.jpg", "/infrastructure/machines/synchro-sheeter-detail.jpg", "/infrastructure/machines/synchro-sheeter-operation.jpg"],
-  "Stretch Wrap & Forklift Despatch": ["/infrastructure/machines/stretch-wrap-wide.jpg", "/infrastructure/machines/stretch-wrap-detail.jpg",    "/infrastructure/machines/stretch-wrap-operation.jpg"],
+  "Flat Bed Punch Press":             ["/infrastructure/machines/flat-bed-punch-press-wide.jpg",       "/infrastructure/machines/flat-bed-punch-press-detail.jpg",       "/infrastructure/machines/flat-bed-punch-press-operation.jpg"],
+  "Plastic Ultrasonic Welder":        ["/infrastructure/machines/ultrasonic-welder-wide.jpg",          "/infrastructure/machines/ultrasonic-welder-detail.jpg",          "/infrastructure/machines/ultrasonic-welder-operation.jpg"],
+  "Screen Printing Unit":             ["/infrastructure/machines/screen-printing-wide.jpg",            "/infrastructure/machines/screen-printing-detail.jpg",            "/infrastructure/machines/screen-printing-operation.jpg"],
+  "Guillotine Sheeter":               ["/infrastructure/machines/guillotine-sheeter-wide.jpg",         "/infrastructure/machines/guillotine-sheeter-detail.jpg",         "/infrastructure/machines/guillotine-sheeter-operation.jpg"],
+  "Synchro Sheeter":                  ["/infrastructure/machines/synchro-sheeter-wide.jpg",            "/infrastructure/machines/synchro-sheeter-detail.jpg",            "/infrastructure/machines/synchro-sheeter-operation.jpg"],
+  "Stretch Wrap & Forklift Despatch": ["/infrastructure/machines/stretch-wrap-forklift-wide.jpg",      "/infrastructure/machines/stretch-wrap-forklift-detail.jpg",      "/infrastructure/machines/stretch-wrap-forklift-operation.jpg"],
 };
 const MC_LABELS = ["Wide View", "Detail", "In Operation"];
 

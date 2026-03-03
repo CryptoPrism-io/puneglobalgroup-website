@@ -496,7 +496,7 @@ export default function PaperBoardPage() {
             <img
               src="/hero-paper-family.jpg"
               alt="Premium paper and board grades — ITC PSPD reels and cut sheets"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "blur(1.5px)", transform: "scale(1.03)" }}
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
             />
             <div style={{
               position: "absolute", bottom: "1.5rem", right: "1.5rem",

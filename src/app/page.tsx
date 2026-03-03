@@ -127,7 +127,7 @@ const GLOBAL_CSS = `
   .hero-carousel-img  {
     position: absolute; inset: 0;
     width: 100%; height: 100%; object-fit: cover;
-    filter: blur(1px); display: block;
+    display: block;
   }
   .hero-carousel-img:nth-child(1) { animation: heroSlide1 25s linear infinite 0s;   }
   .hero-carousel-img:nth-child(2) { animation: heroSlide2 25s linear infinite -20s;  }
@@ -1627,7 +1627,7 @@ function ClientLogoBand() {
         letterSpacing: "0.24em", textTransform: "uppercase",
         color: C.taupe, opacity: 0.55, marginBottom: "2.25rem",
       }}>
-        Trusted by India&apos;s leading brands
+        Our packaging protects their products
       </p>
 
       {/* Marquee wrapper */}
