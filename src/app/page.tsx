@@ -1056,95 +1056,6 @@ function ProductsSection() {
     <section id="products" style={{ background: C.cream, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
-        {/* Header */}
-        <div className="sr" style={{ marginBottom: "4rem" }}>
-          <span className="eyebrow">Three Business Lines</span>
-          <h2 style={{ fontFamily: F.display, fontWeight: 700,
-            fontSize: "clamp(2rem, 4vw, 3.4rem)", color: C.charcoal,
-            letterSpacing: "-0.02em", lineHeight: 1.1, maxWidth: "560px" }}>
-            Manufacture. Convert. Trade.
-          </h2>
-          <p style={{ fontFamily: F.body, fontSize: "1rem", color: C.taupe,
-            lineHeight: 1.8, maxWidth: "520px", marginTop: "1rem", fontWeight: 300 }}>
-            We manufacture industrial PP packaging to export spec. We convert FBB
-            into press-ready sheets. We trade ITC, TNPL and imported board grades.
-            One facility. One partner. 30 years.
-          </p>
-        </div>
-
-        {/* 3 Business line cards — light parchment */}
-        <div className="products-grid"
-          style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px",
-            background: C.borderMid, marginBottom: "4rem" }}>
-          {lines.map((line, i) => (
-            <div key={line.eyebrow} className="sr svc-card" data-delay={`${0.1 * i}`}
-              style={{
-                background: C.cream,
-                padding: "2.75rem",
-                display: "flex", flexDirection: "column",
-                transition: "background 0.25s",
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = "#fff"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = C.cream; }}>
-
-              <div className="sr prod-num-anim svc-num" data-delay={`${0.05 + 0.1 * i}`}
-                style={{ fontFamily: F.display, fontWeight: 700, fontSize: "3.5rem",
-                  color: C.saffron, lineHeight: 1, marginBottom: "1.5rem" }}>
-                {line.num}
-              </div>
-
-              <span style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.65rem",
-                letterSpacing: "0.14em", textTransform: "uppercase", color: C.taupe,
-                marginBottom: "0.75rem" }}>
-                {line.eyebrow}
-              </span>
-
-              <h3 className="svc-heading" style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1.4rem",
-                color: C.charcoal, letterSpacing: "-0.01em", lineHeight: 1.2, marginBottom: "1rem" }}>
-                {line.heading}
-              </h3>
-
-              <p className="svc-desc" style={{ fontFamily: F.body, fontSize: "1.08rem", color: C.warm,
-                lineHeight: 1.78, marginBottom: "1.5rem", flex: 1, fontWeight: 300 }}>
-                {line.desc}
-              </p>
-
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "2rem" }}>
-                {line.tags.map((t) => (
-                  <Link key={t.label} href={t.href} onClick={(e) => e.stopPropagation()} style={{
-                    fontFamily: F.body, fontSize: "0.68rem", padding: "3px 10px",
-                    border: `1px solid ${C.borderMid}`, color: C.warm, borderRadius: "1px",
-                    letterSpacing: "0.02em", textDecoration: "none",
-                    transition: "background 0.18s, border-color 0.18s, color 0.18s",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.background = C.charcoal;
-                    (e.currentTarget as HTMLAnchorElement).style.color = C.cream;
-                    (e.currentTarget as HTMLAnchorElement).style.borderColor = C.charcoal;
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.background = "";
-                    (e.currentTarget as HTMLAnchorElement).style.color = C.warm;
-                    (e.currentTarget as HTMLAnchorElement).style.borderColor = C.borderMid;
-                  }}>
-                    {t.label}
-                  </Link>
-                ))}
-              </div>
-
-              <Link href={line.href} className="svc-cta" style={{
-                display: "inline-flex", alignItems: "center", gap: "6px",
-                fontFamily: F.body, fontSize: "1.15rem", fontWeight: 500,
-                letterSpacing: "0.06em", color: C.charcoal, textDecoration: "none",
-                borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "2px",
-                alignSelf: "flex-start",
-              }}>
-                {line.cta} <IconArrowRight size={11} />
-              </Link>
-            </div>
-          ))}
-        </div>
-
         {/* PP Carousel subheading */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
           marginBottom: "1.25rem" }}>
@@ -1419,6 +1330,20 @@ function IndustriesSection() {
 
 /* ─── Social Proof ───────────────────────────────────────────────────────────── */
 function SocialProofSection() {
+  const clients = [
+    { name: "Asian Paints",   file: "asian-paints.svg"   },
+    { name: "ITC",            file: "itc.svg"            },
+    { name: "Finolex",        file: "finolex.svg"        },
+    { name: "Volkswagen",     file: "volkswagen.svg"     },
+    { name: "General Motors", file: "general-motors.svg" },
+    { name: "Mitsubishi",     file: "mitsubishi.svg"     },
+    { name: "Suguna",         file: "suguna.jpg"         },
+    { name: "Sun Pharma",     file: "sun-pharma.svg"     },
+    { name: "Cipla",          file: "cipla.svg"          },
+    { name: "Dr. Reddy's",    file: "dr-reddys.svg"      },
+    { name: "Alkem Labs",     file: "alkem.png"          },
+    { name: "Glenmark",       file: "glenmark.png"       },
+  ];
   return (
     <section style={{ position: "relative", background: C.charcoal, padding: "100px clamp(1.5rem, 5vw, 4rem) 80px", overflow: "hidden" }}>
 
@@ -1493,6 +1418,48 @@ function SocialProofSection() {
         </div>
 
       </div>
+
+      {/* ── Client logo band — same dark section, no break ── */}
+      <div style={{ borderTop: "1px solid rgba(250,247,242,0.06)", paddingTop: "3rem", marginTop: "3rem" }}>
+        <p style={{
+          textAlign: "center", fontFamily: F.body, fontSize: "0.58rem", fontWeight: 600,
+          letterSpacing: "0.24em", textTransform: "uppercase",
+          color: "rgba(250,247,242,0.22)", marginBottom: "2.25rem",
+        }}>
+          Our packaging protects their products
+        </p>
+        <div style={{ position: "relative", overflow: "hidden", width: "100%" }}>
+          <div aria-hidden="true" style={{
+            position: "absolute", left: 0, top: 0, bottom: 0, width: "140px",
+            background: `linear-gradient(to right, ${C.charcoal} 30%, transparent)`,
+            zIndex: 2, pointerEvents: "none",
+          }} />
+          <div aria-hidden="true" style={{
+            position: "absolute", right: 0, top: 0, bottom: 0, width: "140px",
+            background: `linear-gradient(to left, ${C.charcoal} 30%, transparent)`,
+            zIndex: 2, pointerEvents: "none",
+          }} />
+          <div className="logo-track">
+            {[...clients, ...clients].map((c, i) => (
+              <div key={`${c.name}-${i}`} className="logo-item">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/clients/${c.file}`}
+                  alt={c.name}
+                  className="logo-img"
+                  style={{ filter: "brightness(0) invert(1)", opacity: 0.3 }}
+                  onError={(e) => {
+                    const el = e.currentTarget as HTMLImageElement;
+                    el.style.display = "none";
+                    if (el.parentElement) el.parentElement.style.display = "none";
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
     </section>
   );
 }
@@ -2150,7 +2117,6 @@ export default function HomePage() {
         <ProductsSection />
         <InfraCallout />
         <SocialProofSection />
-        <ClientLogoBand />
         <BlogTeaser />
         <ContactSection />
       </main>
