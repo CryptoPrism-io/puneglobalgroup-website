@@ -4,552 +4,474 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { blogPosts, BlogPost } from "@/lib/pgg-data";
 
-// ————————————————————————————————————————————
-// The Merchant — Design Tokens
-// ————————————————————————————————————————————
 const C = {
-  cream: "#FAF7F2",
+  cream:     "#FAF7F2",
   parchment: "#F0EAE0",
-  charcoal: "#1C1A17",
-  warm: "#4A4540",
-  taupe: "#7A736D",
-  saffron: "#F5A623",
-  dark: "#141210",
-  border: "rgba(28,26,23,0.1)",
-  borderMid: "rgba(28,26,23,0.16)",
+  charcoal:  "#1C1A17",
+  warm:      "#4A4540",
+  taupe:     "#7A736D",
+  dark:      "#141210",
+  border:    "rgba(28,26,23,0.1)",
+  borderMid: "rgba(28,26,23,0.18)",
 };
 
 const F = {
   display: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
-  body: "'DM Sans', 'Plus Jakarta Sans', sans-serif",
-  italic: "'Cormorant Garamond', Georgia, serif",
+  body:    "'DM Sans', 'Plus Jakarta Sans', sans-serif",
+  italic:  "'Cormorant Garamond', Georgia, serif",
 };
 
-const GLOBAL_CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
+const CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,300;1,400;1,500&display=swap');
   *, *::before, *::after { box-sizing: border-box; }
-  body { margin: 0; background: #FAF7F2; }
+  body { margin: 0; background: ${C.cream}; }
 
+  /* ── Animations ──────────────────── */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
+    from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
   }
   @keyframes ruleGrow {
-    from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
+    from { transform: scaleX(0); transform-origin: left; }
+    to   { transform: scaleX(1); transform-origin: left; }
   }
-
-  .sr { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .sr { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .sr.visible { opacity: 1; transform: translateY(0); }
 
-  .blog-nav-link {
-    font-family: 'DM Sans', sans-serif;
-    color: ${C.charcoal};
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-  }
-  .blog-nav-link:hover { opacity: 1; }
-
-  .blog-card {
-    background: #fff;
+  /* ── Featured post ───────────────── */
+  .feat-wrap {
+    display: grid;
+    grid-template-columns: 55% 1fr;
     border: 1px solid ${C.border};
-    border-radius: 6px;
+    border-radius: 4px;
     overflow: hidden;
+    background: #fff;
+    text-decoration: none;
+    transition: box-shadow 0.35s ease, border-color 0.35s ease;
+    min-height: 380px;
+  }
+  .feat-wrap:hover {
+    box-shadow: 0 20px 60px rgba(28,26,23,0.11);
+    border-color: ${C.borderMid};
+  }
+  .feat-img-wrap {
+    position: relative;
+    overflow: hidden;
+    background: ${C.parchment};
+  }
+  .feat-img-wrap img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+  .feat-wrap:hover .feat-img-wrap img { transform: scale(1.05); }
+  .feat-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(20,18,16,0.38) 0%, rgba(20,18,16,0.05) 100%);
+  }
+
+  /* ── Blog card grid ──────────────── */
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: ${C.border};
+    border: 1px solid ${C.border};
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  @media (max-width: 860px) {
+    .blog-grid { grid-template-columns: repeat(2, 1fr); }
+    .feat-wrap { grid-template-columns: 1fr; }
+    .feat-img-wrap { min-height: 260px; }
+    .blog-masthead-rule { display: none; }
+  }
+  @media (max-width: 560px) {
+    .blog-grid { grid-template-columns: 1fr; }
+  }
+
+  .bcard {
+    background: ${C.cream};
+    text-decoration: none;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
-    text-decoration: none;
+    transition: background 0.25s ease;
+    position: relative;
   }
-  .blog-card:hover {
-    border-color: ${C.borderMid};
-    box-shadow: 0 12px 40px rgba(28,26,23,0.08);
-    transform: translateY(-4px);
+  .bcard:hover { background: #fff; }
+
+  /* Image thumbnail */
+  .bcard-img {
+    height: 210px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    background: ${C.parchment};
+  }
+  .bcard-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.65s cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+  .bcard:hover .bcard-img img { transform: scale(1.06); }
+  .bcard-accent {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
   }
 
-  .read-arrow {
-    display: inline-block;
-    transition: transform 0.2s ease;
+  /* Card body */
+  .bcard-body {
+    padding: 1.5rem 1.5rem 1.75rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    border-top: 1px solid ${C.border};
   }
-  .blog-card:hover .read-arrow { transform: translateX(4px); }
+
+  /* Read arrow */
+  .rarrow { display: inline-block; transition: transform 0.22s ease; }
+  .bcard:hover .rarrow { transform: translateX(5px); }
+  .feat-wrap:hover .rarrow { transform: translateX(5px); }
+
+  /* Masthead decorative number */
+  .post-index {
+    font-family: ${F.display};
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: ${C.border};
+    letter-spacing: 0.08em;
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    font-style: italic;
+  }
 `;
 
-// ————————————————————————————————————————————
-// Scroll reveal
-// ————————————————————————————————————————————
 function useScrollReveal() {
   useEffect(() => {
-    const els = document.querySelectorAll(".sr");
     const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("visible");
-            obs.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } }),
+      { threshold: 0.08 }
     );
-    els.forEach((el) => obs.observe(el));
+    document.querySelectorAll(".sr").forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, []);
 }
 
-// ————————————————————————————————————————————
-// Blog Card
-// ————————————————————————————————————————————
-function BlogCard({ post, delay }: { post: BlogPost; delay: number }) {
+function BlogCard({ post, index }: { post: BlogPost; index: number }) {
   return (
-    <Link
-      href={`/blog/${post.slug}`}
-      className="blog-card sr"
-      style={{ animationDelay: `${delay}s` } as React.CSSProperties}
-    >
-      {/* Cover image */}
-      {post.coverImage && (
-        <div style={{ height: "200px", overflow: "hidden", flexShrink: 0, position: "relative" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={post.coverImage}
-            alt=""
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-          />
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "3px", background: post.categoryColor }} />
-        </div>
-      )}
-      {!post.coverImage && <div style={{ height: "3px", background: post.categoryColor, flexShrink: 0 }} />}
+    <Link href={`/blog/${post.slug}`} className="bcard sr" style={{ transitionDelay: `${(index % 3) * 0.08}s` } as React.CSSProperties}>
+      {/* Image */}
+      <div className="bcard-img">
+        {post.coverImage
+          // eslint-disable-next-line @next/next/no-img-element
+          ? <img src={post.coverImage} alt="" />
+          : <div style={{ background: C.parchment, width: "100%", height: "100%" }} />
+        }
+        <div className="bcard-accent" style={{ background: post.categoryColor }} />
+      </div>
 
-      <div
-        style={{
-          padding: "1.75rem",
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.875rem",
-        }}
-      >
-        {/* Category + meta */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
-          <span
-            style={{
-              fontFamily: F.body,
-              fontSize: "0.68rem",
-              fontWeight: 600,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: post.categoryColor,
-              background: `${post.categoryColor}15`,
-              border: `1px solid ${post.categoryColor}30`,
-              padding: "0.22rem 0.55rem",
-              borderRadius: "2px",
-            }}
-          >
+      {/* Body */}
+      <div className="bcard-body">
+        <span className="post-index">#{String(index + 2).padStart(2, "0")}</span>
+
+        {/* Category + date */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+          <span style={{
+            fontFamily: F.body, fontSize: "0.63rem", fontWeight: 600,
+            letterSpacing: "0.11em", textTransform: "uppercase",
+            color: post.categoryColor, background: `${post.categoryColor}14`,
+            border: `1px solid ${post.categoryColor}28`, padding: "0.2rem 0.5rem", borderRadius: "2px",
+          }}>
             {post.category}
           </span>
-          <span style={{ fontFamily: F.body, fontSize: "0.74rem", color: C.taupe }}>
-            {post.date} · {post.readTime} read
+          <span style={{ fontFamily: F.body, fontSize: "0.72rem", color: C.taupe }}>
+            {post.readTime} read
           </span>
         </div>
 
         {/* Title */}
-        <h2
-          style={{
-            fontFamily: F.display,
-            fontSize: "1.25rem",
-            fontWeight: 600,
-            color: C.charcoal,
-            margin: 0,
-            lineHeight: 1.3,
-            flex: 1,
-          }}
-        >
+        <h2 style={{
+          fontFamily: F.display, fontSize: "1.1rem", fontWeight: 700,
+          color: C.charcoal, margin: 0, lineHeight: 1.35, flex: 1,
+        }}>
           {post.title}
         </h2>
 
-        {/* Excerpt */}
-        <p
-          style={{
-            fontFamily: F.body,
-            fontSize: "0.875rem",
-            color: C.taupe,
-            margin: 0,
-            lineHeight: 1.65,
-          }}
-        >
+        {/* Excerpt — truncated */}
+        <p style={{
+          fontFamily: F.body, fontSize: "0.825rem", color: C.taupe,
+          margin: 0, lineHeight: 1.65,
+          display: "-webkit-box", WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical", overflow: "hidden",
+        } as React.CSSProperties}>
           {post.excerpt}
         </p>
 
-        {/* Read more */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.35rem",
-            fontFamily: F.body,
-            fontSize: "0.8rem",
-            fontWeight: 600,
-            color: C.charcoal,
-            letterSpacing: "0.02em",
-            marginTop: "0.25rem",
-          }}
-        >
-          Read Article
-          <span className="read-arrow">→</span>
+        {/* CTA */}
+        <div style={{
+          fontFamily: F.body, fontSize: "0.78rem", fontWeight: 600,
+          color: C.charcoal, letterSpacing: "0.03em", marginTop: "0.25rem",
+          display: "flex", alignItems: "center", gap: "0.3rem",
+        }}>
+          Read Article <span className="rarrow">→</span>
         </div>
       </div>
     </Link>
   );
 }
 
-// ————————————————————————————————————————————
-// Main Page
-// ————————————————————————————————————————————
 export default function BlogPage() {
   useScrollReveal();
+  const featured = blogPosts[0];
+  const rest = blogPosts.slice(1);
 
   return (
     <div style={{ background: C.cream, minHeight: "100vh", fontFamily: F.body, paddingTop: "70px" }}>
-      <style>{GLOBAL_CSS}</style>
+      <style>{CSS}</style>
 
-      {/* ——— Hero ——— */}
-      <section
-        style={{
-          background: C.cream,
-          padding: "5.5rem 2.5rem 4rem",
-          position: "relative",
-          overflow: "hidden",
-          borderBottom: `1px solid ${C.border}`,
-        }}
-      >
-        {/* Paper grain */}
-        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity: 0.035 }} aria-hidden>
-          <filter id="grain-blog"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
-          <rect width="100%" height="100%" filter="url(#grain-blog)" />
+      {/* ══ Masthead ═══════════════════════════════════════════════════════ */}
+      <section style={{
+        padding: "5rem 2.5rem 3.5rem",
+        borderBottom: `1px solid ${C.border}`,
+        position: "relative", overflow: "hidden",
+      }}>
+        {/* Grain */}
+        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity: 0.03 }} aria-hidden>
+          <filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.68" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
+          <rect width="100%" height="100%" filter="url(#g)" />
         </svg>
 
-        <div style={{ position: "relative", maxWidth: "760px", margin: "0 auto" }}>
-          <p
-            style={{
-              fontFamily: F.italic,
-              fontStyle: "italic",
-              fontSize: "1rem",
-              color: C.taupe,
-              margin: "0 0 1.25rem",
-              animation: "fadeUp 0.7s ease both",
-            }}
-          >
-            Industry Insights
-          </p>
-          <div
-            style={{
-              width: "48px",
-              height: "2px",
-              background: C.charcoal,
-              marginBottom: "1.5rem",
-              transformOrigin: "left",
-              animation: "ruleGrow 0.6s ease 0.15s both",
-            }}
-          />
-          <h1
-            style={{
-              fontFamily: F.display,
-              fontSize: "clamp(2.2rem, 5vw, 3.5rem)",
-              fontWeight: 700,
-              color: C.charcoal,
-              margin: "0 0 1.5rem",
-              lineHeight: 1.1,
-              animation: "fadeUp 0.8s ease 0.25s both",
-            }}
-          >
-            Packaging{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 500 }}>Knowledge Hub</em>
+        {/* Large decorative numeral behind text */}
+        <div aria-hidden style={{
+          position: "absolute", right: "2rem", top: "50%", transform: "translateY(-50%)",
+          fontFamily: F.display, fontSize: "clamp(8rem, 18vw, 16rem)",
+          fontWeight: 800, fontStyle: "italic",
+          color: "rgba(28,26,23,0.035)", lineHeight: 1,
+          pointerEvents: "none", userSelect: "none",
+        }}>01</div>
+
+        <div style={{ maxWidth: "1100px", margin: "0 auto", position: "relative" }}>
+
+          {/* Issue label */}
+          <div style={{
+            display: "flex", alignItems: "center", gap: "1rem", marginBottom: "2rem",
+            animation: "fadeUp 0.6s ease both",
+          }}>
+            <span style={{
+              fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600,
+              letterSpacing: "0.18em", textTransform: "uppercase", color: C.taupe,
+            }}>
+              Knowledge Hub
+            </span>
+            <div className="blog-masthead-rule" style={{
+              flex: "0 0 48px", height: "1px", background: C.taupe, opacity: 0.4,
+              animation: "ruleGrow 0.55s ease 0.2s both",
+            }} />
+            <span style={{
+              fontFamily: F.italic, fontStyle: "italic",
+              fontSize: "0.75rem", color: C.taupe, opacity: 0.7,
+            }}>
+              {blogPosts.length} Articles
+            </span>
+          </div>
+
+          {/* Headline */}
+          <h1 style={{
+            fontFamily: F.display,
+            fontSize: "clamp(2.4rem, 5.5vw, 4rem)",
+            fontWeight: 800, color: C.charcoal,
+            margin: "0 0 1.25rem", lineHeight: 1.05,
+            animation: "fadeUp 0.75s ease 0.15s both",
+            maxWidth: "680px",
+          }}>
+            Packaging<br />
+            <em style={{ fontStyle: "italic", fontWeight: 500, color: C.warm }}>Intelligence</em>
           </h1>
-          <p
-            style={{
-              fontFamily: F.body,
-              fontSize: "1rem",
-              color: C.warm,
-              lineHeight: 1.75,
-              margin: 0,
-              animation: "fadeUp 0.8s ease 0.4s both",
-            }}
-          >
-            Technical guides, compliance updates, and market intelligence for
-            packaging buyers, procurement managers, and converting professionals
-            across India&apos;s paper and board supply chain.
+
+          <p style={{
+            fontFamily: F.body, fontSize: "0.95rem", color: C.warm,
+            lineHeight: 1.75, margin: 0, maxWidth: "520px",
+            animation: "fadeUp 0.75s ease 0.3s both",
+          }}>
+            Technical guides, compliance updates, and market intelligence
+            for packaging buyers and converting professionals across India.
           </p>
         </div>
       </section>
 
-      {/* ——— Blog Grid ——— */}
-      <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "4rem 2.5rem 5rem" }}>
+      {/* ══ Content ════════════════════════════════════════════════════════ */}
+      <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "3.5rem 2.5rem 5rem" }}>
 
-        {/* Featured post */}
-        <div style={{ marginBottom: "3.5rem" }}>
-          <p
-            style={{
-              fontFamily: F.body,
-              fontSize: "0.7rem",
-              fontWeight: 600,
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              color: C.taupe,
-              margin: "0 0 1.5rem",
-            }}
-          >
-            Latest Articles
-          </p>
+        {/* ── Featured post ──────────────────────────── */}
+        <div style={{ marginBottom: "1px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
+            <span style={{
+              fontFamily: F.body, fontSize: "0.63rem", fontWeight: 600,
+              letterSpacing: "0.16em", textTransform: "uppercase", color: C.taupe,
+            }}>Latest</span>
+            <div style={{ flex: "0 0 32px", height: "1px", background: C.taupe, opacity: 0.35 }} />
+            <span style={{
+              fontFamily: F.italic, fontStyle: "italic",
+              fontSize: "0.75rem", color: C.taupe, opacity: 0.6,
+            }}>#01</span>
+          </div>
 
-          <Link
-            href={`/blog/${blogPosts[0].slug}`}
-            style={{ textDecoration: "none", display: "block" }}
-          >
-            <article
-              style={{
-                background: "#fff",
-                border: `1px solid ${C.border}`,
-                borderRadius: "6px",
-                overflow: "hidden",
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                transition: "border-color 0.2s ease, box-shadow 0.2s ease",
-                marginBottom: "1.5rem",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = C.borderMid;
-                (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 40px rgba(28,26,23,0.08)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = C.border;
-                (e.currentTarget as HTMLElement).style.boxShadow = "none";
-              }}
-            >
-              {/* Left: cover image panel */}
-              <div
-                style={{
-                  minHeight: "280px",
-                  position: "relative",
-                  overflow: "hidden",
-                  borderRight: `1px solid ${C.border}`,
-                  background: C.parchment,
-                }}
-              >
-                {blogPosts[0].coverImage && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={blogPosts[0].coverImage}
-                    alt=""
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", position: "absolute", inset: 0 }}
-                  />
-                )}
-                {/* Dark gradient overlay so text is readable */}
-                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)" }} />
-                {/* Category accent bar */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: "3px",
-                    background: blogPosts[0].categoryColor,
-                  }}
-                />
-                {/* Text pinned to bottom */}
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "2rem", zIndex: 1 }}>
-                  <span
-                    style={{
-                      fontFamily: F.body,
-                      fontSize: "0.68rem",
-                      fontWeight: 600,
-                      letterSpacing: "0.12em",
-                      textTransform: "uppercase",
-                      color: "#fff",
-                      background: `${blogPosts[0].categoryColor}cc`,
-                      padding: "0.25rem 0.6rem",
-                      borderRadius: "2px",
-                      display: "inline-block",
-                      marginBottom: "0.75rem",
-                    }}
-                  >
-                    {blogPosts[0].category}
-                  </span>
-                  <h2
-                    style={{
-                      fontFamily: F.display,
-                      fontSize: "1.5rem",
-                      fontWeight: 700,
-                      color: "#fff",
-                      margin: 0,
-                      lineHeight: 1.25,
-                      textShadow: "0 1px 4px rgba(0,0,0,0.4)",
-                    }}
-                  >
-                    {blogPosts[0].title}
-                  </h2>
-                </div>
+          <Link href={`/blog/${featured.slug}`} className="feat-wrap sr">
+            {/* Left: image */}
+            <div className="feat-img-wrap">
+              {featured.coverImage && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={featured.coverImage} alt="" />
+              )}
+              <div className="feat-overlay" />
+              <div style={{
+                position: "absolute", top: 0, left: 0, right: 0,
+                height: "3px", background: featured.categoryColor,
+              }} />
+            </div>
+
+            {/* Right: content */}
+            <div style={{
+              padding: "3rem 2.75rem",
+              display: "flex", flexDirection: "column", justifyContent: "center",
+              gap: "1.25rem", borderLeft: `1px solid ${C.border}`,
+            }}>
+              {/* Category */}
+              <span style={{
+                fontFamily: F.body, fontSize: "0.63rem", fontWeight: 600,
+                letterSpacing: "0.13em", textTransform: "uppercase",
+                color: featured.categoryColor,
+              }}>
+                {featured.category}
+              </span>
+
+              {/* Title */}
+              <h2 style={{
+                fontFamily: F.display,
+                fontSize: "clamp(1.5rem, 2.8vw, 2.1rem)",
+                fontWeight: 800, color: C.charcoal,
+                margin: 0, lineHeight: 1.18,
+              }}>
+                {featured.title}
+              </h2>
+
+              {/* Rule */}
+              <div style={{ width: "36px", height: "2px", background: C.charcoal, opacity: 0.2 }} />
+
+              {/* Excerpt */}
+              <p style={{
+                fontFamily: F.body, fontSize: "0.9rem", color: C.warm,
+                margin: 0, lineHeight: 1.75,
+              }}>
+                {featured.excerpt}
+              </p>
+
+              {/* Meta + CTA */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "0.5rem" }}>
+                <span style={{ fontFamily: F.body, fontSize: "0.75rem", color: C.taupe }}>
+                  {featured.date} · {featured.readTime} read
+                </span>
+                <span style={{
+                  fontFamily: F.body, fontSize: "0.82rem", fontWeight: 600,
+                  color: C.charcoal, letterSpacing: "0.02em",
+                  display: "flex", alignItems: "center", gap: "0.3rem",
+                }}>
+                  Read Article <span className="rarrow">→</span>
+                </span>
               </div>
-
-              {/* Right: content */}
-              <div
-                style={{
-                  padding: "3rem",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  gap: "1rem",
-                }}
-              >
-                <div style={{ fontFamily: F.body, fontSize: "0.78rem", color: C.taupe }}>
-                  {blogPosts[0].date} · {blogPosts[0].readTime} read
-                </div>
-                <p
-                  style={{
-                    fontFamily: F.body,
-                    fontSize: "0.95rem",
-                    color: C.warm,
-                    margin: 0,
-                    lineHeight: 1.7,
-                  }}
-                >
-                  {blogPosts[0].excerpt}
-                </p>
-                <div
-                  style={{
-                    fontFamily: F.body,
-                    fontSize: "0.85rem",
-                    fontWeight: 600,
-                    color: C.charcoal,
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  Read Article →
-                </div>
-              </div>
-            </article>
+            </div>
           </Link>
         </div>
 
-        {/* Remaining posts grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-            gap: "1.25rem",
-          }}
-        >
-          {blogPosts.slice(1).map((post, i) => (
-            <BlogCard key={post.slug} post={post} delay={i * 0.1} />
-          ))}
+        {/* ── Cards grid ──────────────────────────────── */}
+        <div style={{ marginTop: "3rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
+            <span style={{
+              fontFamily: F.body, fontSize: "0.63rem", fontWeight: 600,
+              letterSpacing: "0.16em", textTransform: "uppercase", color: C.taupe,
+            }}>More Articles</span>
+            <div style={{ flex: "0 0 32px", height: "1px", background: C.taupe, opacity: 0.35 }} />
+          </div>
+
+          <div className="blog-grid">
+            {rest.map((post, i) => (
+              <BlogCard key={post.slug} post={post} index={i} />
+            ))}
+          </div>
         </div>
 
-        {/* ——— CTA Banner ——— */}
-        <div
-          className="sr"
-          style={{
-            marginTop: "4.5rem",
-            background: C.dark,
-            borderRadius: "6px",
-            padding: "3.5rem 3rem",
-            display: "grid",
-            gridTemplateColumns: "1fr auto",
-            gap: "2rem",
-            alignItems: "center",
-          }}
-        >
+        {/* ── CTA ─────────────────────────────────────── */}
+        <div className="sr" style={{
+          marginTop: "4rem",
+          background: C.dark,
+          borderRadius: "4px",
+          padding: "3.5rem",
+          display: "grid",
+          gridTemplateColumns: "1fr auto",
+          gap: "2rem",
+          alignItems: "center",
+        }}>
           <div>
-            <p
-              style={{
-                fontFamily: F.italic,
-                fontStyle: "italic",
-                fontSize: "0.95rem",
-                color: "rgba(250,247,242,0.5)",
-                margin: "0 0 0.75rem",
-              }}
-            >
+            <p style={{
+              fontFamily: F.italic, fontStyle: "italic",
+              fontSize: "0.9rem", color: "rgba(250,247,242,0.45)",
+              margin: "0 0 0.75rem",
+            }}>
               Need Expert Advice?
             </p>
-            <h3
-              style={{
-                fontFamily: F.display,
-                fontSize: "1.75rem",
-                fontWeight: 700,
-                color: C.cream,
-                margin: "0 0 0.875rem",
-                lineHeight: 1.2,
-              }}
-            >
+            <h3 style={{
+              fontFamily: F.display, fontSize: "1.75rem", fontWeight: 700,
+              color: C.cream, margin: "0 0 0.75rem", lineHeight: 1.2,
+            }}>
               Talk to Our Technical Team
             </h3>
-            <p
-              style={{
-                fontFamily: F.body,
-                fontSize: "0.875rem",
-                color: "rgba(250,247,242,0.55)",
-                margin: 0,
-                lineHeight: 1.7,
-              }}
-            >
-              Our sales team has hands-on experience across pharma, FMCG, automotive,
-              and electronics packaging. Honest answers — not a sales pitch.
+            <p style={{
+              fontFamily: F.body, fontSize: "0.875rem",
+              color: "rgba(250,247,242,0.5)", margin: 0, lineHeight: 1.7,
+            }}>
+              Hands-on expertise across pharma, FMCG, automotive, and electronics packaging.
+              Honest answers — not a sales pitch.
             </p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", alignItems: "flex-end" }}>
-            <Link
-              href="/#contact"
-              style={{
-                fontFamily: F.body,
-                background: C.cream,
-                color: C.charcoal,
-                textDecoration: "none",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                padding: "0.9rem 1.75rem",
-                borderRadius: "3px",
-                whiteSpace: "nowrap",
-              }}
-            >
+            <Link href="/#contact" style={{
+              fontFamily: F.body, background: C.cream, color: C.charcoal,
+              textDecoration: "none", fontSize: "0.875rem", fontWeight: 600,
+              padding: "0.9rem 1.75rem", borderRadius: "3px", whiteSpace: "nowrap",
+            }}>
               Ask a Question →
             </Link>
-            <a
-              href="tel:+919823383230"
-              style={{
-                fontFamily: F.body,
-                fontSize: "0.8rem",
-                color: "rgba(250,247,242,0.4)",
-                textDecoration: "none",
-                textAlign: "center",
-              }}
-            >
+            <a href="tel:+919823383230" style={{
+              fontFamily: F.body, fontSize: "0.78rem",
+              color: "rgba(250,247,242,0.35)", textDecoration: "none", textAlign: "center",
+            }}>
               +91 98233 83230
             </a>
           </div>
         </div>
       </main>
 
-      {/* ——— Footer ——— */}
-      <footer
-        style={{
-          background: C.dark,
-          borderTop: `1px solid rgba(250,247,242,0.07)`,
-          padding: "2rem 2.5rem",
-          textAlign: "center",
-        }}
-      >
-        <p
-          style={{
-            fontFamily: F.body,
-            fontSize: "0.78rem",
-            color: "rgba(250,247,242,0.35)",
-            margin: 0,
-          }}
-        >
+      {/* ══ Footer ═════════════════════════════════════════════════════════ */}
+      <footer style={{
+        background: C.dark, borderTop: `1px solid rgba(250,247,242,0.07)`,
+        padding: "2rem 2.5rem", textAlign: "center",
+      }}>
+        <p style={{
+          fontFamily: F.body, fontSize: "0.75rem",
+          color: "rgba(250,247,242,0.3)", margin: 0,
+        }}>
           © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO ·{" "}
-          <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ color: "rgba(250,247,242,0.35)", textDecoration: "none" }}>
+          <a href="mailto:contact.puneglobalgroup@gmail.com" style={{ color: "rgba(250,247,242,0.3)", textDecoration: "none" }}>
             contact.puneglobalgroup@gmail.com
           </a>
         </p>

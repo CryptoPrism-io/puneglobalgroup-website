@@ -129,17 +129,14 @@ const GLOBAL_CSS = `
     width: 100%; height: 100%; object-fit: cover;
     display: block;
   }
-  /* 10-image carousel — 50s cycle, 5s stagger each */
+  /* 7-image carousel — 50s cycle, ~7s stagger each (50/7) */
   .hero-carousel-img:nth-child(1)  { animation: heroSlide1 50s linear infinite 0s;   }
-  .hero-carousel-img:nth-child(2)  { animation: heroSlide2 50s linear infinite -45s;  }
-  .hero-carousel-img:nth-child(3)  { animation: heroSlide1 50s linear infinite -40s;  }
-  .hero-carousel-img:nth-child(4)  { animation: heroSlide2 50s linear infinite -35s;  }
-  .hero-carousel-img:nth-child(5)  { animation: heroSlide1 50s linear infinite -30s;  }
-  .hero-carousel-img:nth-child(6)  { animation: heroSlide2 50s linear infinite -25s;  }
-  .hero-carousel-img:nth-child(7)  { animation: heroSlide1 50s linear infinite -20s;  }
-  .hero-carousel-img:nth-child(8)  { animation: heroSlide2 50s linear infinite -15s;  }
-  .hero-carousel-img:nth-child(9)  { animation: heroSlide1 50s linear infinite -10s;  }
-  .hero-carousel-img:nth-child(10) { animation: heroSlide2 50s linear infinite -5s;   }
+  .hero-carousel-img:nth-child(2)  { animation: heroSlide2 50s linear infinite -43s;  }
+  .hero-carousel-img:nth-child(3)  { animation: heroSlide1 50s linear infinite -36s;  }
+  .hero-carousel-img:nth-child(4)  { animation: heroSlide2 50s linear infinite -29s;  }
+  .hero-carousel-img:nth-child(5)  { animation: heroSlide1 50s linear infinite -22s;  }
+  .hero-carousel-img:nth-child(6)  { animation: heroSlide2 50s linear infinite -15s;  }
+  .hero-carousel-img:nth-child(7)  { animation: heroSlide1 50s linear infinite -8s;   }
   @media (max-width: 768px) {
     .products-grid {
       display: flex !important;
