@@ -130,6 +130,7 @@ const CSS = `
 
   /* Responsive */
   @media(max-width:960px) { .hero-img-col { display: none !important; } .pp-hero-grid { grid-template-columns: 1fr !important; } }
+  @media(max-width:520px) { .pp-eyebrow-row { flex-wrap: wrap !important; gap: 0.5rem !important; } .pp-eyebrow-rule { display: none !important; } .pp-eyebrow-tag { display: none !important; } }
   @media(max-width:900px) {
     .family-grid { grid-template-columns: repeat(2,1fr) !important; }
     .cap-grid { grid-template-columns: repeat(2,1fr) !important; }
@@ -138,11 +139,19 @@ const CSS = `
     .lc-wrap { overflow-x:auto; }
   }
   @media(max-width:580px) {
-    .family-grid { grid-template-columns: 1fr !important; }
+    /* Family grid: horizontal scroll carousel instead of single column */
+    .family-grid {
+      display: flex !important;
+      overflow-x: auto !important;
+      scroll-snap-type: x mandatory !important;
+      -webkit-overflow-scrolling: touch !important;
+      scrollbar-width: none !important;
+      gap: 12px !important;
+      padding-bottom: 1rem !important;
+    }
+    .family-grid::-webkit-scrollbar { display: none; }
+    .family-grid > * { flex: 0 0 85vw !important; max-width: 320px !important; scroll-snap-align: start !important; }
     .cap-grid { grid-template-columns: 1fr 1fr !important; }
-    /* Nav: hide desktop links, show hamburger */
-    .nav-desktop-links { display: none !important; }
-    .nav-hamburger { display: flex !important; }
     /* Carousel: taller hit area on small screens */
     .carousel-wrap { height: 248px !important; }
     /* CTA: stack vertically */
@@ -150,7 +159,6 @@ const CSS = `
     .cta-btn-group { flex-direction: column !important; }
     /* Hero: tighter vertical rhythm */
     .hero-section { padding-top: 48px !important; padding-bottom: 44px !important; }
-    /* Cap bar: single column on very small */
   }
   @media(max-width:380px) {
     .cap-grid { grid-template-columns: 1fr !important; }
@@ -523,7 +531,7 @@ function Hero() {
 
         {/* LEFT */}
         <div>
-          <div className="fade-up d1" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}>
+          <div className="fade-up d1 pp-eyebrow-row" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}>
             <span style={{
               fontFamily: F.mono, fontSize: "0.65rem", fontWeight: 500,
               color: C.pp, background: C.ppLight, border: `1px solid ${C.ppMid}`,
@@ -531,8 +539,8 @@ function Hero() {
             }}>
               PP CORRUGATED SYSTEMS
             </span>
-            <div className="rule-grow" style={{ flex: 1, height: "1px", background: C.border, maxWidth: "300px" }} />
-            <span style={{ fontFamily: F.body, fontSize: "0.65rem", color: C.taupe,
+            <div className="rule-grow pp-eyebrow-rule" style={{ flex: 1, height: "1px", background: C.border, maxWidth: "300px" }} />
+            <span className="pp-eyebrow-tag" style={{ fontFamily: F.body, fontSize: "0.65rem", color: C.taupe,
               letterSpacing: "0.12em", textTransform: "uppercase" }}>
               Single-flute · 7 families · 20+ variants
             </span>

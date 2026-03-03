@@ -31,7 +31,11 @@ const FOOTER_CSS = `
 
   @media (max-width: 768px) {
     .footer-grid { flex-direction: column !important; gap: 2.5rem !important; }
+    .footer-brand-col { flex: 1 1 auto !important; width: 100% !important; }
     .footer-cols { flex-wrap: wrap !important; gap: 2rem !important; justify-content: flex-start !important; }
+  }
+  @media (max-width: 480px) {
+    .footer-cols { flex-direction: column !important; }
   }
 `;
 
@@ -71,7 +75,7 @@ export default function SiteFooter() {
           }}>
 
             {/* Brand column */}
-            <div style={{ flex: "0 0 300px" }}>
+            <div className="footer-brand-col" style={{ flex: "0 0 300px" }}>
               <SiteLogo inverted />
               <p style={{
                 fontFamily: F.body, fontSize: "0.86rem",

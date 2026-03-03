@@ -158,6 +158,7 @@ const GLOBAL_CSS = `
     .hero-eyebrow-divider { display: none !important; }
     .hero-eyebrow-est { display: none !important; }
     .hero-eyebrow-text { white-space: normal !important; font-size: 0.95rem !important; }
+    .hero-stat-box { padding: 0 0.75rem !important; }
   }
   .hero-h1-line1 {
     display: block;
@@ -337,6 +338,9 @@ const GLOBAL_CSS = `
   @media (max-width: 1024px) {
     .pp-product-grid { grid-template-columns: repeat(3, 1fr) !important; }
   }
+  /* Infra callout 2-col */
+  @media (max-width: 960px) { .infra-2col { grid-template-columns: 1fr !important; } .infra-img-col { display: none !important; } }
+
   /* Hero 2-col grid */
   .hero-grid {
     display: grid;
@@ -354,8 +358,26 @@ const GLOBAL_CSS = `
     .mobile-menu-btn { display: flex !important; }
     .hero-headline { font-size: clamp(2.2rem, 9vw, 3.2rem) !important; }
     .products-grid { grid-template-columns: 1fr !important; }
-    .pp-product-grid { grid-template-columns: 1fr 1fr !important; }
-    .products-detail-grid { grid-template-columns: 1fr 1fr !important; }
+    /* PP Products: horizontal scroll carousel on mobile */
+    .pp-product-grid {
+      display: flex !important; overflow-x: auto !important;
+      scroll-snap-type: x mandatory !important;
+      -webkit-overflow-scrolling: touch !important;
+      scrollbar-width: none !important;
+      gap: 0 !important;
+    }
+    .pp-product-grid::-webkit-scrollbar { display: none; }
+    .pp-product-grid > * { flex: 0 0 78vw !important; max-width: 290px !important; scroll-snap-align: start !important; }
+    /* Paper products: horizontal scroll carousel on mobile */
+    .products-detail-grid {
+      display: flex !important; overflow-x: auto !important;
+      scroll-snap-type: x mandatory !important;
+      -webkit-overflow-scrolling: touch !important;
+      scrollbar-width: none !important;
+      gap: 12px !important; background: transparent !important;
+    }
+    .products-detail-grid::-webkit-scrollbar { display: none; }
+    .products-detail-grid > * { flex: 0 0 78vw !important; max-width: 290px !important; scroll-snap-align: start !important; }
     .industries-grid { grid-template-columns: 1fr 1fr !important; }
     .infra-metrics-grid { grid-template-columns: repeat(3, 1fr) !important; }
     .blog-teaser-grid { grid-template-columns: 1fr !important; }
@@ -364,8 +386,6 @@ const GLOBAL_CSS = `
   }
   @media (max-width: 480px) {
     .industries-grid { grid-template-columns: 1fr !important; }
-    .pp-product-grid { grid-template-columns: 1fr !important; }
-    .products-detail-grid { grid-template-columns: 1fr !important; }
     .infra-metrics-grid { grid-template-columns: repeat(2, 1fr) !important; }
     .blog-teaser-header { flex-direction: column !important; align-items: flex-start !important; gap: 1rem !important; }
   }
@@ -1149,56 +1169,78 @@ function InfraCallout() {
   return (
     <div className="infra-section" style={{ background: C.charcoal, padding: "64px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-        <div className="infra-callout-header" style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          gap: "2rem", flexWrap: "wrap", marginBottom: "3rem",
-        }}>
-          <div>
-            <span style={{ fontFamily: F.italic, fontStyle: "italic",
-              fontSize: "1.1rem", color: "rgba(250,247,242,0.5)", display: "block", marginBottom: "8px" }}>
-              Converting Facility · BU Bhandari MIDC, Sanaswadi
-            </span>
-            <h2 style={{ fontFamily: F.display, fontWeight: 600,
-              fontSize: "clamp(1.5rem, 2.5vw, 2.2rem)", color: C.cream,
-              lineHeight: 1.2, letterSpacing: "-0.02em" }}>
-              Cut-to-size. Wound to spec.<br />
-              <em style={{ fontWeight: 400, opacity: 0.75 }}>Shipped on time.</em>
-            </h2>
-          </div>
-          <Link href="/infrastructure" style={{
-            display: "inline-flex", alignItems: "center", gap: "8px",
-            fontFamily: F.body, fontSize: "0.98rem", fontWeight: 500,
-            color: C.cream, textDecoration: "none", letterSpacing: "0.07em",
-            textTransform: "uppercase",
-            border: `1px solid rgba(250,247,242,0.25)`,
-            padding: "11px 22px", borderRadius: "1px", whiteSpace: "nowrap",
-            transition: "border-color 0.2s, background 0.2s",
-          }}
-          onMouseEnter={e => { const a = e.currentTarget; a.style.borderColor = "rgba(250,247,242,0.5)"; a.style.background = "rgba(250,247,242,0.07)"; }}
-          onMouseLeave={e => { const a = e.currentTarget; a.style.borderColor = "rgba(250,247,242,0.25)"; a.style.background = "transparent"; }}>
-            View Full Facility <IconArrowRight size={13} />
-          </Link>
-        </div>
 
-        <div className="infra-metrics-grid" style={{
-          display: "grid", gridTemplateColumns: "repeat(6, 1fr)",
-          gap: "1px", background: "rgba(250,247,242,0.08)",
-        }}>
-          {metrics.map((m) => (
-            <div key={m.label} style={{
-              background: C.charcoal, padding: "1.5rem 1rem", textAlign: "center",
+        {/* 2-col: text + metrics left, facility photo right */}
+        <div className="infra-2col" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "3rem", alignItems: "center" }}>
+
+          {/* Left: header + metrics */}
+          <div>
+            <div className="infra-callout-header" style={{
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              gap: "2rem", flexWrap: "wrap", marginBottom: "2.5rem",
             }}>
-              <div style={{ fontFamily: F.display, fontWeight: 700,
-                fontSize: "1.5rem", color: C.saffron, lineHeight: 1 }}>
-                {m.value}
+              <div>
+                <span style={{ fontFamily: F.italic, fontStyle: "italic",
+                  fontSize: "1.1rem", color: "rgba(250,247,242,0.5)", display: "block", marginBottom: "8px" }}>
+                  Converting Facility · BU Bhandari MIDC, Sanaswadi
+                </span>
+                <h2 style={{ fontFamily: F.display, fontWeight: 600,
+                  fontSize: "clamp(1.5rem, 2.5vw, 2.2rem)", color: C.cream,
+                  lineHeight: 1.2, letterSpacing: "-0.02em" }}>
+                  Cut-to-size. Wound to spec.<br />
+                  <em style={{ fontWeight: 400, opacity: 0.75 }}>Shipped on time.</em>
+                </h2>
               </div>
-              <div style={{ fontFamily: F.body, fontSize: "0.66rem",
-                color: "rgba(250,247,242,0.45)", letterSpacing: "0.07em",
-                textTransform: "uppercase", marginTop: "6px" }}>
-                {m.label}
-              </div>
+              <Link href="/infrastructure" style={{
+                display: "inline-flex", alignItems: "center", gap: "8px",
+                fontFamily: F.body, fontSize: "0.98rem", fontWeight: 500,
+                color: C.cream, textDecoration: "none", letterSpacing: "0.07em",
+                textTransform: "uppercase",
+                border: `1px solid rgba(250,247,242,0.25)`,
+                padding: "11px 22px", borderRadius: "1px", whiteSpace: "nowrap",
+                transition: "border-color 0.2s, background 0.2s",
+              }}
+              onMouseEnter={e => { const a = e.currentTarget; a.style.borderColor = "rgba(250,247,242,0.5)"; a.style.background = "rgba(250,247,242,0.07)"; }}
+              onMouseLeave={e => { const a = e.currentTarget; a.style.borderColor = "rgba(250,247,242,0.25)"; a.style.background = "transparent"; }}>
+                View Full Facility <IconArrowRight size={13} />
+              </Link>
             </div>
-          ))}
+
+            <div className="infra-metrics-grid" style={{
+              display: "grid", gridTemplateColumns: "repeat(6, 1fr)",
+              gap: "1px", background: "rgba(250,247,242,0.08)",
+            }}>
+              {metrics.map((m) => (
+                <div key={m.label} style={{
+                  background: C.charcoal, padding: "1.5rem 1rem", textAlign: "center",
+                }}>
+                  <div style={{ fontFamily: F.display, fontWeight: 700,
+                    fontSize: "1.5rem", color: C.saffron, lineHeight: 1 }}>
+                    {m.value}
+                  </div>
+                  <div style={{ fontFamily: F.body, fontSize: "0.66rem",
+                    color: "rgba(250,247,242,0.45)", letterSpacing: "0.07em",
+                    textTransform: "uppercase", marginTop: "6px" }}>
+                    {m.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: facility photo — hidden on mobile via CSS */}
+          <div className="infra-img-col" style={{
+            height: "360px", borderRadius: "4px", overflow: "hidden",
+            border: "1px solid rgba(250,247,242,0.08)",
+          }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/hero-infrastructure.jpg"
+              alt="Pune Global Group — Sanaswadi converting facility"
+              style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.85, display: "block" }}
+            />
+          </div>
+
         </div>
       </div>
     </div>
