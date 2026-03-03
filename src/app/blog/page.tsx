@@ -109,8 +109,19 @@ function BlogCard({ post, delay }: { post: BlogPost; delay: number }) {
       className="blog-card sr"
       style={{ animationDelay: `${delay}s` } as React.CSSProperties}
     >
-      {/* Category accent bar */}
-      <div style={{ height: "3px", background: post.categoryColor, flexShrink: 0 }} />
+      {/* Cover image */}
+      {post.coverImage && (
+        <div style={{ height: "200px", overflow: "hidden", flexShrink: 0, position: "relative" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={post.coverImage}
+            alt=""
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          />
+          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "3px", background: post.categoryColor }} />
+        </div>
+      )}
+      {!post.coverImage && <div style={{ height: "3px", background: post.categoryColor, flexShrink: 0 }} />}
 
       <div
         style={{
@@ -317,20 +328,26 @@ export default function BlogPage() {
                 (e.currentTarget as HTMLElement).style.boxShadow = "none";
               }}
             >
-              {/* Left: parchment visual panel */}
+              {/* Left: cover image panel */}
               <div
                 style={{
-                  background: C.parchment,
-                  padding: "3rem",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
                   minHeight: "280px",
                   position: "relative",
                   overflow: "hidden",
                   borderRight: `1px solid ${C.border}`,
+                  background: C.parchment,
                 }}
               >
+                {blogPosts[0].coverImage && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={blogPosts[0].coverImage}
+                    alt=""
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", position: "absolute", inset: 0 }}
+                  />
+                )}
+                {/* Dark gradient overlay so text is readable */}
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)" }} />
                 {/* Category accent bar */}
                 <div
                   style={{
@@ -342,58 +359,39 @@ export default function BlogPage() {
                     background: blogPosts[0].categoryColor,
                   }}
                 />
-                {/* Large italic number */}
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "1.5rem",
-                    right: "1.5rem",
-                    fontFamily: F.display,
-                    fontSize: "8rem",
-                    fontWeight: 700,
-                    color: C.border,
-                    lineHeight: 1,
-                    fontStyle: "italic",
-                    userSelect: "none",
-                    pointerEvents: "none",
-                  }}
-                >
-                  01
+                {/* Text pinned to bottom */}
+                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "2rem", zIndex: 1 }}>
+                  <span
+                    style={{
+                      fontFamily: F.body,
+                      fontSize: "0.68rem",
+                      fontWeight: 600,
+                      letterSpacing: "0.12em",
+                      textTransform: "uppercase",
+                      color: "#fff",
+                      background: `${blogPosts[0].categoryColor}cc`,
+                      padding: "0.25rem 0.6rem",
+                      borderRadius: "2px",
+                      display: "inline-block",
+                      marginBottom: "0.75rem",
+                    }}
+                  >
+                    {blogPosts[0].category}
+                  </span>
+                  <h2
+                    style={{
+                      fontFamily: F.display,
+                      fontSize: "1.5rem",
+                      fontWeight: 700,
+                      color: "#fff",
+                      margin: 0,
+                      lineHeight: 1.25,
+                      textShadow: "0 1px 4px rgba(0,0,0,0.4)",
+                    }}
+                  >
+                    {blogPosts[0].title}
+                  </h2>
                 </div>
-                <span
-                  style={{
-                    fontFamily: F.body,
-                    fontSize: "0.68rem",
-                    fontWeight: 600,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: blogPosts[0].categoryColor,
-                    background: `${blogPosts[0].categoryColor}18`,
-                    border: `1px solid ${blogPosts[0].categoryColor}35`,
-                    padding: "0.25rem 0.6rem",
-                    borderRadius: "2px",
-                    display: "inline-block",
-                    marginBottom: "1rem",
-                    position: "relative",
-                    zIndex: 1,
-                  }}
-                >
-                  {blogPosts[0].category}
-                </span>
-                <h2
-                  style={{
-                    fontFamily: F.display,
-                    fontSize: "1.65rem",
-                    fontWeight: 700,
-                    color: C.charcoal,
-                    margin: 0,
-                    lineHeight: 1.2,
-                    position: "relative",
-                    zIndex: 1,
-                  }}
-                >
-                  {blogPosts[0].title}
-                </h2>
               </div>
 
               {/* Right: content */}

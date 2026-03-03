@@ -1294,7 +1294,7 @@ export const blogPosts: BlogPost[] = [
     categoryColor: "#2563EB",
     date: "February 2026",
     readTime: "6 min",
-    coverImage: "/blog/gsm-guide-paper-board.webp",
+    coverImage: "/blog/gsm-guide-paper-board.jpg",
     excerpt:
       "GSM is the most fundamental specification in paper and board buying. Get it wrong and you're either over-spending or watching your cartons fail on the shelf.",
     content: [
@@ -1393,7 +1393,7 @@ export const blogPosts: BlogPost[] = [
   // 2. FBB vs Duplex
   // ——————————————————————————————————————————
   {
-    coverImage: "/blog/fbb-vs-duplex-board.webp",
+    coverImage: "/blog/fbb-vs-duplex-board.jpg",
     slug: "fbb-vs-duplex-board",
     title: "FBB vs Duplex Board: Which is Right for Your Packaging?",
     category: "Product Guide",
@@ -1497,7 +1497,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "export-packaging-compliance-india",
-    coverImage: "/blog/export-packaging-compliance-india.webp",
+    coverImage: "/blog/export-packaging-compliance-india.jpg",
     title: "Export Packaging Compliance for Indian Manufacturers in 2026",
     category: "Compliance",
     categoryColor: "#DC2626",
@@ -1612,7 +1612,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "pp-corrugated-returnable-packaging",
-    coverImage: "/blog/pp-corrugated-returnable-packaging.webp",
+    coverImage: "/blog/pp-corrugated-returnable-packaging.jpg",
     title: "Why PP Corrugated is Replacing Cardboard in Returnable Packaging",
     category: "Industry Trends",
     categoryColor: "#059669",
@@ -1716,7 +1716,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "sheet-vs-reel-paper-supply",
-    coverImage: "/blog/sheet-vs-reel-paper-supply.webp",
+    coverImage: "/blog/sheet-vs-reel-paper-supply.jpg",
     title: "Sheet vs Reel: How to Choose Your Paper Supply Format",
     category: "Industry Guide",
     categoryColor: "#2563EB",
@@ -1823,7 +1823,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "itc-pspd-vs-imported-board",
-    coverImage: "/blog/itc-pspd-vs-imported-board.webp",
+    coverImage: "/blog/itc-pspd-vs-imported-board.jpg",
     title: "ITC PSPD vs Imported Board: A Total Cost of Ownership Analysis",
     category: "Product Guide",
     categoryColor: "#7C3AED",
@@ -1930,7 +1930,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "pharma-packaging-board-specs",
-    coverImage: "/blog/pharma-packaging-board-specs.webp",
+    coverImage: "/blog/pharma-packaging-board-specs.jpg",
     title: "Pharma Packaging Board Specifications: What Your QA Team Needs to Know",
     category: "Compliance",
     categoryColor: "#DC2626",
@@ -2048,7 +2048,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "india-paper-board-market-2026",
-    coverImage: "/blog/india-paper-board-market-2026.webp",
+    coverImage: "/blog/india-paper-board-market-2026.jpg",
     title: "India Paper & Board Market Outlook: Trends Shaping 2025–2026",
     category: "Industry Trends",
     categoryColor: "#059669",
