@@ -8,7 +8,6 @@ import {
   IconLoader2, IconCar, IconPill, IconShoppingCart, IconTool,
 } from "@tabler/icons-react";
 import { productPath } from "@/lib/pgg-data";
-import { LOGO_MASK_STYLE } from "@/components/LogoWatermark";
 import { db } from "@/lib/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
@@ -128,7 +127,7 @@ const GLOBAL_CSS = `
   .hero-carousel-img  {
     position: absolute; inset: 0;
     width: 100%; height: 100%; object-fit: cover;
-    filter: none; display: block;
+    filter: blur(1px); display: block;
   }
   .hero-carousel-img:nth-child(1) { animation: heroSlide1 25s linear infinite 0s;   }
   .hero-carousel-img:nth-child(2) { animation: heroSlide2 25s linear infinite -20s;  }
@@ -691,23 +690,7 @@ function Hero() {
           overflow: "hidden",
           boxShadow: "0 8px 48px rgba(28,26,23,0.10)",
         }}>
-          {/* Layer 1 — blurred (outside the logo) */}
           <div className="hero-carousel-wrap">
-            {[
-              "/hero-homepage-v2.jpg",
-              "/hero-industry.jpg",
-              "/hero-infrastructure.jpg",
-              "/hero-paper-family.jpg",
-              "/hero-pp-family.jpg",
-            ].map((src) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img key={src} src={src} alt="" className="hero-carousel-img"
-                style={{ filter: "blur(4px)", transform: "scale(1.08)" }} />
-            ))}
-          </div>
-
-          {/* Layer 2 — sharp, visible only through logo mark shape */}
-          <div className="hero-carousel-wrap" style={{ ...LOGO_MASK_STYLE, zIndex: 1 }}>
             {[
               "/hero-homepage-v2.jpg",
               "/hero-industry.jpg",
@@ -1126,7 +1109,7 @@ function ProductsSection() {
       num: "03",
       eyebrow: "Paper & PP Sheet Trading",
       heading: "ITC · TNPL · Imported",
-      desc: "Authorised ITC PSPD and TNPL distributor — FBB, duplex, kraft and test liner. PP corrugated sheets also available ex-stock from our Pune warehouse.",
+      desc: "Trusted traders of ITC PSPD and TNPL — FBB, duplex, kraft and test liner. PP corrugated sheets also available ex-stock from our Pune warehouse.",
       tags: [
         { label: "Cyber XLPac", href: "/products/paper-board/cyber-xlpac-gc1" },
         { label: "Carte Lumina", href: "/products/paper-board/carte-lumina" },
@@ -1621,6 +1604,11 @@ function ClientLogoBand() {
     { name: "General Motors", file: "general-motors.svg" },
     { name: "Mitsubishi",     file: "mitsubishi.svg"     },
     { name: "Suguna",         file: "suguna.jpg"         },
+    { name: "Sun Pharma",     file: "sun-pharma.svg"     },
+    { name: "Cipla",          file: "cipla.svg"          },
+    { name: "Dr. Reddy's",    file: "dr-reddys.svg"      },
+    { name: "Alkem Labs",     file: "alkem.png"          },
+    { name: "Glenmark",       file: "glenmark.png"       },
   ];
   const doubled = [...clients, ...clients];
 

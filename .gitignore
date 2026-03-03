@@ -42,6 +42,9 @@ tsconfig.tsbuildinfo
 # Reference images & knowledge docs (local research only)
 *.jpg
 *.png
+# But commit production assets in public/
+!public/**/*.jpg
+!public/**/*.png
 *-knowledge.md
 TROUBLESHOOTING.md
 

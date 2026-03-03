@@ -473,7 +473,7 @@ export default function PaperBoardPage() {
               fontFamily: F.body, fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)",
               color: C.taupe, lineHeight: 1.85, maxWidth: "560px", fontWeight: 300,
             }}>
-              Authorised distributor of ITC PSPD and TNPL board grades — FBB, duplex, kraft liner,
+              Trusted traders of ITC PSPD and TNPL board grades — FBB, duplex, kraft liner,
               test liner and white top. Sheeted from reel to your exact press dimensions out of our
               Pune warehouse.
             </p>
@@ -513,7 +513,7 @@ export default function PaperBoardPage() {
               <div>
                 <div style={{ fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
                   textTransform: "uppercase", color: "rgba(250,247,242,0.45)", marginBottom: "3px" }}>
-                  ITC PSPD Authorised Distributor
+                  ITC PSPD Trusted Trader
                 </div>
                 <div style={{ fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
                   color: "#FAF7F2", letterSpacing: "0.01em" }}>

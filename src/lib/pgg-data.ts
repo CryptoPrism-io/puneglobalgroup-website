@@ -1889,7 +1889,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "Domestic supply from ITC via authorized distributors like Pune Global Group offers 5–10 day lead times on most grades. Minimum order quantities of 1–5 tonnes mean you can hold 2–3 weeks of stock rather than 3–4 months. The cash flow difference is material, particularly for mid-sized converters where working capital is constrained.",
+        text: "Domestic supply from ITC via trusted traders like Pune Global Group offers 5–10 day lead times on most grades. Minimum order quantities of 1–5 tonnes mean you can hold 2–3 weeks of stock rather than 3–4 months. The cash flow difference is material, particularly for mid-sized converters where working capital is constrained.",
       },
       {
         type: "heading",
@@ -1915,7 +1915,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "Pune Global Group is an authorized distributor for ITC PSPD across all FBB and kraft liner grades. We hold stocked inventory of the top 15 grades by volume at our Pune warehouse, and can fulfil most orders within 48 hours.",
+        text: "Pune Global Group is a trusted trader for ITC PSPD across all FBB and kraft liner grades. We hold stocked inventory of the top 15 grades by volume at our Pune warehouse, and can fulfil most orders within 48 hours.",
       },
       {
         type: "callout",
@@ -2121,7 +2121,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "In a market growing faster than new supply, buyers benefit from stronger supplier relationships and longer-term supply agreements. Spot buying in a tight market pays a 5–12% premium over contracted supply. For grades where ITC PSPD is the dominant or sole domestic supplier — particularly premium FBB grades — authorized distributors with direct mill allocations provide supply security that open-market sourcing cannot.",
+        text: "In a market growing faster than new supply, buyers benefit from stronger supplier relationships and longer-term supply agreements. Spot buying in a tight market pays a 5–12% premium over contracted supply. For grades where ITC PSPD is the dominant or sole domestic supplier — particularly premium FBB grades — trusted traders with direct mill allocations provide supply security that open-market sourcing cannot.",
       },
       {
         type: "paragraph",
@@ -2166,45 +2166,45 @@ export interface Machine {
 
 export const machines: Machine[] = [
   {
-    name: "Rewinder",
-    icon: "⟳",
-    description: "Roll-to-roll rewinding for precise tension control and master reel splitting",
+    name: "Flat Bed Punch Press",
+    icon: "◻",
+    description: "Precision flatbed die-cutting for PP corrugated sheet — cuts boxes, trays and separators to exact finished dimensions",
     specs: [
-      "Max working width: 2500 mm",
-      "Digital tension control system",
-      "Variable speed drive — up to 600 m/min",
-      "Automatic edge guiding",
-      "Suitable for all paper and board grades",
-    ],
-  },
-  {
-    name: "Sheeter",
-    icon: "▤",
-    description: "Precision rotary sheeting for consistent, square-cut sheets at high throughput",
-    specs: [
-      "Sheet length: up to 1540 mm",
-      "Working width: up to 2400 mm",
+      "Cutting area: 1200 × 900 mm",
       "Tolerance: ±0.5 mm",
-      "Automatic pile stacking",
-      "Suitable for 80 – 450 GSM",
+      "Suitable for 3–6 mm PP corrugated sheet",
+      "Quick-change die system",
+      "Output: up to 800 cuts/hour",
     ],
   },
   {
-    name: "Synchro Sheeter",
-    icon: "◫",
-    description: "High-speed sheeting with synchronized register for demanding print-grade sheets",
+    name: "Plastic Ultrasonic Welder",
+    icon: "◈",
+    description: "Ultrasonic welding for seamless PP corrugated box fabrication — pharma-grade clean joins with no adhesive",
     specs: [
-      "Roll width: up to 1800 mm",
-      "Output: up to 300 sheets/min",
-      "24–36 hour turnaround on standard jobs",
-      "Print-quality surface handling",
-      "Automated register and quality check",
+      "Weld strength: >90% parent material",
+      "Cycle time: 0.5–2 seconds per joint",
+      "Suitable for 3–6 mm PP sheet",
+      "No adhesive or consumables",
+      "GMP-compatible clean weld finish",
     ],
   },
   {
-    name: "Guillotine",
+    name: "Screen Printing Unit",
+    icon: "▦",
+    description: "Flat-bed screen printing on PP corrugated panels — part numbers, barcodes, colour coding and logos",
+    specs: [
+      "Print area: up to 600 × 900 mm",
+      "Up to 4 colour passes",
+      "Solvent-resistant PP inks",
+      "Barcode and QR-code capable",
+      "Output: up to 400 panels/hour",
+    ],
+  },
+  {
+    name: "Guillotine Sheeter",
     icon: "▬",
-    description: "Precision guillotine cutting to exact finished dimensions for converters",
+    description: "Precision guillotine cutting of ITC FBB, duplex and kraft board to exact converter dimensions",
     specs: [
       "Cutting width: up to 1800 mm",
       "Tolerance: ±0.3 mm",
@@ -2214,36 +2214,36 @@ export const machines: Machine[] = [
     ],
   },
   {
-    name: "Heat Shrink Wrap",
-    icon: "◈",
-    description: "Ream and bundle wrapping with heat shrink film for moisture-protected delivery",
+    name: "Synchro Sheeter",
+    icon: "◫",
+    description: "High-speed sheeting with synchronised register for print-grade ITC FBB sheets",
     specs: [
-      "Fully sealed moisture barrier",
-      "Handles 50-sheet to 500-sheet reams",
-      "Ream labelling and batch marking",
-      "LDPE shrink film — compliant with transit standards",
-      "Output: up to 20 reams/min",
+      "Roll width: up to 1800 mm",
+      "Output: up to 300 sheets/min",
+      "24–36 hour turnaround",
+      "Print-quality surface handling",
+      "Automated register and quality check",
     ],
   },
   {
-    name: "Stretch Wrap",
+    name: "Stretch Wrap & Forklift Despatch",
     icon: "⊡",
-    description: "Automated pallet stretch wrapping for secure, transit-ready pallet despatch",
+    description: "Automated pallet stretch wrapping and forklift-assisted loading for transit-ready pallet despatch",
     specs: [
       "Semi-automatic rotary arm system",
-      "Film overlap 50–80% adjustable",
       "Handles pallets up to 1200 × 1200 mm",
       "Pre-stretch ratio up to 250%",
+      "3-tonne capacity electric forklift",
       "Integrated pallet weighing",
     ],
   },
 ];
 
 export const capabilities = [
-  { label: "Processing Capacity", value: "200 Tons/Day", icon: "⚡" },
+  { label: "Processing Capacity", value: "50,000 Units/Day", icon: "⚡" },
   { label: "Minimum Order Quantity", value: "500 kg", icon: "📦" },
   { label: "Lead Time", value: "2 Business Days", icon: "🕐" },
-  { label: "Processing Turnaround", value: "24–36 Hours", icon: "⏱" },
+  { label: "Processing Turnaround", value: "48 Hours", icon: "⏱" },
   { label: "Sheet Tolerance", value: "±0.3 mm", icon: "🎯" },
-  { label: "Max Reel Width", value: "2500 mm", icon: "📐" },
+  { label: "Max Sheet Width", value: "1800 mm", icon: "📐" },
 ];

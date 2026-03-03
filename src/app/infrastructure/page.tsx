@@ -4,18 +4,17 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { machines, capabilities } from "@/lib/pgg-data";
 import { SiteLogo } from "@/components/SiteLogo";
-import { LOGO_MASK_STYLE } from "@/components/LogoWatermark";
 
 // ————————————————————————————————————————————
 // Image data
 // ————————————————————————————————————————————
 const MACHINE_IMAGES: Record<string, string[]> = {
-  "Rewinder":         ["/infrastructure/machines/rewinder-wide.jpg",        "/infrastructure/machines/rewinder-detail.jpg",        "/infrastructure/machines/rewinder-operation.jpg"],
-  "Sheeter":          ["/infrastructure/machines/sheeter-wide.jpg",         "/infrastructure/machines/sheeter-detail.jpg",         "/infrastructure/machines/sheeter-operation.jpg"],
-  "Synchro Sheeter":  ["/infrastructure/machines/synchro-sheeter-wide.jpg", "/infrastructure/machines/synchro-sheeter-detail.jpg", "/infrastructure/machines/synchro-sheeter-operation.jpg"],
-  "Guillotine":       ["/infrastructure/machines/guillotine-wide.jpg",      "/infrastructure/machines/guillotine-detail.jpg",      "/infrastructure/machines/guillotine-operation.jpg"],
-  "Heat Shrink Wrap": ["/infrastructure/machines/shrink-wrap-wide.jpg",     "/infrastructure/machines/shrink-wrap-detail.jpg",     "/infrastructure/machines/shrink-wrap-operation.jpg"],
-  "Stretch Wrap":     ["/infrastructure/machines/stretch-wrap-wide.jpg",    "/infrastructure/machines/stretch-wrap-detail.jpg",    "/infrastructure/machines/stretch-wrap-operation.jpg"],
+  "Flat Bed Punch Press":          ["/infrastructure/machines/rewinder-wide.jpg",        "/infrastructure/machines/rewinder-detail.jpg",        "/infrastructure/machines/rewinder-operation.jpg"],
+  "Plastic Ultrasonic Welder":     ["/infrastructure/machines/sheeter-wide.jpg",         "/infrastructure/machines/sheeter-detail.jpg",         "/infrastructure/machines/sheeter-operation.jpg"],
+  "Screen Printing Unit":          ["/infrastructure/machines/shrink-wrap-wide.jpg",     "/infrastructure/machines/shrink-wrap-detail.jpg",     "/infrastructure/machines/shrink-wrap-operation.jpg"],
+  "Guillotine Sheeter":            ["/infrastructure/machines/guillotine-wide.jpg",      "/infrastructure/machines/guillotine-detail.jpg",      "/infrastructure/machines/guillotine-operation.jpg"],
+  "Synchro Sheeter":               ["/infrastructure/machines/synchro-sheeter-wide.jpg", "/infrastructure/machines/synchro-sheeter-detail.jpg", "/infrastructure/machines/synchro-sheeter-operation.jpg"],
+  "Stretch Wrap & Forklift Despatch": ["/infrastructure/machines/stretch-wrap-wide.jpg", "/infrastructure/machines/stretch-wrap-detail.jpg",    "/infrastructure/machines/stretch-wrap-operation.jpg"],
 };
 const MC_LABELS = ["Wide View", "Detail", "In Operation"];
 
@@ -371,11 +370,11 @@ export default function InfrastructurePage() {
             <p style={{ fontFamily: F.body, fontSize: "1.05rem", color: C.warm,
               lineHeight: 1.75, margin: "0 0 2rem", maxWidth: "560px",
               animation: "fadeUp 0.8s ease 0.45s both" }}>
-              Our dedicated converting facility at BU Bhandari MIDC, Sanaswadi, Pune
-              processes up to{" "}
-              <strong style={{ color: C.saffron, fontFamily: F.display, fontWeight: 700 }}>200 tons per day</strong>
-              {" "}— rewinding, sheeting, slitting, and pallet wrapping for same-city
-              delivery or pan-India dispatch.
+              Our dedicated manufacturing facility at BU Bhandari MIDC, Sanaswadi, Pune
+              produces up to{" "}
+              <strong style={{ color: C.saffron, fontFamily: F.display, fontWeight: 700 }}>50,000 units per day</strong>
+              {" "}— PP corrugated box fabrication, ITC board sheet cutting, screen printing,
+              and pallet despatch for same-city delivery or pan-India dispatch.
             </p>
 
             <div style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem",
@@ -389,7 +388,7 @@ export default function InfrastructurePage() {
             </div>
           </div>
 
-          {/* RIGHT — rewinder image + capacity badge */}
+          {/* RIGHT — facility image + capacity badge */}
           <div className="hero-img-col" style={{
             position: "relative",
             height: "clamp(380px, 55vh, 560px)",
@@ -397,20 +396,11 @@ export default function InfrastructurePage() {
             overflow: "hidden",
             boxShadow: "0 8px 48px rgba(28,26,23,0.10)",
           }}>
-            {/* Layer 1 — blurred (outside logo) */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/hero-infrastructure.jpg"
-              alt="PGG converting facility — rewinder, sheeter and guillotine, MIDC Pune"
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "blur(4px)", transform: "scale(1.08)" }}
-            />
-            {/* Layer 2 — sharp, masked to logo shape */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/hero-infrastructure.jpg"
-              alt=""
-              aria-hidden="true"
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block", ...LOGO_MASK_STYLE, zIndex: 1 }}
+              alt="PGG manufacturing facility — PP box welding, punching and sheet cutting, MIDC Pune"
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
             />
             <div style={{
               position: "absolute", bottom: "1.5rem", right: "1.5rem",
@@ -431,7 +421,7 @@ export default function InfrastructurePage() {
                 </div>
                 <div style={{ fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
                   color: "#FAF7F2", letterSpacing: "0.01em" }}>
-                  ISO 9001:2015 · 200 TPD · MIDC Pune
+                  ISO 9001:2015 · 50K Units/Day · MIDC Pune
                 </div>
               </div>
             </div>
@@ -795,7 +785,7 @@ export default function InfrastructurePage() {
               Maharashtra, India
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-              {["Rewinding & Sheeting", "Slitting & Guillotine", "Shrink & Stretch Wrapping", "200 Tons/Day Capacity"].map((item) => (
+              {["PP Box Welding & Punching", "Screen Printing", "ITC Board Sheet Cutting", "50,000 Units/Day Capacity"].map((item) => (
                 <div
                   key={item}
                   style={{
