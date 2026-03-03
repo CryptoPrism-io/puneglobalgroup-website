@@ -36,7 +36,6 @@ const F = {
 };
 
 const CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,300;1,400;1,500&display=swap');
   *, *::before, *::after { box-sizing: border-box; }
   body { margin: 0; background: ${C.cream}; }
 
@@ -277,7 +276,7 @@ export default function AboutPage() {
                 color: C.taupe, marginBottom: "2.5rem", fontWeight: 300 }}>
                 Today we operate from our converting facility at BU Bhandari MIDC, Sanaswadi,
                 and our commercial office in Gulmohar Center Point, Pune — serving
-                500+ clients across India.
+                50+ clients across India.
               </p>
 
               <Link href="/infrastructure" style={{
@@ -307,7 +306,7 @@ export default function AboutPage() {
 
                 {[
                   { stat: "1995",  label: "Year Established" },
-                  { stat: "500+",  label: "Active Clients" },
+                  { stat: "50+",   label: "Active Clients" },
                   { stat: "40+",   label: "Paper Grades Stocked" },
                   { stat: "50 T",  label: "Daily Processing Capacity" },
                 ].map((item) => (
@@ -593,7 +592,7 @@ export default function AboutPage() {
               Request a quote, ask about grades, or visit our facility.
             </p>
           </div>
-          <Link href="/#contact" style={{
+          <Link href="/contact" style={{
             display: "inline-flex", alignItems: "center", gap: "0.5rem",
             fontFamily: F.body, fontWeight: 600, fontSize: "0.85rem",
             letterSpacing: "0.06em", textTransform: "uppercase",
@@ -605,19 +604,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Footer ───────────────────────────────────── */}
-      <footer style={{ background: C.dark, borderTop: "1px solid rgba(250,247,242,0.07)",
-        padding: "2rem 2.5rem", textAlign: "center" }}>
-        <p style={{ fontFamily: F.body, fontSize: "0.78rem",
-          color: "rgba(250,247,242,0.35)", margin: 0 }}>
-          © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO ·{" "}
-          <a href="mailto:yogesh.sahu@puneglobalgroup.in"
-            style={{ color: "rgba(250,247,242,0.35)", textDecoration: "none" }}>
-            yogesh.sahu@puneglobalgroup.in
-          </a>{" "}
-          · +91 98233 83230
-        </p>
-      </footer>
     </div>
   );
 }

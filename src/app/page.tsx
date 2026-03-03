@@ -11,10 +11,6 @@ import { productPath } from "@/lib/pgg-data";
 import { db } from "@/lib/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
-/* ─── Fonts ─────────────────────────────────────────────────────────────────── */
-const FONTS = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500&display=swap');
-`;
 
 /* ─── Tokens ─────────────────────────────────────────────────────────────────── */
 const C = {
@@ -38,7 +34,6 @@ const F = {
 
 /* ─── Global CSS ─────────────────────────────────────────────────────────────── */
 const GLOBAL_CSS = `
-  ${FONTS}
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; font-size: 16px; }
   body {
@@ -491,10 +486,10 @@ function Hero() {
     document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
 
   const stats = [
-    { raw: "100M+", label: "Boxes Delivered", note: "and counting" },
-    { raw: "500+",  label: "Active Clients",  note: "across India" },
-    { raw: "21",    label: "States Served",   note: "nationwide" },
-    { raw: "1995",  label: "Established",     note: "Pune, Maharashtra" },
+    { raw: "1M+ Ton", label: "Material Supplied", note: "and counting" },
+    { raw: "50+",     label: "Active Clients",    note: "across India" },
+    { raw: "21",      label: "States Served",     note: "nationwide" },
+    { raw: "1995",    label: "Established",       note: "Pune, Maharashtra" },
   ];
 
   return (
@@ -563,7 +558,7 @@ function Hero() {
                 View Products <IconArrowRight size={14} />
               </Link>
               <button className="btn-outline" onClick={scrollToContact}>
-                Request RFQ <IconChevronRight size={14} />
+                Get a Quote <IconChevronRight size={14} />
               </button>
             </div>
           </div>
@@ -653,7 +648,7 @@ function MarqueeTicker() {
     "Board Converting",
     "Sheeting · Slitting · Rewinding",
     "ITC · TNPL · Imported Grades",
-    "21 States · 500+ Customers",
+    "21 States · 50+ Clients",
   ];
   const repeated = [...items, ...items];
 
@@ -1056,6 +1051,29 @@ function ProductsSection() {
     <section id="products" style={{ background: C.cream, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
+        <div className="sr" style={{ marginBottom: "3.5rem" }}>
+          <span style={{
+            fontFamily: F.body, fontWeight: 500, fontSize: "0.72rem",
+            letterSpacing: "0.18em", textTransform: "uppercase",
+            color: C.saffron, display: "block", marginBottom: "0.85rem",
+          }}>
+            Our Products
+          </span>
+          <h2 style={{ fontFamily: F.italic, fontWeight: 400,
+            fontSize: "clamp(2rem, 4vw, 3rem)", color: C.charcoal,
+            letterSpacing: "-0.01em", lineHeight: 1.1, margin: "0 0 1.1rem",
+            fontStyle: "italic" }}>
+            From Raw Board to Finished Packaging
+          </h2>
+          <p style={{ fontFamily: F.body, fontSize: "1.0625rem", color: C.taupe,
+            lineHeight: 1.75, maxWidth: "560px", margin: "0 0 2rem", fontWeight: 300 }}>
+            Two manufacturing verticals — PP corrugated packaging and paper/board
+            conversion — serving automotive, pharma, FMCG and export industries
+            across 21 states.
+          </p>
+          <div style={{ width: "48px", height: "1px", background: C.borderMid }} />
+        </div>
+
         {/* PP Carousel subheading */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
           marginBottom: "1.25rem" }}>
@@ -1330,22 +1348,8 @@ function IndustriesSection() {
 
 /* ─── Social Proof ───────────────────────────────────────────────────────────── */
 function SocialProofSection() {
-  const clients = [
-    { name: "Asian Paints",   file: "asian-paints.svg"   },
-    { name: "ITC",            file: "itc.svg"            },
-    { name: "Finolex",        file: "finolex.svg"        },
-    { name: "Volkswagen",     file: "volkswagen.svg"     },
-    { name: "General Motors", file: "general-motors.svg" },
-    { name: "Mitsubishi",     file: "mitsubishi.svg"     },
-    { name: "Suguna",         file: "suguna.jpg"         },
-    { name: "Sun Pharma",     file: "sun-pharma.svg"     },
-    { name: "Cipla",          file: "cipla.svg"          },
-    { name: "Dr. Reddy's",    file: "dr-reddys.svg"      },
-    { name: "Alkem Labs",     file: "alkem.png"          },
-    { name: "Glenmark",       file: "glenmark.png"       },
-  ];
   return (
-    <section style={{ position: "relative", background: C.charcoal, padding: "100px clamp(1.5rem, 5vw, 4rem) 80px", overflow: "hidden" }}>
+    <section style={{ position: "relative", background: C.charcoal, padding: "80px clamp(1.5rem, 5vw, 4rem)", overflow: "hidden" }}>
 
       {/* Atmospheric background image */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1371,95 +1375,31 @@ function SocialProofSection() {
             fontFamily: F.italic, fontStyle: "italic",
             fontSize: "clamp(1.45rem, 2.6vw, 2.1rem)",
             fontWeight: 400, lineHeight: 1.62, color: C.cream,
-            margin: "0 0 3rem", letterSpacing: "-0.015em",
+            margin: "0 0 2.5rem", letterSpacing: "-0.015em",
           }}>
-            We have been fortunate to serve the most exacting
-            supply chains in India for three decades.
-            We intend to keep it that way.
+            In 1995, I chose Pune because I believed Indian industry
+            would grow faster than anyone expected. It did.
+            We grew with it.
           </p>
 
           {/* Attribution */}
-          <footer style={{ marginBottom: "5rem" }}>
+          <footer>
             <div style={{
               fontFamily: F.display, fontWeight: 600, fontSize: "1.05rem",
               color: "rgba(250,247,242,0.88)", letterSpacing: "0.01em", marginBottom: "0.3rem",
             }}>
-              Yogesh Sahu
+              Umesh Sahu
             </div>
             <div style={{
               fontFamily: F.body, fontSize: "0.62rem", fontWeight: 500,
               color: "rgba(250,247,242,0.3)", letterSpacing: "0.2em", textTransform: "uppercase",
             }}>
-              Director &middot; Pune Global Group
+              Founder &middot; Pune Global Group &middot; Est. 1995
             </div>
           </footer>
         </blockquote>
 
-        {/* Stats — editorial, left-to-right */}
-        <div className="sr" style={{
-          display: "flex", flexWrap: "wrap",
-          borderTop: "1px solid rgba(250,247,242,0.06)", paddingTop: "2.5rem",
-        }}>
-          {[
-            { val: "500+",   lbl: "Active Clients" },
-            { val: "30 yrs", lbl: "In Operation"   },
-            { val: "21",     lbl: "States Served"  },
-            { val: "50 T",  lbl: "Daily Capacity" },
-          ].map(({ val, lbl }, i) => (
-            <div key={lbl} style={{
-              paddingRight: "3rem", marginRight: i < 3 ? "3rem" : 0,
-              borderRight: i < 3 ? "1px solid rgba(250,247,242,0.06)" : "none",
-              marginBottom: "1rem",
-            }}>
-              <div style={{ fontFamily: F.display, fontSize: "clamp(1.5rem,2.6vw,2rem)", fontWeight: 700, color: C.cream, lineHeight: 1 }}>{val}</div>
-              <div style={{ fontFamily: F.body, fontSize: "0.6rem", fontWeight: 500, color: "rgba(250,247,242,0.28)", letterSpacing: "0.14em", textTransform: "uppercase", marginTop: "0.45rem" }}>{lbl}</div>
-            </div>
-          ))}
-        </div>
-
       </div>
-
-      {/* ── Client logo band — same dark section, no break ── */}
-      <div style={{ borderTop: "1px solid rgba(250,247,242,0.06)", paddingTop: "3rem", marginTop: "3rem" }}>
-        <p style={{
-          textAlign: "center", fontFamily: F.body, fontSize: "0.58rem", fontWeight: 600,
-          letterSpacing: "0.24em", textTransform: "uppercase",
-          color: "rgba(250,247,242,0.22)", marginBottom: "2.25rem",
-        }}>
-          Our packaging protects their products
-        </p>
-        <div style={{ position: "relative", overflow: "hidden", width: "100%" }}>
-          <div aria-hidden="true" style={{
-            position: "absolute", left: 0, top: 0, bottom: 0, width: "140px",
-            background: `linear-gradient(to right, ${C.charcoal} 30%, transparent)`,
-            zIndex: 2, pointerEvents: "none",
-          }} />
-          <div aria-hidden="true" style={{
-            position: "absolute", right: 0, top: 0, bottom: 0, width: "140px",
-            background: `linear-gradient(to left, ${C.charcoal} 30%, transparent)`,
-            zIndex: 2, pointerEvents: "none",
-          }} />
-          <div className="logo-track">
-            {[...clients, ...clients].map((c, i) => (
-              <div key={`${c.name}-${i}`} className="logo-item">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`/clients/${c.file}`}
-                  alt={c.name}
-                  className="logo-img"
-                  style={{ filter: "brightness(0) invert(1)", opacity: 0.3 }}
-                  onError={(e) => {
-                    const el = e.currentTarget as HTMLImageElement;
-                    el.style.display = "none";
-                    if (el.parentElement) el.parentElement.style.display = "none";
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
     </section>
   );
 }
@@ -1499,7 +1439,7 @@ function ClientLogoBand() {
         letterSpacing: "0.24em", textTransform: "uppercase",
         color: C.taupe, opacity: 0.55, marginBottom: "2.25rem",
       }}>
-        Our packaging protects their products
+        Trusted by India's leading manufacturers
       </p>
 
       {/* Marquee wrapper */}
@@ -1690,7 +1630,7 @@ function AboutSection() {
               color: C.taupe, marginBottom: "2.5rem", fontWeight: 300 }}>
               Today we operate from our converting facility at BU Bhandari MIDC, Sanaswadi,
               and our commercial office in Gulmohar Center Point, Pune — serving
-              500+ clients across India.
+              50+ clients across India.
             </p>
 
             <Link href="/infrastructure" className="btn-outline" style={{ textDecoration: "none" }}>
@@ -1712,7 +1652,7 @@ function AboutSection() {
 
               {[
                 { stat: "1995",    label: "Year Established" },
-                { stat: "500+",   label: "Active Clients" },
+                { stat: "50+",    label: "Active Clients" },
                 { stat: "40+",    label: "Paper Grades Stocked" },
                 { stat: "50 T",  label: "Daily Processing Capacity" },
               ].map((item) => (
@@ -1977,131 +1917,6 @@ function ContactSection() {
   );
 }
 
-/* ─── Footer ─────────────────────────────────────────────────────────────────── */
-function Footer() {
-  const productLinks = [
-    { label: "PP Corrugated Systems", href: "/products/pp-corrugated" },
-    { label: "Paper & Board Grades",  href: "/products/paper-board" },
-    { label: "Cyber XLPac GC1",       href: "/products/paper-board/cyber-xlpac-gc1" },
-    { label: "Carte Lumina",          href: "/products/paper-board/carte-lumina" },
-    { label: "Eco Natura",            href: "/products/paper-board/eco-natura" },
-  ];
-  const industryLinks = [
-    { label: "Automotive",     href: "/about#industries" },
-    { label: "Pharmaceutical", href: "/about#industries" },
-    { label: "E-Commerce",     href: "/about#industries" },
-    { label: "FMCG",           href: "/about#industries" },
-    { label: "Engineering",    href: "/about#industries" },
-  ];
-  const companyLinks = [
-    { label: "About Us",    href: "/about" },
-    { label: "Contact",     href: "/#contact" },
-    { label: "Get a Quote", href: "/#contact" },
-  ];
-
-  return (
-    <footer style={{ background: C.dark, padding: "70px clamp(1.5rem, 5vw, 4rem) 0" }}>
-      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-
-        <div className="footer-grid" style={{
-          display: "flex", gap: "4rem",
-          paddingBottom: "3rem", borderBottom: `1px solid rgba(250,247,242,0.08)`,
-        }}>
-          <div style={{ flex: "0 0 300px" }}>
-            <Logo inverted />
-            <p style={{ fontFamily: F.body, fontSize: "0.86rem",
-              color: "rgba(250,247,242,0.55)", lineHeight: 1.8,
-              marginTop: "1.25rem", maxWidth: "260px", fontWeight: 300 }}>
-              Paper trading, converting and PP packaging solutions from Pune since 1995.
-              ITC, TNPL &amp; imported grades in ready stock.
-            </p>
-            <a href="tel:+919823383230" style={{ display: "inline-flex",
-              alignItems: "center", gap: "6px", marginTop: "1.5rem",
-              fontFamily: F.body, fontSize: "0.82rem",
-              color: "rgba(250,247,242,0.75)", textDecoration: "none" }}>
-              <IconPhone size={13} /> +91 98233 83230
-            </a>
-          </div>
-
-          <div className="footer-cols" style={{ display: "flex", gap: "3rem", flex: 1, justifyContent: "flex-end" }}>
-            <div>
-              <div style={{ fontFamily: F.body, fontWeight: 500, fontSize: "0.72rem",
-                color: "rgba(250,247,242,0.4)", letterSpacing: "0.12em",
-                textTransform: "uppercase", marginBottom: "1.25rem" }}>
-                Products
-              </div>
-              {productLinks.map(({ label, href }) => (
-                <Link key={label} href={href} className="footer-link">
-                  {label}
-                </Link>
-              ))}
-            </div>
-
-            <div>
-              <div style={{ fontFamily: F.body, fontWeight: 500, fontSize: "0.72rem",
-                color: "rgba(250,247,242,0.4)", letterSpacing: "0.12em",
-                textTransform: "uppercase", marginBottom: "1.25rem" }}>
-                Industries
-              </div>
-              {industryLinks.map(({ label, href }) => (
-                <Link key={label} href={href} className="footer-link">
-                  {label}
-                </Link>
-              ))}
-            </div>
-
-            <div>
-              <div style={{ fontFamily: F.body, fontWeight: 500, fontSize: "0.72rem",
-                color: "rgba(250,247,242,0.4)", letterSpacing: "0.12em",
-                textTransform: "uppercase", marginBottom: "1.25rem" }}>
-                Company
-              </div>
-              {companyLinks.map(({ label, href }) => (
-                <Link key={label} href={href} className="footer-link">
-                  {label}
-                </Link>
-              ))}
-              <div style={{ marginTop: "1.5rem" }}>
-                <a href="mailto:yogesh.sahu@puneglobalgroup.in"
-                  style={{ display: "flex", alignItems: "center", gap: "6px",
-                    fontFamily: F.body, fontSize: "0.76rem",
-                    color: "rgba(250,247,242,0.55)", transition: "color 0.2s", marginBottom: "0.5rem" }}
-                  onMouseEnter={e => (e.currentTarget.style.color = C.cream)}
-                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(250,247,242,0.55)")}>
-                  <IconMail size={12} /> yogesh.sahu@puneglobalgroup.in
-                </a>
-                <div style={{ fontFamily: F.body, fontSize: "0.76rem",
-                  color: "rgba(250,247,242,0.55)",
-                  display: "flex", alignItems: "flex-start", gap: "6px" }}>
-                  <IconMapPin size={12} style={{ marginTop: "2px", flexShrink: 0 }} />
-                  <span>206 Gulmohar Center Point,<br />Pune 411006</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
-          flexWrap: "wrap", gap: "1rem", padding: "1.5rem 0" }}>
-          <div style={{ fontFamily: F.body, fontSize: "0.76rem",
-            color: "rgba(250,247,242,0.38)" }}>
-            © {new Date().getFullYear()} Pune Global Group. All rights reserved.
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px",
-            fontFamily: F.body, fontSize: "0.73rem", color: "rgba(250,247,242,0.38)" }}>
-            <span>GSTIN:</span>
-            <span style={{ fontFamily: "'Courier New', monospace", letterSpacing: "0.05em" }}>
-              27FYYPS5999K1ZO
-            </span>
-            <span style={{ color: "rgba(250,247,242,0.12)", margin: "0 4px" }}>|</span>
-            <span>Pune, Maharashtra, India</span>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
 /* ─── Page ───────────────────────────────────────────────────────────────────── */
 export default function HomePage() {
   useScrollReveal();
@@ -2117,10 +1932,10 @@ export default function HomePage() {
         <ProductsSection />
         <InfraCallout />
         <SocialProofSection />
+        <ClientLogoBand />
         <BlogTeaser />
         <ContactSection />
       </main>
-      <Footer />
     </>
   );
 }

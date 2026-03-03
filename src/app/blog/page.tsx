@@ -22,7 +22,6 @@ const F = {
 };
 
 const CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,300;1,400;1,500&display=swap');
   *, *::before, *::after { box-sizing: border-box; }
   body { margin: 0; background: ${C.cream}; }
 
@@ -142,18 +141,6 @@ const CSS = `
   .bcard:hover .rarrow { transform: translateX(5px); }
   .feat-wrap:hover .rarrow { transform: translateX(5px); }
 
-  /* Masthead decorative number */
-  .post-index {
-    font-family: ${F.display};
-    font-size: 0.68rem;
-    font-weight: 600;
-    color: ${C.border};
-    letter-spacing: 0.08em;
-    position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
-    font-style: italic;
-  }
 `;
 
 function useScrollReveal() {
@@ -182,9 +169,7 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
 
       {/* Body */}
       <div className="bcard-body">
-        <span className="post-index">#{String(index + 2).padStart(2, "0")}</span>
-
-        {/* Category + date */}
+        {/* Category + read time */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
           <span style={{
             fontFamily: F.body, fontSize: "0.63rem", fontWeight: 600,
@@ -197,6 +182,12 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
           <span style={{ fontFamily: F.body, fontSize: "0.72rem", color: C.taupe }}>
             {post.readTime} read
           </span>
+        </div>
+
+        {/* Date */}
+        <div style={{ fontFamily: F.body, fontSize: "0.81rem", color: "#6B6B6B",
+          letterSpacing: "0.04em", marginBottom: "0.5rem", fontWeight: 400 }}>
+          {post.date}
         </div>
 
         {/* Title */}
@@ -230,10 +221,20 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
   );
 }
 
+const monthOrder: Record<string, number> = {
+  January: 1, February: 2, March: 3, April: 4, May: 5, June: 6,
+  July: 7, August: 8, September: 9, October: 10, November: 11, December: 12,
+};
+function parseDate(d: string) {
+  const [month, year] = d.split(" ");
+  return parseInt(year) * 100 + (monthOrder[month] ?? 0);
+}
+
 export default function BlogPage() {
   useScrollReveal();
-  const featured = blogPosts[0];
-  const rest = blogPosts.slice(1);
+  const sorted = [...blogPosts].sort((a, b) => parseDate(b.date) - parseDate(a.date));
+  const featured = sorted[0];
+  const cards = sorted.slice(1);
 
   return (
     <div style={{ background: C.cream, minHeight: "100vh", fontFamily: F.body, paddingTop: "70px" }}>
@@ -355,6 +356,12 @@ export default function BlogPage() {
                 {featured.category}
               </span>
 
+              {/* Date */}
+              <div style={{ fontFamily: F.body, fontSize: "0.81rem", color: "#6B6B6B",
+                marginBottom: "0.75rem", fontWeight: 400 }}>
+                {featured.date}
+              </div>
+
               {/* Title */}
               <h2 style={{
                 fontFamily: F.display,
@@ -404,7 +411,7 @@ export default function BlogPage() {
           </div>
 
           <div className="blog-grid">
-            {rest.map((post, i) => (
+            {cards.map((post, i) => (
               <BlogCard key={post.slug} post={post} index={i} />
             ))}
           </div>

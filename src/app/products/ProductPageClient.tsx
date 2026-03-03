@@ -27,7 +27,6 @@ const F = {
 };
 
 const GLOBAL_CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
   *, *::before, *::after { box-sizing: border-box; }
   body { margin: 0; background: #FAF7F2; }
 
@@ -834,10 +833,7 @@ export default function ProductPageClient({ slug }: { slug: string }) {
     <>
       <style>{GLOBAL_CSS}</style>
       {product ? (
-        <>
-          <SubpageNav />
-          <ProductPageContent product={product} />
-        </>
+        <ProductPageContent product={product} />
       ) : (
         <div
           style={{

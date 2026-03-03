@@ -1,8 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { SiteLogo } from "@/components/SiteLogo";
 
 const C = {
   cream:     "#FAF7F2",
@@ -10,8 +8,8 @@ const C = {
   charcoal:  "#1C1A17",
   warm:      "#4A4540",
   taupe:     "#7A736D",
-  navy:      "#0D1B2E",
-  navyMid:   "#132238",
+  navy:      "#1A1A1A",
+  navyMid:   "#242424",
   border:    "rgba(28,26,23,0.10)",
   borderMid: "rgba(28,26,23,0.16)",
 };
@@ -23,7 +21,6 @@ const F = {
 };
 
 const CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: ${C.cream}; color: ${C.charcoal}; font-family: ${F.body}; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
@@ -52,7 +49,7 @@ const CSS = `
   }
   .cat-divider { width: 2px; background: ${C.cream}; flex-shrink: 0; z-index: 2; }
 
-  /* PP card — navy */
+  /* PP card — charcoal */
   .cat-pp {
     position: relative; overflow: hidden; cursor: pointer; text-decoration: none;
     display: flex; flex-direction: column; justify-content: flex-end;
@@ -85,8 +82,8 @@ const CSS = `
   .pp-overlay {
     position: absolute; inset: 0; pointer-events: none;
     background:
-      linear-gradient(to top,  rgba(13,27,46,0.96) 0%, rgba(13,27,46,0.72) 38%, rgba(13,27,46,0.22) 68%, rgba(13,27,46,0.04) 100%),
-      linear-gradient(to right, rgba(13,27,46,0.55) 0%, rgba(13,27,46,0.0) 55%);
+      linear-gradient(to top,  rgba(28,26,23,0.96) 0%, rgba(28,26,23,0.72) 38%, rgba(28,26,23,0.22) 68%, rgba(28,26,23,0.04) 100%),
+      linear-gradient(to right, rgba(28,26,23,0.55) 0%, rgba(28,26,23,0.0) 55%);
   }
   .paper-overlay {
     position: absolute; inset: 0; pointer-events: none;
@@ -167,115 +164,25 @@ const CSS = `
     .cat-divider { width: 100%; height: 2px; }
   }
 
-  /* Navbar */
-  .prod-nav-links { display: flex; align-items: center; gap: 2rem; }
-  .prod-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer;
-    background: none; border: none; padding: 4px; }
-  .prod-hamburger span { display: block; width: 22px; height: 1.5px; background: ${C.charcoal}; transition: opacity 0.2s; }
-  .prod-dropdown { display: none; position: absolute; top: 68px; right: 0; left: 0;
-    background: ${C.cream}; border-bottom: 1px solid ${C.borderMid};
-    padding: 1rem clamp(1.5rem, 4vw, 3rem); flex-direction: column; gap: 0.85rem;
-    box-shadow: 0 4px 20px rgba(28,26,23,0.07); }
-  .prod-dropdown.open { display: flex; }
-  @media (max-width: 600px) {
-    .prod-nav-links { display: none !important; }
-    .prod-hamburger { display: flex !important; }
-  }
 `;
 
 const PP_COMPOSITE   = "/hero-pp-family.jpg";
 const PAPER_COMPOSITE = "/hero-paper-family.jpg";
 
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", h, { passive: true });
-    return () => window.removeEventListener("scroll", h);
-  }, []);
-  return (
-    <nav style={{ position: "sticky", top: 0, zIndex: 100, background: C.cream,
-      borderBottom: `1px solid ${scrolled ? C.borderMid : C.border}`,
-      boxShadow: scrolled ? "0 1px 20px rgba(28,26,23,0.05)" : "none",
-      transition: "all 0.3s ease" }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 clamp(1.5rem, 4vw, 3rem)", height: "68px" }}>
-        <SiteLogo href="/" />
-        <div className="prod-nav-links">
-          <Link href="/infrastructure" className="nav-link">Infrastructure</Link>
-          <Link href="/blog" className="nav-link">Insights</Link>
-          <Link href="/#contact" style={{
-            fontFamily: F.body, fontSize: "0.78rem", fontWeight: 500,
-            letterSpacing: "0.09em", textTransform: "uppercase",
-            background: C.charcoal, color: C.cream,
-            padding: "9px 22px", borderRadius: "1px", textDecoration: "none",
-          }}>
-            Request a Quote →
-          </Link>
-        </div>
-        <button className="prod-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
-          <span /><span /><span />
-        </button>
-      </div>
-      <div className={`prod-dropdown${menuOpen ? " open" : ""}`}>
-        <Link href="/infrastructure" className="nav-link" onClick={() => setMenuOpen(false)}>Infrastructure</Link>
-        <Link href="/blog" className="nav-link" onClick={() => setMenuOpen(false)}>Insights</Link>
-        <Link href="/#contact" onClick={() => setMenuOpen(false)} style={{
-          fontFamily: F.body, fontSize: "0.78rem", fontWeight: 500,
-          letterSpacing: "0.09em", textTransform: "uppercase",
-          background: C.charcoal, color: C.cream,
-          padding: "9px 22px", borderRadius: "1px", textDecoration: "none",
-          alignSelf: "flex-start",
-        }}>
-          Request a Quote →
-        </Link>
-      </div>
-    </nav>
-  );
-}
-
 export default function ProductsPage() {
   return (
-    <div style={{ background: C.cream, minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <div style={{ background: C.cream, minHeight: "100vh", display: "flex", flexDirection: "column", paddingTop: "70px", paddingBottom: 0 }}>
       <style>{CSS}</style>
-      <Navbar />
-
-      {/* Page header */}
-      <div style={{ padding: "3.25rem clamp(1.5rem, 5vw, 4rem) 2rem", borderBottom: `1px solid ${C.border}` }}>
-        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-          <p className="fade-up d1" style={{
-            fontFamily: F.mono, fontSize: "0.63rem", fontWeight: 500,
-            color: C.taupe, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "0.65rem",
-          }}>
-            Pune Global Group · Product Range
-          </p>
-          <h1 className="fade-up d2" style={{
-            fontFamily: F.display, fontWeight: 700,
-            fontSize: "clamp(1.9rem, 4vw, 3rem)",
-            color: C.charcoal, lineHeight: 1.1, letterSpacing: "-0.022em",
-          }}>
-            Two categories.{" "}
-            <em style={{ fontWeight: 400, color: C.warm }}>Built to spec.</em>
-          </h1>
-          <p className="fade-up d3" style={{
-            fontFamily: F.body, fontSize: "0.92rem", color: C.taupe,
-            lineHeight: 1.75, fontWeight: 300, marginTop: "0.8rem", maxWidth: "440px",
-          }}>
-            We manufacture PP corrugated systems and trade premium paper &amp; board grades.
-          </p>
-        </div>
-      </div>
 
       {/* Two category panels */}
       <div className="cat-row" style={{ borderBottom: `1px solid ${C.border}` }}>
 
-        {/* ── 01 PP Corrugated Systems — NAVY ── */}
+        {/* ── 01 PP Corrugated Systems — CHARCOAL ── */}
         <Link href="/products/pp-corrugated" className="cat-pp">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={PP_COMPOSITE} alt="" className="cat-bg-img" />
 
-          {/* Navy gradient overlay lifting text */}
+          {/* Charcoal gradient overlay lifting text */}
           <div className="pp-overlay" />
 
           {/* Text */}
@@ -324,8 +231,8 @@ export default function ProductsPage() {
             <span className="cat-eyebrow">Paper &amp; Board Grades</span>
 
             <h2 className="cat-title">
-              ITC · TNPL<br />
-              <em style={{ fontWeight: 400 }}>· Imported</em>
+              Kraft · FBB<br />
+              <em style={{ fontWeight: 400 }}>Duplex · Coated</em>
             </h2>
 
             <div className="cat-stats">
@@ -348,7 +255,7 @@ export default function ProductsPage() {
         <span style={{ fontFamily: F.body, fontSize: "0.73rem", color: C.taupe, fontWeight: 300 }}>
           Custom specifications on all products · Lead time 7–14 working days
         </span>
-        <Link href="/#contact" style={{
+        <Link href="/contact" style={{
           fontFamily: F.body, fontSize: "0.74rem", fontWeight: 500,
           color: C.charcoal, textDecoration: "none", letterSpacing: "0.04em",
           borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "1px",

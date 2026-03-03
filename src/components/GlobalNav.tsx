@@ -91,7 +91,7 @@ const NAV_LINKS = [
   { label: "Infrastructure", href: "/infrastructure" },
   { label: "Blog",           href: "/blog" },
   { label: "About",          href: "/about" },
-  { label: "Contact",        href: "/#contact" },
+  { label: "Contact",        href: "/contact" },
 ];
 
 export default function GlobalNav() {
@@ -109,7 +109,6 @@ export default function GlobalNav() {
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
   const isActive = (href: string) => {
-    if (href.startsWith("/#")) return false;
     return pathname === href || pathname.startsWith(href + "/");
   };
 
@@ -153,7 +152,7 @@ export default function GlobalNav() {
 
           {/* CTA + hamburger */}
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <Link href="/#contact" className="gnav-cta gnav-desktop-links">
+            <Link href="/contact" className="gnav-cta gnav-desktop-links">
               Get Quote →
             </Link>
             <button
@@ -188,7 +187,7 @@ export default function GlobalNav() {
             {l.label}
           </Link>
         ))}
-        <Link href="/#contact" onClick={() => setMobileOpen(false)} className="gnav-cta">
+        <Link href="/contact" onClick={() => setMobileOpen(false)} className="gnav-cta">
           Get Quote →
         </Link>
       </div>

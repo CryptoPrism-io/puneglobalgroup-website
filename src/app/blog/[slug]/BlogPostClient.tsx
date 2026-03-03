@@ -28,7 +28,6 @@ const F = {
 };
 
 const GLOBAL_CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
   *, *::before, *::after { box-sizing: border-box; }
   body { margin: 0; background: #FAF7F2; }
 
@@ -129,7 +128,7 @@ function Navbar() {
       <SiteLogo href="/" />
 
       <a
-        href="/#contact"
+        href="/contact"
         style={{
           fontFamily: F.body,
           background: C.charcoal,
@@ -442,7 +441,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
             <span style={{ fontFamily: F.body, fontSize: "0.78rem", color: C.taupe }}>
               Published by Pune Global Group · {post.date}
             </span>
-            <a href="/#contact" style={{ fontFamily: F.body, fontSize: "0.78rem", color: C.charcoal, textDecoration: "none", fontWeight: 600 }}>
+            <a href="/contact" style={{ fontFamily: F.body, fontSize: "0.78rem", color: C.charcoal, textDecoration: "none", fontWeight: 600 }}>
               Contact Us →
             </a>
           </div>
@@ -530,7 +529,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
           </p>
           <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
             <a
-              href="/#contact"
+              href="/contact"
               style={{
                 fontFamily: F.body,
                 background: C.cream,
@@ -619,20 +618,6 @@ function BlogPostContent({ post }: { post: BlogPost }) {
         )}
       </main>
 
-      {/* Footer */}
-      <footer style={{ background: C.dark, borderTop: `1px solid rgba(250,247,242,0.07)`, padding: "2rem 2.5rem", textAlign: "center" }}>
-        <div style={{ maxWidth: "760px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
-          <Link href="/blog" style={{ fontFamily: F.body, fontSize: "0.78rem", color: "rgba(250,247,242,0.4)", textDecoration: "none" }}>
-            ← All Articles
-          </Link>
-          <p style={{ fontFamily: F.body, fontSize: "0.78rem", color: "rgba(250,247,242,0.35)", margin: 0 }}>
-            © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO
-          </p>
-          <a href="mailto:yogesh.sahu@puneglobalgroup.in" style={{ fontFamily: F.body, fontSize: "0.78rem", color: "rgba(250,247,242,0.4)", textDecoration: "none" }}>
-            yogesh.sahu@puneglobalgroup.in
-          </a>
-        </div>
-      </footer>
     </div>
   );
 }

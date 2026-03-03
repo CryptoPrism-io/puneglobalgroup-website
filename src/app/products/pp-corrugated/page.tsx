@@ -27,10 +27,7 @@ const F = {
   mono:    "'DM Mono', 'Courier New', monospace",
 };
 
-const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');`;
-
 const CSS = `
-  ${FONTS}
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: ${C.cream}; color: ${C.charcoal}; font-family: ${F.body}; -webkit-font-smoothing: antialiased; }
 
@@ -563,7 +560,7 @@ function Hero() {
           </p>
 
           <div className="fade-up d4" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "2.5rem" }}>
-            <Link href="/#contact" className="btn-pp">Request a System Quote →</Link>
+            <Link href="/contact" className="btn-pp">Request a System Quote →</Link>
             <Link href="/products" className="btn-ghost">← All Products</Link>
           </div>
         </div>
@@ -612,31 +609,6 @@ function Hero() {
   );
 }
 
-/* ─── Footer ─────────────────────────────────────────────────────────────────── */
-function Footer() {
-  return (
-    <footer style={{ background: C.dark, padding: "2rem clamp(1.5rem, 5vw, 4rem)" }}>
-      <div style={{
-        maxWidth: "1400px", margin: "0 auto",
-        display: "flex", justifyContent: "space-between", alignItems: "center",
-        flexWrap: "wrap", gap: "1rem",
-      }}>
-        <span style={{ fontFamily: F.body, fontSize: "0.76rem", color: "rgba(250,247,242,0.38)" }}>
-          © {new Date().getFullYear()} Pune Global Group · PP Corrugated Systems
-        </span>
-        <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
-          <Link href="/products" style={{ fontFamily: F.body, fontSize: "0.76rem", color: "rgba(250,247,242,0.38)", textDecoration: "none" }}>
-            All Products
-          </Link>
-          <a href="mailto:yogesh.sahu@puneglobalgroup.in"
-            style={{ fontFamily: F.body, fontSize: "0.76rem", color: "rgba(250,247,242,0.38)", textDecoration: "none" }}>
-            yogesh.sahu@puneglobalgroup.in
-          </a>
-        </div>
-      </div>
-    </footer>
-  );
-}
 
 /* ─── Page ───────────────────────────────────────────────────────────────────── */
 export default function PPCorrugatedPage() {
@@ -683,7 +655,7 @@ export default function PPCorrugatedPage() {
             </p>
           </div>
           <div className="cta-btn-group" style={{ display: "flex", flexDirection: "column", gap: "0.75rem", flexShrink: 0 }}>
-            <Link href="/#contact" style={{
+            <Link href="/contact" style={{
               display: "inline-flex", alignItems: "center", gap: "8px",
               background: C.cream, color: C.pp,
               fontFamily: F.body, fontSize: "0.8rem", fontWeight: 600,
@@ -706,7 +678,6 @@ export default function PPCorrugatedPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

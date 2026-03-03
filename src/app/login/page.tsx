@@ -19,8 +19,6 @@ const T = {
   body: "'Plus Jakarta Sans', system-ui, sans-serif",
 };
 
-const FONT_LINK = `@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap');`;
-
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,7 +55,6 @@ export default function LoginPage() {
 
   return (
     <>
-      <style>{FONT_LINK}</style>
       <div style={{ minHeight: "100vh", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", fontFamily: T.body }}>
         {/* Background glow */}
         <div style={{ position: "fixed", top: "30%", left: "50%", transform: "translateX(-50%)", width: 600, height: 400, background: `radial-gradient(ellipse, rgba(0,196,106,0.08), transparent)`, pointerEvents: "none" }} />

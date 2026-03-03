@@ -48,7 +48,6 @@ const F = {
 };
 
 const GLOBAL_CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
   *, *::before, *::after { box-sizing: border-box; }
   body { margin: 0; background: #FAF7F2; }
 
@@ -1093,7 +1092,14 @@ export default function InfrastructurePage() {
                 eyebrow: "PP Manufacturing — Core Business",
                 heading: "Trays · Separators · Boxes · Crates",
                 desc: "Precision polypropylene packaging for automotive, pharma and electronics — custom sizes, export-ready documentation on every order.",
-                tags: ["PP Trays", "Separators", "Foldable Boxes", "PP Crates", "Layer Pads", "ESD Bins"],
+                tags: [
+                  { label: "PP Trays",      href: "/products/pp-corrugated/pp-tray-folded-corner" },
+                  { label: "Separators",    href: "/products/pp-corrugated/pp-sep-cross-partition" },
+                  { label: "Foldable Boxes",href: "/products/pp-corrugated/pp-box-collapsible" },
+                  { label: "PP Crates",     href: "/products/pp-corrugated/pp-bin-scrap-open-top" },
+                  { label: "Layer Pads",    href: "/products/pp-corrugated/pp-layer-pad-heavy-duty" },
+                  { label: "ESD Bins",      href: "/products/pp-corrugated/pp-tray-esd-antistatic" },
+                ],
                 href: "/products/pp-corrugated",
                 cta: "View PP Products",
               },
@@ -1102,7 +1108,14 @@ export default function InfrastructurePage() {
                 eyebrow: "Board Converting",
                 heading: "Cut to Size. Press-Ready.",
                 desc: "Sheeting, slitting and rewinding to exact press dimensions. Fast turnaround, low MOQ, for printers and converters across India.",
-                tags: ["FBB Sheeting", "Duplex Cutting", "Slitting", "Rewinding", "Custom Dimensions", "Low MOQ"],
+                tags: [
+                  { label: "FBB Sheeting",       href: "/infrastructure" },
+                  { label: "Duplex Cutting",      href: "/infrastructure" },
+                  { label: "Slitting",            href: "/infrastructure" },
+                  { label: "Rewinding",           href: "/infrastructure" },
+                  { label: "Custom Dimensions",   href: "/infrastructure" },
+                  { label: "Low MOQ",             href: "/infrastructure" },
+                ],
                 href: "/infrastructure",
                 cta: "See Converting Facility",
               },
@@ -1111,7 +1124,14 @@ export default function InfrastructurePage() {
                 eyebrow: "Paper & PP Sheet Trading",
                 heading: "ITC · TNPL · Imported",
                 desc: "Trusted traders of ITC PSPD and TNPL — FBB, duplex, kraft and test liner. PP corrugated sheets also available ex-stock from our Pune warehouse.",
-                tags: ["Cyber XLPac", "Carte Lumina", "Safire Graphik", "Eco Natura", "PP Sheets", "Ready Stock"],
+                tags: [
+                  { label: "Cyber XLPac",    href: "/products/paper-board/cyber-xlpac-gc1" },
+                  { label: "Carte Lumina",   href: "/products/paper-board/carte-lumina" },
+                  { label: "Safire Graphik", href: "/products/paper-board/safire-graphik" },
+                  { label: "Eco Natura",     href: "/products/paper-board/eco-natura" },
+                  { label: "PP Sheets",      href: "/products/pp-corrugated" },
+                  { label: "Ready Stock",    href: "/contact" },
+                ],
                 href: "/products",
                 cta: "Browse All Grades",
               },
@@ -1137,12 +1157,23 @@ export default function InfrastructurePage() {
                 </p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "2rem" }}>
                   {line.tags.map((tag) => (
-                    <span key={tag} style={{ fontFamily: F.body, fontSize: "0.72rem",
+                    <Link key={tag.label} href={tag.href} style={{ fontFamily: F.body, fontSize: "0.72rem",
                       fontWeight: 500, color: C.warm, background: C.parchment,
                       border: `1px solid ${C.border}`, borderRadius: "2px",
-                      padding: "0.3rem 0.6rem" }}>
-                      {tag}
-                    </span>
+                      padding: "0.3rem 0.6rem", textDecoration: "none", cursor: "pointer",
+                      transition: "background 0.2s, color 0.2s, border-color 0.2s" }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLAnchorElement).style.background = C.parchment;
+                        (e.currentTarget as HTMLAnchorElement).style.color = C.charcoal;
+                        (e.currentTarget as HTMLAnchorElement).style.borderColor = C.borderMid;
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLAnchorElement).style.background = C.parchment;
+                        (e.currentTarget as HTMLAnchorElement).style.color = C.warm;
+                        (e.currentTarget as HTMLAnchorElement).style.borderColor = C.border;
+                      }}>
+                      {tag.label}
+                    </Link>
                   ))}
                 </div>
                 <Link href={line.href} style={{ fontFamily: F.body, fontWeight: 600,
@@ -1157,30 +1188,6 @@ export default function InfrastructurePage() {
         </div>
       </section>
 
-      {/* ——— Footer ——— */}
-      <footer
-        style={{
-          background: C.dark,
-          borderTop: `1px solid rgba(250,247,242,0.07)`,
-          padding: "2rem 2.5rem",
-          textAlign: "center",
-        }}
-      >
-        <p
-          style={{
-            fontFamily: F.body,
-            fontSize: "0.78rem",
-            color: "rgba(250,247,242,0.35)",
-            margin: 0,
-          }}
-        >
-          © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO ·{" "}
-          <a href="mailto:yogesh.sahu@puneglobalgroup.in" style={{ color: "rgba(250,247,242,0.35)", textDecoration: "none" }}>
-            yogesh.sahu@puneglobalgroup.in
-          </a>{" "}
-          · +91 98233 83230
-        </p>
-      </footer>
     </div>
   );
 }
