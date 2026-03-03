@@ -599,10 +599,7 @@ function Hero() {
           <div className="hero-carousel-wrap">
             {[
               "/hero-homepage-v2.jpg",
-              "/infrastructure/support/finished-goods-stack.jpg",
               "/hero-infrastructure.jpg",
-              "/infrastructure/machines/stretch-wrap-forklift-wide.jpg",
-              "/infrastructure/facility/converting-floor.jpg",
               "/infrastructure/facility/dispatch-area.jpg",
               "/hero-pp-family.jpg",
               "/infrastructure/facility/quality-control.jpg",
