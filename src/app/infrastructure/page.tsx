@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { machines, capabilities } from "@/lib/pgg-data";
 import { SiteLogo } from "@/components/SiteLogo";
+import { LogoWatermark } from "@/components/LogoWatermark";
 
 // ————————————————————————————————————————————
 // Image data
@@ -402,6 +403,7 @@ export default function InfrastructurePage() {
               alt="PGG converting facility — rewinder, sheeter and guillotine, MIDC Pune"
               style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "blur(1.5px)", transform: "scale(1.03)" }}
             />
+            <LogoWatermark />
             <div style={{
               position: "absolute", bottom: "1.5rem", right: "1.5rem",
               background: "rgba(20,18,16,0.88)",

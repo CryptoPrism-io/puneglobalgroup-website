@@ -8,6 +8,7 @@ import {
   IconLoader2, IconCar, IconPill, IconShoppingCart, IconTool,
 } from "@tabler/icons-react";
 import { productPath } from "@/lib/pgg-data";
+import { LogoWatermark } from "@/components/LogoWatermark";
 import { db } from "@/lib/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
@@ -702,6 +703,8 @@ function Hero() {
               <img key={src} src={src} alt="" className="hero-carousel-img" />
             ))}
           </div>
+
+          <LogoWatermark />
 
           {/* Certification badge overlay */}
           <div style={{
