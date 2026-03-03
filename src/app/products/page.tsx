@@ -183,7 +183,7 @@ const CSS = `
   }
 `;
 
-const PP_COMPOSITE   = "/products-pp-composite.jpg";
+const PP_COMPOSITE   = "/hero-pp-family.jpg";
 const PAPER_COMPOSITE = "/products-paper-composite.jpg";
 
 function Navbar() {

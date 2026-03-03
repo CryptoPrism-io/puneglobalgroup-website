@@ -2,10 +2,11 @@
  * Generate infrastructure page images using Imagen 4 via Gemini API
  * Run: node scripts/generate-infra-images.mjs
  */
+import './load-env.mjs';
 import fs from 'fs';
 import path from 'path';
 
-const API_KEY = 'AIzaSyDIxpNqLTm_lEFiDyHvYiz-ba3GeK4vhbc';
+const API_KEY = process.env.GEMINI_API_KEY || (() => { throw new Error('Set GEMINI_API_KEY in .env.local'); })();
 const MODEL   = 'imagen-4.0-generate-001';
 
 const MDIR = 'public/infrastructure/machines';

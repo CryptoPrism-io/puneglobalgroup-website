@@ -2,10 +2,11 @@
  * Regenerate facility images with Indian workers (diverse, including female)
  * Run: node scripts/regen-facility-images.mjs
  */
+import './load-env.mjs';
 import fs from 'fs';
 import sharp from 'sharp';
 
-const API_KEY = 'AIzaSyDIxpNqLTm_lEFiDyHvYiz-ba3GeK4vhbc';
+const API_KEY = process.env.GEMINI_API_KEY || (() => { throw new Error('Set GEMINI_API_KEY in .env.local'); })();
 const MODEL   = 'imagen-4.0-generate-001';
 const DIR     = 'public/infrastructure/facility';
 

@@ -2,11 +2,12 @@
  * Regenerate infrastructure machine images with tight, explicit industrial prompts.
  * Run: node scripts/regen-machine-images.mjs
  */
+import './load-env.mjs';
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 
-const API_KEY = 'AIzaSyDIxpNqLTm_lEFiDyHvYiz-ba3GeK4vhbc';
+const API_KEY = process.env.GEMINI_API_KEY || (() => { throw new Error('Set GEMINI_API_KEY in .env.local'); })();
 const MODEL   = 'imagen-4.0-generate-001';
 const DIR     = 'public/infrastructure/machines';
 

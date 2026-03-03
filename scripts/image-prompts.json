@@ -1,0 +1,358 @@
+{
+  "company": {
+    "name": "Pune Global Group",
+    "location": "Pune, Maharashtra, India",
+    "tagline": "Industrial handling & protection systems",
+    "business": "Manufacturer of PP corrugated plastic packaging (boxes, trays, bins, separators, layer pads, ESD packaging) and authorised trader of premium paper & board grades (ITC PSPD, TNPL, imported). Serves automotive, pharma, FMCG, electronics, and export industries across India.",
+    "brand_tone": "Premium, editorial, industrial. Warm cream/charcoal palette. Serif display headings. Not consumer — B2B.",
+    "site_url": "https://puneglobalgroup.in"
+  },
+
+  "pages": {
+    "/": {
+      "title": "Homepage",
+      "description": "Full-screen hero carousel (10 images), services overview, client industries, contact form. Hero images rotate across factory, machines, products and facility shots."
+    },
+    "/products": {
+      "title": "Products Index",
+      "description": "Two-panel split: PP Corrugated Systems (navy) vs Paper & Board Grades (cream). Each panel is a full-bleed image card linking to its sub-page."
+    },
+    "/products/pp-corrugated": {
+      "title": "PP Corrugated Systems",
+      "description": "Hero + product family grid (foldable boxes, corrugated sheets, layer pads, crates, ESD packaging). 3 images per product sub-category."
+    },
+    "/products/paper-board": {
+      "title": "Paper & Board Grades",
+      "description": "Hero + product family grid (FBB, duplex board, kraft liner, test liner). 3 images per grade."
+    },
+    "/infrastructure": {
+      "title": "Infrastructure",
+      "description": "Six converting machines each with wide / detail / operation shots. Facility section with 6 photos showing Indian diverse workers (majority female)."
+    },
+    "/blog": {
+      "title": "Insights Blog",
+      "description": "14 editorial articles on packaging industry topics. Each article has a cover image."
+    }
+  },
+
+  "pp_material_rules": {
+    "WHAT_IT_IS": "Polypropylene (PP) twinwall / twin-flute corrugated plastic sheet — rigid flat plastic board 3–10mm thick with hollow rectangular channels (flutes) running through it. Brand references: Coroplast, Correx, Twinwall, Corflute.",
+    "CONSTRUCTION": "Products are made by CUTTING flat PP twinwall sheet on a die-cutting punch press, then FOLDING/BENDING the sheet at scored lines and joining corners with metal RIVETS or ULTRASONIC WELDING. Finished products have: flat smooth panels, sharp 90-degree fold lines, metal rivets or weld points at corners, hollow flute channels visible on any cut edge.",
+    "VISUAL_IDENTIFIERS": "Smooth flat matte plastic surface (not wavy, not ribbed, not shiny). Hollow rectangular channels visible on cut edges. Metal rivet heads at corners. Fold/crease lines on panel faces. Common colours: grey, black, blue, yellow, white.",
+    "NEVER_GENERATE": [
+      "Injection-moulded plastic bins with external ribbing (Euro containers, Stemo bins, Georg Utz style)",
+      "Corrugated cardboard / kraft paper / brown wavy-flute packaging",
+      "Arc welding / MIG welding / handheld heat guns / sparks / flames",
+      "Solid plastic walls with no flute structure",
+      "Round-cornered moulded crates"
+    ],
+    "ALWAYS_SAY_IN_PROMPT": "PP corrugated twin-wall plastic. Hollow single-flute polypropylene sheet. Flat panel construction with metal rivets. NOT cardboard. NOT injection moulded. NOT kraft paper.",
+    "PROMPT_LENS_LIGHTING": "50mm lens perspective. 5200K neutral LED lighting."
+  },
+
+  "style_guides": {
+    "machine_shots": "No people. No animals. No food. No nature scenery. Only industrial machines. Professional industrial product photography. Ultra sharp. 4K photorealistic. 50mm lens. 5200K LED lighting.",
+    "facility_shots": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including majority women in orange safety vests and white helmets. Candid professional workplace photography. Bright 5200K LED lighting. Clean factory.",
+    "hero_shots": "Ultra high resolution photorealistic photography. Professional commercial photography. Cinematic quality. Highly detailed.",
+    "pp_prefix": "MATERIAL: All packaging shown is rigid polypropylene (PP) twin-wall corrugated plastic sheet — hollow single-flute, flat panel, metal rivets at corners, fold lines visible. NOT cardboard. NOT injection moulded. NOT kraft."
+  },
+
+  "models_used": {
+    "ULTRA": "gemini-3-pro-image-preview (Nano Banana Pro) — hero images",
+    "STD": "imagen-4.0-fast-generate-001 — machines & facility images"
+  },
+
+  "images": [
+
+    {
+      "file": "public/hero-homepage-v2.jpg",
+      "model": "ULTRA",
+      "aspect": "16:9",
+      "size_kb": 427,
+      "pages_used": ["/ (homepage carousel, slot 1)"],
+      "section": "Hero Carousel",
+      "prompt": "Ultra high resolution photorealistic photography. Professional commercial photography. Cinematic quality. Highly detailed. Aerial wide-angle photo of a modern Indian industrial packaging factory at golden hour. Clean white building facade, company name on building, loading bay with trucks, green landscaping, dramatic orange sky. Corporate architecture photography."
+    },
+
+    {
+      "file": "public/hero-industry.jpg",
+      "model": "ULTRA",
+      "aspect": "16:9",
+      "size_kb": 536,
+      "pages_used": ["/ (homepage carousel, slot 3)"],
+      "section": "Hero Carousel",
+      "prompt": "Ultra high resolution photorealistic photography. Professional commercial photography. Cinematic quality. Highly detailed. Inside a large modern Indian automotive assembly plant. Rows of car body frames on a lit production line. Indian workers in blue uniforms. Grey and black PP corrugated packaging trays and boxes visible on the line. Blue-white factory lighting. Cinematic wide shot."
+    },
+
+    {
+      "file": "public/hero-infrastructure.jpg",
+      "model": "ULTRA",
+      "aspect": "16:9",
+      "size_kb": 389,
+      "pages_used": ["/ (homepage carousel, slot 5)", "/infrastructure (page hero)"],
+      "section": "Hero Carousel + Infrastructure Page Hero",
+      "prompt": "Ultra high resolution photorealistic photography. Professional commercial photography. Cinematic quality. Highly detailed. Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Wide panoramic shot of a PP corrugated box manufacturing facility. Multiple industrial machines — punch press, screen printer, sheeter — arranged on a factory floor. Indian female and male workers operating machines. Yellow floor safety markings. Very wide angle."
+    },
+
+    {
+      "file": "public/hero-paper-family.jpg",
+      "model": "ULTRA",
+      "aspect": "4:3",
+      "size_kb": 330,
+      "pages_used": ["/ (homepage carousel, slot 9)", "/products/paper-board (page hero)"],
+      "section": "Hero Carousel + Paper-Board Page Hero",
+      "prompt": "Ultra high resolution photorealistic photography. Professional commercial photography. Cinematic quality. Highly detailed. Elegant flat-lay overhead product photography of premium paper and board grades. Stacked FBB folding boxboard sheets, white duplex board, cream kraft liner arranged in layers on a white marble surface. Soft even studio lighting with clean shadow. Minimalist, ultra sharp."
+    },
+
+    {
+      "file": "public/hero-pp-family.jpg",
+      "model": "ORIGINAL (restored from git)",
+      "aspect": "4:3",
+      "size_kb": 142,
+      "pages_used": ["/ (homepage carousel, slot 7)", "/products/pp-corrugated (page hero)", "/products (PP card background)"],
+      "section": "Hero Carousel + PP Page Hero + Products Index PP Card",
+      "prompt": "ORIGINAL PHOTO — grey realistic 3D-render-style product photo of PP corrugated bins, boxes and trays. Kept as preferred by client over AI-generated version."
+    },
+
+    {
+      "file": "public/infrastructure/machines/flat-bed-punch-press-wide.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 450,
+      "pages_used": ["/ (homepage carousel, slot 4)", "/infrastructure (machine card — Flat Bed Punch Press, image 1)"],
+      "section": "Infrastructure Page — Flat Bed Punch Press",
+      "prompt": "No people. No animals. No food. No nature scenery. Only industrial machines. Professional industrial product photography. Ultra sharp. 4K photorealistic. Wide shot: large industrial flatbed die-cutting punch press machine, orange and grey painted steel body, heavy upper platen, polished guide rails, digital control panel with red emergency stop. Clean factory floor. Overhead LED lighting."
+    },
+
+    {
+      "file": "public/infrastructure/machines/flat-bed-punch-press-detail.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 258,
+      "pages_used": ["/infrastructure (machine card — Flat Bed Punch Press, image 2)"],
+      "section": "Infrastructure Page — Flat Bed Punch Press",
+      "prompt": "No people. No animals. No food. No nature scenery. Only industrial machines. Professional industrial product photography. Ultra sharp. 4K photorealistic. Extreme close-up macro: sharp steel cutting-rule die pressed into a grey PP corrugated plastic sheet on a flatbed press platen. Clean cut edges, flute structure visible in cross-section. Ultra sharp macro industrial photography."
+    },
+
+    {
+      "file": "public/infrastructure/machines/flat-bed-punch-press-operation.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 486,
+      "pages_used": ["/infrastructure (machine card — Flat Bed Punch Press, image 3)"],
+      "section": "Infrastructure Page — Flat Bed Punch Press",
+      "prompt": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Indian male factory worker loading grey PP corrugated plastic sheets into a flatbed die-cutting punch press machine. Machine in mid-cycle. Safety glasses. Factory floor. Realistic candid industrial photography."
+    },
+
+    {
+      "file": "public/infrastructure/machines/ultrasonic-welder-wide.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 214,
+      "pages_used": ["/infrastructure (machine card — Plastic Ultrasonic Welder, image 1)"],
+      "section": "Infrastructure Page — Plastic Ultrasonic Welder",
+      "prompt": "No people. No animals. No food. No nature scenery. Only industrial machines. Professional industrial product photography. Ultra sharp. 4K photorealistic. Wide shot: compact industrial ultrasonic plastic welding machine on a metal workbench. Cylindrical titanium sonotrode horn at top, digital frequency display, foot pedal controller on floor. Grey metal casing. White background wall. LED workshop lighting."
+    },
+
+    {
+      "file": "public/infrastructure/machines/ultrasonic-welder-detail.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 469,
+      "pages_used": ["/infrastructure (machine card — Plastic Ultrasonic Welder, image 2)"],
+      "section": "Infrastructure Page — Plastic Ultrasonic Welder",
+      "prompt": "No people. No animals. No food. No nature scenery. Only industrial machines. Professional industrial product photography. Ultra sharp. 4K photorealistic. Close-up macro: titanium ultrasonic welding horn pressing against the join of two grey PP corrugated plastic panels. Visible weld line, micro vibration rings. Extreme clarity. Industrial macro photography."
+    },
+
+    {
+      "file": "public/infrastructure/machines/ultrasonic-welder-operation.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 364,
+      "pages_used": ["/infrastructure (machine card — Plastic Ultrasonic Welder, image 3)"],
+      "section": "Infrastructure Page — Plastic Ultrasonic Welder",
+      "prompt": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Indian female factory worker operating an ultrasonic plastic welding machine, holding a grey PP corrugated box under the welding horn. Safety glasses. Clean workbench. Indian manufacturing facility. Candid professional photo."
+    },
+
+    {
+      "file": "public/infrastructure/machines/screen-printing-wide.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 653,
+      "pages_used": ["/ (homepage carousel, slot 10)", "/infrastructure (machine card — Screen Printing Unit, image 1)"],
+      "section": "Hero Carousel + Infrastructure Page — Screen Printing Unit",
+      "prompt": "No people. No animals. No food. No nature scenery. Only industrial machines. Professional industrial product photography. Ultra sharp. 4K photorealistic. Wide shot: large industrial flatbed screen printing machine with metal frame, mesh screen, rubber squeegee arm, flat print table. Ink containers on side table. Print shop environment. Bright overhead lighting."
+    },
+
+    {
+      "file": "public/infrastructure/machines/screen-printing-detail.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 359,
+      "pages_used": ["/infrastructure (machine card — Screen Printing Unit, image 2)"],
+      "section": "Infrastructure Page — Screen Printing Unit",
+      "prompt": "No people. No animals. No food. No nature scenery. Only industrial machines. Professional industrial product photography. Ultra sharp. 4K photorealistic. Close-up macro: screen printing rubber squeegee pressing black ink through a fine mesh stencil, printing a barcode pattern onto a white PP corrugated plastic sheet. Ink droplets visible. Ultra sharp macro."
+    },
+
+    {
+      "file": "public/infrastructure/machines/screen-printing-operation.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 582,
+      "pages_used": ["/infrastructure (machine card — Screen Printing Unit, image 3)"],
+      "section": "Infrastructure Page — Screen Printing Unit",
+      "prompt": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Indian female worker operating a screen printing machine, lifting the printed PP corrugated sheet showing fresh black printed text and barcode. Print shop setting. Candid professional photo."
+    },
+
+    {
+      "file": "public/infrastructure/machines/guillotine-sheeter-wide.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 279,
+      "pages_used": ["/infrastructure (machine card — Guillotine Sheeter, image 1)"],
+      "section": "Infrastructure Page — Guillotine Sheeter",
+      "prompt": "No people. No animals. No food. No nature scenery. Only industrial machines. Professional industrial product photography. Ultra sharp. 4K photorealistic. Wide shot: large industrial hydraulic guillotine paper cutter machine. Tall grey metal body, top-mounted steel blade, white clamp bar, back gauge ruler, digital display panel showing cut dimensions, red emergency stop button. Stack of white FBB board loaded."
+    },
+
+    {
+      "file": "public/infrastructure/machines/guillotine-sheeter-detail.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 392,
+      "pages_used": ["/infrastructure (machine card — Guillotine Sheeter, image 2)"],
+      "section": "Infrastructure Page — Guillotine Sheeter",
+      "prompt": "No people. No animals. No food. No nature scenery. Only industrial machines. Professional industrial product photography. Ultra sharp. 4K photorealistic. Close-up macro: hydraulic guillotine blade slicing cleanly through a thick stack of white coated FBB paper board sheets. Perfect straight cut edge showing multiple paper layers in cross-section. Ultra sharp industrial macro photography."
+    },
+
+    {
+      "file": "public/infrastructure/machines/guillotine-sheeter-operation.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 490,
+      "pages_used": ["/infrastructure (machine card — Guillotine Sheeter, image 3)"],
+      "section": "Infrastructure Page — Guillotine Sheeter",
+      "prompt": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Indian male worker setting the back gauge on a large hydraulic guillotine paper cutter, stacking white board sheets on the machine table. Focused professional. Indian factory setting."
+    },
+
+    {
+      "file": "public/infrastructure/machines/synchro-sheeter-wide.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 548,
+      "pages_used": ["/infrastructure (machine card — Synchro Sheeter, image 1)"],
+      "section": "Infrastructure Page — Synchro Sheeter",
+      "prompt": "No people. No animals. No food. No nature scenery. Only industrial machines. Professional industrial product photography. Ultra sharp. 4K photorealistic. Wide shot: industrial rotary synchro sheeter machine in a paper converting factory. Large infeed reel stand, rotating cutting drum, outfeed delivery conveyor stacking cut sheets. Grey and blue steel machine. Overhead lighting."
+    },
+
+    {
+      "file": "public/infrastructure/machines/synchro-sheeter-detail.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 443,
+      "pages_used": ["/infrastructure (machine card — Synchro Sheeter, image 2)"],
+      "section": "Infrastructure Page — Synchro Sheeter",
+      "prompt": "No people. No animals. No food. No nature scenery. Only industrial machines. Professional industrial product photography. Ultra sharp. 4K photorealistic. Close-up macro: rotary sheeter cutting drum and precision blade cutting a continuous web of white coated paper board into exact-size sheets. Mechanical gears, timing belt. Ultra sharp industrial macro."
+    },
+
+    {
+      "file": "public/infrastructure/machines/synchro-sheeter-operation.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 422,
+      "pages_used": ["/infrastructure (machine card — Synchro Sheeter, image 3)"],
+      "section": "Infrastructure Page — Synchro Sheeter",
+      "prompt": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Indian female worker monitoring a running synchro sheeter machine, checking cut sheet dimensions with a ruler. Sheets stacking at output. Paper converting factory. Candid professional photo."
+    },
+
+    {
+      "file": "public/infrastructure/machines/stretch-wrap-forklift-wide.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 450,
+      "pages_used": ["/infrastructure (machine card — Stretch Wrap & Forklift Despatch, image 1)"],
+      "section": "Infrastructure Page — Stretch Wrap & Forklift Despatch",
+      "prompt": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Wide shot: yellow electric counterbalance forklift truck parked next to a rotary arm pallet stretch wrap machine in an Indian warehouse despatch bay. Fully wrapped pallets of grey PP corrugated boxes on wooden pallets nearby. Roller shutter doors. Bright industrial lighting."
+    },
+
+    {
+      "file": "public/infrastructure/machines/stretch-wrap-forklift-detail.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 636,
+      "pages_used": ["/infrastructure (machine card — Stretch Wrap & Forklift Despatch, image 2)"],
+      "section": "Infrastructure Page — Stretch Wrap & Forklift Despatch",
+      "prompt": "No people. No animals. No food. No nature scenery. Only industrial machines. Professional industrial product photography. Ultra sharp. 4K photorealistic. Close-up: transparent stretch wrap film tightly wound in multiple overlapping layers around a corrugated cardboard pallet. Film tension lines visible. Clean industrial detail photography."
+    },
+
+    {
+      "file": "public/infrastructure/machines/stretch-wrap-forklift-operation.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 411,
+      "pages_used": ["/infrastructure (machine card — Stretch Wrap & Forklift Despatch, image 3)"],
+      "section": "Infrastructure Page — Stretch Wrap & Forklift Despatch",
+      "prompt": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Indian female forklift operator driving a yellow electric counterbalance forklift, placing a stretch-wrapped pallet of grey PP corrugated boxes near the loading bay. Candid action photo. Indian warehouse. Professional industrial photography."
+    },
+
+    {
+      "file": "public/infrastructure/facility/converting-floor.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 488,
+      "pages_used": ["/ (homepage carousel, slot 2)", "/infrastructure (facility section)"],
+      "section": "Hero Carousel + Infrastructure Page — Facility",
+      "prompt": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Wide interior shot of an Indian PP corrugated box manufacturing facility. Indian female worker operating a punch press machine, male worker at screen printer in background. Bright LED overhead lighting, yellow safety floor markings. Clean organised factory."
+    },
+
+    {
+      "file": "public/infrastructure/facility/storage-warehouse.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 426,
+      "pages_used": ["/infrastructure (facility section)"],
+      "section": "Infrastructure Page — Facility",
+      "prompt": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Interior of an organised Indian industrial warehouse. Tall metal shelving racks with pallets of grey PP corrugated boxes and white board reels. Indian female warehouse manager with tablet doing inventory. Forklift aisle visible. Bright lighting."
+    },
+
+    {
+      "file": "public/infrastructure/facility/dispatch-area.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 457,
+      "pages_used": ["/ (homepage carousel, slot 6)", "/infrastructure (facility section)"],
+      "section": "Hero Carousel + Infrastructure Page — Facility",
+      "prompt": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Indian factory loading bay and despatch area. Indian female logistics worker with clipboard and Indian male worker loading stretch-wrapped pallets of PP corrugated boxes onto a truck. Roller shutter doors open, daylight streaming in. Action shot."
+    },
+
+    {
+      "file": "public/infrastructure/facility/quality-control.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 333,
+      "pages_used": ["/ (homepage carousel, slot 8)", "/infrastructure (facility section)"],
+      "section": "Hero Carousel + Infrastructure Page — Facility",
+      "prompt": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Indian female quality control inspector in an Indian factory, wearing safety glasses and blue uniform, using digital calipers to precisely measure a grey PP corrugated plastic box at a QC inspection table. Focused expression. Clean well-lit QC station."
+    },
+
+    {
+      "file": "public/infrastructure/facility/freight-lift.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 502,
+      "pages_used": ["/infrastructure (facility section)"],
+      "section": "Infrastructure Page — Facility",
+      "prompt": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Indian factory worker (female) pressing the button panel on a large industrial freight elevator inside a multi-story Indian manufacturing building. Heavy-duty metal cage lift with open steel doors, pallet of corrugated boxes inside. Concrete walls."
+    },
+
+    {
+      "file": "public/infrastructure/facility/forklift.jpg",
+      "model": "STD",
+      "aspect": "4:3",
+      "size_kb": 509,
+      "pages_used": ["/infrastructure (facility section)"],
+      "section": "Infrastructure Page — Facility",
+      "prompt": "Photorealistic 4K photo. Indian manufacturing facility. Diverse Indian workers including women in orange safety vests and white helmets. Candid professional workplace photography. Bright LED lighting. Clean factory. Indian female forklift operator driving a yellow electric counterbalance forklift truck down a warehouse aisle, lifting a pallet of grey PP corrugated boxes. Clean floor with yellow painted safety lines. Confident professional expression. 4K photorealistic action shot."
+    }
+
+  ]
+}

@@ -599,15 +599,15 @@ function Hero() {
           <div className="hero-carousel-wrap">
             {[
               "/hero-homepage-v2.jpg",
-              "/infrastructure/facility/converting-floor.jpg",
-              "/hero-industry.jpg",
-              "/infrastructure/machines/flat-bed-punch-press-wide.jpg",
+              "/infrastructure/support/finished-goods-stack.jpg",
               "/hero-infrastructure.jpg",
+              "/infrastructure/machines/stretch-wrap-forklift-wide.jpg",
+              "/infrastructure/facility/converting-floor.jpg",
               "/infrastructure/facility/dispatch-area.jpg",
               "/hero-pp-family.jpg",
               "/infrastructure/facility/quality-control.jpg",
               "/hero-paper-family.jpg",
-              "/infrastructure/machines/screen-printing-wide.jpg",
+              "/infrastructure/facility/storage-warehouse.jpg",
             ].map((src) => (
               // eslint-disable-next-line @next/next/no-img-element
               <img key={src} src={src} alt="" className="hero-carousel-img" />

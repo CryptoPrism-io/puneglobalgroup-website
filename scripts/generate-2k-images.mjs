@@ -11,38 +11,61 @@
  * - Use "macro industrial photo" for detail shots
  * - Mention lighting: "bright LED overhead lighting" or "soft even studio lighting"
  */
+import './load-env.mjs';
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 
-const API_KEY = 'AIzaSyDIxpNqLTm_lEFiDyHvYiz-ba3GeK4vhbc';
-const ULTRA   = 'imagen-4.0-ultra-generate-001';  // Best quality
-const STD     = 'imagen-4.0-generate-001';         // Faster for batches
+const API_KEY = process.env.GEMINI_API_KEY || (() => { throw new Error('Set GEMINI_API_KEY in .env.local'); })();
+const ULTRA   = 'gemini-3-pro-image-preview';   // Nano Banana Pro — highest quality
+const STD     = 'imagen-4.0-fast-generate-001'; // Fast variant — higher quota
 
+// Gemini image models use generateContent; Imagen models use :predict
 async function gen(outputPath, prompt, { model = STD, aspectRatio = '16:9', people = false } = {}) {
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${model}:predict?key=${API_KEY}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        instances: [{ prompt }],
-        parameters: {
-          sampleCount: 1,
-          aspectRatio,
-          safetyFilterLevel: 'block_some',
-          personGeneration: people ? 'allow_adult' : 'dont_allow',
-        },
-      }),
-    }
-  );
-  if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0,150)}`);
-  const data = await res.json();
-  const b64 = data?.predictions?.[0]?.bytesBase64Encoded;
-  if (!b64) throw new Error('No bytes in response');
+  const isGemini = model.startsWith('gemini');
+  let b64;
+
+  if (isGemini) {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { responseModalities: ['IMAGE', 'TEXT'] },
+        }),
+      }
+    );
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0,150)}`);
+    const data = await res.json();
+    b64 = data?.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+    if (!b64) throw new Error(`No image in response: ${JSON.stringify(data).slice(0,200)}`);
+  } else {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:predict?key=${API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          instances: [{ prompt }],
+          parameters: {
+            sampleCount: 1,
+            aspectRatio,
+            safetyFilterLevel: 'block_some',
+            personGeneration: people ? 'allow_adult' : 'dont_allow',
+          },
+        }),
+      }
+    );
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0,150)}`);
+    const data = await res.json();
+    b64 = data?.predictions?.[0]?.bytesBase64Encoded;
+    if (!b64) throw new Error('No bytes in response');
+  }
+
   const raw = Buffer.from(b64, 'base64');
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-  // Resize to 2K (1920px wide) — keep aspect ratio, high quality JPEG
   const [w, h] = aspectRatio === '16:9' ? [1920, 1080] : [1920, 1440];
   await sharp(raw)
     .resize(w, h, { fit: 'cover', withoutEnlargement: false })
@@ -145,18 +168,26 @@ const IMAGES = [
    `${STYLE_FACILITY} Indian female forklift operator driving a yellow electric counterbalance forklift truck down a warehouse aisle, lifting a pallet of grey PP corrugated boxes. Clean floor with yellow painted safety lines. Confident professional expression. 4K photorealistic action shot.`],
 ];
 
-let ok = 0, fail = 0;
+let ok = 0, fail = 0, skipped = 0;
 for (const [out, model, ratio, people, prompt] of IMAGES) {
   const label = out.replace('public/', '');
+  // Skip files that already exist
+  if (fs.existsSync(out)) {
+    console.log(`  [SKIP ] ${label}`);
+    skipped++;
+    continue;
+  }
   process.stdout.write(`  [${model === ULTRA ? 'ULTRA' : 'STD  '}] ${label}... `);
   try {
     const bytes = await gen(out, prompt, { model, aspectRatio: ratio, people });
     console.log(`✓ ${(bytes/1024).toFixed(0)} KB`);
     ok++;
   } catch (e) {
-    console.log(`✗ ${e.message}`);
+    console.log(`✗ ${e.message.slice(0, 80)}`);
     fail++;
   }
-  await new Promise(r => setTimeout(r, 800));
+  // 6s delay between standard, 30s after ultra to respect rate limits
+  const delay = model === ULTRA ? 30000 : 6000;
+  await new Promise(r => setTimeout(r, delay));
 }
-console.log(`\nDone: ${ok} generated, ${fail} failed.`);
+console.log(`\nDone: ${ok} generated, ${skipped} skipped, ${fail} failed.`);
