@@ -3,18 +3,18 @@
 import Link from "next/link";
 
 const C = {
-  cream:     "#DFF3E3",
-  parchment: "#EDF7F0",
+  cream:     "#F2FBE0",
+  parchment: "#E8F5CC",
   charcoal:  "#1C1A17",
   warm:      "#5B6C5D",
   taupe:     "#5B6C5D",
   saffron:   "#F18F01",
-  deepWarm:  "#280003",
+  deepWarm:  "#2B0504",
   goldStart: "#F18F01",
   goldEnd:   "#F5C842",
   navy:      "#094074",
   granite:   "#5B6C5D",
-  dark:      "#280003",
+  dark:      "#2B0504",
   border:    "rgba(9,64,116,0.10)",
   borderMid: "rgba(9,64,116,0.18)",
 };
@@ -120,8 +120,8 @@ const CSS = `
   .paper-overlay {
     position: absolute; inset: 0; pointer-events: none;
     background:
-      linear-gradient(to top,  rgba(237,247,240,0.98) 0%, rgba(237,247,240,0.80) 36%, rgba(237,247,240,0.32) 62%, rgba(237,247,240,0.0) 100%),
-      linear-gradient(to right, rgba(237,247,240,0.65) 0%, rgba(237,247,240,0.0) 55%);
+      linear-gradient(to top,  rgba(232,245,204,0.98) 0%, rgba(232,245,204,0.80) 36%, rgba(232,245,204,0.32) 62%, rgba(232,245,204,0.0) 100%),
+      linear-gradient(to right, rgba(232,245,204,0.65) 0%, rgba(232,245,204,0.0) 55%);
   }
 
   /* Text content */
@@ -168,15 +168,15 @@ const CSS = `
   .cat-paper:hover .cat-cta { gap: 14px; }
 
   /* PP text: white */
-  .cat-pp .cat-index-num   { color: rgba(223,243,227,0.35); }
-  .cat-pp .cat-index-rule  { background: rgba(223,243,227,0.12); }
-  .cat-pp .cat-index-tag   { color: rgba(223,243,227,0.40); }
-  .cat-pp .cat-eyebrow     { color: rgba(223,243,227,0.48); }
-  .cat-pp .cat-title       { color: #DFF3E3; }
-  .cat-pp .cat-stats       { border-color: rgba(223,243,227,0.14); }
-  .cat-pp .cat-stat        { color: rgba(223,243,227,0.50); border-color: rgba(223,243,227,0.14); }
-  .cat-pp .cat-cta         { color: rgba(223,243,227,0.65); border-color: rgba(223,243,227,0.30); }
-  .cat-pp:hover .cat-cta   { color: #DFF3E3; border-color: rgba(223,243,227,0.7); }
+  .cat-pp .cat-index-num   { color: rgba(242,251,224,0.35); }
+  .cat-pp .cat-index-rule  { background: rgba(242,251,224,0.12); }
+  .cat-pp .cat-index-tag   { color: rgba(242,251,224,0.40); }
+  .cat-pp .cat-eyebrow     { color: rgba(242,251,224,0.48); }
+  .cat-pp .cat-title       { color: #F2FBE0; }
+  .cat-pp .cat-stats       { border-color: rgba(242,251,224,0.14); }
+  .cat-pp .cat-stat        { color: rgba(242,251,224,0.50); border-color: rgba(242,251,224,0.14); }
+  .cat-pp .cat-cta         { color: rgba(242,251,224,0.65); border-color: rgba(242,251,224,0.30); }
+  .cat-pp:hover .cat-cta   { color: #F2FBE0; border-color: rgba(242,251,224,0.7); }
 
   /* Paper text: dark charcoal */
   .cat-paper .cat-index-num  { color: rgba(28,26,23,0.30); }
@@ -225,7 +225,7 @@ export default function ProductsPage() {
           </h1>
           <p style={{
             fontFamily: F.italic, fontStyle: "italic",
-            fontSize: "1.2rem", color: "rgba(223,243,227,0.65)",
+            fontSize: "1.2rem", color: "rgba(242,251,224,0.65)",
             lineHeight: 1.6,
           }}>
             Precision-engineered packaging for automotive, pharma, FMCG and industrial sectors.
@@ -337,7 +337,7 @@ export default function ProductsPage() {
           Request a <span className="gold-text">Product Catalogue</span>
         </h2>
         <p style={{ fontFamily: F.body, fontSize: "1rem",
-          color: "rgba(223,243,227,0.65)", marginBottom: "2rem" }}>
+          color: "rgba(242,251,224,0.65)", marginBottom: "2rem" }}>
           Get our full range specifications delivered to your inbox.
         </p>
         <a href="/#contact" style={{
