@@ -24,6 +24,9 @@ const C = {
   dark:      "#141210",
   border:    "rgba(28,26,23,0.1)",
   borderMid: "rgba(28,26,23,0.16)",
+  deepWarm:  "#2C1810",
+  goldStart: "#F5A623",
+  goldEnd:   "#FFD166",
 };
 
 const F = {
@@ -252,6 +255,36 @@ const GLOBAL_CSS = `
     margin-bottom: 16px;
   }
 
+  /* ── Heritage Premium ───────────────────────────────────── */
+  .gold-text {
+    background: linear-gradient(135deg, ${C.goldStart} 0%, ${C.goldEnd} 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline;
+  }
+  .section-dark {
+    background: ${C.deepWarm};
+    color: ${C.cream};
+  }
+  .card-heritage {
+    background: ${C.parchment};
+    border-bottom: 2px solid ${C.saffron};
+    box-shadow: 0 2px 12px rgba(28,26,23,0.07);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+  }
+  .card-heritage:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 36px rgba(28,26,23,0.13);
+  }
+  .saffron-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: ${C.saffron}; color: #fff;
+    font-family: ${F.body}; font-size: 0.68rem; font-weight: 600;
+    letter-spacing: 0.13em; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 20px;
+  }
+
   /* Buttons */
   .btn-primary {
     display: inline-flex; align-items: center; gap: 8px;
@@ -281,7 +314,7 @@ const GLOBAL_CSS = `
     padding: 11px 15px; font-family: ${F.body}; font-size: 0.9rem; color: ${C.charcoal};
     outline: none; transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .form-input:focus { border-color: ${C.charcoal}; box-shadow: 0 0 0 3px rgba(28,26,23,0.05); }
+  .form-input:focus { border-color: ${C.saffron}; box-shadow: 0 0 0 3px rgba(245,166,35,0.15); }
   .form-input::placeholder { color: ${C.taupe}; opacity: 0.55; }
 
   /* Cards */
@@ -289,10 +322,18 @@ const GLOBAL_CSS = `
   .product-card:hover { border-color: ${C.charcoal} !important; box-shadow: 0 6px 22px rgba(28,26,23,0.07); }
 
   .industry-tile {
-    background: ${C.cream}; border: 1px solid ${C.border};
-    padding: 2rem 1.75rem; border-radius: 1px; transition: border-color 0.22s, background 0.22s;
+    background: ${C.cream};
+    border: 1px solid ${C.border};
+    border-bottom: 2px solid transparent;
+    padding: 2rem 1.75rem;
+    border-radius: 2px;
+    transition: border-color 0.22s, background 0.22s, transform 0.22s;
   }
-  .industry-tile:hover { border-color: ${C.borderMid}; background: #fff; }
+  .industry-tile:hover {
+    border-bottom-color: ${C.saffron};
+    background: #fff;
+    transform: translateY(-3px);
+  }
 
   /* Footer link */
   .footer-link {
@@ -484,16 +525,16 @@ function AnimatedStat({ raw, label, note, animClass }: {
   return (
     <div className={animClass} style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
       <div style={{ fontFamily: F.display, fontWeight: 700,
-        fontSize: "2.2rem", color: C.saffrondark, lineHeight: 1,
+        fontSize: "2.2rem", color: C.goldEnd, lineHeight: 1,
         transition: "color 0.3s" }}>
         {display}
       </div>
       <div style={{ fontFamily: F.body, fontWeight: 500, fontSize: "0.7rem",
-        color: C.charcoal, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+        color: C.cream, letterSpacing: "0.05em", textTransform: "uppercase" }}>
         {label}
       </div>
       <div style={{ fontFamily: F.italic, fontStyle: "italic",
-        fontSize: "1.15rem", color: C.taupe }}>
+        fontSize: "1.15rem", color: "rgba(250,247,242,0.6)" }}>
         {note}
       </div>
     </div>
@@ -514,9 +555,12 @@ function Hero() {
 
   return (
     <section style={{
-      minHeight: "100vh", background: C.cream,
+      minHeight: "100vh", background: C.deepWarm,
       display: "flex", flexDirection: "column", justifyContent: "center",
       padding: "clamp(50px, 8vh, 90px) clamp(1.5rem, 5vw, 4rem) clamp(48px, 8vh, 80px)",
+      clipPath: "polygon(0 0, 100% 0, 100% 96%, 0 100%)",
+      marginBottom: "-3rem",
+      position: "relative", zIndex: 1,
     }}>
       <div className="hero-grid" style={{ maxWidth: "1400px", margin: "0 auto", width: "100%" }}>
 
@@ -525,49 +569,41 @@ function Hero() {
           {/* Eyebrow */}
           <div className="hero-eyebrow-anim"
             style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
-            <span className="hero-eyebrow-text" style={{ fontFamily: F.italic, fontStyle: "italic",
-              fontSize: "1.15rem", color: C.taupe }}>
-              PP Manufacturing · Board Converting · Paper Trading
-            </span>
-            <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: C.border }} />
-            <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: C.taupe,
+            <span className="saffron-badge">Est. 1995 · Pune, India</span>
+            <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: "rgba(250,247,242,0.15)" }} />
+            <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: "rgba(250,247,242,0.45)",
               letterSpacing: "0.12em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
-              Pune, India · Est. 1995
+              PP · Board · Paper
             </span>
           </div>
 
           {/* Headline */}
           <h1 className="hero-headline" style={{
-            fontFamily: F.display, fontWeight: 700,
-            fontSize: "clamp(2.8rem, 5vw, 5rem)",
-            lineHeight: 1.08, color: C.charcoal,
+            fontFamily: F.display, fontWeight: 900,
+            fontSize: "clamp(3.2rem, 6vw, 5.5rem)",
+            lineHeight: 1.06, color: C.cream,
             letterSpacing: "-0.02em", marginBottom: "0",
           }}>
             <span className="hero-h1-line1" style={{ display: "block" }}>
-              Engineered for Industry.
+              Engineered for{" "}
+              <span className="gold-text">Industry.</span>
             </span>
             <span className="hero-h1-line2" style={{
               display: "block", fontSize: "0.72em", fontWeight: 400,
-              letterSpacing: "0em", color: C.charcoal, marginTop: "0.18em",
+              letterSpacing: "0em", color: "rgba(250,247,242,0.75)", marginTop: "0.22em",
             }}>
-              Trusted{" "}
-              <span style={{
-                background: C.charcoal, color: C.cream,
-                fontWeight: 700, fontStyle: "normal",
-                padding: "0 10px 2px", borderRadius: "2px",
-                display: "inline-block",
-              }}>Across India.</span>
+              Trusted Across India.
             </span>
           </h1>
 
           {/* Rule */}
           <div className="hero-rule-anim"
-            style={{ height: "1px", background: C.borderMid, margin: "2.75rem 0" }} />
+            style={{ height: "1px", background: "rgba(250,247,242,0.15)", margin: "2.75rem 0" }} />
 
           {/* Body + CTAs */}
           <div className="hero-body-anim">
             <p style={{ fontFamily: F.body, fontSize: "1.05rem", lineHeight: 1.85,
-              color: C.taupe, marginBottom: "2.5rem", fontWeight: 300 }}>
+              color: "rgba(250,247,242,0.72)", marginBottom: "2.5rem", fontWeight: 300 }}>
               Pune Global Group manufactures precision PP trays, separators, boxes
               and crates for automotive, pharma and electronics industries — export-ready,
               custom-spec, from our Pune facility. We also convert FBB sheets and
@@ -577,7 +613,8 @@ function Hero() {
               <Link href="/products" className="btn-primary" style={{ textDecoration: "none" }}>
                 View Products <IconArrowRight size={14} />
               </Link>
-              <button className="btn-outline" onClick={scrollToContact}>
+              <button className="btn-outline" onClick={scrollToContact}
+                style={{ color: C.cream, borderColor: "rgba(250,247,242,0.35)" }}>
                 Get a Quote <IconChevronRight size={14} />
               </button>
             </div>
@@ -588,8 +625,8 @@ function Hero() {
             {stats.map((stat, i) => (
               <div key={stat.label} className="hero-stat-box" style={{
                 padding: "0 2.25rem",
-                borderLeft: `1px solid ${C.borderMid}`,
-                borderRight: i === stats.length - 1 ? `1px solid ${C.borderMid}` : "none",
+                borderLeft: "1px solid rgba(250,247,242,0.18)",
+                borderRight: i === stats.length - 1 ? "1px solid rgba(250,247,242,0.18)" : "none",
               }}>
                 <AnimatedStat
                   raw={stat.raw} label={stat.label} note={stat.note}
@@ -1167,7 +1204,7 @@ function InfraCallout() {
   ];
 
   return (
-    <div className="infra-section" style={{ background: C.charcoal, padding: "64px clamp(1.5rem, 5vw, 4rem)" }}>
+    <div className="infra-section" style={{ background: C.deepWarm, padding: "64px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
         {/* 2-col: text + metrics left, facility photo right */}
@@ -1187,7 +1224,7 @@ function InfraCallout() {
                 <h2 style={{ fontFamily: F.display, fontWeight: 600,
                   fontSize: "clamp(1.5rem, 2.5vw, 2.2rem)", color: C.cream,
                   lineHeight: 1.2, letterSpacing: "-0.02em" }}>
-                  Cut-to-size. Wound to spec.<br />
+                  <span className="gold-text">Cut-to-size.</span> Wound to spec.<br />
                   <em style={{ fontWeight: 400, opacity: 0.75 }}>Shipped on time.</em>
                 </h2>
               </div>
@@ -1212,14 +1249,14 @@ function InfraCallout() {
             }}>
               {metrics.map((m) => (
                 <div key={m.label} style={{
-                  background: C.charcoal, padding: "1.5rem 1rem", textAlign: "center",
+                  background: C.deepWarm, padding: "1.5rem 1rem", textAlign: "center",
                 }}>
                   <div style={{ fontFamily: F.display, fontWeight: 700,
-                    fontSize: "1.5rem", color: C.saffron, lineHeight: 1 }}>
+                    fontSize: "1.5rem", color: C.goldEnd, lineHeight: 1 }}>
                     {m.value}
                   </div>
                   <div style={{ fontFamily: F.body, fontSize: "0.66rem",
-                    color: "rgba(250,247,242,0.45)", letterSpacing: "0.07em",
+                    color: "rgba(250,247,242,0.7)", letterSpacing: "0.07em",
                     textTransform: "uppercase", marginTop: "6px" }}>
                     {m.label}
                   </div>
@@ -1939,7 +1976,16 @@ function ContactSection() {
 
                   <button type="submit" className="btn-primary"
                     disabled={status === "submitting"}
-                    style={{ alignSelf: "flex-start", opacity: status === "submitting" ? 0.7 : 1 }}>
+                    style={{
+                      background: C.saffron, color: "#fff",
+                      border: "none", padding: "13px 32px",
+                      fontFamily: F.body, fontWeight: 600,
+                      fontSize: "0.82rem", letterSpacing: "0.09em",
+                      textTransform: "uppercase", cursor: "pointer",
+                      borderRadius: "2px",
+                      transition: "background 0.2s, transform 0.15s",
+                      alignSelf: "flex-start", opacity: status === "submitting" ? 0.7 : 1,
+                    }}>
                     {status === "submitting"
                       ? <><IconLoader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> Sending...</>
                       : <>Send Request <IconArrowRight size={14} /></>}
