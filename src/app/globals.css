@@ -1,12 +1,12 @@
 :root {
-  --background: #DFF3E3;
+  --background: #F2FBE0;
   --foreground: #1C1A17;
   --accent: #F18F01;
   --accent-dark: #C07200;
   --muted: #5B6C5D;
   --border: rgba(9,64,116,0.12);
-  --surface: #EDF7F0;
-  --deep-warm: #280003;
+  --surface: #E8F5CC;
+  --deep-warm: #2B0504;
   --navy: #094074;
   --granite: #5B6C5D;
   --gold-start: #F18F01;
@@ -111,7 +111,7 @@ body::after {
 }
 
 .card-heritage {
-  background: #EDF7F0;
+  background: #E8F5CC;
   border-bottom: 2px solid var(--gold-start);
   box-shadow: 0 2px 12px rgba(9,64,116,0.07);
   transition: transform 0.22s ease, box-shadow 0.22s ease;
@@ -123,5 +123,5 @@ body::after {
 
 .section-dark {
   background: var(--deep-warm);
-  color: #DFF3E3;
+  color: #F2FBE0;
 }
