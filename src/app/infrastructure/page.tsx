@@ -30,15 +30,15 @@ const FACILITY_SHOTS = [
 // The Merchant — Design Tokens
 // ————————————————————————————————————————————
 const C = {
-  cream:       "#DFF3E3",
-  parchment:   "#EDF7F0",
+  cream:       "#F2FBE0",
+  parchment:   "#E8F5CC",
   charcoal:    "#1C1A17",
   warm:        "#5B6C5D",
   taupe:       "#5B6C5D",
   saffron:     "#F18F01",
   saffrondark: "#C07200",
-  dark:        "#280003",
-  deepWarm:    "#280003",
+  dark:        "#2B0504",
+  deepWarm:    "#2B0504",
   navy:        "#094074",
   granite:     "#5B6C5D",
   goldStart:   "#F18F01",
@@ -55,7 +55,7 @@ const F = {
 
 const GLOBAL_CSS = `
   *, *::before, *::after { box-sizing: border-box; }
-  body { margin: 0; background: #DFF3E3; }
+  body { margin: 0; background: #F2FBE0; }
 
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(28px); }
@@ -128,7 +128,7 @@ const GLOBAL_CSS = `
   .mc-carousel { position: relative; width: 100%; height: 210px; overflow: hidden; border-radius: 5px 5px 0 0; background: ${C.parchment}; }
   .mc-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1); pointer-events: none; }
   .mc-img.active { opacity: 1; }
-  .mc-label { position: absolute; bottom: 8px; left: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.58rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(223,243,227,0.85); background: rgba(20,18,16,0.5); padding: 2px 8px; border-radius: 2px; }
+  .mc-label { position: absolute; bottom: 8px; left: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.58rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(242,251,224,0.85); background: rgba(20,18,16,0.5); padding: 2px 8px; border-radius: 2px; }
   .mc-dots { display: flex; gap: 5px; align-items: center; justify-content: center; padding: 8px 0 2px; }
   .mc-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(28,26,23,0.18); border: none; padding: 0; cursor: pointer; transition: background 0.25s, width 0.25s, border-radius 0.25s; }
   .mc-dot.active { background: ${C.charcoal}; width: 14px; border-radius: 3px; }
@@ -140,7 +140,7 @@ const GLOBAL_CSS = `
   .fac-item { position: relative; border-radius: 4px; overflow: hidden; aspect-ratio: 4/3; }
   .fac-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.55s ease; }
   .fac-item:hover img { transform: scale(1.04); }
-  .fac-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 0.55rem 0.8rem; font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(223,243,227,0.9); background: linear-gradient(to top, rgba(20,18,16,0.68) 0%, transparent 100%); }
+  .fac-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 0.55rem 0.8rem; font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(242,251,224,0.9); background: linear-gradient(to top, rgba(20,18,16,0.68) 0%, transparent 100%); }
 
   .infra-nav-links { display: flex; gap: 2rem; align-items: center; }
   .infra-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer;
@@ -341,7 +341,7 @@ export default function InfrastructurePage() {
               <em style={{ fontStyle: "italic", fontWeight: 500 }}><span className="gold-text">Infrastructure</span> for Precision.</em>
             </h1>
 
-            <p style={{ fontFamily: F.body, fontSize: "1.05rem", color: "rgba(223,243,227,0.72)",
+            <p style={{ fontFamily: F.body, fontSize: "1.05rem", color: "rgba(242,251,224,0.72)",
               lineHeight: 1.75, margin: "0 0 2rem", maxWidth: "560px",
               animation: "fadeUp 0.8s ease 0.45s both" }}>
               Our dedicated manufacturing facility at BU Bhandari MIDC, Sanaswadi, Pune
@@ -382,7 +382,7 @@ export default function InfrastructurePage() {
               backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
               borderRadius: "8px", padding: "0.8rem 1.1rem",
               display: "flex", alignItems: "center", gap: "0.75rem",
-              border: "1px solid rgba(223,243,227,0.10)",
+              border: "1px solid rgba(242,251,224,0.10)",
             }}>
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <circle cx="9" cy="9" r="8" stroke="#F5A623" strokeWidth="1.5"/>
@@ -390,11 +390,11 @@ export default function InfrastructurePage() {
               </svg>
               <div>
                 <div style={{ fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
-                  textTransform: "uppercase", color: "rgba(223,243,227,0.45)", marginBottom: "3px" }}>
+                  textTransform: "uppercase", color: "rgba(242,251,224,0.45)", marginBottom: "3px" }}>
                   Certified Facility
                 </div>
                 <div style={{ fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
-                  color: "#DFF3E3", letterSpacing: "0.01em" }}>
+                  color: "#F2FBE0", letterSpacing: "0.01em" }}>
                   ISO 9001:2015 · 50K Units/Day · MIDC Pune
                 </div>
               </div>
@@ -728,7 +728,7 @@ export default function InfrastructurePage() {
                 fontWeight: 600,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
-                color: "rgba(223,243,227,0.5)",
+                color: "rgba(242,251,224,0.5)",
                 margin: "0 0 1rem",
               }}
             >
@@ -749,7 +749,7 @@ export default function InfrastructurePage() {
               style={{
                 fontFamily: F.body,
                 fontSize: "0.875rem",
-                color: "rgba(223,243,227,0.6)",
+                color: "rgba(242,251,224,0.6)",
                 lineHeight: 1.7,
                 margin: "0 0 1.5rem",
               }}
@@ -765,7 +765,7 @@ export default function InfrastructurePage() {
                   style={{
                     fontFamily: F.body,
                     fontSize: "0.78rem",
-                    color: "rgba(223,243,227,0.55)",
+                    color: "rgba(242,251,224,0.55)",
                     display: "flex",
                     alignItems: "center",
                     gap: "0.5rem",
@@ -862,9 +862,9 @@ export default function InfrastructurePage() {
           <Link href="/products/pp-corrugated" style={{ textDecoration: "none", background: C.dark, borderRadius: "6px", padding: "2.5rem", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px", position: "relative", overflow: "hidden" }}>
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: C.saffron }} />
             <div>
-              <p style={{ fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(223,243,227,0.45)", margin: "0 0 0.75rem" }}>Manufactured</p>
+              <p style={{ fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(242,251,224,0.45)", margin: "0 0 0.75rem" }}>Manufactured</p>
               <h3 style={{ fontFamily: F.display, fontSize: "clamp(1.4rem,2.5vw,1.9rem)", fontWeight: 700, color: C.cream, margin: "0 0 0.6rem", lineHeight: 1.15 }}>PP Corrugated Systems</h3>
-              <p style={{ fontFamily: F.body, fontSize: "0.83rem", color: "rgba(223,243,227,0.55)", margin: 0, lineHeight: 1.6 }}>Boxes, trays, bins, separators — custom to ±1 mm, made at this facility.</p>
+              <p style={{ fontFamily: F.body, fontSize: "0.83rem", color: "rgba(242,251,224,0.55)", margin: 0, lineHeight: 1.6 }}>Boxes, trays, bins, separators — custom to ±1 mm, made at this facility.</p>
             </div>
             <span style={{ fontFamily: F.body, fontSize: "0.74rem", fontWeight: 500, color: C.saffron, marginTop: "1.5rem", letterSpacing: "0.04em" }}>Explore PP Systems →</span>
           </Link>
@@ -904,7 +904,7 @@ export default function InfrastructurePage() {
               fontFamily: F.italic,
               fontStyle: "italic",
               fontSize: "1rem",
-              color: "rgba(223,243,227,0.55)",
+              color: "rgba(242,251,224,0.55)",
               margin: 0,
             }}
           >
@@ -926,7 +926,7 @@ export default function InfrastructurePage() {
             style={{
               fontFamily: F.body,
               fontSize: "0.95rem",
-              color: "rgba(223,243,227,0.6)",
+              color: "rgba(242,251,224,0.6)",
               lineHeight: 1.75,
               margin: 0,
             }}
@@ -962,7 +962,7 @@ export default function InfrastructurePage() {
                 fontWeight: 400,
                 padding: "0.9rem 2rem",
                 borderRadius: "3px",
-                border: `1px solid rgba(223,243,227,0.2)`,
+                border: `1px solid rgba(242,251,224,0.2)`,
               }}
             >
               +91 98233 83230
@@ -1105,7 +1105,7 @@ export default function InfrastructurePage() {
         textAlign: "center",
       }}>
         <p style={{ fontFamily: F.italic, fontStyle: "italic",
-          fontSize: "1.1rem", color: "rgba(223,243,227,0.65)", marginBottom: "1rem" }}>
+          fontSize: "1.1rem", color: "rgba(242,251,224,0.65)", marginBottom: "1rem" }}>
           Ready to partner?
         </p>
         <h2 style={{ fontFamily: F.display, fontWeight: 700,
