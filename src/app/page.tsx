@@ -14,15 +14,15 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 /* ─── Tokens ─────────────────────────────────────────────────────────────────── */
 const C = {
-  cream:       "#DFF3E3",   // Honeydew — page background
-  parchment:   "#EDF7F0",   // Derived light mint — alternate sections
+  cream:       "#F2FBE0",   // Honeydew — page background
+  parchment:   "#E8F5CC",   // Derived light mint — alternate sections
   charcoal:    "#1C1A17",   // Keep — body text
   warm:        "#5B6C5D",   // Granite — replaces warm brown
   taupe:       "#5B6C5D",   // Granite — replaces taupe
   saffron:     "#F18F01",   // Carrot Orange — primary accent
   saffrondark: "#C07200",   // Darker orange — for stat numbers
-  dark:        "#280003",   // Rich Mahogany — replaces near-black
-  deepWarm:    "#280003",   // Rich Mahogany — hero/dark sections
+  dark:        "#2B0504",   // Rich Mahogany — replaces near-black
+  deepWarm:    "#2B0504",   // Rich Mahogany — hero/dark sections
   navy:        "#094074",   // Yale Blue — secondary accent
   granite:     "#5B6C5D",   // Granite — secondary
   goldStart:   "#F18F01",   // Carrot Orange — gradient start
@@ -329,7 +329,7 @@ const GLOBAL_CSS = `
 
   /* Footer link */
   .footer-link {
-    font-family: ${F.body}; font-size: 0.84rem; color: rgba(223,243,227,0.52);
+    font-family: ${F.body}; font-size: 0.84rem; color: rgba(242,251,224,0.52);
     transition: color 0.2s; cursor: pointer; display: block; margin-bottom: 10px;
     text-decoration: none; background: none; border: none; padding: 0; text-align: left;
   }
@@ -446,7 +446,7 @@ function TuriyaLogo({ size = 40, onDark = false }: { size?: number; onDark?: boo
 
 function Logo({ inverted = false }: { inverted?: boolean }) {
   const textColor = inverted ? C.cream : C.charcoal;
-  const subColor  = inverted ? "rgba(223,243,227,0.55)" : C.taupe;
+  const subColor  = inverted ? "rgba(242,251,224,0.55)" : C.taupe;
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "12px", userSelect: "none" }}>
       <TuriyaLogo size={42} onDark={inverted} />
@@ -526,7 +526,7 @@ function AnimatedStat({ raw, label, note, animClass }: {
         {label}
       </div>
       <div style={{ fontFamily: F.italic, fontStyle: "italic",
-        fontSize: "1.15rem", color: "rgba(223,243,227,0.6)" }}>
+        fontSize: "1.15rem", color: "rgba(242,251,224,0.6)" }}>
         {note}
       </div>
     </div>
@@ -562,8 +562,8 @@ function Hero() {
           <div className="hero-eyebrow-anim"
             style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
             <span className="saffron-badge">Est. 1995 · Pune, India</span>
-            <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: "rgba(223,243,227,0.15)" }} />
-            <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: "rgba(223,243,227,0.45)",
+            <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: "rgba(242,251,224,0.15)" }} />
+            <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: "rgba(242,251,224,0.45)",
               letterSpacing: "0.12em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
               PP · Board · Paper
             </span>
@@ -582,7 +582,7 @@ function Hero() {
             </span>
             <span className="hero-h1-line2" style={{
               display: "block", fontSize: "0.72em", fontWeight: 400,
-              letterSpacing: "0em", color: "rgba(223,243,227,0.75)", marginTop: "0.22em",
+              letterSpacing: "0em", color: "rgba(242,251,224,0.75)", marginTop: "0.22em",
             }}>
               Trusted Across India.
             </span>
@@ -590,12 +590,12 @@ function Hero() {
 
           {/* Rule */}
           <div className="hero-rule-anim"
-            style={{ height: "1px", background: "rgba(223,243,227,0.15)", margin: "2.75rem 0" }} />
+            style={{ height: "1px", background: "rgba(242,251,224,0.15)", margin: "2.75rem 0" }} />
 
           {/* Body + CTAs */}
           <div className="hero-body-anim">
             <p style={{ fontFamily: F.body, fontSize: "1.05rem", lineHeight: 1.85,
-              color: "rgba(223,243,227,0.72)", marginBottom: "2.5rem", fontWeight: 300 }}>
+              color: "rgba(242,251,224,0.72)", marginBottom: "2.5rem", fontWeight: 300 }}>
               Pune Global Group manufactures precision PP trays, separators, boxes
               and crates for automotive, pharma and electronics industries — export-ready,
               custom-spec, from our Pune facility. We also convert FBB sheets and
@@ -606,7 +606,7 @@ function Hero() {
                 View Products <IconArrowRight size={14} />
               </Link>
               <button className="btn-outline" onClick={scrollToContact}
-                style={{ color: C.cream, borderColor: "rgba(223,243,227,0.35)" }}>
+                style={{ color: C.cream, borderColor: "rgba(242,251,224,0.35)" }}>
                 Get a Quote <IconChevronRight size={14} />
               </button>
             </div>
@@ -617,8 +617,8 @@ function Hero() {
             {stats.map((stat, i) => (
               <div key={stat.label} className="hero-stat-box" style={{
                 padding: "0 2.25rem",
-                borderLeft: "1px solid rgba(223,243,227,0.18)",
-                borderRight: i === stats.length - 1 ? "1px solid rgba(223,243,227,0.18)" : "none",
+                borderLeft: "1px solid rgba(242,251,224,0.18)",
+                borderRight: i === stats.length - 1 ? "1px solid rgba(242,251,224,0.18)" : "none",
               }}>
                 <AnimatedStat
                   raw={stat.raw} label={stat.label} note={stat.note}
@@ -661,13 +661,13 @@ function Hero() {
             borderRadius: "8px",
             padding: "0.8rem 1.1rem",
             display: "flex", alignItems: "center", gap: "0.75rem",
-            border: "1px solid rgba(223,243,227,0.10)",
+            border: "1px solid rgba(242,251,224,0.10)",
           }}>
             <IconCircleCheck size={18} style={{ color: C.saffron, flexShrink: 0 }} />
             <div>
               <div style={{
                 fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
-                textTransform: "uppercase", color: "rgba(223,243,227,0.45)", marginBottom: "3px",
+                textTransform: "uppercase", color: "rgba(242,251,224,0.45)", marginBottom: "3px",
               }}>
                 Certified Quality
               </div>
@@ -1210,7 +1210,7 @@ function InfraCallout() {
             }}>
               <div>
                 <span style={{ fontFamily: F.italic, fontStyle: "italic",
-                  fontSize: "1.1rem", color: "rgba(223,243,227,0.5)", display: "block", marginBottom: "8px" }}>
+                  fontSize: "1.1rem", color: "rgba(242,251,224,0.5)", display: "block", marginBottom: "8px" }}>
                   Converting Facility · BU Bhandari MIDC, Sanaswadi
                 </span>
                 <h2 style={{ fontFamily: F.display, fontWeight: 600,
@@ -1225,19 +1225,19 @@ function InfraCallout() {
                 fontFamily: F.body, fontSize: "0.98rem", fontWeight: 500,
                 color: C.cream, textDecoration: "none", letterSpacing: "0.07em",
                 textTransform: "uppercase",
-                border: `1px solid rgba(223,243,227,0.25)`,
+                border: `1px solid rgba(242,251,224,0.25)`,
                 padding: "11px 22px", borderRadius: "1px", whiteSpace: "nowrap",
                 transition: "border-color 0.2s, background 0.2s",
               }}
-              onMouseEnter={e => { const a = e.currentTarget; a.style.borderColor = "rgba(223,243,227,0.5)"; a.style.background = "rgba(223,243,227,0.07)"; }}
-              onMouseLeave={e => { const a = e.currentTarget; a.style.borderColor = "rgba(223,243,227,0.25)"; a.style.background = "transparent"; }}>
+              onMouseEnter={e => { const a = e.currentTarget; a.style.borderColor = "rgba(242,251,224,0.5)"; a.style.background = "rgba(242,251,224,0.07)"; }}
+              onMouseLeave={e => { const a = e.currentTarget; a.style.borderColor = "rgba(242,251,224,0.25)"; a.style.background = "transparent"; }}>
                 View Full Facility <IconArrowRight size={13} />
               </Link>
             </div>
 
             <div className="infra-metrics-grid" style={{
               display: "grid", gridTemplateColumns: "repeat(6, 1fr)",
-              gap: "1px", background: "rgba(223,243,227,0.08)",
+              gap: "1px", background: "rgba(242,251,224,0.08)",
             }}>
               {metrics.map((m) => (
                 <div key={m.label} style={{
@@ -1248,7 +1248,7 @@ function InfraCallout() {
                     {m.value}
                   </div>
                   <div style={{ fontFamily: F.body, fontSize: "0.66rem",
-                    color: "rgba(223,243,227,0.7)", letterSpacing: "0.07em",
+                    color: "rgba(242,251,224,0.7)", letterSpacing: "0.07em",
                     textTransform: "uppercase", marginTop: "6px" }}>
                     {m.label}
                   </div>
@@ -1260,7 +1260,7 @@ function InfraCallout() {
           {/* Right: facility photo — hidden on mobile via CSS */}
           <div className="infra-img-col" style={{
             height: "360px", borderRadius: "4px", overflow: "hidden",
-            border: "1px solid rgba(223,243,227,0.08)",
+            border: "1px solid rgba(242,251,224,0.08)",
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
