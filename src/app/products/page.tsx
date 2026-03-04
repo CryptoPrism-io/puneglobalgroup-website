@@ -12,6 +12,10 @@ const C = {
   navyMid:   "#242424",
   border:    "rgba(28,26,23,0.10)",
   borderMid: "rgba(28,26,23,0.16)",
+  saffron:   "#F5A623",
+  deepWarm:  "#2C1810",
+  goldStart: "#F5A623",
+  goldEnd:   "#FFD166",
 };
 const F = {
   display: "'Playfair Display', Georgia, serif",
@@ -40,6 +44,33 @@ const CSS = `
     background:${C.charcoal}; transition:width 0.28s; }
   .nav-link:hover { color:${C.charcoal}; }
   .nav-link:hover::after { width:100%; }
+
+  /* ── Heritage Premium ─────────────────────────────── */
+  .gold-text {
+    background: linear-gradient(135deg, ${C.goldStart} 0%, ${C.goldEnd} 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline;
+  }
+  .saffron-badge {
+    display: inline-flex; align-items: center;
+    background: ${C.saffron}; color: #fff;
+    font-size: 0.68rem; font-weight: 600;
+    letter-spacing: 0.13em; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 20px;
+    font-family: ${F.body};
+  }
+  .card-heritage {
+    background: ${C.parchment};
+    border-bottom: 2px solid ${C.saffron};
+    box-shadow: 0 2px 12px rgba(28,26,23,0.07);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+  }
+  .card-heritage:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 36px rgba(28,26,23,0.13);
+  }
 
   /* ── Category Cards ─────────────────────────────── */
   .cat-row {
@@ -174,6 +205,33 @@ export default function ProductsPage() {
     <div style={{ background: C.cream, minHeight: "100vh", display: "flex", flexDirection: "column", paddingTop: "70px", paddingBottom: 0 }}>
       <style>{CSS}</style>
 
+      {/* Heritage hero band */}
+      <section style={{
+        background: C.deepWarm,
+        padding: "clamp(90px, 14vh, 130px) clamp(1.5rem, 5vw, 4rem) clamp(3rem, 6vh, 5rem)",
+      }}>
+        <div style={{ maxWidth: "800px" }}>
+          <span className="saffron-badge" style={{ marginBottom: "1.5rem", display: "inline-flex" }}>
+            Packaging Solutions
+          </span>
+          <h1 style={{
+            fontFamily: F.display, fontWeight: 900,
+            fontSize: "clamp(3rem, 6vw, 5rem)", color: C.cream,
+            lineHeight: 1.06, letterSpacing: "-0.02em",
+            marginTop: "1rem", marginBottom: "1.25rem",
+          }}>
+            Our <span className="gold-text">Products</span>
+          </h1>
+          <p style={{
+            fontFamily: F.italic, fontStyle: "italic",
+            fontSize: "1.2rem", color: "rgba(250,247,242,0.65)",
+            lineHeight: 1.6,
+          }}>
+            Precision-engineered packaging for automotive, pharma, FMCG and industrial sectors.
+          </p>
+        </div>
+      </section>
+
       {/* Two category panels */}
       <div className="cat-row" style={{ borderBottom: `1px solid ${C.border}` }}>
 
@@ -263,6 +321,34 @@ export default function ProductsPage() {
           Request a Quote →
         </Link>
       </div>
+
+      {/* Catalogue CTA band */}
+      <section style={{
+        background: C.deepWarm,
+        padding: "clamp(3rem, 6vh, 5rem) clamp(1.5rem, 5vw, 4rem)",
+        textAlign: "center",
+      }}>
+        <h2 style={{
+          fontFamily: F.display, fontWeight: 700,
+          fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+          color: C.cream, marginBottom: "1rem", lineHeight: 1.1,
+        }}>
+          Request a <span className="gold-text">Product Catalogue</span>
+        </h2>
+        <p style={{ fontFamily: F.body, fontSize: "1rem",
+          color: "rgba(250,247,242,0.65)", marginBottom: "2rem" }}>
+          Get our full range specifications delivered to your inbox.
+        </p>
+        <a href="/#contact" style={{
+          display: "inline-flex", alignItems: "center", gap: "8px",
+          background: C.saffron, color: "#fff",
+          fontFamily: F.body, fontWeight: 600, fontSize: "0.82rem",
+          letterSpacing: "0.09em", textTransform: "uppercase",
+          padding: "13px 32px", borderRadius: "2px", textDecoration: "none",
+        }}>
+          Contact Us →
+        </a>
+      </section>
     </div>
   );
 }
