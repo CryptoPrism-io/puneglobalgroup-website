@@ -214,6 +214,27 @@ const CSS = `
     .hero-anim { display: none; }
   }
 
+  /* ── Process animation ────────────────────────────── */
+  /* 9s loop: 0-33% sheet, 33-66% die-cut, 66-100% box */
+
+  /* Stage 1 — flat sheet */
+  @keyframes stg-sheet-in  { 0%{opacity:0;transform:translateX(-24px)} 8%{opacity:1;transform:translateX(0)} 30%{opacity:1} 36%{opacity:0} 100%{opacity:0} }
+  .anim-sheet { animation: stg-sheet-in 9s linear infinite; }
+
+  /* Stage 2 — die-cut outline */
+  @keyframes stg-cut-in    { 0%,30%{opacity:0} 38%{opacity:1} 62%{opacity:1} 68%{opacity:0} 100%{opacity:0} }
+  .anim-cut   { animation: stg-cut-in 9s linear infinite; }
+
+  /* Stage 3 — finished box */
+  @keyframes stg-box-in    { 0%,64%{opacity:0} 72%{opacity:1} 92%{opacity:1} 98%{opacity:0} 100%{opacity:0} }
+  .anim-box   { animation: stg-box-in 9s linear infinite; }
+
+  /* Stage dots */
+  @keyframes dot-active { 0%{transform:scale(1)} 50%{transform:scale(1.5)} 100%{transform:scale(1)} }
+  .dot-1 { animation: dot-active 9s linear infinite 0s; }
+  .dot-2 { animation: dot-active 9s linear infinite 3s; }
+  .dot-3 { animation: dot-active 9s linear infinite 6s; }
+
 `;
 
 const PP_COMPOSITE   = "/hero-pp-family.jpg";
