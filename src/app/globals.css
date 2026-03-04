@@ -70,23 +70,14 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ————————————————————————————————————————
-   Heading gradient fill + depth shadows
-   currentColor gradient works on both light and dark backgrounds:
-   charcoal headings fade to warm charcoal, cream headings fade to soft gold
+   Heading depth shadows
    ———————————————————————————————————————— */
 h1, h2 {
-  background: linear-gradient(
-    175deg,
-    currentColor 0%,
-    color-mix(in srgb, currentColor 55%, transparent) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none;
-  filter:
-    drop-shadow(0 2px 6px rgba(0,0,0,0.14))
-    drop-shadow(0 8px 28px rgba(0,0,0,0.08));
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.06),
+    0 2px 8px rgba(28,26,23,0.16),
+    0 8px 24px rgba(28,26,23,0.10),
+    0 20px 52px rgba(28,26,23,0.06);
 }
 
 /* .gold-text must have NO text-shadow — the gradient clip is incompatible */

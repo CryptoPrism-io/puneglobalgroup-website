@@ -305,27 +305,54 @@ export default function InfrastructurePage() {
       {/* ——— Hero ——— */}
       <section
         style={{
-          background: C.deepWarm,
-          padding: "clamp(100px, 15vh, 140px) clamp(1.5rem, 5vw, 4rem) clamp(4rem, 8vh, 7rem)",
+          position: "relative",
+          minHeight: "clamp(520px, 78vh, 720px)",
+          display: "flex", alignItems: "center",
           clipPath: "polygon(0 0, 100% 0, 100% 94%, 0 100%)",
           marginBottom: "-2rem",
-          position: "relative", zIndex: 1,
+          overflow: "hidden",
+          zIndex: 1,
         }}
       >
-        {/* Paper grain */}
-        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity: 0.035 }} aria-hidden>
-          <filter id="grain-infra"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
-          <rect width="100%" height="100%" filter="url(#grain-infra)" />
-        </svg>
+        {/* Full-bleed background image */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/infrastructure/machines/synchro-sheeter-wide.jpg"
+          alt="Synchro sheeter in operation at PGG facility, MIDC Pune"
+          fetchPriority="high"
+          loading="eager"
+          decoding="sync"
+          style={{
+            position: "absolute", inset: 0,
+            width: "100%", height: "100%",
+            objectFit: "cover", objectPosition: "center 40%",
+            display: "block",
+            imageRendering: "-webkit-optimize-contrast" as React.CSSProperties["imageRendering"],
+          }}
+        />
 
-        <div className="infra-hero-grid" style={{
-          position: "relative", maxWidth: "1400px", margin: "0 auto",
-          display: "grid", gridTemplateColumns: "1fr 1fr",
-          gap: "clamp(2rem,5vw,5rem)", alignItems: "center",
+        {/* Blur layer — masked to left 55% where text sits */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          maskImage: "linear-gradient(to right, black 0%, black 38%, transparent 62%)",
+          WebkitMaskImage: "linear-gradient(to right, black 0%, black 38%, transparent 62%)",
+        }} />
+
+        {/* Gradient overlay — dark left, fades to transparent right */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(to right, rgba(20,18,16,0.94) 0%, rgba(20,18,16,0.88) 30%, rgba(20,18,16,0.45) 58%, rgba(20,18,16,0.05) 100%)",
+        }} />
+
+        {/* Content */}
+        <div style={{
+          position: "relative", zIndex: 1,
+          width: "100%", maxWidth: "1400px", margin: "0 auto",
+          padding: "clamp(100px,15vh,140px) clamp(1.5rem,5vw,4rem) clamp(4rem,8vh,7rem)",
         }}>
-
-          {/* LEFT */}
-          <div>
+          <div style={{ maxWidth: "580px" }}>
             <span className="saffron-badge" style={{ marginBottom: "1.5rem", display: "inline-flex" }}>
               Manufacturing · Converting · Trading
             </span>
@@ -341,8 +368,8 @@ export default function InfrastructurePage() {
               <em style={{ fontStyle: "italic", fontWeight: 500 }}><span className="gold-text">Infrastructure</span> for Precision.</em>
             </h1>
 
-            <p style={{ fontFamily: F.body, fontSize: "1.05rem", color: "rgba(250,247,242,0.72)",
-              lineHeight: 1.75, margin: "0 0 2rem", maxWidth: "560px",
+            <p style={{ fontFamily: F.body, fontSize: "1.05rem", color: "rgba(250,247,242,0.78)",
+              lineHeight: 1.75, margin: "0 0 2rem",
               animation: "fadeUp 0.8s ease 0.45s both" }}>
               Our dedicated manufacturing facility at BU Bhandari MIDC, Sanaswadi, Pune
               produces up to{" "}
@@ -352,56 +379,42 @@ export default function InfrastructurePage() {
             </p>
 
             <div style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem",
-              background: C.parchment, border: `1px solid ${C.borderMid}`,
+              background: "rgba(250,247,242,0.10)", border: "1px solid rgba(250,247,242,0.20)",
               borderRadius: "3px", padding: "0.65rem 1.25rem",
               animation: "fadeUp 0.7s ease 0.6s both" }}>
-              <span style={{ fontSize: "0.9rem" }}>📍</span>
-              <span style={{ fontFamily: F.body, fontSize: "0.84rem", fontWeight: 500, color: C.charcoal }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(250,247,242,0.7)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span style={{ fontFamily: F.body, fontSize: "0.84rem", fontWeight: 500, color: "rgba(250,247,242,0.82)" }}>
                 108 BU Bhandari MIDC, Sanaswadi, Pune 412208
               </span>
             </div>
           </div>
+        </div>
 
-          {/* RIGHT — facility image + capacity badge */}
-          <div className="hero-img-col" style={{
-            position: "relative",
-            height: "clamp(380px, 55vh, 560px)",
-            borderRadius: "10px",
-            overflow: "hidden",
-            boxShadow: "0 8px 48px rgba(28,26,23,0.10)",
-          }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/hero-infrastructure.jpg"
-              alt="PGG manufacturing facility — PP box welding, punching and sheet cutting, MIDC Pune"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-            />
-            <div style={{
-              position: "absolute", bottom: "1.5rem", right: "1.5rem",
-              background: "rgba(20,18,16,0.88)",
-              backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
-              borderRadius: "8px", padding: "0.8rem 1.1rem",
-              display: "flex", alignItems: "center", gap: "0.75rem",
-              border: "1px solid rgba(250,247,242,0.10)",
-            }}>
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <circle cx="9" cy="9" r="8" stroke="#F5A623" strokeWidth="1.5"/>
-                <polyline points="5,9 8,12 13,6" stroke="#F5A623" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <div>
-                <div style={{ fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
-                  textTransform: "uppercase", color: "rgba(250,247,242,0.45)", marginBottom: "3px" }}>
-                  Certified Facility
-                </div>
-                <div style={{ fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
-                  color: "#FAF7F2", letterSpacing: "0.01em" }}>
-                  ISO 9001:2015 · 50K Units/Day · MIDC Pune
-                </div>
-              </div>
+        {/* Certification badge — bottom right over image */}
+        <div style={{
+          position: "absolute", bottom: "2rem", right: "2rem", zIndex: 2,
+          background: "rgba(20,18,16,0.82)",
+          backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+          borderRadius: "8px", padding: "0.8rem 1.1rem",
+          display: "flex", alignItems: "center", gap: "0.75rem",
+          border: "1px solid rgba(250,247,242,0.12)",
+        }}>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <circle cx="9" cy="9" r="8" stroke="#F5A623" strokeWidth="1.5"/>
+            <polyline points="5,9 8,12 13,6" stroke="#F5A623" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <div>
+            <div style={{ fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
+              textTransform: "uppercase", color: "rgba(250,247,242,0.45)", marginBottom: "3px" }}>
+              Certified Facility
+            </div>
+            <div style={{ fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
+              color: "#FAF7F2", letterSpacing: "0.01em" }}>
+              ISO 9001:2015 · 50K Units/Day · MIDC Pune
             </div>
           </div>
-
         </div>
+
       </section>
 
       {/* ——— Capabilities Strip ——— */}
