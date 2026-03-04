@@ -1,14 +1,16 @@
 :root {
-  --background: #ffffff;
-  --foreground: #0a0a0a;
-  --accent: #F5A623;
-  --accent-dark: #d4891a;
-  --muted: #6b7280;
-  --border: #e5e7eb;
-  --surface: #f9fafb;
-  --deep-warm: #2C1810;
-  --gold-start: #F5A623;
-  --gold-end: #FFD166;
+  --background: #DFF3E3;
+  --foreground: #1C1A17;
+  --accent: #F18F01;
+  --accent-dark: #C07200;
+  --muted: #5B6C5D;
+  --border: rgba(9,64,116,0.12);
+  --surface: #EDF7F0;
+  --deep-warm: #280003;
+  --navy: #094074;
+  --granite: #5B6C5D;
+  --gold-start: #F18F01;
+  --gold-end: #F5C842;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -52,7 +54,7 @@ body {
   outline-offset: 2px;
 }
 
-/* Global link reset — prevent browser default underlines bleeding into card copy */
+/* Global link reset */
 a { text-decoration: none; color: inherit; }
 
 /* Hero eyebrow — mobile layout */
@@ -68,21 +70,21 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ————————————————————————————————————————
-   Heading text shadows — The Merchant
-   Outer drop shadow + inner highlight on all h1/h2
-   Applies site-wide to Playfair Display headings
+   Heading text shadows
    ———————————————————————————————————————— */
 h1, h2 {
   text-shadow:
-    0 1px 0 rgba(255, 248, 235, 0.65),
-    0 -1px 0 rgba(28, 26, 23, 0.10),
-    0 2px 5px rgba(28, 26, 23, 0.18),
-    0 6px 22px rgba(28, 26, 23, 0.10);
+    0 2px 8px rgba(40,0,3,0.12),
+    0 6px 24px rgba(40,0,3,0.08);
+}
+
+/* .gold-text must have NO text-shadow — the gradient clip is incompatible */
+.gold-text {
+  text-shadow: none !important;
 }
 
 /* ————————————————————————————————————————
-   Global paper grain overlay — The Merchant
-   Gives every page the feel of textured cream stock
+   Global paper grain overlay
    ———————————————————————————————————————— */
 body::after {
   content: '';
@@ -92,33 +94,34 @@ body::after {
   height: 100%;
   pointer-events: none;
   z-index: 9998;
-  opacity: 0.055;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23grain)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 400px 400px;
 }
 
-/* ── Heritage Premium utilities ─────────────────────────────── */
+/* ── New Palette utilities ─────────────────────────────── */
 .gold-text {
   background: linear-gradient(135deg, var(--gold-start) 0%, var(--gold-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   display: inline;
+  text-shadow: none !important;
 }
 
 .card-heritage {
-  background: #F0EAE0;
+  background: #EDF7F0;
   border-bottom: 2px solid var(--gold-start);
-  box-shadow: 0 2px 12px rgba(28,26,23,0.07);
+  box-shadow: 0 2px 12px rgba(9,64,116,0.07);
   transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 .card-heritage:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 36px rgba(28,26,23,0.13);
+  box-shadow: 0 10px 36px rgba(9,64,116,0.13);
 }
 
 .section-dark {
   background: var(--deep-warm);
-  color: #FAF7F2;
+  color: #DFF3E3;
 }
