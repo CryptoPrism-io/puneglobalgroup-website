@@ -93,12 +93,12 @@ const GLOBAL_CSS = `
   .logo-img {
     height: 36px; width: auto; max-width: 120px;
     object-fit: contain;
-    filter: grayscale(1);
+    filter: grayscale(0.5);
     opacity: 0.5;
     transition: filter 0.35s, opacity 0.35s;
     display: block;
   }
-  .logo-img:hover { filter: grayscale(0); opacity: 1; }
+  .logo-img:hover { filter: grayscale(0.19); opacity: 0.81; }
 
   /* ── Hero image carousel (Ken Burns crossfade) ──────────── */
   @keyframes heroSlide1 {
@@ -372,14 +372,13 @@ const GLOBAL_CSS = `
     .pp-product-grid { grid-template-columns: repeat(3, 1fr) !important; }
   }
   /* Infra callout 2-col */
-  @media (max-width: 960px) { .infra-2col { grid-template-columns: 1fr !important; } .infra-img-col { display: none !important; } }
 
   /* Hero 2-col grid */
   .hero-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: clamp(2rem, 5vw, 5rem);
-    align-items: center;
+    align-items: stretch;
   }
   @media (max-width: 960px) {
     .hero-grid { grid-template-columns: 1fr !important; }
@@ -647,24 +646,24 @@ function Hero() {
           {/* Headline */}
           <h1 className="hero-headline" style={{
             fontFamily: F.display, fontWeight: 900,
-            fontSize: "clamp(3.2rem, 6vw, 5.5rem)",
+            fontSize: "clamp(2.2rem, 4vw, 3.8rem)",
             lineHeight: 1.06, color: C.charcoal,
             letterSpacing: "-0.02em", marginBottom: "0",
           }}>
             <span className="hero-h1-line1" style={{ display: "block" }}>
-              Your Packaging{" "}
+              Industrial Packaging for{" "}
               <span style={{
                 background: "linear-gradient(135deg, #1C1A17 0%, #7A736D 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
-              }}>Partner.</span>
+              }}>Automotive, Pharma &amp; Electronics</span>
             </span>
             <span className="hero-h1-line2" style={{
               display: "block", fontSize: "0.72em", fontWeight: 400,
               letterSpacing: "0em", color: "rgba(28,26,23,0.55)", marginTop: "0.22em",
             }}>
-              Precision supply across 21 states, since 1995.
+              Precision PP Trays, Boxes &amp; Separators — Made in India Since 1995
             </span>
           </h1>
 
@@ -691,32 +690,17 @@ function Hero() {
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="hero-stats-row" style={{ display: "flex", marginTop: "3rem" }}>
-            {stats.map((stat, i) => (
-              <div key={stat.label} className="hero-stat-box" style={{
-                padding: "0 2.25rem",
-                borderLeft: "1px solid rgba(28,26,23,0.10)",
-                borderRight: i === stats.length - 1 ? "1px solid rgba(28,26,23,0.10)" : "none",
-              }}>
-                <AnimatedStat
-                  raw={stat.raw} label={stat.label} note={stat.note}
-                  animClass={`hero-stat-anim-${i}`}
-                  numColor={C.charcoal} labelColor={C.warm} noteColor="rgba(28,26,23,0.50)"
-                />
-              </div>
-            ))}
-          </div>
         </div>
 
-        {/* ── RIGHT COLUMN — industry image + cert badge ───────── */}
-        <div className="hero-img-col" style={{
-          position: "relative",
-          height: "clamp(440px, 68vh, 700px)",
-          borderRadius: "10px",
-          overflow: "hidden",
-          boxShadow: "0 8px 48px rgba(28,26,23,0.10)",
-        }}>
+        {/* ── RIGHT COLUMN — image + stats beneath ───────── */}
+        <div className="hero-img-col" style={{ display: "grid", gridTemplateRows: "auto 1fr auto", gap: 0 }}>
+          <div style={{
+            position: "relative",
+            height: "clamp(400px, 60vh, 620px)",
+            borderRadius: "10px",
+            overflow: "hidden",
+            boxShadow: "0 8px 48px rgba(28,26,23,0.10)",
+          }}>
           <div className="hero-carousel-wrap">
             {[
               "/hero-homepage-v2.jpg",
@@ -759,6 +743,49 @@ function Hero() {
               </div>
             </div>
           </div>
+          </div>
+
+          {/* Spacer */}
+          <div />
+
+          {/* Stats — 4 columns under the image, aligned with CTAs on left */}
+          <div style={{
+            display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 0, alignSelf: "end",
+            border: `1px solid rgba(28,26,23,0.08)`,
+            borderRadius: "8px",
+            overflow: "hidden",
+          }}>
+            {stats.map((stat, i) => (
+              <div key={stat.label} style={{
+                padding: "0.85rem 0.75rem",
+                textAlign: "center",
+                borderRight: i < stats.length - 1 ? "1px solid rgba(28,26,23,0.08)" : "none",
+                background: i % 2 === 0 ? "rgba(28,26,23,0.02)" : "transparent",
+              }}>
+                <div style={{
+                  fontFamily: F.display, fontWeight: 700,
+                  fontSize: "1.35rem", color: C.charcoal, lineHeight: 1,
+                  marginBottom: "4px",
+                }}>
+                  {stat.raw}
+                </div>
+                <div style={{
+                  fontFamily: F.body, fontWeight: 500, fontSize: "0.58rem",
+                  color: C.warm, letterSpacing: "0.06em", textTransform: "uppercase",
+                  marginBottom: "2px",
+                }}>
+                  {stat.label}
+                </div>
+                <div style={{
+                  fontFamily: F.italic, fontStyle: "italic",
+                  fontSize: "0.72rem", color: "rgba(28,26,23,0.45)",
+                }}>
+                  {stat.note}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
       </div>
@@ -796,7 +823,7 @@ function MarqueeTicker() {
             color: C.warm, whiteSpace: "nowrap", padding: "0 2.5rem",
           }}>
             {item}
-            <span style={{ marginLeft: "2.5rem", color: C.saffron, fontSize: "0.5rem" }}>◆</span>
+            <span style={{ marginLeft: "2.5rem", color: "#F5A623", fontSize: "0.5rem" }}>◆</span>
           </span>
         ))}
       </div>
@@ -1177,7 +1204,7 @@ function ProductsSection() {
   ];
 
   return (
-    <section id="products" style={{ background: C.deepWarm, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
+    <section id="products" className="section-dark" style={{ background: C.deepWarm, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
         <div className="sr" style={{ marginBottom: "3.5rem" }}>
@@ -1275,11 +1302,47 @@ function InfraCallout() {
   ];
 
   return (
-    <div className="infra-section" style={{ background: C.parchment, padding: "64px clamp(1.5rem, 5vw, 4rem)" }}>
-      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+    <div className="infra-section" style={{ background: C.parchment, padding: "64px clamp(1.5rem, 5vw, 4rem)", position: "relative", overflow: "hidden" }}>
+
+      {/* Raindrop pulse keyframes */}
+      <style>{`
+        @keyframes rp1 { 0%,100% { opacity: 0.42; } 50% { opacity: 0.54; } }
+        @keyframes rp2 { 0%,100% { opacity: 0.53; } 50% { opacity: 0.43; } }
+        @keyframes rp3 { 0%,100% { opacity: 0.44; } 50% { opacity: 0.54; } }
+        @keyframes rp4 { 0%,100% { opacity: 0.52; } 50% { opacity: 0.42; } }
+      `}</style>
+
+      {/* Background — 4 best images side by side */}
+      <div aria-hidden style={{
+        position: "absolute", inset: 0,
+        display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
+        gap: 0,
+        filter: "grayscale(0.2)",
+      }}>
+        {[
+          { src: "/infrastructure/machines/synchro-sheeter-wide.jpg",    anim: "rp1 3.5s ease-in-out infinite" },
+          { src: "/infrastructure/facility/converting-floor.jpg",        anim: "rp2 4.6s ease-in-out 0.8s infinite" },
+          { src: "/infrastructure/support/full-product-lineup.jpg",      anim: "rp3 3.2s ease-in-out 1.5s infinite" },
+          { src: "/infrastructure/facility/quality-control.jpg",         anim: "rp4 4.2s ease-in-out 0.4s infinite" },
+        ].map((item) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img key={item.src} src={item.src} alt="" style={{
+            width: "100%", height: "100%", objectFit: "cover", display: "block",
+            animation: item.anim,
+          }} />
+        ))}
+      </div>
+
+      {/* Soft wash over images for text clarity */}
+      <div aria-hidden style={{
+        position: "absolute", inset: 0,
+        background: "linear-gradient(180deg, rgba(237,229,216,0.55) 0%, rgba(237,229,216,0.50) 50%, rgba(237,229,216,0.55) 100%)",
+      }} />
+
+      <div style={{ maxWidth: "1400px", margin: "0 auto", position: "relative", zIndex: 1 }}>
 
         {/* 2-col: text + metrics left, facility photo right */}
-        <div className="infra-2col" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "3rem", alignItems: "center" }}>
+        <div style={{ maxWidth: "100%" }}>
 
           {/* Left: header + metrics */}
           <div>
@@ -1288,9 +1351,17 @@ function InfraCallout() {
               gap: "2rem", flexWrap: "wrap", marginBottom: "2.5rem",
             }}>
               <div>
-                <span style={{ fontFamily: F.italic, fontStyle: "italic",
-                  fontSize: "1.1rem", color: "rgba(28,26,23,0.45)", display: "block", marginBottom: "8px" }}>
-                  Converting Facility · BU Bhandari MIDC, Sanaswadi
+                <span style={{
+                  display: "inline-block",
+                  fontFamily: F.body, fontStyle: "normal",
+                  fontSize: "0.62rem", fontWeight: 600,
+                  letterSpacing: "0.14em", textTransform: "uppercase",
+                  color: "rgba(28,26,23,0.50)",
+                  border: "1px solid rgba(28,26,23,0.15)",
+                  borderRadius: "999px", padding: "0.3em 1em",
+                  marginBottom: "0.85rem",
+                }}>
+                  MIDC Sanaswadi, Pune · Converting Facility
                 </span>
                 <h2 style={{ fontFamily: F.display, fontWeight: 600,
                   fontSize: "clamp(1.5rem, 2.5vw, 2.2rem)", color: C.charcoal,
@@ -1334,19 +1405,6 @@ function InfraCallout() {
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Right: facility photo — hidden on mobile via CSS */}
-          <div className="infra-img-col" style={{
-            height: "360px", borderRadius: "4px", overflow: "hidden",
-            border: "1px solid rgba(28,26,23,0.10)",
-          }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/hero-infrastructure.jpg"
-              alt="Pune Global Group — Sanaswadi converting facility"
-              style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.88, display: "block" }}
-            />
           </div>
 
         </div>
@@ -1605,7 +1663,7 @@ function BlogTeaser() {
   ];
 
   return (
-    <section style={{ background: C.deepWarm, padding: "80px clamp(1.5rem, 5vw, 4rem)" }}>
+    <section className="section-dark" style={{ background: C.deepWarm, padding: "80px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
         <div className="sr blog-teaser-header" style={{
@@ -2028,11 +2086,11 @@ export default function HomePage() {
         `@keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }` }} />
       <main style={{ paddingTop: "70px" }}>
         <Hero />
-        <MarqueeTicker />
+        <ClientLogoBand />
         <ProductsSection />
         <InfraCallout />
-        <ClientLogoBand />
         <BlogTeaser />
+        <MarqueeTicker />
         <ContactSection />
       </main>
     </>

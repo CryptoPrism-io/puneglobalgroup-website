@@ -239,7 +239,7 @@ export default function ProductsPage() {
       <div className="cat-row" style={{ borderBottom: `1px solid ${C.border}` }}>
 
         {/* ── 01 PP Corrugated Systems — CHARCOAL ── */}
-        <Link href="/products/pp-corrugated" className="cat-pp">
+        <Link href="/products/pp-corrugated" className="cat-pp section-dark">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={PP_COMPOSITE} alt="" className="cat-bg-img" />
 
@@ -326,7 +326,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Catalogue CTA band */}
-      <section style={{
+      <section className="section-dark" style={{
         background: C.deepWarm,
         padding: "clamp(3rem, 6vh, 5rem) clamp(1.5rem, 5vw, 4rem)",
         textAlign: "center",

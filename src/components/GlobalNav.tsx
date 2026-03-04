@@ -16,7 +16,7 @@ const C = {
 const GLOBAL_NAV_CSS = `
   .gnav-link {
     font-family: 'DM Sans', 'Plus Jakarta Sans', sans-serif;
-    font-size: 0.875rem;
+    font-size: 0.825rem;
     font-weight: 500;
     color: ${C.warm};
     text-decoration: none;
@@ -25,34 +25,32 @@ const GLOBAL_NAV_CSS = `
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0;
-    transition: color 0.2s;
+    padding: 6px 14px;
+    border-radius: 999px;
+    transition: color 0.2s, background 0.25s;
   }
-  .gnav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -2px; left: 0;
-    width: 0; height: 1px;
-    background: ${C.cream};
-    transition: width 0.25s ease;
+  .gnav-link:hover {
+    color: ${C.cream};
+    background: rgba(250,247,242,0.08);
   }
-  .gnav-link:hover { color: ${C.cream}; }
-  .gnav-link:hover::after { width: 100%; }
-  .gnav-link.active { color: ${C.cream}; }
-  .gnav-link.active::after { width: 100%; }
+  .gnav-link.active {
+    color: ${C.cream};
+    background: rgba(250,247,242,0.12);
+    font-weight: 600;
+  }
 
   .gnav-cta {
     display: inline-flex; align-items: center; gap: 6px;
     font-family: 'DM Sans', 'Plus Jakarta Sans', sans-serif;
-    font-size: 0.75rem; font-weight: 600;
+    font-size: 0.72rem; font-weight: 600;
     letter-spacing: 0.08em; text-transform: uppercase;
     color: ${C.charcoal}; background: ${C.cream};
     border: none; cursor: pointer;
-    padding: 10px 22px; border-radius: 2px;
+    padding: 8px 18px; border-radius: 999px;
     text-decoration: none;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s, transform 0.2s;
   }
-  .gnav-cta:hover { opacity: 0.82; }
+  .gnav-cta:hover { opacity: 0.88; transform: scale(1.02); }
 
   .gnav-mobile-menu {
     display: none;
@@ -87,6 +85,7 @@ const GLOBAL_NAV_CSS = `
 `;
 
 const NAV_LINKS = [
+  { label: "Home",           href: "/" },
   { label: "Products",       href: "/products" },
   { label: "Infrastructure", href: "/infrastructure" },
   { label: "Blog",           href: "/blog" },
@@ -109,6 +108,7 @@ export default function GlobalNav() {
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
   const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
     return pathname === href || pathname.startsWith(href + "/");
   };
 
@@ -116,28 +116,36 @@ export default function GlobalNav() {
     <>
       <style>{GLOBAL_NAV_CSS}</style>
 
-      {/* ── Fixed top bar ── */}
+      {/* ── Floating glassmorphic nav ── */}
       <nav style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 900,
-        height: "70px",
-        background: C.charcoal,
-        borderBottom: `1px solid ${scrolled ? C.borderMid : C.border}`,
-        boxShadow: scrolled ? "0 2px 16px rgba(28,26,23,0.07)" : "none",
-        transition: "box-shadow 0.3s ease, border-color 0.3s ease",
+        position: "fixed", top: "12px", left: "50%", transform: "translateX(-50%)",
+        width: "calc(100% - clamp(3rem, 10vw, 8rem) - 50px)",
+        maxWidth: "1450px",
+        zIndex: 900,
+        height: "56px",
+        background: "rgba(28,26,23,0.78)",
+        backdropFilter: "blur(20px) saturate(1.4)",
+        WebkitBackdropFilter: "blur(20px) saturate(1.4)",
+        border: `1px solid rgba(250,247,242,0.10)`,
+        borderRadius: "16px",
+        boxShadow: scrolled
+          ? "0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(250,247,242,0.06)"
+          : "0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(250,247,242,0.06)",
+        transition: "box-shadow 0.3s ease, background 0.3s ease",
         display: "flex", alignItems: "center",
-        padding: "0 clamp(1.5rem, 5vw, 4rem)",
+        padding: "0 clamp(1rem, 3vw, 1.75rem)",
       }}>
         <div style={{
           display: "flex", alignItems: "center",
           justifyContent: "space-between",
-          width: "100%", maxWidth: "1400px", margin: "0 auto",
+          width: "100%",
         }}>
           {/* Logo */}
           <SiteLogo inverted />
 
           {/* Desktop links */}
           <div className="gnav-desktop-links" style={{
-            display: "flex", alignItems: "center", gap: "2.5rem",
+            display: "flex", alignItems: "center", gap: "0.35rem",
           }}>
             {NAV_LINKS.map((l) => (
               <Link
@@ -179,9 +187,12 @@ export default function GlobalNav() {
             onClick={() => setMobileOpen(false)}
             style={{
               fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontStyle: "italic", fontWeight: 400,
+              fontStyle: "italic", fontWeight: isActive(l.href) ? 600 : 400,
               fontSize: "2rem", color: C.cream,
               textDecoration: "none", letterSpacing: "0.03em",
+              background: isActive(l.href) ? "rgba(250,247,242,0.10)" : "none",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "999px",
             }}
           >
             {l.label}

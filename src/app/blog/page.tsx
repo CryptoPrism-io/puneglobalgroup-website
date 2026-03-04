@@ -13,6 +13,7 @@ const C = {
   dark:      "#141210",
   border:    "rgba(28,26,23,0.1)",
   borderMid: "rgba(28,26,23,0.18)",
+  goldEnd:   "#C8B89A",
 };
 
 const F = {
@@ -36,6 +37,14 @@ const CSS = `
   }
   .sr { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .sr.visible { opacity: 1; transform: translateY(0); }
+
+  .gold-text {
+    background: linear-gradient(135deg, ${C.cream} 0%, ${C.goldEnd} 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline;
+  }
 
   /* ── Featured post ───────────────── */
   .feat-wrap {
@@ -242,12 +251,12 @@ export default function BlogPage() {
 
       {/* ══ Masthead ═══════════════════════════════════════════════════════ */}
       <section style={{
-        padding: "5rem 2.5rem 3.5rem",
-        borderBottom: `1px solid ${C.border}`,
+        background: C.charcoal,
+        padding: "clamp(50px, 7vh, 80px) clamp(1.5rem, 5vw, 4rem) clamp(1.5rem, 3vh, 2.5rem)",
         position: "relative", overflow: "hidden",
       }}>
         {/* Grain */}
-        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity: 0.03 }} aria-hidden>
+        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity: 0.04 }} aria-hidden>
           <filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.68" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
           <rect width="100%" height="100%" filter="url(#g)" />
         </svg>
@@ -257,7 +266,7 @@ export default function BlogPage() {
           position: "absolute", right: "2rem", top: "50%", transform: "translateY(-50%)",
           fontFamily: F.display, fontSize: "clamp(8rem, 18vw, 16rem)",
           fontWeight: 800, fontStyle: "italic",
-          color: "rgba(28,26,23,0.035)", lineHeight: 1,
+          color: "rgba(250,247,242,0.035)", lineHeight: 1,
           pointerEvents: "none", userSelect: "none",
         }}>01</div>
 
@@ -270,17 +279,18 @@ export default function BlogPage() {
           }}>
             <span style={{
               fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600,
-              letterSpacing: "0.18em", textTransform: "uppercase", color: C.taupe,
+              letterSpacing: "0.18em", textTransform: "uppercase",
+              color: "rgba(250,247,242,0.55)",
             }}>
               Knowledge Hub
             </span>
             <div className="blog-masthead-rule" style={{
-              flex: "0 0 48px", height: "1px", background: C.taupe, opacity: 0.4,
+              flex: "0 0 48px", height: "1px", background: "rgba(250,247,242,0.3)",
               animation: "ruleGrow 0.55s ease 0.2s both",
             }} />
             <span style={{
               fontFamily: F.italic, fontStyle: "italic",
-              fontSize: "0.75rem", color: C.taupe, opacity: 0.7,
+              fontSize: "0.75rem", color: "rgba(250,247,242,0.45)",
             }}>
               {blogPosts.length} Articles
             </span>
@@ -290,17 +300,17 @@ export default function BlogPage() {
           <h1 style={{
             fontFamily: F.display,
             fontSize: "clamp(2.4rem, 5.5vw, 4rem)",
-            fontWeight: 800, color: C.charcoal,
+            fontWeight: 800, color: C.cream,
             margin: "0 0 1.25rem", lineHeight: 1.05,
             animation: "fadeUp 0.75s ease 0.15s both",
             maxWidth: "680px",
           }}>
             Packaging<br />
-            <em style={{ fontStyle: "italic", fontWeight: 500, color: C.warm }}>Intelligence</em>
+            <em style={{ fontStyle: "italic", fontWeight: 500 }}><span className="gold-text">Intelligence</span></em>
           </h1>
 
           <p style={{
-            fontFamily: F.body, fontSize: "0.95rem", color: C.warm,
+            fontFamily: F.body, fontSize: "0.95rem", color: "rgba(250,247,242,0.65)",
             lineHeight: 1.75, margin: 0, maxWidth: "520px",
             animation: "fadeUp 0.75s ease 0.3s both",
           }}>

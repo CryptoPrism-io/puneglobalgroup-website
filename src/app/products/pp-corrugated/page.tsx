@@ -636,7 +636,7 @@ export default function PPCorrugatedPage() {
       <LifecycleTable />
 
       {/* Final CTA */}
-      <section style={{
+      <section className="section-dark" style={{
         padding: "5rem clamp(1.5rem, 5vw, 4rem)",
         background: C.pp,
       }}>

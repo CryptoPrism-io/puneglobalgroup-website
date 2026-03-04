@@ -520,7 +520,7 @@ export default function PaperBoardPage() {
       </section>
 
       {/* CTA */}
-      <section style={{ padding: "5rem clamp(1.5rem, 5vw, 4rem)", background: C.kraft }}>
+      <section className="section-dark" style={{ padding: "5rem clamp(1.5rem, 5vw, 4rem)", background: C.kraft }}>
         <div className="kraft-cta-grid" style={{
           maxWidth: "1400px", margin: "0 auto",
           display: "grid", gridTemplateColumns: "1fr auto", gap: "2rem", alignItems: "center",

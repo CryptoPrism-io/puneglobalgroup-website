@@ -577,7 +577,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA Bar ──────────────────────────────────── */}
-      <section style={{ background: C.charcoal, padding: "70px clamp(1.5rem, 5vw, 4rem)" }}>
+      <section className="section-dark" style={{ background: C.charcoal, padding: "70px clamp(1.5rem, 5vw, 4rem)" }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto",
           display: "flex", justifyContent: "space-between",
           alignItems: "center", flexWrap: "wrap", gap: "2rem" }}>

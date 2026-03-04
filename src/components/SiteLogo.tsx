@@ -38,12 +38,12 @@ export function SiteLogo({ inverted = false, href = "/" }: { inverted?: boolean;
       <style>{LOGO_CSS}</style>
       <Link href={href} style={{ textDecoration: "none", userSelect: "none", flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <TuriyaLogo size={42} onDark={inverted} />
+          <TuriyaLogo size={32} onDark={inverted} />
           <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
             <span className="sitelogo-name" style={{
               fontFamily: "'DM Sans', sans-serif",
               fontWeight: 600,
-              fontSize: "0.98rem",
+              fontSize: "0.74rem",
               letterSpacing: "0.13em",
               color: textColor,
               lineHeight: 1.1,
@@ -56,7 +56,7 @@ export function SiteLogo({ inverted = false, href = "/" }: { inverted?: boolean;
               fontFamily: "'Cormorant Garamond', Georgia, serif",
               fontStyle: "italic",
               fontWeight: 400,
-              fontSize: "0.98rem",
+              fontSize: "0.74rem",
               color: subColor,
               letterSpacing: "0.03em",
               lineHeight: 1.2,

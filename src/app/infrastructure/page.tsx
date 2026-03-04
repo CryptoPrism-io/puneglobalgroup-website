@@ -392,7 +392,7 @@ export default function InfrastructurePage() {
 
         {/* Certification badge — bottom right over image */}
         <div style={{
-          position: "absolute", bottom: "2rem", right: "2rem", zIndex: 2,
+          position: "absolute", top: "2rem", right: "2rem", zIndex: 2,
           background: "rgba(20,18,16,0.82)",
           backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
           borderRadius: "8px", padding: "0.8rem 1.1rem",
@@ -925,7 +925,7 @@ export default function InfrastructurePage() {
 
       {/* ——— CTA ——— */}
       <section
-        className="infra-section"
+        className="infra-section section-dark"
         style={{
           background: C.deepWarm,
           padding: "5rem 2.5rem",
@@ -1149,7 +1149,7 @@ export default function InfrastructurePage() {
       </section>
 
       {/* Heritage CTA band */}
-      <section style={{
+      <section className="section-dark" style={{
         background: C.deepWarm,
         padding: "clamp(3rem, 6vh, 5rem) clamp(1.5rem, 5vw, 4rem)",
         textAlign: "center",

@@ -72,12 +72,43 @@ a { text-decoration: none; color: inherit; }
 /* ————————————————————————————————————————
    Heading depth shadows
    ———————————————————————————————————————— */
-h1, h2 {
+h1 {
   text-shadow:
     0 1px 0 rgba(255,255,255,0.06),
     0 2px 8px rgba(28,26,23,0.16),
     0 8px 24px rgba(28,26,23,0.10),
     0 20px 52px rgba(28,26,23,0.06);
+}
+
+/* ————————————————————————————————————————
+   Premium H2 — gradient text + layered shadows
+   ———————————————————————————————————————— */
+h2 {
+  --h2-from: #1C1A17;
+  --h2-via:  #3D352E;
+  --h2-to:   #1C1A17;
+  background: linear-gradient(135deg, var(--h2-from) 0%, var(--h2-via) 45%, var(--h2-to) 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,0.10))
+    drop-shadow(0 2px 6px rgba(28,26,23,0.22))
+    drop-shadow(0 8px 20px rgba(28,26,23,0.14))
+    drop-shadow(0 20px 48px rgba(28,26,23,0.08));
+}
+
+/* Dark-section h2 — cream-to-gold gradient */
+.section-dark h2,
+h2.h2-dark {
+  --h2-from: #FAF7F2;
+  --h2-via:  #DDD0B8;
+  --h2-to:   #C8B89A;
+  filter:
+    drop-shadow(0 1px 0 rgba(250,247,242,0.12))
+    drop-shadow(0 2px 6px rgba(0,0,0,0.30))
+    drop-shadow(0 8px 20px rgba(0,0,0,0.20))
+    drop-shadow(0 20px 48px rgba(0,0,0,0.10));
 }
 
 /* .gold-text must have NO text-shadow — the gradient clip is incompatible */
