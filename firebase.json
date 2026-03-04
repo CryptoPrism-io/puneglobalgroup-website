@@ -11,6 +11,7 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": true,
     "rewrites": [
+      { "source": "/api/submitContact", "function": "submitContact" },
       { "source": "/admin", "destination": "/admin/index.html" },
       { "source": "/login", "destination": "/login/index.html" }
     ],

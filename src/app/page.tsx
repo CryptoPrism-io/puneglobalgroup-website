@@ -8,8 +8,7 @@ import {
   IconLoader2, IconCar, IconPill, IconShoppingCart, IconTool,
 } from "@tabler/icons-react";
 import { productPath } from "@/lib/pgg-data";
-import { db } from "@/lib/firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import emailjs from "@emailjs/browser";
 
 
 /* ─── Tokens ─────────────────────────────────────────────────────────────────── */
@@ -1868,13 +1867,21 @@ function ContactSection() {
     if (!form.name || !form.email || !form.message) return;
     setStatus("submitting");
     try {
-      await addDoc(collection(db, "contacts"), {
-        name: form.name, email: form.email, phone: form.phone,
-        message: form.message, createdAt: serverTimestamp(), source: "website",
-      });
+      await emailjs.send(
+        "service_ybv3hbj",
+        "template_njm152v",
+        {
+          name: form.name,
+          email: form.email,
+          phone: form.phone || "—",
+          message: form.message,
+        },
+        { publicKey: "LxaNXYpu9X7rnTnEn" }
+      );
       setStatus("success");
       setForm({ name: "", email: "", phone: "", message: "" });
-    } catch {
+    } catch (err) {
+      console.error("Contact form error:", err);
       setStatus("error");
     }
   };
