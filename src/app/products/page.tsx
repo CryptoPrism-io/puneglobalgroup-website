@@ -272,7 +272,58 @@ export default function ProductsPage() {
             </p>
           </div>
           <div className="hero-anim">
-            {/* SVG placeholder — will be filled in Task 3 */}
+            <svg viewBox="0 0 240 130" width="240" height="130"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              style={{ display: "block", overflow: "visible" }}>
+
+              {/* Stage 1: Flat Sheet */}
+              <g className="anim-sheet">
+                <rect x="20" y="30" width="90" height="70"
+                  fill="none" stroke="rgba(250,247,242,0.65)" strokeWidth="1.2" rx="1"/>
+                <line x1="50" y1="30" x2="50" y2="100" stroke="rgba(250,247,242,0.25)" strokeWidth="0.8" strokeDasharray="4 3"/>
+                <line x1="80" y1="30" x2="80" y2="100" stroke="rgba(250,247,242,0.25)" strokeWidth="0.8" strokeDasharray="4 3"/>
+                <line x1="20" y1="58" x2="110" y2="58" stroke="rgba(250,247,242,0.25)" strokeWidth="0.8" strokeDasharray="4 3"/>
+                <line x1="20" y1="78" x2="110" y2="78" stroke="rgba(250,247,242,0.25)" strokeWidth="0.8" strokeDasharray="4 3"/>
+                <rect x="20" y="30" width="3" height="70" fill="rgba(250,247,242,0.18)"/>
+              </g>
+
+              {/* Stage 2: Die-Cut Cross */}
+              <g className="anim-cut">
+                <rect x="75" y="40" width="50" height="50"
+                  fill="none" stroke="rgba(250,247,242,0.70)" strokeWidth="1.2" strokeDasharray="5 3"/>
+                <rect x="75" y="18" width="50" height="22"
+                  fill="none" stroke="rgba(250,247,242,0.35)" strokeWidth="1" strokeDasharray="5 3"/>
+                <rect x="75" y="90" width="50" height="20"
+                  fill="none" stroke="rgba(250,247,242,0.35)" strokeWidth="1" strokeDasharray="5 3"/>
+                <rect x="50" y="40" width="25" height="50"
+                  fill="none" stroke="rgba(250,247,242,0.35)" strokeWidth="1" strokeDasharray="5 3"/>
+                <rect x="125" y="40" width="22" height="50"
+                  fill="none" stroke="rgba(250,247,242,0.35)" strokeWidth="1" strokeDasharray="5 3"/>
+              </g>
+
+              {/* Stage 3: Finished Box */}
+              <g className="anim-box">
+                <rect x="95" y="52" width="58" height="52"
+                  fill="none" stroke="rgba(250,247,242,0.70)" strokeWidth="1.4" rx="1"/>
+                <polygon points="95,52 153,52 168,38 110,38"
+                  fill="none" stroke="rgba(250,247,242,0.50)" strokeWidth="1.2"/>
+                <polygon points="153,52 168,38 168,90 153,104"
+                  fill="none" stroke="rgba(250,247,242,0.40)" strokeWidth="1.2"/>
+                <circle cx="124" cy="78" r="9"
+                  fill="none" stroke="rgba(250,247,242,0.45)" strokeWidth="1"/>
+                <path d="M118,78 L122,83 L130,71"
+                  fill="none" stroke="rgba(250,247,242,0.80)" strokeWidth="1.4"
+                  strokeLinecap="round" strokeLinejoin="round"/>
+              </g>
+
+              {/* Stage dots */}
+              <g>
+                <circle className="dot-1" cx="108" cy="122" r="2.5" fill="rgba(250,247,242,0.55)"/>
+                <circle className="dot-2" cx="120" cy="122" r="2.5" fill="rgba(250,247,242,0.55)"/>
+                <circle className="dot-3" cx="132" cy="122" r="2.5" fill="rgba(250,247,242,0.55)"/>
+              </g>
+            </svg>
           </div>
         </div>
       </section>
