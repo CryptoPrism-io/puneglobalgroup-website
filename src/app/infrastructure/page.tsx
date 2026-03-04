@@ -997,7 +997,7 @@ export default function InfrastructurePage() {
       <section
         className="infra-section"
         style={{
-          background: C.dark,
+          background: C.deepWarm,
           padding: "5rem 2.5rem",
           textAlign: "center",
         }}
