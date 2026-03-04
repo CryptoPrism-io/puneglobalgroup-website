@@ -1,16 +1,16 @@
 :root {
-  --background: #F2FBE0;
+  --background: #FAF7F2;
   --foreground: #1C1A17;
-  --accent: #F18F01;
-  --accent-dark: #C07200;
-  --muted: #5B6C5D;
-  --border: rgba(9,64,116,0.12);
-  --surface: #E8F5CC;
-  --deep-warm: #2B0504;
-  --navy: #094074;
-  --granite: #5B6C5D;
-  --gold-start: #F18F01;
-  --gold-end: #F5C842;
+  --accent: #1C1A17;
+  --accent-dark: #0D0B09;
+  --muted: #7A736D;
+  --border: rgba(28,26,23,0.12);
+  --surface: #EDE5D8;
+  --deep-warm: #1C1A17;
+  --navy: #1C1A17;
+  --granite: #7A736D;
+  --gold-start: #FAF7F2;
+  --gold-end: #C8B89A;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,7 +18,7 @@
     --background: #0a0a0a;
     --foreground: #f9fafb;
     --border: #1f2937;
-    --surface: #111827;
+    --surface: #1C1A17;
   }
 }
 
@@ -74,8 +74,8 @@ a { text-decoration: none; color: inherit; }
    ———————————————————————————————————————— */
 h1, h2 {
   text-shadow:
-    0 2px 8px rgba(40,0,3,0.12),
-    0 6px 24px rgba(40,0,3,0.08);
+    0 2px 8px rgba(28,26,23,0.12),
+    0 6px 24px rgba(28,26,23,0.08);
 }
 
 /* .gold-text must have NO text-shadow — the gradient clip is incompatible */
@@ -111,17 +111,17 @@ body::after {
 }
 
 .card-heritage {
-  background: #E8F5CC;
-  border-bottom: 2px solid var(--gold-start);
-  box-shadow: 0 2px 12px rgba(9,64,116,0.07);
+  background: #EDE5D8;
+  border-bottom: 2px solid #1C1A17;
+  box-shadow: 0 2px 12px rgba(28,26,23,0.07);
   transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 .card-heritage:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 36px rgba(9,64,116,0.13);
+  box-shadow: 0 10px 36px rgba(28,26,23,0.13);
 }
 
 .section-dark {
-  background: var(--deep-warm);
-  color: #F2FBE0;
+  background: #1C1A17;
+  color: #FAF7F2;
 }

@@ -1,0 +1,106 @@
+
+========================================
+PAGE: HOMEPAGE — http://localhost:3000
+========================================
+Screenshot saved: 01-homepage-full.png
+Screenshot saved: 02-homepage-hero.png
+First 6 section backgrounds:
+  Section[0]: bg=rgb(40, 0, 3) | text="Est. 1995 · Pune, IndiaPP · Board · PaperEngineered for Industry.Trusted Across"
+  Section[1]: bg=rgb(223, 243, 227) | text="Our ProductsFrom Raw Board to Finished PackagingTwo manufacturing verticals — PP"
+  Section[2]: bg=rgb(237, 247, 240) | text="Trusted by India's leading manufacturers"
+  Section[3]: bg=rgb(223, 243, 227) | text="Knowledge HubPackaging Intelligence,Free to Use.All Articles Industry Guide6 min"
+  Section[4]: bg=rgb(237, 247, 240) | text="Get In TouchStart Your Packaging Project.Pune Global GroupPaper & PP Packaging S"
+DARK HERO CHECK: PASS — dark mahogany found
+Unique background colors: rgb(40, 0, 3) | rgb(223, 243, 227) | rgb(237, 247, 240)
+HONEYDEW BACKGROUND CHECK: PASS — mint/honeydew color found
+CARROT ORANGE ACCENT CHECK: PASS — orange #F18F01 found
+H1 text: "Engineered for Industry.Trusted Across India."
+Gold gradient element: {"bg":"linear-gradient(135deg, rgb(241, 143, 1) 0%, rgb(245, 200, 66) 100%)","webkitFill":"rgba(0, 0, 0, 0)","text":"Industry."}
+GOLD GRADIENT CHECK: PASS — gradient span found in H1
+Pill/badge element: {"bg":"rgb(241, 143, 1)","text":"Est. 1995 · Pune, India","borderRadius":"20px"}
+FOUNDER QUOTE REMOVED CHECK: PASS — no founder quote found
+CONTACT FORM CHECK: FOUND — form with 5 inputs/buttons
+GRAIN ELEMENT COUNT: 0 (0=none, 1=single OK, 2+=double grain BUG)
+DOUBLE GRAIN CHECK: PASS
+Text-shadow check on gold elements:
+  .hero-h1-line1: text-shadow=none
+  .gold-text: text-shadow=none
+  .hero-h1-line2: text-shadow=none
+  .gold-text: text-shadow=none
+CONSOLE ERRORS: 5 error(s):
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+HORIZONTAL OVERFLOW (desktop): NONE (PASS)
+
+========================================
+PAGE: INFRASTRUCTURE — http://localhost:3000/infrastructure
+========================================
+Screenshot saved: 03-infrastructure-full.png
+Screenshot saved: 04-infrastructure-hero.png
+First 4 section backgrounds:
+  Section[0]: bg=rgb(40, 0, 3) | text="Manufacturing · Converting · TradingBuilt for Speed. Infrastructure for Precisio"
+  Section[1]: bg=rgb(237, 247, 240) | text="⚡50,000 Units/DayProcessing Capacity📦500 kgMinimum Order Quantity🕐2 Business D"
+  Section[2]: bg=rgba(0, 0, 0, 0) | text="EquipmentSix Converting Machines. One Integrated Facility.From master reel to pa"
+  Section[3]: bg=rgba(0, 0, 0, 0) | text="Inside the Facility10,000 sq ft. Purpose-Built.Converting FloorStorage & Warehou"
+DARK HERO CHECK: PASS — mahogany dark background found
+H1 text: "Built for Speed. Infrastructure for Precision."
+H1 INFRASTRUCTURE CHECK: PASS
+"HOW WE WORK" REMOVED CHECK: PASS — section not found
+Last section: bg=rgb(40, 0, 3) | text="Ready to partner?Let's build something together.Contact Us →"
+CTA BAND DARK CHECK: PASS — last section is dark mahogany
+CONSOLE ERRORS: 5 error(s):
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+
+========================================
+PAGE: PRODUCTS — http://localhost:3000/products
+========================================
+Screenshot saved: 05-products-full.png
+Screenshot saved: 06-products-hero.png
+First 4 section backgrounds:
+  Section[0]: bg=rgb(40, 0, 3) | text="Packaging SolutionsOur ProductsPrecision-engineered packaging for automotive, ph"
+  Section[1]: bg=rgb(40, 0, 3) | text="Request a Product CatalogueGet our full range specifications delivered to your i"
+DARK HERO CHECK: PASS — mahogany dark background found
+H1 text: "Our Products"
+H1 PRODUCTS CHECK: PASS
+Section backgrounds: rgb(40, 0, 3) | rgb(40, 0, 3)
+HONEYDEW BACKGROUND CHECK: FAIL — no honeydew
+CONSOLE ERRORS: 5 error(s):
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+  ERROR: Failed to load resource: the server responded with a status of 404 (Not Found)
+
+========================================
+MOBILE VIEWPORT CHECK (375x812)
+========================================
+Screenshot saved: 07-mobile-homepage-hero.png
+Screenshot saved: 08-mobile-homepage-full.png
+MOBILE HORIZONTAL OVERFLOW: NONE (PASS)
+Mobile H1 height: 107px (PASS — renders)
+Mobile nav: Hamburger found: <button class="gnav-hamburger" aria-label="Open menu"><span></span><span></span><span></span></butto
+
+========================================
+NAVIGATION LINKS CHECK
+========================================
+Nav links found: "Pune Global GroupYour Trusted Packaging Partner"→/ | "Products"→/products/ | "Infrastructure"→/infrastructure/ | "Blog"→/blog/ | "About"→/about/ | "Contact"→/contact/ | "Get Quote →"→/contact/
+  NAV "Pune Global GroupYour Trusted Packaging Partner" (/): HTTP 200 — PASS
+  NAV "Products" (/products/): HTTP 200 — PASS
+  NAV "Infrastructure" (/infrastructure/): HTTP 200 — PASS
+  NAV "Blog" (/blog/): HTTP 200 — PASS
+  NAV "About" (/about/): HTTP 200 — PASS
+  NAV "Contact" (/contact/): HTTP 200 — PASS
+  NAV "Get Quote →" (/contact/): HTTP 200 — PASS
+Screenshot saved: 09-nav-last-page.png
+
+========================================
+SUMMARY
+========================================
+PASS: 12  |  FAIL: 1

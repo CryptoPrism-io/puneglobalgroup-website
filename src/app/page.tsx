@@ -14,21 +14,21 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 /* ─── Tokens ─────────────────────────────────────────────────────────────────── */
 const C = {
-  cream:       "#F2FBE0",   // Honeydew — page background
-  parchment:   "#E8F5CC",   // Derived light mint — alternate sections
-  charcoal:    "#1C1A17",   // Keep — body text
-  warm:        "#5B6C5D",   // Granite — replaces warm brown
-  taupe:       "#5B6C5D",   // Granite — replaces taupe
-  saffron:     "#F18F01",   // Carrot Orange — primary accent
-  saffrondark: "#C07200",   // Darker orange — for stat numbers
-  dark:        "#2B0504",   // Rich Mahogany — replaces near-black
-  deepWarm:    "#2B0504",   // Rich Mahogany — hero/dark sections
-  navy:        "#094074",   // Yale Blue — secondary accent
-  granite:     "#5B6C5D",   // Granite — secondary
-  goldStart:   "#F18F01",   // Carrot Orange — gradient start
-  goldEnd:     "#F5C842",   // Amber — gradient end
-  border:      "rgba(9,64,116,0.10)",
-  borderMid:   "rgba(9,64,116,0.18)",
+  cream: "#FAF7F2",
+  parchment: "#EDE5D8",
+  charcoal: "#1C1A17",
+  warm: "#7A736D",
+  taupe: "#7A736D",
+  saffron: "#1C1A17",
+  saffrondark: "#0D0B09",
+  dark: "#1C1A17",
+  deepWarm: "#1C1A17",
+  navy: "#1C1A17",
+  granite: "#7A736D",
+  goldStart: "#FAF7F2",
+  goldEnd: "#C8B89A",
+  border: "rgba(28,26,23,0.10)",
+  borderMid: "rgba(28,26,23,0.18)",
 };
 
 const F = {
@@ -262,12 +262,12 @@ const GLOBAL_CSS = `
   .card-heritage {
     background: ${C.parchment};
     border-bottom: 2px solid ${C.saffron};
-    box-shadow: 0 2px 12px rgba(9,64,116,0.07);
+    box-shadow: 0 2px 12px rgba(28,26,23,0.07);
     transition: transform 0.22s ease, box-shadow 0.22s ease;
   }
   .card-heritage:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 36px rgba(9,64,116,0.13);
+    box-shadow: 0 10px 36px rgba(28,26,23,0.13);
   }
   .saffron-badge {
     display: inline-flex; align-items: center; gap: 8px;
@@ -329,7 +329,7 @@ const GLOBAL_CSS = `
 
   /* Footer link */
   .footer-link {
-    font-family: ${F.body}; font-size: 0.84rem; color: rgba(242,251,224,0.52);
+    font-family: ${F.body}; font-size: 0.84rem; color: rgba(250,247,242,0.52);
     transition: color 0.2s; cursor: pointer; display: block; margin-bottom: 10px;
     text-decoration: none; background: none; border: none; padding: 0; text-align: left;
   }
@@ -425,6 +425,82 @@ const GLOBAL_CSS = `
   @media (max-width: 640px) {
     .contact-form-grid { grid-template-columns: 1fr !important; }
   }
+
+  /* ── Homepage product panels ─────────────────────────────── */
+  .hp-cat-row {
+    display: flex; min-height: 62vh;
+  }
+  .hp-cat-pp {
+    position: relative; overflow: hidden; cursor: pointer; text-decoration: none;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    flex: 1; transition: flex 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    background: ${C.charcoal};
+  }
+  .hp-cat-pp:hover { flex: 1.18; }
+  .hp-cat-paper {
+    position: relative; overflow: hidden; cursor: pointer; text-decoration: none;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    flex: 1; transition: flex 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    background: ${C.parchment};
+  }
+  .hp-cat-paper:hover { flex: 1.18; }
+  .hp-cat-bg-img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .hp-cat-pp:hover .hp-cat-bg-img,
+  .hp-cat-paper:hover .hp-cat-bg-img { transform: scale(1.04); }
+  .hp-pp-overlay {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(to top, rgba(28,26,23,0.96) 0%, rgba(28,26,23,0.72) 38%, rgba(28,26,23,0.22) 68%, rgba(28,26,23,0.04) 100%),
+      linear-gradient(to right, rgba(28,26,23,0.55) 0%, rgba(28,26,23,0.0) 55%);
+  }
+  .hp-paper-overlay {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(to top, rgba(237,229,216,0.98) 0%, rgba(237,229,216,0.80) 36%, rgba(237,229,216,0.32) 62%, rgba(237,229,216,0.0) 100%),
+      linear-gradient(to right, rgba(237,229,216,0.65) 0%, rgba(237,229,216,0.0) 55%);
+  }
+  .hp-cat-content { position: relative; z-index: 2; padding: clamp(1.4rem, 4.5vw, 3.5rem); }
+  .hp-cat-index-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+  .hp-cat-index-num { font-family: ${F.body}; font-size: 0.58rem; letter-spacing: 0.22em; }
+  .hp-cat-index-rule { flex: 1; height: 1px; }
+  .hp-cat-index-tag { font-family: ${F.body}; font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; }
+  .hp-cat-eyebrow { font-family: ${F.body}; font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.65rem; display: block; }
+  .hp-cat-title {
+    font-family: ${F.display}; font-weight: 700;
+    font-size: clamp(1.55rem, 3.4vw, 3.2rem);
+    line-height: 1.04; letter-spacing: -0.025em; margin-bottom: 1.4rem;
+  }
+  .hp-cat-stats { display: flex; gap: 0; flex-wrap: wrap; margin-bottom: 2rem; border-top: 1px solid; padding-top: 1rem; }
+  .hp-cat-stat { font-family: ${F.body}; font-size: 0.62rem; letter-spacing: 0.06em; padding-right: 1.4rem; margin-right: 1.4rem; border-right: 1px solid; }
+  .hp-cat-stat:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+  .hp-cat-cta { display: inline-flex; align-items: center; gap: 8px; font-family: ${F.body}; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid; padding-bottom: 3px; transition: gap 0.25s; }
+  .hp-cat-pp:hover .hp-cat-cta, .hp-cat-paper:hover .hp-cat-cta { gap: 14px; }
+  .hp-cat-pp .hp-cat-index-num  { color: rgba(250,247,242,0.35); }
+  .hp-cat-pp .hp-cat-index-rule { background: rgba(250,247,242,0.12); }
+  .hp-cat-pp .hp-cat-index-tag  { color: rgba(250,247,242,0.40); }
+  .hp-cat-pp .hp-cat-eyebrow    { color: rgba(250,247,242,0.48); }
+  .hp-cat-pp .hp-cat-title      { color: #FAF7F2; }
+  .hp-cat-pp .hp-cat-stats      { border-color: rgba(250,247,242,0.14); }
+  .hp-cat-pp .hp-cat-stat       { color: rgba(250,247,242,0.50); border-color: rgba(250,247,242,0.14); }
+  .hp-cat-pp .hp-cat-cta        { color: rgba(250,247,242,0.65); border-color: rgba(250,247,242,0.30); }
+  .hp-cat-pp:hover .hp-cat-cta  { color: #FAF7F2; border-color: rgba(250,247,242,0.7); }
+  .hp-cat-paper .hp-cat-index-num  { color: rgba(28,26,23,0.30); }
+  .hp-cat-paper .hp-cat-index-rule { background: rgba(28,26,23,0.12); }
+  .hp-cat-paper .hp-cat-index-tag  { color: rgba(28,26,23,0.38); }
+  .hp-cat-paper .hp-cat-eyebrow    { color: rgba(28,26,23,0.48); }
+  .hp-cat-paper .hp-cat-title      { color: ${C.charcoal}; }
+  .hp-cat-paper .hp-cat-stats      { border-color: rgba(28,26,23,0.14); }
+  .hp-cat-paper .hp-cat-stat       { color: rgba(28,26,23,0.50); border-color: rgba(28,26,23,0.14); }
+  .hp-cat-paper .hp-cat-cta        { color: rgba(28,26,23,0.60); border-color: rgba(28,26,23,0.28); }
+  .hp-cat-paper:hover .hp-cat-cta  { color: ${C.charcoal}; border-color: rgba(28,26,23,0.65); }
+  @media (max-width: 680px) {
+    .hp-cat-row { flex-direction: column; min-height: auto; }
+    .hp-cat-pp, .hp-cat-paper { flex: 1 !important; min-height: 75vw; }
+  }
 `;
 
 /* ─── Turiya Logo ─────────────────────────────────────────────────────────── */
@@ -446,7 +522,7 @@ function TuriyaLogo({ size = 40, onDark = false }: { size?: number; onDark?: boo
 
 function Logo({ inverted = false }: { inverted?: boolean }) {
   const textColor = inverted ? C.cream : C.charcoal;
-  const subColor  = inverted ? "rgba(242,251,224,0.55)" : C.taupe;
+  const subColor  = inverted ? "rgba(250,247,242,0.55)" : C.taupe;
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "12px", userSelect: "none" }}>
       <TuriyaLogo size={42} onDark={inverted} />
@@ -504,8 +580,9 @@ function useScrollReveal() {
 }
 
 /* ─── Animated stat ──────────────────────────────────────────────────────────── */
-function AnimatedStat({ raw, label, note, animClass }: {
+function AnimatedStat({ raw, label, note, animClass, numColor, labelColor, noteColor }: {
   raw: string; label: string; note: string; animClass: string;
+  numColor?: string; labelColor?: string; noteColor?: string;
 }) {
   const [ready, setReady] = useState(false);
   useEffect(() => { const t = setTimeout(() => setReady(true), 900); return () => clearTimeout(t); }, []);
@@ -517,16 +594,16 @@ function AnimatedStat({ raw, label, note, animClass }: {
   return (
     <div className={animClass} style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
       <div style={{ fontFamily: F.display, fontWeight: 700,
-        fontSize: "2.2rem", color: C.goldEnd, lineHeight: 1,
+        fontSize: "2.2rem", color: numColor ?? C.goldEnd, lineHeight: 1,
         transition: "color 0.3s" }}>
         {display}
       </div>
       <div style={{ fontFamily: F.body, fontWeight: 500, fontSize: "0.7rem",
-        color: C.cream, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+        color: labelColor ?? C.cream, letterSpacing: "0.05em", textTransform: "uppercase" }}>
         {label}
       </div>
       <div style={{ fontFamily: F.italic, fontStyle: "italic",
-        fontSize: "1.15rem", color: "rgba(242,251,224,0.6)" }}>
+        fontSize: "1.15rem", color: noteColor ?? "rgba(250,247,242,0.6)" }}>
         {note}
       </div>
     </div>
@@ -547,11 +624,9 @@ function Hero() {
 
   return (
     <section style={{
-      minHeight: "100vh", background: C.deepWarm,
+      minHeight: "100vh", background: C.cream,
       display: "flex", flexDirection: "column", justifyContent: "center",
       padding: "clamp(50px, 8vh, 90px) clamp(1.5rem, 5vw, 4rem) clamp(48px, 8vh, 80px)",
-      clipPath: "polygon(0 0, 100% 0, 100% 96%, 0 100%)",
-      marginBottom: "-3rem",
       position: "relative", zIndex: 1,
     }}>
       <div className="hero-grid" style={{ maxWidth: "1400px", margin: "0 auto", width: "100%" }}>
@@ -562,8 +637,8 @@ function Hero() {
           <div className="hero-eyebrow-anim"
             style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
             <span className="saffron-badge">Est. 1995 · Pune, India</span>
-            <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: "rgba(242,251,224,0.15)" }} />
-            <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: "rgba(242,251,224,0.45)",
+            <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: "rgba(28,26,23,0.12)" }} />
+            <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: "rgba(28,26,23,0.45)",
               letterSpacing: "0.12em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
               PP · Board · Paper
             </span>
@@ -573,29 +648,34 @@ function Hero() {
           <h1 className="hero-headline" style={{
             fontFamily: F.display, fontWeight: 900,
             fontSize: "clamp(3.2rem, 6vw, 5.5rem)",
-            lineHeight: 1.06, color: C.cream,
+            lineHeight: 1.06, color: C.charcoal,
             letterSpacing: "-0.02em", marginBottom: "0",
           }}>
             <span className="hero-h1-line1" style={{ display: "block" }}>
-              Engineered for{" "}
-              <span className="gold-text">Industry.</span>
+              Your Packaging{" "}
+              <span style={{
+                background: "linear-gradient(135deg, #1C1A17 0%, #7A736D 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}>Partner.</span>
             </span>
             <span className="hero-h1-line2" style={{
               display: "block", fontSize: "0.72em", fontWeight: 400,
-              letterSpacing: "0em", color: "rgba(242,251,224,0.75)", marginTop: "0.22em",
+              letterSpacing: "0em", color: "rgba(28,26,23,0.55)", marginTop: "0.22em",
             }}>
-              Trusted Across India.
+              Precision supply across 21 states, since 1995.
             </span>
           </h1>
 
           {/* Rule */}
           <div className="hero-rule-anim"
-            style={{ height: "1px", background: "rgba(242,251,224,0.15)", margin: "2.75rem 0" }} />
+            style={{ height: "1px", background: "rgba(28,26,23,0.12)", margin: "2.75rem 0" }} />
 
           {/* Body + CTAs */}
           <div className="hero-body-anim">
             <p style={{ fontFamily: F.body, fontSize: "1.05rem", lineHeight: 1.85,
-              color: "rgba(242,251,224,0.72)", marginBottom: "2.5rem", fontWeight: 300 }}>
+              color: "rgba(28,26,23,0.65)", marginBottom: "2.5rem", fontWeight: 300 }}>
               Pune Global Group manufactures precision PP trays, separators, boxes
               and crates for automotive, pharma and electronics industries — export-ready,
               custom-spec, from our Pune facility. We also convert FBB sheets and
@@ -605,8 +685,7 @@ function Hero() {
               <Link href="/products" className="btn-primary" style={{ textDecoration: "none" }}>
                 View Products <IconArrowRight size={14} />
               </Link>
-              <button className="btn-outline" onClick={scrollToContact}
-                style={{ color: C.cream, borderColor: "rgba(242,251,224,0.35)" }}>
+              <button className="btn-outline" onClick={scrollToContact}>
                 Get a Quote <IconChevronRight size={14} />
               </button>
             </div>
@@ -617,12 +696,13 @@ function Hero() {
             {stats.map((stat, i) => (
               <div key={stat.label} className="hero-stat-box" style={{
                 padding: "0 2.25rem",
-                borderLeft: "1px solid rgba(242,251,224,0.18)",
-                borderRight: i === stats.length - 1 ? "1px solid rgba(242,251,224,0.18)" : "none",
+                borderLeft: "1px solid rgba(28,26,23,0.10)",
+                borderRight: i === stats.length - 1 ? "1px solid rgba(28,26,23,0.10)" : "none",
               }}>
                 <AnimatedStat
                   raw={stat.raw} label={stat.label} note={stat.note}
                   animClass={`hero-stat-anim-${i}`}
+                  numColor={C.charcoal} labelColor={C.warm} noteColor="rgba(28,26,23,0.50)"
                 />
               </div>
             ))}
@@ -661,13 +741,13 @@ function Hero() {
             borderRadius: "8px",
             padding: "0.8rem 1.1rem",
             display: "flex", alignItems: "center", gap: "0.75rem",
-            border: "1px solid rgba(242,251,224,0.10)",
+            border: "1px solid rgba(250,247,242,0.10)",
           }}>
             <IconCircleCheck size={18} style={{ color: C.saffron, flexShrink: 0 }} />
             <div>
               <div style={{
                 fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
-                textTransform: "uppercase", color: "rgba(242,251,224,0.45)", marginBottom: "3px",
+                textTransform: "uppercase", color: "rgba(250,247,242,0.45)", marginBottom: "3px",
               }}>
                 Certified Quality
               </div>
@@ -1097,88 +1177,87 @@ function ProductsSection() {
   ];
 
   return (
-    <section id="products" style={{ background: C.cream, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
+    <section id="products" style={{ background: C.deepWarm, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
         <div className="sr" style={{ marginBottom: "3.5rem" }}>
           <span style={{
             fontFamily: F.body, fontWeight: 500, fontSize: "0.72rem",
             letterSpacing: "0.18em", textTransform: "uppercase",
-            color: C.saffron, display: "block", marginBottom: "0.85rem",
+            color: "rgba(250,247,242,0.45)", display: "block", marginBottom: "0.85rem",
           }}>
             Our Products
           </span>
           <h2 style={{ fontFamily: F.italic, fontWeight: 400,
-            fontSize: "clamp(2rem, 4vw, 3rem)", color: C.charcoal,
+            fontSize: "clamp(2rem, 4vw, 3rem)", color: C.cream,
             letterSpacing: "-0.01em", lineHeight: 1.1, margin: "0 0 1.1rem",
             fontStyle: "italic" }}>
             From Raw Board to Finished Packaging
           </h2>
-          <p style={{ fontFamily: F.body, fontSize: "1.0625rem", color: C.taupe,
+          <p style={{ fontFamily: F.body, fontSize: "1.0625rem", color: "rgba(250,247,242,0.60)",
             lineHeight: 1.75, maxWidth: "560px", margin: "0 0 2rem", fontWeight: 300 }}>
             Two manufacturing verticals — PP corrugated packaging and paper/board
             conversion — serving automotive, pharma, FMCG and export industries
             across 21 states.
           </p>
-          <div style={{ width: "48px", height: "1px", background: C.borderMid }} />
+          <div style={{ width: "48px", height: "1px", background: "rgba(250,247,242,0.15)" }} />
         </div>
 
-        {/* PP Carousel subheading */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
-          marginBottom: "1.25rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <span style={{ fontFamily: F.body, fontWeight: 500, fontSize: "0.72rem",
-              letterSpacing: "0.12em", textTransform: "uppercase", color: C.charcoal }}>
-              PP Products
-            </span>
-            <div style={{ width: "32px", height: "1px", background: C.saffron }} />
+      </div>
+
+      {/* Two-panel product showcase */}
+      <div className="hp-cat-row">
+
+        {/* PP Corrugated */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <Link href="/products/pp-corrugated" className="hp-cat-pp">
+          <img src="/hero-pp-family.jpg" alt="" className="hp-cat-bg-img" />
+          <div className="hp-pp-overlay" />
+          <div className="hp-cat-content">
+            <div className="hp-cat-index-row">
+              <span className="hp-cat-index-num">01</span>
+              <div className="hp-cat-index-rule" />
+              <span className="hp-cat-index-tag">Manufactured</span>
+            </div>
+            <span className="hp-cat-eyebrow">PP Corrugated Systems</span>
+            <h2 className="hp-cat-title">
+              Boxes · Trays<br />
+              <em style={{ fontWeight: 400 }}>Bins · Separators</em>
+            </h2>
+            <div className="hp-cat-stats">
+              {["7 product families", "20+ variants", "Custom to ±1 mm"].map(s => (
+                <span key={s} className="hp-cat-stat">{s}</span>
+              ))}
+            </div>
+            <span className="hp-cat-cta">Explore PP Systems →</span>
           </div>
-          <Link href="/products" style={{
-            fontFamily: F.body, fontSize: "0.74rem", fontWeight: 400,
-            color: C.taupe, textDecoration: "none", letterSpacing: "0.04em",
-            display: "inline-flex", alignItems: "center", gap: "4px",
-          }}>
-            View All <IconChevronRight size={11} />
-          </Link>
-        </div>
-        <div className="sr" data-delay="0.1"><PPProductGrid /></div>
+        </Link>
 
-        {/* Paper grades */}
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem",
-          margin: "3.5rem 0 1.25rem" }}>
-          <span style={{ fontFamily: F.body, fontWeight: 500, fontSize: "0.72rem",
-            letterSpacing: "0.12em", textTransform: "uppercase", color: C.charcoal }}>
-            Paper &amp; Board Grades
-          </span>
-          <div style={{ width: "32px", height: "1px", background: C.border }} />
-          <div style={{ flex: 1, height: "1px", background: C.border }} />
-          <Link href="/products/paper-board" style={{
-            fontFamily: F.body, fontSize: "0.74rem", fontWeight: 400,
-            color: C.taupe, textDecoration: "none", letterSpacing: "0.04em",
-            display: "inline-flex", alignItems: "center", gap: "4px", flexShrink: 0,
-          }}>
-            View All <IconChevronRight size={11} />
-          </Link>
-        </div>
+        {/* Paper & Board */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <Link href="/products/paper-board" className="hp-cat-paper">
+          <img src="/hero-paper-family.jpg" alt="" className="hp-cat-bg-img" />
+          <div className="hp-paper-overlay" />
+          <div className="hp-cat-content">
+            <div className="hp-cat-index-row">
+              <span className="hp-cat-index-num">02</span>
+              <div className="hp-cat-index-rule" />
+              <span className="hp-cat-index-tag">Traded</span>
+            </div>
+            <span className="hp-cat-eyebrow">Paper &amp; Board Grades</span>
+            <h2 className="hp-cat-title">
+              Kraft · FBB<br />
+              <em style={{ fontWeight: 400 }}>Duplex · Coated</em>
+            </h2>
+            <div className="hp-cat-stats">
+              {["10 ITC PSPD grades", "200–400 GSM", "Ready stock · Pune"].map(s => (
+                <span key={s} className="hp-cat-stat">{s}</span>
+              ))}
+            </div>
+            <span className="hp-cat-cta">Browse Board Grades →</span>
+          </div>
+        </Link>
 
-        <div className="products-detail-grid"
-          style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px",
-            background: "transparent" }}>
-          {paperProducts.map((p, i) => (
-            <PaperProductCard key={p.name} p={p} i={i} />
-          ))}
-        </div>
-
-        {/* Bottom CTA */}
-        <div style={{ textAlign: "center", marginTop: "3.5rem",
-          display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/products" className="btn-outline" style={{ textDecoration: "none" }}>
-            View Full Catalogue <IconArrowRight size={13} />
-          </Link>
-          <button className="btn-primary" onClick={scrollToContact}>
-            Request a Custom Quote <IconArrowRight size={14} />
-          </button>
-        </div>
       </div>
     </section>
   );
@@ -1196,7 +1275,7 @@ function InfraCallout() {
   ];
 
   return (
-    <div className="infra-section" style={{ background: C.deepWarm, padding: "64px clamp(1.5rem, 5vw, 4rem)" }}>
+    <div className="infra-section" style={{ background: C.parchment, padding: "64px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
         {/* 2-col: text + metrics left, facility photo right */}
@@ -1210,45 +1289,45 @@ function InfraCallout() {
             }}>
               <div>
                 <span style={{ fontFamily: F.italic, fontStyle: "italic",
-                  fontSize: "1.1rem", color: "rgba(242,251,224,0.5)", display: "block", marginBottom: "8px" }}>
+                  fontSize: "1.1rem", color: "rgba(28,26,23,0.45)", display: "block", marginBottom: "8px" }}>
                   Converting Facility · BU Bhandari MIDC, Sanaswadi
                 </span>
                 <h2 style={{ fontFamily: F.display, fontWeight: 600,
-                  fontSize: "clamp(1.5rem, 2.5vw, 2.2rem)", color: C.cream,
+                  fontSize: "clamp(1.5rem, 2.5vw, 2.2rem)", color: C.charcoal,
                   lineHeight: 1.2, letterSpacing: "-0.02em" }}>
-                  <span className="gold-text">Cut-to-size.</span> Wound to spec.<br />
-                  <em style={{ fontWeight: 400, opacity: 0.75 }}>Shipped on time.</em>
+                  Cut-to-size. Wound to spec.<br />
+                  <em style={{ fontWeight: 400, opacity: 0.65 }}>Shipped on time.</em>
                 </h2>
               </div>
               <Link href="/infrastructure" style={{
                 display: "inline-flex", alignItems: "center", gap: "8px",
                 fontFamily: F.body, fontSize: "0.98rem", fontWeight: 500,
-                color: C.cream, textDecoration: "none", letterSpacing: "0.07em",
+                color: C.charcoal, textDecoration: "none", letterSpacing: "0.07em",
                 textTransform: "uppercase",
-                border: `1px solid rgba(242,251,224,0.25)`,
+                border: `1px solid rgba(28,26,23,0.22)`,
                 padding: "11px 22px", borderRadius: "1px", whiteSpace: "nowrap",
                 transition: "border-color 0.2s, background 0.2s",
               }}
-              onMouseEnter={e => { const a = e.currentTarget; a.style.borderColor = "rgba(242,251,224,0.5)"; a.style.background = "rgba(242,251,224,0.07)"; }}
-              onMouseLeave={e => { const a = e.currentTarget; a.style.borderColor = "rgba(242,251,224,0.25)"; a.style.background = "transparent"; }}>
+              onMouseEnter={e => { const a = e.currentTarget; a.style.borderColor = "rgba(28,26,23,0.5)"; a.style.background = "rgba(28,26,23,0.05)"; }}
+              onMouseLeave={e => { const a = e.currentTarget; a.style.borderColor = "rgba(28,26,23,0.22)"; a.style.background = "transparent"; }}>
                 View Full Facility <IconArrowRight size={13} />
               </Link>
             </div>
 
             <div className="infra-metrics-grid" style={{
               display: "grid", gridTemplateColumns: "repeat(6, 1fr)",
-              gap: "1px", background: "rgba(242,251,224,0.08)",
+              gap: "1px", background: "rgba(28,26,23,0.10)",
             }}>
               {metrics.map((m) => (
                 <div key={m.label} style={{
-                  background: C.deepWarm, padding: "1.5rem 1rem", textAlign: "center",
+                  background: C.parchment, padding: "1.5rem 1rem", textAlign: "center",
                 }}>
                   <div style={{ fontFamily: F.display, fontWeight: 700,
-                    fontSize: "1.5rem", color: C.goldEnd, lineHeight: 1 }}>
+                    fontSize: "1.5rem", color: C.charcoal, lineHeight: 1 }}>
                     {m.value}
                   </div>
                   <div style={{ fontFamily: F.body, fontSize: "0.66rem",
-                    color: "rgba(242,251,224,0.7)", letterSpacing: "0.07em",
+                    color: "rgba(28,26,23,0.55)", letterSpacing: "0.07em",
                     textTransform: "uppercase", marginTop: "6px" }}>
                     {m.label}
                   </div>
@@ -1260,13 +1339,13 @@ function InfraCallout() {
           {/* Right: facility photo — hidden on mobile via CSS */}
           <div className="infra-img-col" style={{
             height: "360px", borderRadius: "4px", overflow: "hidden",
-            border: "1px solid rgba(242,251,224,0.08)",
+            border: "1px solid rgba(28,26,23,0.10)",
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/hero-infrastructure.jpg"
               alt="Pune Global Group — Sanaswadi converting facility"
-              style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.85, display: "block" }}
+              style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.88, display: "block" }}
             />
           </div>
 
@@ -1452,7 +1531,7 @@ function ClientLogoBand() {
         letterSpacing: "0.24em", textTransform: "uppercase",
         color: C.taupe, opacity: 0.55, marginBottom: "2.25rem",
       }}>
-        Trusted by India's leading manufacturers
+        Our packaging is used by
       </p>
 
       {/* Marquee wrapper */}

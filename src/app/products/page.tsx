@@ -3,20 +3,21 @@
 import Link from "next/link";
 
 const C = {
-  cream:     "#F2FBE0",
-  parchment: "#E8F5CC",
-  charcoal:  "#1C1A17",
-  warm:      "#5B6C5D",
-  taupe:     "#5B6C5D",
-  saffron:   "#F18F01",
-  deepWarm:  "#2B0504",
-  goldStart: "#F18F01",
-  goldEnd:   "#F5C842",
-  navy:      "#094074",
-  granite:   "#5B6C5D",
-  dark:      "#2B0504",
-  border:    "rgba(9,64,116,0.10)",
-  borderMid: "rgba(9,64,116,0.18)",
+  cream: "#FAF7F2",
+  parchment: "#EDE5D8",
+  charcoal: "#1C1A17",
+  warm: "#7A736D",
+  taupe: "#7A736D",
+  saffron: "#1C1A17",
+  saffrondark: "#0D0B09",
+  dark: "#1C1A17",
+  deepWarm: "#1C1A17",
+  navy: "#1C1A17",
+  granite: "#7A736D",
+  goldStart: "#FAF7F2",
+  goldEnd: "#C8B89A",
+  border: "rgba(28,26,23,0.10)",
+  borderMid: "rgba(28,26,23,0.18)",
 };
 const F = {
   display: "'Playfair Display', Georgia, serif",
@@ -65,19 +66,19 @@ const CSS = `
   .card-heritage {
     background: ${C.parchment};
     border-bottom: 2px solid ${C.saffron};
-    box-shadow: 0 2px 12px rgba(9,64,116,0.07);
+    box-shadow: 0 2px 12px rgba(28,26,23,0.07);
     transition: transform 0.22s ease, box-shadow 0.22s ease;
   }
   .card-heritage:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 36px rgba(9,64,116,0.13);
+    box-shadow: 0 10px 36px rgba(28,26,23,0.13);
   }
 
   /* ── Category Cards ─────────────────────────────── */
   .cat-row {
     display: flex;
     flex: 1;
-    min-height: 72vh;
+    min-height: 58vh;
   }
   .cat-divider { width: 2px; background: ${C.cream}; flex-shrink: 0; z-index: 2; }
 
@@ -168,15 +169,15 @@ const CSS = `
   .cat-paper:hover .cat-cta { gap: 14px; }
 
   /* PP text: white */
-  .cat-pp .cat-index-num   { color: rgba(242,251,224,0.35); }
-  .cat-pp .cat-index-rule  { background: rgba(242,251,224,0.12); }
-  .cat-pp .cat-index-tag   { color: rgba(242,251,224,0.40); }
-  .cat-pp .cat-eyebrow     { color: rgba(242,251,224,0.48); }
-  .cat-pp .cat-title       { color: #F2FBE0; }
-  .cat-pp .cat-stats       { border-color: rgba(242,251,224,0.14); }
-  .cat-pp .cat-stat        { color: rgba(242,251,224,0.50); border-color: rgba(242,251,224,0.14); }
-  .cat-pp .cat-cta         { color: rgba(242,251,224,0.65); border-color: rgba(242,251,224,0.30); }
-  .cat-pp:hover .cat-cta   { color: #F2FBE0; border-color: rgba(242,251,224,0.7); }
+  .cat-pp .cat-index-num   { color: rgba(250,247,242,0.35); }
+  .cat-pp .cat-index-rule  { background: rgba(250,247,242,0.12); }
+  .cat-pp .cat-index-tag   { color: rgba(250,247,242,0.40); }
+  .cat-pp .cat-eyebrow     { color: rgba(250,247,242,0.48); }
+  .cat-pp .cat-title       { color: #FAF7F2; }
+  .cat-pp .cat-stats       { border-color: rgba(250,247,242,0.14); }
+  .cat-pp .cat-stat        { color: rgba(250,247,242,0.50); border-color: rgba(250,247,242,0.14); }
+  .cat-pp .cat-cta         { color: rgba(250,247,242,0.65); border-color: rgba(250,247,242,0.30); }
+  .cat-pp:hover .cat-cta   { color: #FAF7F2; border-color: rgba(250,247,242,0.7); }
 
   /* Paper text: dark charcoal */
   .cat-paper .cat-index-num  { color: rgba(28,26,23,0.30); }
@@ -209,10 +210,10 @@ export default function ProductsPage() {
       {/* Heritage hero band */}
       <section style={{
         background: C.deepWarm,
-        padding: "clamp(90px, 14vh, 130px) clamp(1.5rem, 5vw, 4rem) clamp(3rem, 6vh, 5rem)",
+        padding: "clamp(50px, 7vh, 80px) clamp(1.5rem, 5vw, 4rem) clamp(1.5rem, 3vh, 2.5rem)",
       }}>
         <div style={{ maxWidth: "800px" }}>
-          <span className="saffron-badge" style={{ marginBottom: "1.5rem", display: "inline-flex" }}>
+          <span className="saffron-badge" style={{ marginBottom: "1.5rem", display: "inline-flex", background: "rgba(250,247,242,0.12)", color: C.cream, border: "1px solid rgba(250,247,242,0.20)" }}>
             Packaging Solutions
           </span>
           <h1 style={{
@@ -225,7 +226,7 @@ export default function ProductsPage() {
           </h1>
           <p style={{
             fontFamily: F.italic, fontStyle: "italic",
-            fontSize: "1.2rem", color: "rgba(242,251,224,0.65)",
+            fontSize: "1.2rem", color: "rgba(250,247,242,0.65)",
             lineHeight: 1.6,
           }}>
             Precision-engineered packaging for automotive, pharma, FMCG and industrial sectors.
@@ -337,7 +338,7 @@ export default function ProductsPage() {
           Request a <span className="gold-text">Product Catalogue</span>
         </h2>
         <p style={{ fontFamily: F.body, fontSize: "1rem",
-          color: "rgba(242,251,224,0.65)", marginBottom: "2rem" }}>
+          color: "rgba(250,247,242,0.65)", marginBottom: "2rem" }}>
           Get our full range specifications delivered to your inbox.
         </p>
         <a href="/#contact" style={{
