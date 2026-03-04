@@ -7,10 +7,10 @@ import { SiteLogo } from "./SiteLogo";
 const C = {
   cream:    "#FAF7F2",
   charcoal: "#1C1A17",
-  warm:     "#4A4540",
-  taupe:    "#7A736D",
-  border:   "rgba(28,26,23,0.1)",
-  borderMid:"rgba(28,26,23,0.16)",
+  warm:     "rgba(250,247,242,0.65)",
+  taupe:    "rgba(250,247,242,0.45)",
+  border:   "rgba(250,247,242,0.10)",
+  borderMid:"rgba(250,247,242,0.18)",
 };
 
 const GLOBAL_NAV_CSS = `
@@ -33,12 +33,12 @@ const GLOBAL_NAV_CSS = `
     position: absolute;
     bottom: -2px; left: 0;
     width: 0; height: 1px;
-    background: ${C.charcoal};
+    background: ${C.cream};
     transition: width 0.25s ease;
   }
-  .gnav-link:hover { color: ${C.charcoal}; }
+  .gnav-link:hover { color: ${C.cream}; }
   .gnav-link:hover::after { width: 100%; }
-  .gnav-link.active { color: ${C.charcoal}; }
+  .gnav-link.active { color: ${C.cream}; }
   .gnav-link.active::after { width: 100%; }
 
   .gnav-cta {
@@ -46,7 +46,7 @@ const GLOBAL_NAV_CSS = `
     font-family: 'DM Sans', 'Plus Jakarta Sans', sans-serif;
     font-size: 0.75rem; font-weight: 600;
     letter-spacing: 0.08em; text-transform: uppercase;
-    color: ${C.cream}; background: ${C.charcoal};
+    color: ${C.charcoal}; background: ${C.cream};
     border: none; cursor: pointer;
     padding: 10px 22px; border-radius: 2px;
     text-decoration: none;
@@ -71,7 +71,7 @@ const GLOBAL_NAV_CSS = `
   }
   .gnav-hamburger span {
     display: block; width: 22px; height: 2px;
-    background: ${C.charcoal}; border-radius: 2px;
+    background: ${C.cream}; border-radius: 2px;
     transition: all 0.2s;
   }
   .gnav-close {
@@ -120,7 +120,7 @@ export default function GlobalNav() {
       <nav style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 900,
         height: "70px",
-        background: C.cream,
+        background: C.charcoal,
         borderBottom: `1px solid ${scrolled ? C.borderMid : C.border}`,
         boxShadow: scrolled ? "0 2px 16px rgba(28,26,23,0.07)" : "none",
         transition: "box-shadow 0.3s ease, border-color 0.3s ease",
@@ -133,7 +133,7 @@ export default function GlobalNav() {
           width: "100%", maxWidth: "1400px", margin: "0 auto",
         }}>
           {/* Logo */}
-          <SiteLogo />
+          <SiteLogo inverted />
 
           {/* Desktop links */}
           <div className="gnav-desktop-links" style={{

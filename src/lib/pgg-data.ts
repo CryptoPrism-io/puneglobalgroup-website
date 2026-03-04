@@ -2240,10 +2240,8 @@ export const machines: Machine[] = [
 ];
 
 export const capabilities = [
-  { label: "Processing Capacity", value: "50,000 Units/Day", icon: "⚡" },
-  { label: "Minimum Order Quantity", value: "500 kg", icon: "📦" },
-  { label: "Lead Time", value: "2 Business Days", icon: "🕐" },
-  { label: "Processing Turnaround", value: "48 Hours", icon: "⏱" },
-  { label: "Sheet Tolerance", value: "±0.3 mm", icon: "🎯" },
-  { label: "Max Sheet Width", value: "1800 mm", icon: "📐" },
+  { label: "Daily Capacity",  value: "50,000 Units",   icon: "lightning" },
+  { label: "Lead Time",       value: "2 Business Days", icon: "clock" },
+  { label: "Sheet Tolerance", value: "±0.3 mm",         icon: "crosshair" },
+  { label: "Max Sheet Width", value: "1,800 mm",        icon: "ruler" },
 ];

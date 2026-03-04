@@ -270,7 +270,7 @@ function FacilityGallery() {
   return (
     <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2.5rem 5rem" }}>
       <div style={{ textAlign: "center", marginBottom: "2.5rem" }} className="sr">
-        <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "1rem", color: C.taupe, margin: "0 0 0.75rem" }}>
+        <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: C.taupe, border: `1px solid ${C.border}`, borderRadius: "999px", padding: "0.3em 1em", margin: "0 0 1rem" }}>
           Inside the Facility
         </p>
         <div style={{ width: "32px", height: "2px", background: C.charcoal, margin: "0 auto 1.25rem" }} />
@@ -424,7 +424,30 @@ export default function InfrastructurePage() {
                 textAlign: "center",
               }}
             >
-              <div style={{ fontSize: "1.1rem", marginBottom: "0.4rem" }}>{cap.icon}</div>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.6rem", color: C.charcoal, opacity: 0.55 }}>
+                {cap.icon === "lightning" && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="13 2 13 9 19 9 11 22 11 15 5 15 13 2"/>
+                  </svg>
+                )}
+                {cap.icon === "clock" && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                )}
+                {cap.icon === "crosshair" && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="7"/>
+                    <line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
+                    <line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+                  </svg>
+                )}
+                {cap.icon === "ruler" && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 12h20M2 12l3-3M2 12l3 3M22 12l-3-3M22 12l-3 3M7 9v2M12 9v3M17 9v2"/>
+                  </svg>
+                )}
+              </div>
               <div
                 style={{
                   fontFamily: F.display,
@@ -459,11 +482,18 @@ export default function InfrastructurePage() {
         <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="sr">
           <p
             style={{
-              fontFamily: F.italic,
-              fontStyle: "italic",
-              fontSize: "1rem",
+              display: "inline-block",
+              fontFamily: F.body,
+              fontStyle: "normal",
+              fontSize: "0.68rem",
+              fontWeight: 600,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
               color: C.taupe,
-              margin: "0 0 0.75rem",
+              border: `1px solid ${C.border}`,
+              borderRadius: "999px",
+              padding: "0.3em 1em",
+              margin: "0 0 1rem",
             }}
           >
             Equipment
@@ -680,7 +710,7 @@ export default function InfrastructurePage() {
       {/* ——— Locations ——— */}
       <section className="infra-section" style={{ maxWidth: "1100px", margin: "0 auto", padding: "5rem 2.5rem" }}>
         <div style={{ textAlign: "center", marginBottom: "3rem" }} className="sr">
-          <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "1rem", color: C.taupe, margin: "0 0 0.75rem" }}>
+          <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: C.taupe, border: `1px solid ${C.border}`, borderRadius: "999px", padding: "0.3em 1em", margin: "0 0 1rem" }}>
             Our Locations
           </p>
           <div style={{ width: "32px", height: "2px", background: C.charcoal, margin: "0 auto 1.25rem" }} />
@@ -855,7 +885,7 @@ export default function InfrastructurePage() {
       {/* ——— Products Bridge ——— */}
       <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 2.5rem 5rem" }}>
         <div style={{ textAlign: "center", marginBottom: "2rem" }} className="sr">
-          <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "1rem", color: C.taupe, margin: "0 0 0.5rem" }}>See what we make with it</p>
+          <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: C.taupe, border: `1px solid ${C.border}`, borderRadius: "999px", padding: "0.3em 1em", margin: "0 0 1rem" }}>See what we make with it</p>
           <div style={{ width: "28px", height: "2px", background: C.charcoal, margin: "0 auto" }} />
         </div>
         <div className="infra-bridge-grid sr" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
@@ -901,11 +931,18 @@ export default function InfrastructurePage() {
         >
           <p
             style={{
-              fontFamily: F.italic,
-              fontStyle: "italic",
-              fontSize: "1rem",
-              color: "rgba(250,247,242,0.55)",
-              margin: 0,
+              display: "inline-block",
+              fontFamily: F.body,
+              fontStyle: "normal",
+              fontSize: "0.68rem",
+              fontWeight: 600,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "rgba(250,247,242,0.65)",
+              border: "1px solid rgba(250,247,242,0.25)",
+              borderRadius: "999px",
+              padding: "0.3em 1em",
+              margin: "0 0 1rem",
             }}
           >
             Get Started
@@ -1104,8 +1141,7 @@ export default function InfrastructurePage() {
         padding: "clamp(3rem, 6vh, 5rem) clamp(1.5rem, 5vw, 4rem)",
         textAlign: "center",
       }}>
-        <p style={{ fontFamily: F.italic, fontStyle: "italic",
-          fontSize: "1.1rem", color: "rgba(250,247,242,0.65)", marginBottom: "1rem" }}>
+        <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(250,247,242,0.65)", border: "1px solid rgba(250,247,242,0.25)", borderRadius: "999px", padding: "0.3em 1em", marginBottom: "1rem" }}>
           Ready to partner?
         </p>
         <h2 style={{ fontFamily: F.display, fontWeight: 700,

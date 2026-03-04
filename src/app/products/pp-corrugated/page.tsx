@@ -642,10 +642,7 @@ export default function PPCorrugatedPage() {
       }}>
         <div className="cta-grid" style={{ maxWidth: "1400px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr auto", gap: "2rem", alignItems: "center" }}>
           <div>
-            <p style={{
-              fontFamily: F.italic, fontStyle: "italic", fontSize: "0.9rem",
-              color: "rgba(250,247,242,0.55)", marginBottom: "0.6rem",
-            }}>
+            <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(250,247,242,0.65)", border: "1px solid rgba(250,247,242,0.25)", borderRadius: "999px", padding: "0.3em 1em", marginBottom: "0.9rem" }}>
               Ready to engineer your system?
             </p>
             <h2 style={{

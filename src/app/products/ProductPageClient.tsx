@@ -721,7 +721,7 @@ function ProductPageContent({ product }: { product: Product }) {
             <section style={{ marginTop: "3.5rem" }} className="sr">
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
                 <div>
-                  <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "0.95rem", color: C.taupe, margin: "0 0 0.25rem" }}>You may also like</p>
+                  <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: C.taupe, border: `1px solid ${C.border}`, borderRadius: "999px", padding: "0.3em 1em", margin: "0 0 0.6rem" }}>You may also like</p>
                   <h3 style={{ fontFamily: F.display, fontSize: "1.35rem", fontWeight: 700, color: C.charcoal, margin: 0 }}>{sectionLabel}</h3>
                 </div>
                 <Link href={sectionHref} style={{ fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500, color: C.charcoal, textDecoration: "none", borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "1px", whiteSpace: "nowrap" }}>
@@ -767,7 +767,7 @@ function ProductPageContent({ product }: { product: Product }) {
           }}
         >
           <div>
-            <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "0.95rem", color: "rgba(250,247,242,0.5)", margin: "0 0 0.75rem" }}>
+            <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(250,247,242,0.65)", border: "1px solid rgba(250,247,242,0.25)", borderRadius: "999px", padding: "0.3em 1em", margin: "0 0 0.9rem" }}>
               Ready to proceed?
             </p>
             <h3 style={{ fontFamily: F.display, fontSize: "1.65rem", fontWeight: 700, color: C.cream, margin: "0 0 0.875rem", lineHeight: 1.2 }}>
