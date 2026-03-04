@@ -39,6 +39,9 @@ const C = {
   dark: "#141210",
   border: "rgba(28,26,23,0.1)",
   borderMid: "rgba(28,26,23,0.16)",
+  deepWarm:  "#2C1810",
+  goldStart: "#F5A623",
+  goldEnd:   "#FFD166",
 };
 
 const F = {
@@ -67,6 +70,32 @@ const GLOBAL_CSS = `
   .sr { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
   .sr.visible { opacity: 1; transform: translateY(0); }
 
+  /* ── Heritage Premium ─────────────────────────────── */
+  .gold-text {
+    background: linear-gradient(135deg, ${C.goldStart} 0%, ${C.goldEnd} 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline;
+  }
+  .saffron-badge {
+    display: inline-flex; align-items: center;
+    background: ${C.saffron}; color: #fff;
+    font-family: ${F.body}; font-size: 0.68rem; font-weight: 600;
+    letter-spacing: 0.13em; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 20px;
+  }
+  .card-heritage {
+    background: ${C.parchment};
+    border-bottom: 2px solid ${C.saffron};
+    box-shadow: 0 2px 12px rgba(28,26,23,0.07);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+  }
+  .card-heritage:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 36px rgba(28,26,23,0.13);
+  }
+
   .infra-nav-link {
     font-family: 'DM Sans', sans-serif;
     color: ${C.charcoal};
@@ -80,16 +109,12 @@ const GLOBAL_CSS = `
   .infra-nav-link:hover { opacity: 1; }
 
   .machine-card {
-    background: #fff;
-    border: 1px solid ${C.border};
     border-radius: 6px;
     padding: 1.75rem;
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
   }
   .machine-card:hover {
     border-color: ${C.borderMid};
-    box-shadow: 0 12px 40px rgba(28,26,23,0.08);
-    transform: translateY(-3px);
   }
 
   .cap-item + .cap-item { border-left: 1px solid ${C.border}; }
@@ -183,7 +208,7 @@ function MachineCard({ machine, delay }: { machine: typeof machines[0]; delay: n
   const hasImgs = imgs.length > 0;
 
   return (
-    <div className={`machine-card sr${hasImgs ? " has-carousel" : ""}`} style={{ animationDelay: `${delay}s` }}>
+    <div className={`machine-card card-heritage sr${hasImgs ? " has-carousel" : ""}`} style={{ animationDelay: `${delay}s` }}>
       {hasImgs && (
         <div className="mc-carousel">
           {imgs.map((src, i) => (
@@ -277,11 +302,11 @@ export default function InfrastructurePage() {
       {/* ——— Hero ——— */}
       <section
         style={{
-          background: C.cream,
-          padding: "5rem 2.5rem 4rem",
-          position: "relative",
-          overflow: "hidden",
-          borderBottom: `1px solid ${C.border}`,
+          background: C.deepWarm,
+          padding: "clamp(100px, 15vh, 140px) clamp(1.5rem, 5vw, 4rem) clamp(4rem, 8vh, 7rem)",
+          clipPath: "polygon(0 0, 100% 0, 100% 94%, 0 100%)",
+          marginBottom: "-2rem",
+          position: "relative", zIndex: 1,
         }}
       >
         {/* Paper grain */}
@@ -298,24 +323,22 @@ export default function InfrastructurePage() {
 
           {/* LEFT */}
           <div>
-            <p style={{ fontFamily: F.italic, fontStyle: "italic", fontSize: "1rem",
-              fontWeight: 400, color: C.taupe, margin: "0 0 1.5rem",
-              animation: "eyebrowIn 0.8s ease both" }}>
-              Converting Infrastructure
-            </p>
+            <span className="saffron-badge" style={{ marginBottom: "1.5rem", display: "inline-flex" }}>
+              Manufacturing · Converting · Trading
+            </span>
 
-            <div style={{ width: "48px", height: "2px", background: C.charcoal,
+            <div style={{ width: "48px", height: "2px", background: C.cream,
               marginBottom: "1.5rem", transformOrigin: "left",
               animation: "ruleGrow 0.6s ease 0.2s both" }} />
 
-            <h1 style={{ fontFamily: F.display, fontSize: "clamp(2.4rem, 5vw, 3.75rem)",
-              fontWeight: 700, color: C.charcoal, margin: "0 0 1.5rem",
+            <h1 style={{ fontFamily: F.display, fontSize: "clamp(3rem, 6vw, 5rem)",
+              fontWeight: 900, color: C.cream, margin: "0 0 1.5rem",
               lineHeight: 1.08, animation: "fadeUp 0.8s ease 0.3s both" }}>
               Built for Speed.{" "}<br />
-              <em style={{ fontStyle: "italic", fontWeight: 500 }}>Engineered for Precision.</em>
+              <em style={{ fontStyle: "italic", fontWeight: 500 }}><span className="gold-text">Infrastructure</span> for Precision.</em>
             </h1>
 
-            <p style={{ fontFamily: F.body, fontSize: "1.05rem", color: C.warm,
+            <p style={{ fontFamily: F.body, fontSize: "1.05rem", color: "rgba(250,247,242,0.72)",
               lineHeight: 1.75, margin: "0 0 2rem", maxWidth: "560px",
               animation: "fadeUp 0.8s ease 0.45s both" }}>
               Our dedicated manufacturing facility at BU Bhandari MIDC, Sanaswadi, Pune
@@ -379,7 +402,7 @@ export default function InfrastructurePage() {
       </section>
 
       {/* ——— Capabilities Strip ——— */}
-      <section style={{ background: "#fff", borderBottom: `1px solid ${C.border}` }}>
+      <section style={{ background: C.parchment, borderBottom: `1px solid ${C.border}` }}>
         <div
           style={{
             maxWidth: "1200px",
@@ -402,8 +425,8 @@ export default function InfrastructurePage() {
               <div
                 style={{
                   fontFamily: F.display,
-                  fontSize: "1.6rem",
-                  fontWeight: 700,
+                  fontSize: "clamp(2.5rem, 4vw, 3.5rem)",
+                  fontWeight: 900,
                   color: C.saffron,
                   lineHeight: 1,
                   marginBottom: "0.4rem",
@@ -416,7 +439,7 @@ export default function InfrastructurePage() {
                   fontFamily: F.body,
                   fontSize: "0.71rem",
                   fontWeight: 500,
-                  color: C.taupe,
+                  color: C.charcoal,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
                 }}
@@ -1186,6 +1209,32 @@ export default function InfrastructurePage() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Heritage CTA band */}
+      <section style={{
+        background: C.deepWarm,
+        padding: "clamp(3rem, 6vh, 5rem) clamp(1.5rem, 5vw, 4rem)",
+        textAlign: "center",
+      }}>
+        <p style={{ fontFamily: F.italic, fontStyle: "italic",
+          fontSize: "1.1rem", color: "rgba(250,247,242,0.65)", marginBottom: "1rem" }}>
+          Ready to partner?
+        </p>
+        <h2 style={{ fontFamily: F.display, fontWeight: 700,
+          fontSize: "clamp(2rem, 4vw, 3rem)", color: C.cream,
+          marginBottom: "2rem", lineHeight: 1.1 }}>
+          Let&apos;s build something <span className="gold-text">together.</span>
+        </h2>
+        <a href="/#contact" style={{
+          display: "inline-flex", alignItems: "center", gap: "8px",
+          background: C.saffron, color: "#fff",
+          fontFamily: F.body, fontWeight: 600, fontSize: "0.82rem",
+          letterSpacing: "0.09em", textTransform: "uppercase",
+          padding: "13px 32px", borderRadius: "2px", textDecoration: "none",
+        }}>
+          Contact Us →
+        </a>
       </section>
 
     </div>
