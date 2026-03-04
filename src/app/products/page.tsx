@@ -197,6 +197,23 @@ const CSS = `
     .cat-divider { width: 100%; height: 2px; }
   }
 
+  /* ── Hero flex layout ─────────────────────────────── */
+  .hero-band {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+  .hero-text { flex: 1; min-width: 0; }
+  .hero-anim {
+    flex-shrink: 0;
+    width: 240px;
+    opacity: 0.9;
+  }
+  @media (max-width: 680px) {
+    .hero-anim { display: none; }
+  }
+
 `;
 
 const PP_COMPOSITE   = "/hero-pp-family.jpg";
@@ -212,25 +229,30 @@ export default function ProductsPage() {
         background: C.deepWarm,
         padding: "clamp(50px, 7vh, 80px) clamp(1.5rem, 5vw, 4rem) clamp(1.5rem, 3vh, 2.5rem)",
       }}>
-        <div style={{ maxWidth: "800px" }}>
-          <span className="saffron-badge" style={{ marginBottom: "1.5rem", display: "inline-flex", background: "rgba(250,247,242,0.12)", color: C.cream, border: "1px solid rgba(250,247,242,0.20)" }}>
-            Packaging Solutions
-          </span>
-          <h1 style={{
-            fontFamily: F.display, fontWeight: 900,
-            fontSize: "clamp(3rem, 6vw, 5rem)", color: C.cream,
-            lineHeight: 1.06, letterSpacing: "-0.02em",
-            marginTop: "1rem", marginBottom: "1.25rem",
-          }}>
-            Our <span className="gold-text">Products</span>
-          </h1>
-          <p style={{
-            fontFamily: F.italic, fontStyle: "italic",
-            fontSize: "1.2rem", color: "rgba(250,247,242,0.65)",
-            lineHeight: 1.6,
-          }}>
-            Precision-engineered packaging for automotive, pharma, FMCG and industrial sectors.
-          </p>
+        <div className="hero-band" style={{ maxWidth: "900px" }}>
+          <div className="hero-text">
+            <span className="saffron-badge" style={{ marginBottom: "1.5rem", display: "inline-flex", background: "rgba(250,247,242,0.12)", color: C.cream, border: "1px solid rgba(250,247,242,0.20)" }}>
+              Packaging Solutions
+            </span>
+            <h1 style={{
+              fontFamily: F.display, fontWeight: 900,
+              fontSize: "clamp(3rem, 6vw, 5rem)", color: C.cream,
+              lineHeight: 1.06, letterSpacing: "-0.02em",
+              marginTop: "1rem", marginBottom: "1.25rem",
+            }}>
+              Our <span className="gold-text">Products</span>
+            </h1>
+            <p style={{
+              fontFamily: F.italic, fontStyle: "italic",
+              fontSize: "1.2rem", color: "rgba(250,247,242,0.65)",
+              lineHeight: 1.6,
+            }}>
+              Precision-engineered packaging for automotive, pharma, FMCG and industrial sectors.
+            </p>
+          </div>
+          <div className="hero-anim">
+            {/* SVG placeholder — will be filled in Task 3 */}
+          </div>
         </div>
       </section>
 
