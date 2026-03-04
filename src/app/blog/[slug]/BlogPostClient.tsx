@@ -410,6 +410,18 @@ function BlogPostContent({ post }: { post: BlogPost }) {
         </div>
       </header>
 
+      {/* ——— Cover Image ——— */}
+      {post.coverImage && (
+        <div style={{ width: "100%", maxHeight: "480px", overflow: "hidden", lineHeight: 0 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={post.coverImage}
+            alt={post.title}
+            style={{ width: "100%", height: "480px", objectFit: "cover", display: "block" }}
+          />
+        </div>
+      )}
+
       {/* ——— Article Body ——— */}
       <main className="blog-content-wrap" style={{ maxWidth: "760px", margin: "0 auto", padding: "3.5rem clamp(1rem, 4vw, 2.5rem) 5rem" }}>
         {/* Lead excerpt */}

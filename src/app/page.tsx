@@ -1605,8 +1605,7 @@ function BlogTeaser() {
   ];
 
   return (
-    <section style={{ background: C.cream, padding: "80px clamp(1.5rem, 5vw, 4rem)",
-      borderTop: `1px solid ${C.border}` }}>
+    <section style={{ background: C.deepWarm, padding: "80px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
         <div className="sr blog-teaser-header" style={{
@@ -1614,9 +1613,9 @@ function BlogTeaser() {
           marginBottom: "3rem", flexWrap: "wrap", gap: "1rem",
         }}>
           <div>
-            <span className="eyebrow">Knowledge Hub</span>
+            <span className="eyebrow" style={{ color: "rgba(250,247,242,0.45)" }}>Knowledge Hub</span>
             <h2 style={{ fontFamily: F.display, fontWeight: 700,
-              fontSize: "clamp(1.8rem, 3vw, 2.6rem)", color: C.charcoal,
+              fontSize: "clamp(1.8rem, 3vw, 2.6rem)", color: C.cream,
               letterSpacing: "-0.02em", lineHeight: 1.1 }}>
               Packaging Intelligence,<br />
               <em style={{ fontWeight: 400 }}>Free to Use.</em>
@@ -1625,9 +1624,9 @@ function BlogTeaser() {
           <Link href="/blog" style={{
             display: "inline-flex", alignItems: "center", gap: "6px",
             fontFamily: F.body, fontSize: "1.15rem", fontWeight: 500,
-            color: C.warm, textDecoration: "none", letterSpacing: "0.06em",
+            color: "rgba(250,247,242,0.60)", textDecoration: "none", letterSpacing: "0.06em",
             textTransform: "uppercase",
-            borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "3px",
+            borderBottom: "1px solid rgba(250,247,242,0.22)", paddingBottom: "3px",
             whiteSpace: "nowrap",
           }}>
             All Articles <IconArrowRight size={12} />
@@ -1636,40 +1635,40 @@ function BlogTeaser() {
 
         <div className="blog-teaser-grid"
           style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
-            gap: "1px", background: C.borderMid }}>
+            gap: "1px", background: "rgba(250,247,242,0.08)" }}>
           {posts.map((post, i) => (
             <Link key={post.slug} href={`/blog/${post.slug}`}
               className="sr" data-delay={`${0.1 * i}`}
               style={{
                 display: "block", textDecoration: "none",
-                background: C.cream, padding: "2rem",
+                background: C.deepWarm, padding: "2rem",
                 transition: "background 0.22s",
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = C.parchment; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = C.cream; }}>
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(250,247,242,0.05)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = C.deepWarm; }}>
               <div style={{ display: "flex", justifyContent: "space-between",
                 alignItems: "center", marginBottom: "1.25rem" }}>
                 <span style={{ fontFamily: F.body, fontSize: "0.64rem", fontWeight: 600,
-                  letterSpacing: "0.1em", textTransform: "uppercase", color: C.saffron }}>
+                  letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(250,247,242,0.45)" }}>
                   {post.category}
                 </span>
                 <span style={{ fontFamily: F.italic, fontStyle: "italic",
-                  fontSize: "1.15rem", color: C.taupe }}>
+                  fontSize: "1.15rem", color: "rgba(250,247,242,0.35)" }}>
                   {post.read} read
                 </span>
               </div>
               <h3 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1rem",
-                color: C.charcoal, lineHeight: 1.4, marginBottom: "0.75rem" }}>
+                color: C.cream, lineHeight: 1.4, marginBottom: "0.75rem" }}>
                 {post.title}
               </h3>
-              <p style={{ fontFamily: F.body, fontSize: "1.02rem", color: C.taupe,
+              <p style={{ fontFamily: F.body, fontSize: "1.02rem", color: "rgba(250,247,242,0.55)",
                 lineHeight: 1.7, marginBottom: "1.5rem", fontWeight: 300 }}>
                 {post.excerpt}
               </p>
               <span style={{ fontFamily: F.body, fontSize: "0.74rem", fontWeight: 500,
-                color: C.charcoal, letterSpacing: "0.05em", display: "inline-flex",
+                color: "rgba(250,247,242,0.65)", letterSpacing: "0.05em", display: "inline-flex",
                 alignItems: "center", gap: "4px",
-                borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "1px" }}>
+                borderBottom: "1px solid rgba(250,247,242,0.22)", paddingBottom: "1px" }}>
                 Read Article <IconChevronRight size={11} />
               </span>
             </Link>
