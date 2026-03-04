@@ -14,19 +14,21 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 /* ─── Tokens ─────────────────────────────────────────────────────────────────── */
 const C = {
-  cream:     "#FAF7F2",
-  parchment: "#F0EAE0",
-  charcoal:  "#1C1A17",
-  warm:      "#4A4540",
-  taupe:     "#7A736D",
-  saffron:   "#F5A623",   /* reserved: decorative accents, labels */
-  saffrondark: "#B8720D", /* WCAG AA large text (3.65:1 on cream) — use for stat numbers */
-  dark:      "#141210",
-  border:    "rgba(28,26,23,0.1)",
-  borderMid: "rgba(28,26,23,0.16)",
-  deepWarm:  "#2C1810",
-  goldStart: "#F5A623",
-  goldEnd:   "#FFD166",
+  cream:       "#DFF3E3",   // Honeydew — page background
+  parchment:   "#EDF7F0",   // Derived light mint — alternate sections
+  charcoal:    "#1C1A17",   // Keep — body text
+  warm:        "#5B6C5D",   // Granite — replaces warm brown
+  taupe:       "#5B6C5D",   // Granite — replaces taupe
+  saffron:     "#F18F01",   // Carrot Orange — primary accent
+  saffrondark: "#C07200",   // Darker orange — for stat numbers
+  dark:        "#280003",   // Rich Mahogany — replaces near-black
+  deepWarm:    "#280003",   // Rich Mahogany — hero/dark sections
+  navy:        "#094074",   // Yale Blue — secondary accent
+  granite:     "#5B6C5D",   // Granite — secondary
+  goldStart:   "#F18F01",   // Carrot Orange — gradient start
+  goldEnd:     "#F5C842",   // Amber — gradient end
+  border:      "rgba(9,64,116,0.10)",
+  borderMid:   "rgba(9,64,116,0.18)",
 };
 
 const F = {
@@ -46,16 +48,6 @@ const GLOBAL_CSS = `
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-  }
-
-  /* Paper grain */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-    opacity: 0.025;
-    pointer-events: none;
-    z-index: 9998;
   }
 
   ::selection { background: ${C.saffron}; color: #fff; }
@@ -270,12 +262,12 @@ const GLOBAL_CSS = `
   .card-heritage {
     background: ${C.parchment};
     border-bottom: 2px solid ${C.saffron};
-    box-shadow: 0 2px 12px rgba(28,26,23,0.07);
+    box-shadow: 0 2px 12px rgba(9,64,116,0.07);
     transition: transform 0.22s ease, box-shadow 0.22s ease;
   }
   .card-heritage:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 36px rgba(28,26,23,0.13);
+    box-shadow: 0 10px 36px rgba(9,64,116,0.13);
   }
   .saffron-badge {
     display: inline-flex; align-items: center; gap: 8px;
@@ -288,7 +280,7 @@ const GLOBAL_CSS = `
   /* Buttons */
   .btn-primary {
     display: inline-flex; align-items: center; gap: 8px;
-    background: ${C.charcoal}; color: ${C.cream};
+    background: ${C.navy}; color: ${C.cream};
     font-family: ${F.body}; font-size: 0.8rem; font-weight: 500;
     letter-spacing: 0.09em; text-transform: uppercase;
     padding: 13px 28px; border: none; border-radius: 1px;
@@ -314,7 +306,7 @@ const GLOBAL_CSS = `
     padding: 11px 15px; font-family: ${F.body}; font-size: 0.9rem; color: ${C.charcoal};
     outline: none; transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .form-input:focus { border-color: ${C.saffron}; box-shadow: 0 0 0 3px rgba(245,166,35,0.15); }
+  .form-input:focus { border-color: ${C.saffron}; box-shadow: 0 0 0 3px rgba(241,143,1,0.15); }
   .form-input::placeholder { color: ${C.taupe}; opacity: 0.55; }
 
   /* Cards */
@@ -337,7 +329,7 @@ const GLOBAL_CSS = `
 
   /* Footer link */
   .footer-link {
-    font-family: ${F.body}; font-size: 0.84rem; color: rgba(250,247,242,0.52);
+    font-family: ${F.body}; font-size: 0.84rem; color: rgba(223,243,227,0.52);
     transition: color 0.2s; cursor: pointer; display: block; margin-bottom: 10px;
     text-decoration: none; background: none; border: none; padding: 0; text-align: left;
   }
@@ -454,7 +446,7 @@ function TuriyaLogo({ size = 40, onDark = false }: { size?: number; onDark?: boo
 
 function Logo({ inverted = false }: { inverted?: boolean }) {
   const textColor = inverted ? C.cream : C.charcoal;
-  const subColor  = inverted ? "rgba(250,247,242,0.55)" : C.taupe;
+  const subColor  = inverted ? "rgba(223,243,227,0.55)" : C.taupe;
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "12px", userSelect: "none" }}>
       <TuriyaLogo size={42} onDark={inverted} />
@@ -534,7 +526,7 @@ function AnimatedStat({ raw, label, note, animClass }: {
         {label}
       </div>
       <div style={{ fontFamily: F.italic, fontStyle: "italic",
-        fontSize: "1.15rem", color: "rgba(250,247,242,0.6)" }}>
+        fontSize: "1.15rem", color: "rgba(223,243,227,0.6)" }}>
         {note}
       </div>
     </div>
@@ -570,8 +562,8 @@ function Hero() {
           <div className="hero-eyebrow-anim"
             style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
             <span className="saffron-badge">Est. 1995 · Pune, India</span>
-            <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: "rgba(250,247,242,0.15)" }} />
-            <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: "rgba(250,247,242,0.45)",
+            <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: "rgba(223,243,227,0.15)" }} />
+            <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: "rgba(223,243,227,0.45)",
               letterSpacing: "0.12em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
               PP · Board · Paper
             </span>
@@ -590,7 +582,7 @@ function Hero() {
             </span>
             <span className="hero-h1-line2" style={{
               display: "block", fontSize: "0.72em", fontWeight: 400,
-              letterSpacing: "0em", color: "rgba(250,247,242,0.75)", marginTop: "0.22em",
+              letterSpacing: "0em", color: "rgba(223,243,227,0.75)", marginTop: "0.22em",
             }}>
               Trusted Across India.
             </span>
@@ -598,12 +590,12 @@ function Hero() {
 
           {/* Rule */}
           <div className="hero-rule-anim"
-            style={{ height: "1px", background: "rgba(250,247,242,0.15)", margin: "2.75rem 0" }} />
+            style={{ height: "1px", background: "rgba(223,243,227,0.15)", margin: "2.75rem 0" }} />
 
           {/* Body + CTAs */}
           <div className="hero-body-anim">
             <p style={{ fontFamily: F.body, fontSize: "1.05rem", lineHeight: 1.85,
-              color: "rgba(250,247,242,0.72)", marginBottom: "2.5rem", fontWeight: 300 }}>
+              color: "rgba(223,243,227,0.72)", marginBottom: "2.5rem", fontWeight: 300 }}>
               Pune Global Group manufactures precision PP trays, separators, boxes
               and crates for automotive, pharma and electronics industries — export-ready,
               custom-spec, from our Pune facility. We also convert FBB sheets and
@@ -614,7 +606,7 @@ function Hero() {
                 View Products <IconArrowRight size={14} />
               </Link>
               <button className="btn-outline" onClick={scrollToContact}
-                style={{ color: C.cream, borderColor: "rgba(250,247,242,0.35)" }}>
+                style={{ color: C.cream, borderColor: "rgba(223,243,227,0.35)" }}>
                 Get a Quote <IconChevronRight size={14} />
               </button>
             </div>
@@ -625,8 +617,8 @@ function Hero() {
             {stats.map((stat, i) => (
               <div key={stat.label} className="hero-stat-box" style={{
                 padding: "0 2.25rem",
-                borderLeft: "1px solid rgba(250,247,242,0.18)",
-                borderRight: i === stats.length - 1 ? "1px solid rgba(250,247,242,0.18)" : "none",
+                borderLeft: "1px solid rgba(223,243,227,0.18)",
+                borderRight: i === stats.length - 1 ? "1px solid rgba(223,243,227,0.18)" : "none",
               }}>
                 <AnimatedStat
                   raw={stat.raw} label={stat.label} note={stat.note}
@@ -669,19 +661,19 @@ function Hero() {
             borderRadius: "8px",
             padding: "0.8rem 1.1rem",
             display: "flex", alignItems: "center", gap: "0.75rem",
-            border: "1px solid rgba(250,247,242,0.10)",
+            border: "1px solid rgba(223,243,227,0.10)",
           }}>
             <IconCircleCheck size={18} style={{ color: C.saffron, flexShrink: 0 }} />
             <div>
               <div style={{
                 fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
-                textTransform: "uppercase", color: "rgba(250,247,242,0.45)", marginBottom: "3px",
+                textTransform: "uppercase", color: "rgba(223,243,227,0.45)", marginBottom: "3px",
               }}>
                 Certified Quality
               </div>
               <div style={{
                 fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
-                color: "#FAF7F2", letterSpacing: "0.01em",
+                color: C.cream, letterSpacing: "0.01em",
               }}>
                 ISO 9001:2015 · FSC · BRC
               </div>
@@ -1218,7 +1210,7 @@ function InfraCallout() {
             }}>
               <div>
                 <span style={{ fontFamily: F.italic, fontStyle: "italic",
-                  fontSize: "1.1rem", color: "rgba(250,247,242,0.5)", display: "block", marginBottom: "8px" }}>
+                  fontSize: "1.1rem", color: "rgba(223,243,227,0.5)", display: "block", marginBottom: "8px" }}>
                   Converting Facility · BU Bhandari MIDC, Sanaswadi
                 </span>
                 <h2 style={{ fontFamily: F.display, fontWeight: 600,
@@ -1233,19 +1225,19 @@ function InfraCallout() {
                 fontFamily: F.body, fontSize: "0.98rem", fontWeight: 500,
                 color: C.cream, textDecoration: "none", letterSpacing: "0.07em",
                 textTransform: "uppercase",
-                border: `1px solid rgba(250,247,242,0.25)`,
+                border: `1px solid rgba(223,243,227,0.25)`,
                 padding: "11px 22px", borderRadius: "1px", whiteSpace: "nowrap",
                 transition: "border-color 0.2s, background 0.2s",
               }}
-              onMouseEnter={e => { const a = e.currentTarget; a.style.borderColor = "rgba(250,247,242,0.5)"; a.style.background = "rgba(250,247,242,0.07)"; }}
-              onMouseLeave={e => { const a = e.currentTarget; a.style.borderColor = "rgba(250,247,242,0.25)"; a.style.background = "transparent"; }}>
+              onMouseEnter={e => { const a = e.currentTarget; a.style.borderColor = "rgba(223,243,227,0.5)"; a.style.background = "rgba(223,243,227,0.07)"; }}
+              onMouseLeave={e => { const a = e.currentTarget; a.style.borderColor = "rgba(223,243,227,0.25)"; a.style.background = "transparent"; }}>
                 View Full Facility <IconArrowRight size={13} />
               </Link>
             </div>
 
             <div className="infra-metrics-grid" style={{
               display: "grid", gridTemplateColumns: "repeat(6, 1fr)",
-              gap: "1px", background: "rgba(250,247,242,0.08)",
+              gap: "1px", background: "rgba(223,243,227,0.08)",
             }}>
               {metrics.map((m) => (
                 <div key={m.label} style={{
@@ -1256,7 +1248,7 @@ function InfraCallout() {
                     {m.value}
                   </div>
                   <div style={{ fontFamily: F.body, fontSize: "0.66rem",
-                    color: "rgba(250,247,242,0.7)", letterSpacing: "0.07em",
+                    color: "rgba(223,243,227,0.7)", letterSpacing: "0.07em",
                     textTransform: "uppercase", marginTop: "6px" }}>
                     {m.label}
                   </div>
@@ -1268,7 +1260,7 @@ function InfraCallout() {
           {/* Right: facility photo — hidden on mobile via CSS */}
           <div className="infra-img-col" style={{
             height: "360px", borderRadius: "4px", overflow: "hidden",
-            border: "1px solid rgba(250,247,242,0.08)",
+            border: "1px solid rgba(223,243,227,0.08)",
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -1420,64 +1412,6 @@ function IndustriesSection() {
             </div>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── Social Proof ───────────────────────────────────────────────────────────── */
-function SocialProofSection() {
-  return (
-    <section style={{ position: "relative", background: C.charcoal, padding: "80px clamp(1.5rem, 5vw, 4rem)", overflow: "hidden" }}>
-
-      {/* Atmospheric background image */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/infrastructure/facility/converting-floor.jpg"
-        alt=""
-        aria-hidden="true"
-        style={{
-          position: "absolute", inset: 0, width: "100%", height: "100%",
-          objectFit: "cover", opacity: 0.07, pointerEvents: "none",
-          filter: "grayscale(100%)",
-        }}
-      />
-
-      <div style={{ position: "relative", maxWidth: "760px", margin: "0 auto" }}>
-
-        {/* Entry rule */}
-        <div style={{ width: "36px", height: "1px", background: C.saffron, opacity: 0.45, marginBottom: "3.5rem" }} />
-
-        {/* Quote */}
-        <blockquote style={{ margin: 0 }}>
-          <p className="sr" style={{
-            fontFamily: F.italic, fontStyle: "italic",
-            fontSize: "clamp(1.45rem, 2.6vw, 2.1rem)",
-            fontWeight: 400, lineHeight: 1.62, color: C.cream,
-            margin: "0 0 2.5rem", letterSpacing: "-0.015em",
-          }}>
-            In 1995, I chose Pune because I believed Indian industry
-            would grow faster than anyone expected. It did.
-            We grew with it.
-          </p>
-
-          {/* Attribution */}
-          <footer>
-            <div style={{
-              fontFamily: F.display, fontWeight: 600, fontSize: "1.05rem",
-              color: "rgba(250,247,242,0.88)", letterSpacing: "0.01em", marginBottom: "0.3rem",
-            }}>
-              Umesh Sahu
-            </div>
-            <div style={{
-              fontFamily: F.body, fontSize: "0.62rem", fontWeight: 500,
-              color: "rgba(250,247,242,0.3)", letterSpacing: "0.2em", textTransform: "uppercase",
-            }}>
-              Founder &middot; Pune Global Group &middot; Est. 1995
-            </div>
-          </footer>
-        </blockquote>
-
       </div>
     </section>
   );
@@ -2019,7 +1953,6 @@ export default function HomePage() {
         <MarqueeTicker />
         <ProductsSection />
         <InfraCallout />
-        <SocialProofSection />
         <ClientLogoBand />
         <BlogTeaser />
         <ContactSection />
