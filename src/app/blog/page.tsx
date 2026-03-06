@@ -2,7 +2,10 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { blogPosts, BlogPost } from "@/lib/pgg-data";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 const C = {
   cream:     "#FAF7F2",
@@ -160,9 +163,19 @@ function useScrollReveal() {
   }, []);
 }
 
+const MotionLink = motion.create(Link);
+
 function BlogCard({ post, index }: { post: BlogPost; index: number }) {
   return (
-    <Link href={`/blog/${post.slug}`} className="bcard sr" style={{ transitionDelay: `${(index % 3) * 0.08}s` } as React.CSSProperties}>
+    <MotionLink
+      href={`/blog/${post.slug}`}
+      className="bcard"
+      initial={{ opacity: 0, y: 20, scale: 0.97 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.6, ease: EASE, delay: index * 0.08 }}
+      whileHover={{ y: -4, transition: { type: "spring", stiffness: 300, damping: 25 } }}
+    >
       <div className="bcard-img">
         {post.coverImage
           // eslint-disable-next-line @next/next/no-img-element
@@ -212,7 +225,7 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
           Read Article <span className="rarrow">{"\u2192"}</span>
         </div>
       </div>
-    </Link>
+    </MotionLink>
   );
 }
 
@@ -252,10 +265,14 @@ export default function BlogPage() {
           pointerEvents: "none", userSelect: "none",
         }}>01</div>
         <div style={{ maxWidth: "1100px", margin: "0 auto", position: "relative" }}>
-          <div style={{
-            display: "flex", alignItems: "center", gap: "1rem", marginBottom: "2rem",
-            animation: "fadeUp 0.6s ease both",
-          }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.2 }}
+            style={{
+              display: "flex", alignItems: "center", gap: "1rem", marginBottom: "2rem",
+            }}
+          >
             <span style={{
               fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600,
               letterSpacing: "0.18em", textTransform: "uppercase",
@@ -273,26 +290,34 @@ export default function BlogPage() {
             }}>
               {blogPosts.length} Articles
             </span>
-          </div>
-          <h1 style={{
-            fontFamily: F.display,
-            fontSize: "clamp(2.4rem, 5.5vw, 4rem)",
-            fontWeight: 800, color: C.cream,
-            margin: "0 0 1.25rem", lineHeight: 1.05,
-            animation: "fadeUp 0.75s ease 0.15s both",
-            maxWidth: "680px",
-          }}>
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.4 }}
+            style={{
+              fontFamily: F.display,
+              fontSize: "clamp(2.4rem, 5.5vw, 4rem)",
+              fontWeight: 800, color: C.cream,
+              margin: "0 0 1.25rem", lineHeight: 1.05,
+              maxWidth: "680px",
+            }}
+          >
             Packaging<br />
             <em style={{ fontStyle: "italic", fontWeight: 500 }}><span className="gold-text">Intelligence</span></em>
-          </h1>
-          <p style={{
-            fontFamily: F.body, fontSize: "0.95rem", color: "rgba(250,247,242,0.65)",
-            lineHeight: 1.75, margin: 0, maxWidth: "520px",
-            animation: "fadeUp 0.75s ease 0.3s both",
-          }}>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.6 }}
+            style={{
+              fontFamily: F.body, fontSize: "0.95rem", color: "rgba(250,247,242,0.65)",
+              lineHeight: 1.75, margin: 0, maxWidth: "520px",
+            }}
+          >
             Technical guides, compliance updates, and market intelligence
             for packaging buyers and converting professionals across India.
-          </p>
+          </motion.p>
         </div>
       </section>
 
@@ -309,7 +334,14 @@ export default function BlogPage() {
               fontSize: "0.75rem", color: C.textFaint, opacity: 0.6,
             }}>#01</span>
           </div>
-          <Link href={`/blog/${featured.slug}`} className="feat-wrap sr">
+          <MotionLink
+            href={`/blog/${featured.slug}`}
+            className="feat-wrap"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.5, ease: EASE }}
+          >
             <div className="feat-img-wrap">
               {featured.coverImage && (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -365,7 +397,7 @@ export default function BlogPage() {
                 </span>
               </div>
             </div>
-          </Link>
+          </MotionLink>
         </div>
 
         <div style={{ marginTop: "3rem" }}>
@@ -383,16 +415,22 @@ export default function BlogPage() {
           </div>
         </div>
 
-        <div className="sr" style={{
-          marginTop: "4rem",
-          background: C.navyDark,
-          borderRadius: "4px",
-          padding: "3.5rem",
-          display: "grid",
-          gridTemplateColumns: "1fr auto",
-          gap: "2rem",
-          alignItems: "center",
-        }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.6, ease: EASE }}
+          style={{
+            marginTop: "4rem",
+            background: C.navyDark,
+            borderRadius: "4px",
+            padding: "3.5rem",
+            display: "grid",
+            gridTemplateColumns: "1fr auto",
+            gap: "2rem",
+            alignItems: "center",
+          }}
+        >
           <div>
             <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(250,247,242,0.65)", border: "1px solid rgba(250,247,242,0.25)", borderRadius: "999px", padding: "0.3em 1em", margin: "0 0 0.9rem" }}>
               Need Expert Advice?
@@ -426,7 +464,7 @@ export default function BlogPage() {
               +91 98233 83230
             </a>
           </div>
-        </div>
+        </motion.div>
       </main>
 
       <footer style={{

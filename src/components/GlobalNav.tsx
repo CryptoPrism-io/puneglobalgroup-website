@@ -44,13 +44,20 @@ const GLOBAL_NAV_CSS = `
     font-family: 'DM Sans', 'Plus Jakarta Sans', sans-serif;
     font-size: 0.72rem; font-weight: 600;
     letter-spacing: 0.08em; text-transform: uppercase;
-    color: ${C.charcoal}; background: ${C.cream};
+    color: #fff; background: linear-gradient(180deg, #6BAAE0 0%, #3A7BBF 100%);
     border: none; cursor: pointer;
     padding: 8px 18px; border-radius: 999px;
     text-decoration: none;
-    transition: opacity 0.2s, transform 0.2s;
+    box-shadow: 0 2px 0 #2A5A8A, 0 3px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+    text-shadow: 0 1px 0 rgba(0,0,0,0.15);
   }
-  .gnav-cta:hover { opacity: 0.88; transform: scale(1.02); }
+  .gnav-cta:hover {
+    background: linear-gradient(180deg, #8AC0F0 0%, #5B9BD5 100%);
+    box-shadow: 0 3px 0 #2A5A8A, 0 5px 16px rgba(91,155,213,0.35), inset 0 1px 0 rgba(255,255,255,0.3);
+    transform: translateY(-1px) scale(1.02);
+  }
+  .gnav-cta:active { transform: translateY(1px); box-shadow: 0 1px 0 #2A5A8A, 0 2px 4px rgba(0,0,0,0.2); }
 
   .gnav-mobile-menu {
     display: none;
@@ -123,14 +130,14 @@ export default function GlobalNav() {
         maxWidth: "1450px",
         zIndex: 900,
         height: "56px",
-        background: "rgba(28,26,23,0.78)",
-        backdropFilter: "blur(20px) saturate(1.4)",
-        WebkitBackdropFilter: "blur(20px) saturate(1.4)",
-        border: `1px solid rgba(250,247,242,0.10)`,
+        background: scrolled ? "rgba(28,26,23,0.35)" : "rgba(28,26,23,0.15)",
+        backdropFilter: "blur(40px) saturate(1.6)",
+        WebkitBackdropFilter: "blur(40px) saturate(1.6)",
+        border: `1px solid rgba(250,247,242,${scrolled ? "0.12" : "0.06"})`,
         borderRadius: "16px",
         boxShadow: scrolled
-          ? "0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(250,247,242,0.06)"
-          : "0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(250,247,242,0.06)",
+          ? "0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(250,247,242,0.06)"
+          : "none",
         transition: "box-shadow 0.3s ease, background 0.3s ease",
         display: "flex", alignItems: "center",
         padding: "0 clamp(1rem, 3vw, 1.75rem)",

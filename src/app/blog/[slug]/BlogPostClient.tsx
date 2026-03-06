@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { blogPosts, BlogPost, BlogSection, products } from "@/lib/pgg-data";
 import { SiteLogo } from "@/components/SiteLogo";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 const C = {
   cream: "#FAF7F2",
@@ -302,7 +305,12 @@ function BlogPostContent({ post }: { post: BlogPost }) {
         </svg>
 
         <div style={{ position: "relative", maxWidth: "760px", margin: "0 auto" }}>
-          <nav style={{ marginBottom: "2rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <motion.nav
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: EASE, delay: 0.1 }}
+            style={{ marginBottom: "2rem", display: "flex", alignItems: "center", gap: "0.5rem" }}
+          >
             <Link href="/" style={{ fontFamily: F.body, fontSize: "0.76rem", color: C.textMuted, textDecoration: "none" }}>Home</Link>
             <span style={{ color: C.textFaint, fontSize: "0.76rem" }}>/</span>
             <Link href="/blog" style={{ fontFamily: F.body, fontSize: "0.76rem", color: C.textMuted, textDecoration: "none" }}>Insights</Link>
@@ -310,9 +318,12 @@ function BlogPostContent({ post }: { post: BlogPost }) {
             <span style={{ fontFamily: F.body, fontSize: "0.76rem", color: C.cream, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "280px" }}>
               {post.title}
             </span>
-          </nav>
+          </motion.nav>
 
-          <span
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: EASE, delay: 0.2 }}
             style={{
               fontFamily: F.body,
               fontSize: "0.68rem",
@@ -326,24 +337,28 @@ function BlogPostContent({ post }: { post: BlogPost }) {
               borderRadius: "2px",
               display: "inline-block",
               marginBottom: "1.25rem",
-              animation: "fadeUp 0.6s ease both",
             }}
           >
             {post.category}
-          </span>
+          </motion.span>
 
-          <div
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.3 }}
             style={{
               width: "48px",
               height: "2px",
               background: C.gold,
               marginBottom: "1.25rem",
               transformOrigin: "left",
-              animation: "ruleGrow 0.6s ease 0.15s both",
             }}
           />
 
-          <h1
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.4 }}
             style={{
               fontFamily: F.display,
               fontSize: "clamp(1.9rem, 4.5vw, 2.9rem)",
@@ -351,19 +366,20 @@ function BlogPostContent({ post }: { post: BlogPost }) {
               color: C.cream,
               margin: "0 0 1.5rem",
               lineHeight: 1.12,
-              animation: "fadeUp 0.7s ease 0.25s both",
             }}
           >
             {post.title}
-          </h1>
+          </motion.h1>
 
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.6 }}
             style={{
               display: "flex",
               alignItems: "center",
               gap: "1rem",
               flexWrap: "wrap",
-              animation: "fadeUp 0.7s ease 0.4s both",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
@@ -392,7 +408,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
             <span style={{ fontFamily: F.body, fontSize: "0.8rem", color: C.textMuted }}>{post.date}</span>
             <span style={{ color: C.textFaint }}>{"\u00B7"}</span>
             <span style={{ fontFamily: F.body, fontSize: "0.8rem", color: C.textMuted }}>{post.readTime} read</span>
-          </div>
+          </motion.div>
         </div>
       </header>
 
@@ -408,26 +424,32 @@ function BlogPostContent({ post }: { post: BlogPost }) {
       )}
 
       <main className="blog-content-wrap" style={{ maxWidth: "760px", margin: "0 auto", padding: "3.5rem clamp(1rem, 4vw, 2.5rem) 5rem" }}>
-        <div
-          style={{
-            fontFamily: F.italic,
-            fontStyle: "italic",
-            fontSize: "1.25rem",
-            color: C.textMuted,
-            lineHeight: 1.75,
-            borderLeft: `3px solid ${C.gold}`,
-            paddingLeft: "1.5rem",
-            marginBottom: "3rem",
-          }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: EASE, delay: 0.4 }}
         >
-          {post.excerpt}
-        </div>
+          <div
+            style={{
+              fontFamily: F.italic,
+              fontStyle: "italic",
+              fontSize: "1.25rem",
+              color: C.textMuted,
+              lineHeight: 1.75,
+              borderLeft: `3px solid ${C.gold}`,
+              paddingLeft: "1.5rem",
+              marginBottom: "3rem",
+            }}
+          >
+            {post.excerpt}
+          </div>
 
-        <div>
-          {post.content.map((section, i) => (
-            <RenderSection key={i} section={section} />
-          ))}
-        </div>
+          <div>
+            {post.content.map((section, i) => (
+              <RenderSection key={i} section={section} />
+            ))}
+          </div>
+        </motion.div>
 
         <div style={{ marginTop: "3.5rem", paddingTop: "2rem", borderTop: `1px solid ${C.border}` }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>
@@ -499,7 +521,11 @@ function BlogPostContent({ post }: { post: BlogPost }) {
           );
         })()}
 
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.6, ease: EASE }}
           style={{
             marginTop: "3rem",
             background: C.navyDark,
@@ -551,10 +577,16 @@ function BlogPostContent({ post }: { post: BlogPost }) {
               +91 98233 83230
             </a>
           </div>
-        </div>
+        </motion.div>
 
         {relatedPosts.length > 0 && (
-          <div style={{ marginTop: "4rem" }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.6, ease: EASE }}
+            style={{ marginTop: "4rem" }}
+          >
             <h3
               style={{
                 fontFamily: F.display,
@@ -569,42 +601,51 @@ function BlogPostContent({ post }: { post: BlogPost }) {
               Related Reading
             </h3>
             <div className="blog-related-reading" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
-              {relatedPosts.map((related) => (
-                <Link key={related.slug} href={`/blog/${related.slug}`} className="related-card">
-                  <div style={{ height: "3px", background: related.categoryColor, borderRadius: "2px", marginBottom: "0.875rem" }} />
-                  <span
-                    style={{
-                      fontFamily: F.body,
-                      fontSize: "0.68rem",
-                      fontWeight: 600,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      color: related.categoryColor,
-                      display: "block",
-                      marginBottom: "0.5rem",
-                    }}
-                  >
-                    {related.category}
-                  </span>
-                  <h4
-                    style={{
-                      fontFamily: F.display,
-                      fontSize: "1.05rem",
-                      fontWeight: 700,
-                      color: C.cream,
-                      margin: "0 0 0.4rem",
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    {related.title}
-                  </h4>
-                  <span style={{ fontFamily: F.body, fontSize: "0.75rem", color: C.textMuted }}>
-                    {related.readTime} read {"\u2192"}
-                  </span>
-                </Link>
+              {relatedPosts.map((related, idx) => (
+                <motion.div
+                  key={related.slug}
+                  initial={{ opacity: 0, y: 20, scale: 0.97 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ duration: 0.6, ease: EASE, delay: idx * 0.08 }}
+                  whileHover={{ y: -4, transition: { type: "spring", stiffness: 300, damping: 25 } }}
+                >
+                  <Link href={`/blog/${related.slug}`} className="related-card">
+                    <div style={{ height: "3px", background: related.categoryColor, borderRadius: "2px", marginBottom: "0.875rem" }} />
+                    <span
+                      style={{
+                        fontFamily: F.body,
+                        fontSize: "0.68rem",
+                        fontWeight: 600,
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        color: related.categoryColor,
+                        display: "block",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      {related.category}
+                    </span>
+                    <h4
+                      style={{
+                        fontFamily: F.display,
+                        fontSize: "1.05rem",
+                        fontWeight: 700,
+                        color: C.cream,
+                        margin: "0 0 0.4rem",
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {related.title}
+                    </h4>
+                    <span style={{ fontFamily: F.body, fontSize: "0.75rem", color: C.textMuted }}>
+                      {related.readTime} read {"\u2192"}
+                    </span>
+                  </Link>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         )}
       </main>
     </div>

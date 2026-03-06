@@ -2,20 +2,24 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
+
+const ease = [0.22, 1, 0.36, 1] as const;
+const springHover = { type: "spring" as const, stiffness: 300, damping: 25 };
 
 const C = {
   cream:     "#FAF7F2",
-  parchment: "#F0EAE0",
-  charcoal:  "#1C1A17",
-  warm:      "#4A4540",
-  taupe:     "#7A736D",
-  dark:      "#141210",
-  border:    "rgba(28,26,23,0.10)",
-  borderMid: "rgba(28,26,23,0.16)",
-  borderStr: "rgba(28,26,23,0.28)",
-  kraft:     "#6B4226",      // warm kraft accent
-  kraftLight:"rgba(107,66,38,0.08)",
-  kraftMid:  "rgba(107,66,38,0.18)",
+  parchment: "#1F2D22",
+  charcoal:  "#FAF7F2",
+  warm:      "rgba(250,247,242,0.60)",
+  taupe:     "rgba(250,247,242,0.60)",
+  dark:      "#1A2A1E",
+  border:    "rgba(250,247,242,0.08)",
+  borderMid: "rgba(250,247,242,0.14)",
+  borderStr: "rgba(250,247,242,0.22)",
+  kraft:     "#C8B89A",
+  kraftLight:"rgba(200,184,154,0.10)",
+  kraftMid:  "rgba(200,184,154,0.18)",
 };
 const F = {
   display: "'Playfair Display', Georgia, serif",
@@ -26,9 +30,9 @@ const F = {
 
 const CSS = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: ${C.cream}; color: ${C.charcoal}; font-family: ${F.body}; -webkit-font-smoothing: antialiased; }
+  body { background: ${C.dark}; color: ${C.charcoal}; font-family: ${F.body}; -webkit-font-smoothing: antialiased; }
   body::before {
-    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9998; opacity: 0.018;
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9998; opacity: 0.035;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
   }
   @keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
@@ -53,7 +57,7 @@ const CSS = `
   /* Grade card */
   .grade-card { transition: border-color 0.22s, box-shadow 0.22s, transform 0.22s; cursor:pointer; }
   .grade-card:hover { border-color:${C.kraft} !important; transform:translateY(-4px);
-    box-shadow:0 12px 32px rgba(107,66,38,0.10); }
+    box-shadow:0 12px 32px rgba(0,0,0,0.35); }
 
   /* Carousel */
   .carousel-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
@@ -69,15 +73,15 @@ const CSS = `
     background:${C.kraftLight}; border:1px solid ${C.kraftMid}; padding:2px 8px; border-radius:1px; white-space:nowrap; }
 
   /* Buttons */
-  .btn-kraft { display:inline-flex; align-items:center; gap:8px; background:${C.kraft}; color:${C.cream};
+  .btn-kraft { display:inline-flex; align-items:center; gap:8px; background:${C.kraft}; color:${C.dark};
     font-family:${F.body}; font-size:0.78rem; font-weight:500; letter-spacing:0.09em; text-transform:uppercase;
     padding:13px 30px; border:none; border-radius:1px; cursor:pointer; transition:all 0.2s; text-decoration:none; }
-  .btn-kraft:hover { background:#4e2f18; transform:translateY(-1px); }
+  .btn-kraft:hover { background:#B0A080; transform:translateY(-1px); }
   .btn-ghost { display:inline-flex; align-items:center; gap:6px; background:transparent; color:${C.charcoal};
     font-family:${F.body}; font-size:0.75rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase;
     padding:10px 20px; border:1px solid ${C.borderMid}; border-radius:1px; cursor:pointer;
     transition:all 0.2s; text-decoration:none; }
-  .btn-ghost:hover { background:${C.charcoal}; color:${C.cream}; }
+  .btn-ghost:hover { background:rgba(250,247,242,0.12); color:${C.cream}; }
 
   /* Responsive */
   @media(max-width:960px) { .hero-img-col { display: none !important; } .hero-grid-paper { grid-template-columns: 1fr !important; } }
@@ -291,13 +295,19 @@ function GradeCarousel({ images, name }: { images: string[]; name: string }) {
 /* ─── Grade Card ─────────────────────────────────────────────────────────────── */
 function GradeCard({ grade, delay }: { grade: typeof VIRGIN_GRADES[0]; delay: number }) {
   return (
-    <Link href={`/products/paper-board/${grade.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column" }}>
+    <motion.div
+      initial={{ opacity: 0, y: 25 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.12 }}
+      transition={{ duration: 0.6, ease, delay }}
+      whileHover={{ y: -4, transition: springHover }}
+    >
+    <Link href={`/products/paper-board/${grade.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column", height: "100%" }}>
       <div
-        className="grade-card sr"
+        className="grade-card"
         style={{
-          background: "#fff", border: `1px solid ${C.border}`, borderRadius: "1px",
+          background: C.parchment, border: `1px solid ${C.border}`, borderRadius: "1px",
           overflow: "hidden", display: "flex", flexDirection: "column", height: "100%",
-          animationDelay: `${delay}s`,
         }}
       >
         <GradeCarousel images={grade.images} name={grade.name} />
@@ -352,6 +362,7 @@ function GradeCard({ grade, delay }: { grade: typeof VIRGIN_GRADES[0]; delay: nu
         </div>
       </div>
     </Link>
+    </motion.div>
   );
 }
 
@@ -360,18 +371,23 @@ export default function PaperBoardPage() {
   useScrollReveal();
 
   return (
-    <div style={{ background: C.cream, minHeight: "100vh", paddingTop: "70px" }}>
+    <div className="section-dark" style={{ background: C.dark, minHeight: "100vh", paddingTop: "70px" }}>
       <style>{CSS}</style>
 
       {/* Hero */}
-      <section style={{ padding: "44px clamp(1.5rem, 5vw, 4rem) 36px", background: C.cream }}>
+      <section style={{ padding: "44px clamp(1.5rem, 5vw, 4rem) 36px", background: C.dark }}>
         <div className="hero-grid-paper" style={{ maxWidth: "1400px", margin: "0 auto",
           display: "grid", gridTemplateColumns: "1fr 1fr",
           gap: "clamp(2rem,5vw,5rem)", alignItems: "center" }}>
 
           {/* LEFT */}
           <div>
-            <div className="fade-up d1" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "1.5rem" }}>
+            <motion.div
+              style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "1.5rem" }}
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease, delay: 0 }}
+            >
               <span style={{
                 fontFamily: F.mono, fontSize: "0.65rem", fontWeight: 500,
                 color: C.kraft, background: C.kraftLight, border: `1px solid ${C.kraftMid}`,
@@ -381,32 +397,47 @@ export default function PaperBoardPage() {
               <span style={{ fontFamily: F.body, fontSize: "0.65rem", color: C.taupe, letterSpacing: "0.12em", textTransform: "uppercase" }}>
                 10 grades · 200–400 GSM · Ready stock
               </span>
-            </div>
+            </motion.div>
 
-            <h1 className="fade-up d2" style={{
-              fontFamily: F.display, fontWeight: 700,
-              fontSize: "clamp(2rem, 4vw, 3.8rem)",
-              lineHeight: 1.05, color: C.charcoal, letterSpacing: "-0.028em",
-            }}>
+            <motion.h1
+              style={{
+                fontFamily: F.display, fontWeight: 700,
+                fontSize: "clamp(2rem, 4vw, 3.8rem)",
+                lineHeight: 1.05, color: C.charcoal, letterSpacing: "-0.028em",
+              }}
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease, delay: 0.08 }}
+            >
               Paper grades,
               <br /><em style={{ fontWeight: 400, color: C.warm }}>press-ready.</em>
-            </h1>
+            </motion.h1>
 
             <div style={{ height: "1px", background: C.borderMid, margin: "2rem 0" }} />
 
-            <p className="fade-up d3" style={{
-              fontFamily: F.body, fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)",
-              color: C.taupe, lineHeight: 1.85, maxWidth: "560px", fontWeight: 300,
-            }}>
+            <motion.p
+              style={{
+                fontFamily: F.body, fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)",
+                color: C.taupe, lineHeight: 1.85, maxWidth: "560px", fontWeight: 300,
+              }}
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease, delay: 0.16 }}
+            >
               Trusted traders of ITC PSPD and TNPL board grades — FBB, duplex, kraft liner,
               test liner and white top. Sheeted from reel to your exact press dimensions out of our
               Pune warehouse.
-            </p>
+            </motion.p>
 
-            <div className="fade-up d4" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "2.5rem" }}>
+            <motion.div
+              style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "2.5rem" }}
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease, delay: 0.24 }}
+            >
               <Link href="/#contact" className="btn-kraft">Request Samples &amp; Pricing →</Link>
               <Link href="/products" className="btn-ghost">← All Products</Link>
-            </div>
+            </motion.div>
           </div>
 
           {/* RIGHT — paper reel image + badge */}
@@ -415,7 +446,7 @@ export default function PaperBoardPage() {
             height: "clamp(380px, 55vh, 560px)",
             borderRadius: "10px",
             overflow: "hidden",
-            boxShadow: "0 8px 48px rgba(28,26,23,0.10)",
+            boxShadow: "0 8px 48px rgba(0,0,0,0.35)",
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -452,14 +483,21 @@ export default function PaperBoardPage() {
       </section>
 
       {/* Capability bar */}
-      <section style={{ padding: "3rem clamp(1.5rem, 5vw, 4rem)", background: C.charcoal }}>
+      <section style={{ padding: "3rem clamp(1.5rem, 5vw, 4rem)", background: "#141F16" }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
           <div className="cap-grid-paper" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
             {CAPS.map((cap, i) => (
-              <div key={i} className="sr" style={{
-                padding: "1.5rem 1.25rem",
-                borderRight: i < CAPS.length - 1 ? "1px solid rgba(250,247,242,0.08)" : "none",
-              }}>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.12 }}
+                transition={{ duration: 0.6, ease, delay: i * 0.08 }}
+                style={{
+                  padding: "1.5rem 1.25rem",
+                  borderRight: i < CAPS.length - 1 ? "1px solid rgba(250,247,242,0.08)" : "none",
+                }}
+              >
                 <div style={{
                   fontFamily: F.display, fontSize: "clamp(1.4rem, 2.2vw, 1.9rem)",
                   fontWeight: 600, color: C.cream, lineHeight: 1.1, marginBottom: "0.4rem",
@@ -476,25 +514,31 @@ export default function PaperBoardPage() {
                 <div style={{ fontFamily: F.mono, fontSize: "0.62rem", color: "rgba(250,247,242,0.35)" }}>
                   {cap.sub}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Grade cards */}
-      <section style={{ padding: "2.5rem clamp(1.5rem, 5vw, 4rem) 4rem", background: C.cream, borderTop: `1px solid ${C.border}` }}>
+      <section style={{ padding: "2.5rem clamp(1.5rem, 5vw, 4rem) 4rem", background: C.dark, borderTop: `1px solid ${C.border}` }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
           {/* ITC PSPD Virgin Boards */}
-          <div className="sr" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2rem" }}>
+          <motion.div
+            style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2rem" }}
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.12 }}
+            transition={{ duration: 0.6, ease }}
+          >
             <span style={{
               fontFamily: F.body, fontSize: "0.68rem", fontWeight: 600,
               letterSpacing: "0.18em", textTransform: "uppercase", color: C.kraft, whiteSpace: "nowrap",
             }}>ITC PSPD — Virgin Boards</span>
             <div style={{ flex: 1, height: "1px", background: C.border }} />
             <span style={{ fontFamily: F.mono, fontSize: "0.65rem", color: C.taupe, whiteSpace: "nowrap" }}>7 grades</span>
-          </div>
+          </motion.div>
           <div className="grade-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.5rem", marginBottom: "3.5rem" }}>
             {VIRGIN_GRADES.map((g, i) => (
               <GradeCard key={g.code} grade={g} delay={i * 0.07} />
@@ -502,14 +546,20 @@ export default function PaperBoardPage() {
           </div>
 
           {/* ITC PSPD Recycled Boards */}
-          <div className="sr" style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2rem" }}>
+          <motion.div
+            style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2rem" }}
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.12 }}
+            transition={{ duration: 0.6, ease }}
+          >
             <span style={{
               fontFamily: F.body, fontSize: "0.68rem", fontWeight: 600,
               letterSpacing: "0.18em", textTransform: "uppercase", color: C.kraft, whiteSpace: "nowrap",
             }}>ITC PSPD — Recycled Boards</span>
             <div style={{ flex: 1, height: "1px", background: C.border }} />
             <span style={{ fontFamily: F.mono, fontSize: "0.65rem", color: C.taupe, whiteSpace: "nowrap" }}>3 grades</span>
-          </div>
+          </motion.div>
           <div className="grade-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.5rem", marginBottom: "3.5rem" }}>
             {RECYCLED_GRADES.map((g, i) => (
               <GradeCard key={g.code} grade={g} delay={i * 0.07} />
@@ -520,7 +570,14 @@ export default function PaperBoardPage() {
       </section>
 
       {/* CTA */}
-      <section className="section-dark" style={{ padding: "5rem clamp(1.5rem, 5vw, 4rem)", background: C.kraft }}>
+      <motion.section
+        className="section-dark"
+        style={{ padding: "5rem clamp(1.5rem, 5vw, 4rem)", background: "#243528" }}
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.12 }}
+        transition={{ duration: 0.6, ease }}
+      >
         <div className="kraft-cta-grid" style={{
           maxWidth: "1400px", margin: "0 auto",
           display: "grid", gridTemplateColumns: "1fr auto", gap: "2rem", alignItems: "center",
@@ -546,7 +603,7 @@ export default function PaperBoardPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", flexShrink: 0 }}>
             <Link href="/#contact" style={{
               display: "inline-flex", alignItems: "center", gap: "8px",
-              background: C.cream, color: C.kraft,
+              background: C.kraft, color: C.dark,
               fontFamily: F.body, fontSize: "0.8rem", fontWeight: 600,
               letterSpacing: "0.09em", textTransform: "uppercase",
               padding: "14px 28px", borderRadius: "1px", textDecoration: "none",
@@ -564,7 +621,7 @@ export default function PaperBoardPage() {
             </a>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Footer */}
       <footer style={{ background: C.dark, padding: "2rem clamp(1.5rem, 5vw, 4rem)" }}>

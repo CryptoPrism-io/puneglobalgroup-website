@@ -91,6 +91,7 @@ h2 {
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
+  padding-bottom: 0.08em;
   filter:
     drop-shadow(0 1px 0 rgba(255,255,255,0.10))
     drop-shadow(0 2px 6px rgba(28,26,23,0.22))

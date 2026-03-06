@@ -1,23 +1,27 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
+
+const ease = [0.22, 1, 0.36, 1] as const;
+const fadeUp = { initial: { opacity: 0, y: 25 }, animate: { opacity: 1, y: 0 } };
 
 const C = {
   cream: "#FAF7F2",
-  parchment: "#EDE5D8",
-  charcoal: "#1C1A17",
-  warm: "#7A736D",
-  taupe: "#7A736D",
-  saffron: "#1C1A17",
-  saffrondark: "#0D0B09",
-  dark: "#1C1A17",
-  deepWarm: "#1C1A17",
-  navy: "#1C1A17",
-  granite: "#7A736D",
+  parchment: "#14161C",
+  charcoal: "#FAF7F2",
+  warm: "rgba(250,247,242,0.60)",
+  taupe: "rgba(250,247,242,0.60)",
+  saffron: "#C8B89A",
+  saffrondark: "#0A0B0E",
+  dark: "#111216",
+  deepWarm: "#111216",
+  navy: "#0F1A2E",
+  granite: "rgba(250,247,242,0.60)",
   goldStart: "#FAF7F2",
   goldEnd: "#C8B89A",
-  border: "rgba(28,26,23,0.10)",
-  borderMid: "rgba(28,26,23,0.18)",
+  border: "rgba(250,247,242,0.08)",
+  borderMid: "rgba(250,247,242,0.14)",
 };
 const F = {
   display: "'Playfair Display', Georgia, serif",
@@ -28,7 +32,7 @@ const F = {
 
 const CSS = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: ${C.cream}; color: ${C.charcoal}; font-family: ${F.body}; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  body { background: ${C.dark}; color: ${C.charcoal}; font-family: ${F.body}; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
   body::before {
     content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9998; opacity: 0.018;
@@ -57,7 +61,7 @@ const CSS = `
   }
   .saffron-badge {
     display: inline-flex; align-items: center;
-    background: ${C.saffron}; color: #fff;
+    background: ${C.saffron}; color: ${C.dark};
     font-size: 0.68rem; font-weight: 600;
     letter-spacing: 0.13em; text-transform: uppercase;
     padding: 5px 14px; border-radius: 20px;
@@ -66,12 +70,12 @@ const CSS = `
   .card-heritage {
     background: ${C.parchment};
     border-bottom: 2px solid ${C.saffron};
-    box-shadow: 0 2px 12px rgba(28,26,23,0.07);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
     transition: transform 0.22s ease, box-shadow 0.22s ease;
   }
   .card-heritage:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 36px rgba(28,26,23,0.13);
+    box-shadow: 0 10px 36px rgba(0,0,0,0.4);
   }
 
   /* ── Category Cards ─────────────────────────────── */
@@ -80,9 +84,9 @@ const CSS = `
     flex: 1;
     min-height: 58vh;
   }
-  .cat-divider { width: 2px; background: ${C.cream}; flex-shrink: 0; z-index: 2; }
+  .cat-divider { width: 2px; background: ${C.border}; flex-shrink: 0; z-index: 2; }
 
-  /* PP card — charcoal */
+  /* PP card — navy */
   .cat-pp {
     position: relative; overflow: hidden; cursor: pointer; text-decoration: none;
     display: flex; flex-direction: column; justify-content: flex-end;
@@ -91,7 +95,7 @@ const CSS = `
   }
   .cat-pp:hover { flex: 1.18; }
 
-  /* Paper card — warm cream */
+  /* Paper card — dark parchment */
   .cat-paper {
     position: relative; overflow: hidden; cursor: pointer; text-decoration: none;
     display: flex; flex-direction: column; justify-content: flex-end;
@@ -115,14 +119,14 @@ const CSS = `
   .pp-overlay {
     position: absolute; inset: 0; pointer-events: none;
     background:
-      linear-gradient(to top,  rgba(28,26,23,0.96) 0%, rgba(28,26,23,0.72) 38%, rgba(28,26,23,0.22) 68%, rgba(28,26,23,0.04) 100%),
-      linear-gradient(to right, rgba(28,26,23,0.55) 0%, rgba(28,26,23,0.0) 55%);
+      linear-gradient(to top,  rgba(15,26,46,0.96) 0%, rgba(15,26,46,0.72) 38%, rgba(15,26,46,0.22) 68%, rgba(15,26,46,0.04) 100%),
+      linear-gradient(to right, rgba(15,26,46,0.55) 0%, rgba(15,26,46,0.0) 55%);
   }
   .paper-overlay {
     position: absolute; inset: 0; pointer-events: none;
     background:
-      linear-gradient(to top,  rgba(232,245,204,0.98) 0%, rgba(232,245,204,0.80) 36%, rgba(232,245,204,0.32) 62%, rgba(232,245,204,0.0) 100%),
-      linear-gradient(to right, rgba(232,245,204,0.65) 0%, rgba(232,245,204,0.0) 55%);
+      linear-gradient(to top,  rgba(20,22,28,0.96) 0%, rgba(20,22,28,0.78) 36%, rgba(20,22,28,0.30) 62%, rgba(20,22,28,0.0) 100%),
+      linear-gradient(to right, rgba(20,22,28,0.60) 0%, rgba(20,22,28,0.0) 55%);
   }
 
   /* Text content */
@@ -168,7 +172,7 @@ const CSS = `
   .cat-pp:hover .cat-cta,
   .cat-paper:hover .cat-cta { gap: 14px; }
 
-  /* PP text: white */
+  /* PP text: light on dark */
   .cat-pp .cat-index-num   { color: rgba(250,247,242,0.35); }
   .cat-pp .cat-index-rule  { background: rgba(250,247,242,0.12); }
   .cat-pp .cat-index-tag   { color: rgba(250,247,242,0.40); }
@@ -179,16 +183,16 @@ const CSS = `
   .cat-pp .cat-cta         { color: rgba(250,247,242,0.65); border-color: rgba(250,247,242,0.30); }
   .cat-pp:hover .cat-cta   { color: #FAF7F2; border-color: rgba(250,247,242,0.7); }
 
-  /* Paper text: dark charcoal */
-  .cat-paper .cat-index-num  { color: rgba(28,26,23,0.30); }
-  .cat-paper .cat-index-rule { background: rgba(28,26,23,0.12); }
-  .cat-paper .cat-index-tag  { color: rgba(28,26,23,0.38); }
-  .cat-paper .cat-eyebrow    { color: rgba(28,26,23,0.48); }
-  .cat-paper .cat-title      { color: ${C.charcoal}; }
-  .cat-paper .cat-stats      { border-color: rgba(28,26,23,0.14); }
-  .cat-paper .cat-stat       { color: rgba(28,26,23,0.50); border-color: rgba(28,26,23,0.14); }
-  .cat-paper .cat-cta        { color: rgba(28,26,23,0.60); border-color: rgba(28,26,23,0.28); }
-  .cat-paper:hover .cat-cta  { color: ${C.charcoal}; border-color: rgba(28,26,23,0.65); }
+  /* Paper text: light on dark */
+  .cat-paper .cat-index-num  { color: rgba(250,247,242,0.35); }
+  .cat-paper .cat-index-rule { background: rgba(250,247,242,0.12); }
+  .cat-paper .cat-index-tag  { color: rgba(250,247,242,0.40); }
+  .cat-paper .cat-eyebrow    { color: rgba(250,247,242,0.48); }
+  .cat-paper .cat-title      { color: #FAF7F2; }
+  .cat-paper .cat-stats      { border-color: rgba(250,247,242,0.14); }
+  .cat-paper .cat-stat       { color: rgba(250,247,242,0.50); border-color: rgba(250,247,242,0.14); }
+  .cat-paper .cat-cta        { color: rgba(250,247,242,0.65); border-color: rgba(250,247,242,0.30); }
+  .cat-paper:hover .cat-cta  { color: #FAF7F2; border-color: rgba(250,247,242,0.7); }
 
   /* Mobile */
   @media(max-width: 680px) {
@@ -205,7 +209,7 @@ const PAPER_COMPOSITE = "/hero-paper-family.jpg";
 
 export default function ProductsPage() {
   return (
-    <div style={{ background: C.cream, minHeight: "100vh", display: "flex", flexDirection: "column", paddingTop: "70px", paddingBottom: 0 }}>
+    <div className="section-dark" style={{ background: C.dark, minHeight: "100vh", display: "flex", flexDirection: "column", paddingTop: "70px", paddingBottom: 0 }}>
       <style>{CSS}</style>
 
       {/* Heritage hero band */}
@@ -214,36 +218,57 @@ export default function ProductsPage() {
         padding: "clamp(50px, 7vh, 80px) clamp(1.5rem, 5vw, 4rem) clamp(1.5rem, 3vh, 2.5rem)",
       }}>
         <div style={{ maxWidth: "800px" }}>
-          <span className="saffron-badge" style={{ marginBottom: "1.5rem", display: "inline-flex", background: "rgba(250,247,242,0.12)", color: C.cream, border: "1px solid rgba(250,247,242,0.20)" }}>
+          <motion.span
+            className="saffron-badge"
+            style={{ marginBottom: "1.5rem", display: "inline-flex", background: "rgba(250,247,242,0.12)", color: C.cream, border: "1px solid rgba(250,247,242,0.20)" }}
+            {...fadeUp}
+            transition={{ duration: 0.6, ease, delay: 0 }}
+          >
             Packaging Solutions
-          </span>
-          <h1 style={{
-            fontFamily: F.display, fontWeight: 900,
-            fontSize: "clamp(3rem, 6vw, 5rem)", color: C.cream,
-            lineHeight: 1.06, letterSpacing: "-0.02em",
-            marginTop: "1rem", marginBottom: "1.25rem",
-          }}>
+          </motion.span>
+          <motion.h1
+            style={{
+              fontFamily: F.display, fontWeight: 900,
+              fontSize: "clamp(3rem, 6vw, 5rem)", color: C.cream,
+              lineHeight: 1.06, letterSpacing: "-0.02em",
+              marginTop: "1rem", marginBottom: "1.25rem",
+            }}
+            {...fadeUp}
+            transition={{ duration: 0.6, ease, delay: 0.08 }}
+          >
             Our <span className="gold-text">Products</span>
-          </h1>
-          <p style={{
-            fontFamily: F.italic, fontStyle: "italic",
-            fontSize: "1.2rem", color: "rgba(250,247,242,0.65)",
-            lineHeight: 1.6,
-          }}>
+          </motion.h1>
+          <motion.p
+            style={{
+              fontFamily: F.italic, fontStyle: "italic",
+              fontSize: "1.2rem", color: "rgba(250,247,242,0.65)",
+              lineHeight: 1.6,
+            }}
+            {...fadeUp}
+            transition={{ duration: 0.6, ease, delay: 0.16 }}
+          >
             Precision-engineered packaging for automotive, pharma, FMCG and industrial sectors.
-          </p>
+          </motion.p>
         </div>
       </section>
 
       {/* Two category panels */}
       <div className="cat-row" style={{ borderBottom: `1px solid ${C.border}` }}>
 
-        {/* ── 01 PP Corrugated Systems — CHARCOAL ── */}
-        <Link href="/products/pp-corrugated" className="cat-pp section-dark">
+        {/* ── 01 PP Corrugated Systems — NAVY ── */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.97 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.12 }}
+          transition={{ duration: 0.6, ease, delay: 0 }}
+          whileHover={{ y: -5 }}
+          style={{ display: "flex", flex: 1 }}
+        >
+        <Link href="/products/pp-corrugated" className="cat-pp section-dark" style={{ flex: 1 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={PP_COMPOSITE} alt="" className="cat-bg-img" />
 
-          {/* Charcoal gradient overlay lifting text */}
+          {/* Dark gradient overlay lifting text */}
           <div className="pp-overlay" />
 
           {/* Text */}
@@ -270,15 +295,24 @@ export default function ProductsPage() {
             <span className="cat-cta">Explore PP Systems →</span>
           </div>
         </Link>
+        </motion.div>
 
         <div className="cat-divider" />
 
-        {/* ── 02 Paper & Board Grades — CREAM ── */}
-        <Link href="/products/paper-board" className="cat-paper">
+        {/* ── 02 Paper & Board Grades — DARK ── */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.97 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.12 }}
+          transition={{ duration: 0.6, ease, delay: 0.08 }}
+          whileHover={{ y: -5 }}
+          style={{ display: "flex", flex: 1 }}
+        >
+        <Link href="/products/paper-board" className="cat-paper section-dark" style={{ flex: 1 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={PAPER_COMPOSITE} alt="" className="cat-bg-img" />
 
-          {/* Cream gradient overlay */}
+          {/* Dark gradient overlay */}
           <div className="paper-overlay" />
 
           {/* Text */}
@@ -305,13 +339,14 @@ export default function ProductsPage() {
             <span className="cat-cta">Browse Board Grades →</span>
           </div>
         </Link>
+        </motion.div>
       </div>
 
       {/* Footer strip */}
       <div style={{
         padding: "1.4rem clamp(1.5rem, 5vw, 4rem)",
         display: "flex", alignItems: "center", justifyContent: "space-between",
-        flexWrap: "wrap", gap: "1rem", background: C.cream,
+        flexWrap: "wrap", gap: "1rem", background: C.parchment,
       }}>
         <span style={{ fontFamily: F.body, fontSize: "0.73rem", color: C.taupe, fontWeight: 300 }}>
           Custom specifications on all products · Lead time 7–14 working days
@@ -326,11 +361,18 @@ export default function ProductsPage() {
       </div>
 
       {/* Catalogue CTA band */}
-      <section className="section-dark" style={{
-        background: C.deepWarm,
-        padding: "clamp(3rem, 6vh, 5rem) clamp(1.5rem, 5vw, 4rem)",
-        textAlign: "center",
-      }}>
+      <motion.section
+        className="section-dark"
+        style={{
+          background: C.deepWarm,
+          padding: "clamp(3rem, 6vh, 5rem) clamp(1.5rem, 5vw, 4rem)",
+          textAlign: "center",
+        }}
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.12 }}
+        transition={{ duration: 0.6, ease }}
+      >
         <h2 style={{
           fontFamily: F.display, fontWeight: 700,
           fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
@@ -344,14 +386,14 @@ export default function ProductsPage() {
         </p>
         <a href="/#contact" style={{
           display: "inline-flex", alignItems: "center", gap: "8px",
-          background: C.saffron, color: "#fff",
+          background: C.saffron, color: C.dark,
           fontFamily: F.body, fontWeight: 600, fontSize: "0.82rem",
           letterSpacing: "0.09em", textTransform: "uppercase",
           padding: "13px 32px", borderRadius: "2px", textDecoration: "none",
         }}>
           Contact Us →
         </a>
-      </section>
+      </motion.section>
     </div>
   );
 }

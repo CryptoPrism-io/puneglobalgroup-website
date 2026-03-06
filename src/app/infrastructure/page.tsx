@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { machines, capabilities } from "@/lib/pgg-data";
 
 // ————————————————————————————————————————————
@@ -172,6 +173,19 @@ const GLOBAL_CSS = `
   }
 `;
 
+/* ── Framer Motion shared ────────────────────── */
+const ease = [0.22, 1, 0.36, 1] as const;
+const vp = { once: true, amount: 0.15 };
+
+const fadeUp = {
+  initial: { opacity: 0, y: 25 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: vp,
+  transition: { duration: 0.6, ease },
+};
+
+const springHover = { type: "spring" as const, stiffness: 300, damping: 25 };
+
 // ————————————————————————————————————————————
 // Scroll reveal
 // ————————————————————————————————————————————
@@ -211,7 +225,13 @@ function MachineCard({ machine, delay }: { machine: typeof machines[0]; delay: n
   const hasImgs = imgs.length > 0;
 
   return (
-    <div className={`machine-card card-heritage sr${hasImgs ? " has-carousel" : ""}`} style={{ animationDelay: `${delay}s` }}>
+    <motion.div
+      className={`machine-card card-heritage${hasImgs ? " has-carousel" : ""}`}
+      initial={{ opacity: 0, y: 25 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={vp}
+      transition={{ duration: 0.6, ease, delay }}
+      whileHover={{ y: -4, transition: springHover }}>
       {hasImgs && (
         <div className="mc-carousel">
           {imgs.map((src, i) => (
@@ -259,7 +279,7 @@ function MachineCard({ machine, delay }: { machine: typeof machines[0]; delay: n
           ))}
         </ul>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -269,7 +289,7 @@ function MachineCard({ machine, delay }: { machine: typeof machines[0]; delay: n
 function FacilityGallery() {
   return (
     <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2.5rem 5rem" }}>
-      <div style={{ textAlign: "center", marginBottom: "2.5rem" }} className="sr">
+      <motion.div {...fadeUp} style={{ textAlign: "center", marginBottom: "2.5rem" }}>
         <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: C.taupe, border: `1px solid ${C.border}`, borderRadius: "999px", padding: "0.3em 1em", margin: "0 0 1rem" }}>
           Inside the Facility
         </p>
@@ -278,14 +298,18 @@ function FacilityGallery() {
           10,000 sq ft.{" "}
           <em style={{ fontStyle: "italic", fontWeight: 500 }}>Purpose-Built.</em>
         </h2>
-      </div>
-      <div className="fac-grid sr">
-        {FACILITY_SHOTS.map(({ src, label }) => (
-          <div key={src} className="fac-item">
+      </motion.div>
+      <div className="fac-grid">
+        {FACILITY_SHOTS.map(({ src, label }, i) => (
+          <motion.div key={src} className="fac-item"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={vp}
+            transition={{ duration: 0.6, ease, delay: i * 0.08 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={src} alt={label} loading="lazy" />
             <div className="fac-caption">{label}</div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>
@@ -343,7 +367,7 @@ export default function InfrastructurePage() {
         {/* Gradient overlay — dark left, fades to transparent right */}
         <div style={{
           position: "absolute", inset: 0,
-          background: "linear-gradient(to right, rgba(20,18,16,0.94) 0%, rgba(20,18,16,0.88) 30%, rgba(20,18,16,0.45) 58%, rgba(20,18,16,0.05) 100%)",
+          background: "linear-gradient(to right, rgba(15,26,46,0.96) 0%, rgba(15,26,46,0.90) 30%, rgba(15,26,46,0.50) 58%, rgba(15,26,46,0.05) 100%)",
         }} />
 
         {/* Content */}
@@ -353,40 +377,53 @@ export default function InfrastructurePage() {
           padding: "clamp(100px,15vh,140px) clamp(1.5rem,5vw,4rem) clamp(4rem,8vh,7rem)",
         }}>
           <div style={{ maxWidth: "580px" }}>
-            <span className="saffron-badge" style={{ marginBottom: "1.5rem", display: "inline-flex" }}>
+            <motion.span className="saffron-badge"
+              style={{ marginBottom: "1.5rem", display: "inline-flex" }}
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease, delay: 0.1 }}>
               Manufacturing · Converting · Trading
-            </span>
+            </motion.span>
 
-            <div style={{ width: "48px", height: "2px", background: C.cream,
-              marginBottom: "1.5rem", transformOrigin: "left",
-              animation: "ruleGrow 0.6s ease 0.2s both" }} />
+            <motion.div style={{ width: "48px", height: "2px", background: C.cream,
+              marginBottom: "1.5rem", transformOrigin: "left" }}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.6, ease, delay: 0.2 }} />
 
-            <h1 style={{ fontFamily: F.display, fontSize: "clamp(3rem, 6vw, 5rem)",
+            <motion.h1 style={{ fontFamily: F.display, fontSize: "clamp(3rem, 6vw, 5rem)",
               fontWeight: 900, color: C.cream, margin: "0 0 1.5rem",
-              lineHeight: 1.08, animation: "fadeUp 0.8s ease 0.3s both" }}>
+              lineHeight: 1.08 }}
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease, delay: 0.3 }}>
               Built for Speed.{" "}<br />
               <em style={{ fontStyle: "italic", fontWeight: 500 }}><span className="gold-text">Infrastructure</span> for Precision.</em>
-            </h1>
+            </motion.h1>
 
-            <p style={{ fontFamily: F.body, fontSize: "1.05rem", color: "rgba(250,247,242,0.78)",
-              lineHeight: 1.75, margin: "0 0 2rem",
-              animation: "fadeUp 0.8s ease 0.45s both" }}>
+            <motion.p style={{ fontFamily: F.body, fontSize: "1.05rem", color: "rgba(250,247,242,0.78)",
+              lineHeight: 1.75, margin: "0 0 2rem" }}
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease, delay: 0.45 }}>
               Our dedicated manufacturing facility at BU Bhandari MIDC, Sanaswadi, Pune
               produces up to{" "}
               <strong style={{ color: C.cream, fontFamily: F.display, fontWeight: 700 }}>50,000 units per day</strong>
               {" "}— PP corrugated box fabrication, ITC board sheet cutting, screen printing,
               and pallet despatch for same-city delivery or pan-India dispatch.
-            </p>
+            </motion.p>
 
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem",
+            <motion.div style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem",
               background: "rgba(250,247,242,0.10)", border: "1px solid rgba(250,247,242,0.20)",
-              borderRadius: "3px", padding: "0.65rem 1.25rem",
-              animation: "fadeUp 0.7s ease 0.6s both" }}>
+              borderRadius: "3px", padding: "0.65rem 1.25rem" }}
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease, delay: 0.6 }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(250,247,242,0.7)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
               <span style={{ fontFamily: F.body, fontSize: "0.84rem", fontWeight: 500, color: "rgba(250,247,242,0.82)" }}>
                 108 BU Bhandari MIDC, Sanaswadi, Pune 412208
               </span>
-            </div>
+            </motion.div>
           </div>
         </div>
 
@@ -428,9 +465,13 @@ export default function InfrastructurePage() {
           }}
         >
           {capabilities.map((cap, i) => (
-            <div
+            <motion.div
               key={i}
               className="cap-item"
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={vp}
+              transition={{ duration: 0.6, ease, delay: i * 0.08 }}
               style={{
                 flex: "1 1 160px",
                 padding: "2rem 1.5rem",
@@ -485,14 +526,14 @@ export default function InfrastructurePage() {
               >
                 {cap.label}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
 
       {/* ——— Machines Section ——— */}
       <section className="infra-section" style={{ maxWidth: "1200px", margin: "0 auto", padding: "5rem 2.5rem" }}>
-        <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="sr">
+        <motion.div {...fadeUp} style={{ textAlign: "center", marginBottom: "3.5rem" }}>
           <p
             style={{
               display: "inline-block",
@@ -547,7 +588,7 @@ export default function InfrastructurePage() {
             From master reel to pallet-wrapped finished goods — every process step is
             handled in-house at our Sanaswadi facility, eliminating inter-vendor delays.
           </p>
-        </div>
+        </motion.div>
 
         <div
           style={{
@@ -557,7 +598,7 @@ export default function InfrastructurePage() {
           }}
         >
           {machines.map((machine, i) => (
-            <MachineCard key={machine.name} machine={machine} delay={i * 0.1} />
+            <MachineCard key={machine.name} machine={machine} delay={i * 0.08} />
           ))}
         </div>
       </section>
@@ -584,7 +625,11 @@ export default function InfrastructurePage() {
               alignItems: "start",
             }}
           >
-            <div className="sr">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={vp}
+              transition={{ duration: 0.6, ease }}>
               <p
                 style={{
                   fontFamily: F.italic,
@@ -638,9 +683,14 @@ export default function InfrastructurePage() {
                 is maintained for every lot, enabling our clients to use the FSC logo on their
                 finished packaging without separate certification.
               </p>
-            </div>
+            </motion.div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }} className="sr">
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={vp}
+              transition={{ duration: 0.6, ease, delay: 0.15 }}
+              style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               {[
                 {
                   badge: "ISO 9001",
@@ -715,14 +765,14 @@ export default function InfrastructurePage() {
                   </div>
                 </div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* ——— Locations ——— */}
       <section className="infra-section" style={{ maxWidth: "1100px", margin: "0 auto", padding: "5rem 2.5rem" }}>
-        <div style={{ textAlign: "center", marginBottom: "3rem" }} className="sr">
+        <motion.div {...fadeUp} style={{ textAlign: "center", marginBottom: "3rem" }}>
           <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: C.taupe, border: `1px solid ${C.border}`, borderRadius: "999px", padding: "0.3em 1em", margin: "0 0 1rem" }}>
             Our Locations
           </p>
@@ -740,12 +790,16 @@ export default function InfrastructurePage() {
             Two Addresses.{" "}
             <em style={{ fontStyle: "italic", fontWeight: 500 }}>One Point of Contact.</em>
           </h2>
-        </div>
+        </motion.div>
 
         <div className="infra-locations-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
           {/* Converting Facility — dark card */}
-          <div
-            className="sr"
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={vp}
+            transition={{ duration: 0.6, ease }}
+            whileHover={{ y: -4, transition: springHover }}
             style={{
               background: C.dark,
               borderRadius: "6px",
@@ -818,11 +872,15 @@ export default function InfrastructurePage() {
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Commercial Office — cream card */}
-          <div
-            className="sr"
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={vp}
+            transition={{ duration: 0.6, ease, delay: 0.1 }}
+            whileHover={{ y: -4, transition: springHover }}
             style={{
               background: C.parchment,
               borderRadius: "6px",
@@ -890,36 +948,50 @@ export default function InfrastructurePage() {
                 GSTIN: 27FYYPS5999K1ZO
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* ——— Processing Workflow ——— */}
       {/* ——— Products Bridge ——— */}
       <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 2.5rem 5rem" }}>
-        <div style={{ textAlign: "center", marginBottom: "2rem" }} className="sr">
+        <motion.div {...fadeUp} style={{ textAlign: "center", marginBottom: "2rem" }}>
           <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: C.taupe, border: `1px solid ${C.border}`, borderRadius: "999px", padding: "0.3em 1em", margin: "0 0 1rem" }}>See what we make with it</p>
           <div style={{ width: "28px", height: "2px", background: C.charcoal, margin: "0 auto" }} />
-        </div>
-        <div className="infra-bridge-grid sr" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
-          <Link href="/products/pp-corrugated" style={{ textDecoration: "none", background: C.dark, borderRadius: "6px", padding: "2.5rem", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px", position: "relative", overflow: "hidden" }}>
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "rgba(250,247,242,0.25)" }} />
-            <div>
-              <p style={{ fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(250,247,242,0.45)", margin: "0 0 0.75rem" }}>Manufactured</p>
-              <h3 style={{ fontFamily: F.display, fontSize: "clamp(1.4rem,2.5vw,1.9rem)", fontWeight: 700, color: C.cream, margin: "0 0 0.6rem", lineHeight: 1.15 }}>PP Corrugated Systems</h3>
-              <p style={{ fontFamily: F.body, fontSize: "0.83rem", color: "rgba(250,247,242,0.55)", margin: 0, lineHeight: 1.6 }}>Boxes, trays, bins, separators — custom to ±1 mm, made at this facility.</p>
-            </div>
-            <span style={{ fontFamily: F.body, fontSize: "0.74rem", fontWeight: 500, color: "rgba(250,247,242,0.75)", marginTop: "1.5rem", letterSpacing: "0.04em" }}>Explore PP Systems →</span>
-          </Link>
-          <Link href="/products/paper-board" style={{ textDecoration: "none", background: C.parchment, border: `1px solid ${C.borderMid}`, borderRadius: "6px", padding: "2.5rem", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px", position: "relative", overflow: "hidden" }}>
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: C.charcoal }} />
-            <div>
-              <p style={{ fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: C.taupe, margin: "0 0 0.75rem" }}>Traded &amp; Converted</p>
-              <h3 style={{ fontFamily: F.display, fontSize: "clamp(1.4rem,2.5vw,1.9rem)", fontWeight: 700, color: C.charcoal, margin: "0 0 0.6rem", lineHeight: 1.15 }}>Paper &amp; Board Grades</h3>
-              <p style={{ fontFamily: F.body, fontSize: "0.83rem", color: C.taupe, margin: 0, lineHeight: 1.6 }}>ITC FBB, Duplex, Kraft, TNPL — sheeted and rewound here to your spec.</p>
-            </div>
-            <span style={{ fontFamily: F.body, fontSize: "0.74rem", fontWeight: 500, color: C.charcoal, marginTop: "1.5rem", letterSpacing: "0.04em" }}>Browse Board Grades →</span>
-          </Link>
+        </motion.div>
+        <div className="infra-bridge-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={vp}
+            transition={{ duration: 0.6, ease }}
+            whileHover={{ y: -4, transition: springHover }}>
+            <Link href="/products/pp-corrugated" style={{ textDecoration: "none", background: C.dark, borderRadius: "6px", padding: "2.5rem", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px", position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "rgba(250,247,242,0.25)" }} />
+              <div>
+                <p style={{ fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(250,247,242,0.45)", margin: "0 0 0.75rem" }}>Manufactured</p>
+                <h3 style={{ fontFamily: F.display, fontSize: "clamp(1.4rem,2.5vw,1.9rem)", fontWeight: 700, color: C.cream, margin: "0 0 0.6rem", lineHeight: 1.15 }}>PP Corrugated Systems</h3>
+                <p style={{ fontFamily: F.body, fontSize: "0.83rem", color: "rgba(250,247,242,0.55)", margin: 0, lineHeight: 1.6 }}>Boxes, trays, bins, separators — custom to ±1 mm, made at this facility.</p>
+              </div>
+              <span style={{ fontFamily: F.body, fontSize: "0.74rem", fontWeight: 500, color: "rgba(250,247,242,0.75)", marginTop: "1.5rem", letterSpacing: "0.04em" }}>Explore PP Systems →</span>
+            </Link>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={vp}
+            transition={{ duration: 0.6, ease, delay: 0.12 }}
+            whileHover={{ y: -4, transition: springHover }}>
+            <Link href="/products/paper-board" style={{ textDecoration: "none", background: C.parchment, border: `1px solid ${C.borderMid}`, borderRadius: "6px", padding: "2.5rem", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px", position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: C.charcoal }} />
+              <div>
+                <p style={{ fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: C.taupe, margin: "0 0 0.75rem" }}>Traded &amp; Converted</p>
+                <h3 style={{ fontFamily: F.display, fontSize: "clamp(1.4rem,2.5vw,1.9rem)", fontWeight: 700, color: C.charcoal, margin: "0 0 0.6rem", lineHeight: 1.15 }}>Paper &amp; Board Grades</h3>
+                <p style={{ fontFamily: F.body, fontSize: "0.83rem", color: C.taupe, margin: 0, lineHeight: 1.6 }}>ITC FBB, Duplex, Kraft, TNPL — sheeted and rewound here to your spec.</p>
+              </div>
+              <span style={{ fontFamily: F.body, fontSize: "0.74rem", fontWeight: 500, color: C.charcoal, marginTop: "1.5rem", letterSpacing: "0.04em" }}>Browse Board Grades →</span>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
@@ -932,7 +1004,8 @@ export default function InfrastructurePage() {
           textAlign: "center",
         }}
       >
-        <div
+        <motion.div
+          {...fadeUp}
           style={{
             maxWidth: "600px",
             margin: "0 auto",
@@ -1018,14 +1091,14 @@ export default function InfrastructurePage() {
               +91 98233 83230
             </a>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* ——— Three Business Lines ——— */}
       <section style={{ background: C.navy, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
-          <div style={{ marginBottom: "4rem" }}>
+          <motion.div {...fadeUp} style={{ marginBottom: "4rem" }}>
             <span style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.68rem",
               letterSpacing: "0.16em", textTransform: "uppercase",
               color: C.taupe, display: "block", marginBottom: "1rem" }}>
@@ -1042,7 +1115,7 @@ export default function InfrastructurePage() {
               press-ready sheets. We trade ITC, TNPL and imported board grades.
               One facility. One partner. 30 years.
             </p>
-          </div>
+          </motion.div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)",
             gap: "1px", background: C.borderMid }}>
@@ -1095,9 +1168,14 @@ export default function InfrastructurePage() {
                 href: "/products",
                 cta: "Browse All Grades",
               },
-            ].map((line) => (
-              <div key={line.num} style={{ background: C.parchment, padding: "2.75rem",
-                display: "flex", flexDirection: "column" }}>
+            ].map((line, i) => (
+              <motion.div key={line.num}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={vp}
+                transition={{ duration: 0.6, ease, delay: i * 0.15 }}
+                style={{ background: C.parchment, padding: "2.75rem",
+                  display: "flex", flexDirection: "column" }}>
                 <div style={{ fontFamily: F.display, fontWeight: 700, fontSize: "3.5rem",
                   color: C.saffron, lineHeight: 1, marginBottom: "1.5rem" }}>
                   {line.num}
@@ -1142,7 +1220,7 @@ export default function InfrastructurePage() {
                   paddingBottom: "2px", alignSelf: "flex-start" }}>
                   {line.cta} →
                 </Link>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -1154,23 +1232,25 @@ export default function InfrastructurePage() {
         padding: "clamp(3rem, 6vh, 5rem) clamp(1.5rem, 5vw, 4rem)",
         textAlign: "center",
       }}>
-        <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(250,247,242,0.65)", border: "1px solid rgba(250,247,242,0.25)", borderRadius: "999px", padding: "0.3em 1em", marginBottom: "1rem" }}>
-          Ready to partner?
-        </p>
-        <h2 style={{ fontFamily: F.display, fontWeight: 700,
-          fontSize: "clamp(2rem, 4vw, 3rem)", color: C.cream,
-          marginBottom: "2rem", lineHeight: 1.1 }}>
-          Let&apos;s build something <span className="gold-text">together.</span>
-        </h2>
-        <a href="/#contact" style={{
-          display: "inline-flex", alignItems: "center", gap: "8px",
-          background: C.saffron, color: "#fff",
-          fontFamily: F.body, fontWeight: 600, fontSize: "0.82rem",
-          letterSpacing: "0.09em", textTransform: "uppercase",
-          padding: "13px 32px", borderRadius: "2px", textDecoration: "none",
-        }}>
-          Contact Us →
-        </a>
+        <motion.div {...fadeUp}>
+          <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(250,247,242,0.65)", border: "1px solid rgba(250,247,242,0.25)", borderRadius: "999px", padding: "0.3em 1em", marginBottom: "1rem" }}>
+            Ready to partner?
+          </p>
+          <h2 style={{ fontFamily: F.display, fontWeight: 700,
+            fontSize: "clamp(2rem, 4vw, 3rem)", color: C.cream,
+            marginBottom: "2rem", lineHeight: 1.1 }}>
+            Let&apos;s build something <span className="gold-text">together.</span>
+          </h2>
+          <a href="/#contact" style={{
+            display: "inline-flex", alignItems: "center", gap: "8px",
+            background: C.saffron, color: "#fff",
+            fontFamily: F.body, fontWeight: 600, fontSize: "0.82rem",
+            letterSpacing: "0.09em", textTransform: "uppercase",
+            padding: "13px 32px", borderRadius: "2px", textDecoration: "none",
+          }}>
+            Contact Us →
+          </a>
+        </motion.div>
       </section>
 
     </div>

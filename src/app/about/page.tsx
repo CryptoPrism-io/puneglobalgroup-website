@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { motion, useInView } from "framer-motion";
 import {
   IconArrowRight,
   IconCircleCheck,
@@ -41,10 +42,12 @@ const F = {
 
 const CSS = `
   *, *::before, *::after { box-sizing: border-box; }
-  body { margin: 0; background: ${C.forest}; }
+  body { margin: 0; background: ${C.forestDark}; }
 
   .sr { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .sr.visible { opacity: 1; transform: translateY(0); }
+
+  .watermark-1995:hover { opacity: 1 !important; }
 
   .eyebrow {
     display: inline-block;
@@ -109,7 +112,59 @@ const CSS = `
     border-bottom: 1px solid ${C.border};
   }
   .timeline-item:last-child { border-bottom: none; }
+
+  @keyframes watermarkFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-12px); }
+  }
 `;
+
+/* ── Framer Motion shared ────────────────────── */
+const ease = [0.22, 1, 0.36, 1] as const;
+const vp = { once: true, amount: 0.15 };
+
+const fadeUp = {
+  initial: { opacity: 0, y: 25 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: vp,
+  transition: { duration: 0.6, ease },
+};
+
+const slideLeft = {
+  initial: { opacity: 0, x: -30 },
+  whileInView: { opacity: 1, x: 0 },
+  viewport: vp,
+  transition: { duration: 0.6, ease },
+};
+
+const slideRight = {
+  initial: { opacity: 0, x: 30 },
+  whileInView: { opacity: 1, x: 0 },
+  viewport: vp,
+  transition: { duration: 0.6, ease },
+};
+
+/* ── CountUp on scroll ───────────────────────── */
+function CountUp({ value, suffix = "" }: { value: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    let start = 0;
+    const dur = 1200;
+    const step = (ts: number) => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / dur, 1);
+      setDisplay(Math.round(p * value));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [inView, value]);
+
+  return <span ref={ref}>{display}{suffix}</span>;
+}
 
 function useScrollReveal() {
   useEffect(() => {
@@ -184,48 +239,66 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="section-dark" style={{ paddingTop: "70px" }}>
+    <div className="section-dark" style={{ paddingTop: "0" }}>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
       {/* ── Page Header ─────────────────────────────── */}
       <section style={{
         background: C.forestDark,
-        padding: "80px clamp(1.5rem, 5vw, 4rem) 70px",
+        padding: "5.5rem clamp(1.5rem, 5vw, 4rem) 70px",
         position: "relative",
         overflow: "hidden",
       }}>
         {/* Background watermark */}
-        <div style={{
+        <div className="watermark-1995" style={{
           position: "absolute", right: "-2rem", top: "-1rem",
           fontFamily: F.display, fontWeight: 800,
           fontSize: "clamp(8rem, 20vw, 16rem)",
           color: C.cream, opacity: 0.025, lineHeight: 1,
-          userSelect: "none", pointerEvents: "none",
+          userSelect: "none", cursor: "default",
           letterSpacing: "-0.06em",
+          transition: "opacity 0.5s ease",
+          animation: "watermarkFloat 6s ease-in-out infinite",
         }}>
           1995
         </div>
         <div style={{ maxWidth: "1400px", margin: "0 auto", position: "relative" }}>
-          <span className="eyebrow" style={{ color: "rgba(250,247,242,0.4)" }}>
+          <motion.span
+            className="eyebrow"
+            style={{ color: "rgba(250,247,242,0.4)" }}
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease, delay: 0.1 }}
+          >
             About Us
-          </span>
-          <h1 style={{
-            fontFamily: F.display, fontWeight: 700,
-            fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-            color: C.cream, letterSpacing: "-0.03em",
-            lineHeight: 1.05, margin: "0 0 1.5rem", maxWidth: "700px",
-          }}>
+          </motion.span>
+          <motion.h1
+            style={{
+              fontFamily: F.display, fontWeight: 700,
+              fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+              color: C.cream, letterSpacing: "-0.03em",
+              lineHeight: 1.05, margin: "0 0 1.5rem", maxWidth: "700px",
+            }}
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease, delay: 0.25 }}
+          >
             Three Decades of<br />
             <em style={{ fontWeight: 400 }}>Packaging Excellence.</em>
-          </h1>
-          <p style={{
-            fontFamily: F.body, fontSize: "1.05rem",
-            color: "rgba(250,247,242,0.55)", lineHeight: 1.8,
-            maxWidth: "520px", margin: 0, fontWeight: 300,
-          }}>
+          </motion.h1>
+          <motion.p
+            style={{
+              fontFamily: F.body, fontSize: "1.05rem",
+              color: "rgba(250,247,242,0.55)", lineHeight: 1.8,
+              maxWidth: "520px", margin: 0, fontWeight: 300,
+            }}
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease, delay: 0.4 }}
+          >
             Paper trading, converting and PP packaging solutions from Pune since 1995.
             ITC, TNPL &amp; imported grades in ready stock.
-          </p>
+          </motion.p>
         </div>
       </section>
 
@@ -235,7 +308,7 @@ export default function AboutPage() {
           <div className="about-hero-grid">
 
             {/* Left — narrative */}
-            <div className="sr" style={{ position: "relative" }}>
+            <motion.div {...slideLeft} transition={{ duration: 0.6, ease }} style={{ position: "relative" }}>
               <div style={{
                 position: "absolute", top: "-10px", left: "-10px",
                 fontFamily: F.display, fontWeight: 700,
@@ -292,10 +365,10 @@ export default function AboutPage() {
               }}>
                 Our Converting Facility <IconArrowRight size={13} />
               </Link>
-            </div>
+            </motion.div>
 
             {/* Right — stats card */}
-            <div className="sr" data-delay="0.15" style={{ flex: "0 0 340px" }}>
+            <motion.div {...slideRight} transition={{ duration: 0.6, ease, delay: 0.15 }} style={{ flex: "0 0 340px" }}>
               <div style={{
                 background: C.forestMid,
                 border: `1px solid ${C.borderMid}`,
@@ -309,10 +382,10 @@ export default function AboutPage() {
                 </span>
 
                 {[
-                  { stat: "1995",  label: "Year Established" },
-                  { stat: "50+",   label: "Active Clients" },
-                  { stat: "40+",   label: "Paper Grades Stocked" },
-                  { stat: "50 T",  label: "Daily Processing Capacity" },
+                  { num: 1995, suffix: "",  label: "Year Established" },
+                  { num: 50,   suffix: "+", label: "Active Clients" },
+                  { num: 40,   suffix: "+", label: "Paper Grades Stocked" },
+                  { num: 50,   suffix: " T", label: "Daily Processing Capacity" },
                 ].map((item) => (
                   <div key={item.label} style={{
                     display: "flex", justifyContent: "space-between",
@@ -325,7 +398,7 @@ export default function AboutPage() {
                     </span>
                     <span style={{ fontFamily: F.display, fontWeight: 700,
                       fontSize: "1.4rem", color: C.saffron }}>
-                      {item.stat}
+                      <CountUp value={item.num} suffix={item.suffix} />
                     </span>
                   </div>
                 ))}
@@ -357,7 +430,7 @@ export default function AboutPage() {
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
           </div>
         </div>
@@ -366,14 +439,14 @@ export default function AboutPage() {
       {/* ── Leadership ───────────────────────────────── */}
       <section style={{ background: C.forestLight, padding: "80px clamp(1.5rem, 5vw, 4rem)" }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-          <div className="sr" style={{ marginBottom: "3rem" }}>
+          <motion.div {...fadeUp} style={{ marginBottom: "3rem" }}>
             <span className="eyebrow">Leadership</span>
             <h2 className="h2-dark" style={{ fontFamily: F.display, fontWeight: 700,
               fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", color: C.cream,
               letterSpacing: "-0.02em", lineHeight: 1.15, margin: "0 0 0.5rem" }}>
               The People Behind the Brand.
             </h2>
-          </div>
+          </motion.div>
           <div className="leadership-grid">
             {[
               {
@@ -389,7 +462,11 @@ export default function AboutPage() {
                 bio: "Joined the family business to lead PP packaging manufacturing and digital transformation. Expanded the group's capabilities into precision-engineered industrial packaging for automotive, pharma and electronics sectors.",
               },
             ].map((person, i) => (
-              <div key={person.name} className="sr" data-delay={`${0.1 * i}`}
+              <motion.div key={person.name}
+                initial={{ opacity: 0, y: 25, scale: 0.97 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={vp}
+                transition={{ duration: 0.6, ease, delay: i * 0.12 }}
                 style={{ background: C.forestMid, padding: "2.5rem 2.75rem" }}>
                 <div style={{
                   fontFamily: F.display, fontWeight: 700,
@@ -411,7 +488,7 @@ export default function AboutPage() {
                   color: C.textMuted, fontWeight: 300, margin: 0 }}>
                   {person.bio}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -421,7 +498,7 @@ export default function AboutPage() {
       <section id="industries" style={{ background: C.forest, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
-          <div className="sr" style={{ marginBottom: "3.5rem" }}>
+          <motion.div {...fadeUp} style={{ marginBottom: "3.5rem" }}>
             <span className="eyebrow">Who We Serve</span>
             <h2 className="h2-dark" style={{ fontFamily: F.display, fontWeight: 700,
               fontSize: "clamp(2rem, 4vw, 3.2rem)", color: C.cream,
@@ -433,7 +510,7 @@ export default function AboutPage() {
               From paper traders and corrugators to automotive OEMs and pharma brands —
               we supply the right grade, converted to the right size, on time.
             </p>
-          </div>
+          </motion.div>
 
           {/* Paper trade customers */}
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.25rem" }}>
@@ -446,7 +523,11 @@ export default function AboutPage() {
 
           <div className="industries-grid-3" style={{ marginBottom: "3rem" }}>
             {tradeCustomers.map((ind, i) => (
-              <div key={ind.name} className="ind-tile sr" data-delay={`${0.1 * i}`}
+              <motion.div key={ind.name} className="ind-tile"
+                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={vp}
+                transition={{ duration: 0.6, ease, delay: i * 0.1 }}
                 style={{ background: C.forestMid }}>
                 <div style={{ fontFamily: F.display, fontWeight: 700, fontSize: "2.8rem",
                   color: C.saffron, lineHeight: 1, marginBottom: "1.25rem", opacity: 0.4 }}>
@@ -465,7 +546,7 @@ export default function AboutPage() {
                   color: C.textMuted, fontWeight: 300, margin: 0 }}>
                   {ind.desc}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -480,7 +561,11 @@ export default function AboutPage() {
 
           <div className="industries-grid-4">
             {endIndustries.map((ind, i) => (
-              <div key={ind.name} className="ind-tile sr" data-delay={`${0.1 * i}`}
+              <motion.div key={ind.name} className="ind-tile"
+                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={vp}
+                transition={{ duration: 0.6, ease, delay: i * 0.1 }}
                 style={{ background: C.forestMid }}>
                 <div style={{ fontFamily: F.display, fontWeight: 700, fontSize: "2.8rem",
                   color: C.saffron, lineHeight: 1, marginBottom: "1.25rem", opacity: 0.4 }}>
@@ -499,7 +584,7 @@ export default function AboutPage() {
                   color: C.textMuted, fontWeight: 300, margin: 0 }}>
                   {ind.desc}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -508,14 +593,14 @@ export default function AboutPage() {
       {/* ── Locations ────────────────────────────────── */}
       <section style={{ background: C.forestLight, padding: "80px clamp(1.5rem, 5vw, 4rem)" }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-          <div className="sr" style={{ marginBottom: "3rem" }}>
+          <motion.div {...fadeUp} style={{ marginBottom: "3rem" }}>
             <span className="eyebrow">Where We Operate</span>
             <h2 className="h2-dark" style={{ fontFamily: F.display, fontWeight: 700,
               fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", color: C.cream,
               letterSpacing: "-0.02em", lineHeight: 1.15, margin: "0 0 0.5rem" }}>
               Two Locations. One Team.
             </h2>
-          </div>
+          </motion.div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             gap: "1px", background: C.border }}>
             {[
@@ -531,8 +616,13 @@ export default function AboutPage() {
                 address: "206 Gulmohar Center Point\nPune 411006, Maharashtra",
                 note: "Sales · Trading · Customer support",
               },
-            ].map((loc) => (
-              <div key={loc.label} className="sr" style={{ background: C.forestMid, padding: "2.5rem 2.75rem" }}>
+            ].map((loc, i) => (
+              <motion.div key={loc.label}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={vp}
+                transition={{ duration: 0.6, ease, delay: i * 0.1 }}
+                style={{ background: C.forestMid, padding: "2.5rem 2.75rem" }}>
                 <div style={{ width: "40px", height: "40px", background: "rgba(245,166,35,0.12)",
                   borderRadius: "1px", display: "flex", alignItems: "center",
                   justifyContent: "center", marginBottom: "1.25rem" }}>
@@ -552,9 +642,9 @@ export default function AboutPage() {
                   fontWeight: 300, margin: 0 }}>
                   {loc.note}
                 </p>
-              </div>
+              </motion.div>
             ))}
-            <div className="sr" data-delay="0.1" style={{ background: C.forestMid, padding: "2.5rem 2.75rem" }}>
+            <motion.div {...fadeUp} transition={{ duration: 0.6, ease, delay: 0.2 }} style={{ background: C.forestMid, padding: "2.5rem 2.75rem" }}>
               <div style={{ width: "40px", height: "40px", background: "rgba(245,166,35,0.12)",
                 borderRadius: "1px", display: "flex", alignItems: "center",
                 justifyContent: "center", marginBottom: "1.25rem" }}>
@@ -575,16 +665,18 @@ export default function AboutPage() {
                 color: C.textMuted, textDecoration: "none", fontWeight: 400 }}>
                 <IconMail size={15} color={C.saffron} /> yogesh.sahu@puneglobalgroup.in
               </a>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* ── CTA Bar ──────────────────────────────────── */}
       <section className="section-dark" style={{ background: C.forestDark, padding: "70px clamp(1.5rem, 5vw, 4rem)" }}>
-        <div style={{ maxWidth: "1400px", margin: "0 auto",
-          display: "flex", justifyContent: "space-between",
-          alignItems: "center", flexWrap: "wrap", gap: "2rem" }}>
+        <motion.div
+          {...fadeUp}
+          style={{ maxWidth: "1400px", margin: "0 auto",
+            display: "flex", justifyContent: "space-between",
+            alignItems: "center", flexWrap: "wrap", gap: "2rem" }}>
           <div>
             <h2 className="h2-dark" style={{ fontFamily: F.display, fontWeight: 700,
               fontSize: "clamp(1.5rem, 3vw, 2.2rem)",
@@ -605,7 +697,7 @@ export default function AboutPage() {
           }}>
             Get a Quote <IconArrowRight size={14} />
           </Link>
-        </div>
+        </motion.div>
       </section>
 
     </div>

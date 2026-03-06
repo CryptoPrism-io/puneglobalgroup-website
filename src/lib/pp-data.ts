@@ -404,8 +404,8 @@ export const ppFamilies: PPFamily[] = [
   // ─────────────────────────────────────────────
   {
     id: "bins",
-    name: "Industrial Bins",
-    descriptor: "Factory-floor scrap and parts management. Colour-coded, labelled, and built for forklift environments.",
+    name: "Industrial & Picking Bins",
+    descriptor: "Factory-floor scrap management to warehouse picking. Colour-coded, labelled, and built for forklift and shelving environments.",
     variants: [
       {
         code: "BIN-01",
@@ -473,17 +473,6 @@ export const ppFamilies: PPFamily[] = [
           "/products/pp/bins/bin-03-usecase.jpg",
         ],
       },
-    ],
-  },
-
-  // ─────────────────────────────────────────────
-  // 6. PICKING BINS
-  // ─────────────────────────────────────────────
-  {
-    id: "picking-bins",
-    name: "Picking Bins",
-    descriptor: "Warehouse inventory shelving and order fulfilment. Open-front, stackable, and kanban-ready.",
-    variants: [
       {
         code: "PKG-01",
         slug: "pp-picking-bin-open-front",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import {
   IconPhone,
@@ -40,6 +41,32 @@ const F = {
   italic:  "'Cormorant Garamond', Georgia, serif",
 };
 
+/* ─── Animation Tokens ───────────────────────────────────────────────────────── */
+const EASE = [0.22, 1, 0.36, 1] as const;
+const DUR = 0.6;
+const VP = { once: true, amount: 0.15 };
+const SPRING_HOVER = { type: "spring" as const, stiffness: 300, damping: 25 };
+
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: DUR, ease: EASE, delay },
+});
+
+const fadeUpScroll = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: VP,
+  transition: { duration: DUR, ease: EASE, delay },
+});
+
+const fadeRightScroll = (delay = 0) => ({
+  initial: { opacity: 0, x: 30 },
+  whileInView: { opacity: 1, x: 0 },
+  viewport: VP,
+  transition: { duration: DUR, ease: EASE, delay },
+});
+
 /* ─── Page-scoped CSS ────────────────────────────────────────────────────────── */
 const PAGE_CSS = `
 
@@ -51,6 +78,10 @@ const PAGE_CSS = `
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+  @keyframes gentleFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
 
   /* ── Hero header text ── */
   .cp-eyebrow {
@@ -61,7 +92,6 @@ const PAGE_CSS = `
     letter-spacing: 0.03em;
     display: block;
     margin-bottom: 14px;
-    animation: fadeUp 0.75s cubic-bezier(0.22,1,0.36,1) 0.1s both;
   }
   .cp-h1 {
     font-family: ${F.display};
@@ -71,7 +101,6 @@ const PAGE_CSS = `
     letter-spacing: -0.02em;
     line-height: 1.08;
     margin: 0 0 1.5rem;
-    animation: fadeUp 0.75s cubic-bezier(0.22,1,0.36,1) 0.22s both;
   }
   .cp-sub {
     font-family: ${F.body};
@@ -81,7 +110,6 @@ const PAGE_CSS = `
     line-height: 1.72;
     max-width: 54ch;
     margin: 0;
-    animation: fadeUp 0.75s cubic-bezier(0.22,1,0.36,1) 0.36s both;
   }
 
   /* ── Breadcrumb ── */
@@ -139,13 +167,18 @@ const PAGE_CSS = `
     font-size: 0.9rem;
     color: ${C.cream};
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.3s cubic-bezier(0.22,1,0.36,1),
+                box-shadow 0.3s cubic-bezier(0.22,1,0.36,1),
+                background 0.3s cubic-bezier(0.22,1,0.36,1),
+                transform 0.2s cubic-bezier(0.22,1,0.36,1);
     appearance: none;
     -webkit-appearance: none;
   }
   .cp-input:focus {
     border-color: ${C.gold};
-    box-shadow: 0 0 0 3px rgba(200,184,154,0.12);
+    box-shadow: 0 0 0 3px rgba(200,184,154,0.12), 0 2px 8px rgba(200,184,154,0.06);
+    background: rgba(250,247,242,0.06);
+    transform: translateY(-1px);
   }
   .cp-input::placeholder {
     color: ${C.textFaint};
@@ -180,13 +213,18 @@ const PAGE_CSS = `
     color: ${C.cream};
     outline: none;
     cursor: pointer;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.3s cubic-bezier(0.22,1,0.36,1),
+                box-shadow 0.3s cubic-bezier(0.22,1,0.36,1),
+                background 0.3s cubic-bezier(0.22,1,0.36,1),
+                transform 0.2s cubic-bezier(0.22,1,0.36,1);
     appearance: none;
     -webkit-appearance: none;
   }
   .cp-input-select:focus {
     border-color: ${C.gold};
-    box-shadow: 0 0 0 3px rgba(200,184,154,0.12);
+    box-shadow: 0 0 0 3px rgba(200,184,154,0.12), 0 2px 8px rgba(200,184,154,0.06);
+    background: rgba(250,247,242,0.06);
+    transform: translateY(-1px);
   }
   .cp-input-select option { background: ${C.navyMid}; color: ${C.cream}; }
   .cp-input-select option[value=""] { color: rgba(250,247,242,0.40); }
@@ -396,8 +434,10 @@ export default function ContactPage() {
           }}
         >
           {/* Radial saffron glow — top right */}
-          <div
+          <motion.div
             aria-hidden
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             style={{
               position:      "absolute",
               top:           0,
@@ -431,15 +471,15 @@ export default function ContactPage() {
               <span style={{ color: "rgba(250,247,242,0.55)" }}>Contact</span>
             </nav>
 
-            <span className="cp-eyebrow">Get in Touch</span>
-            <h1 className="cp-h1">Start Your Packaging Project.</h1>
-            <p className="cp-sub">
+            <motion.span className="cp-eyebrow" {...fadeUp(0.2)}>Get in Touch</motion.span>
+            <motion.h1 className="cp-h1" {...fadeUp(0.4)}>Start Your Packaging Project.</motion.h1>
+            <motion.p className="cp-sub" {...fadeUp(0.6)}>
               Send us your RFQ, request a sample, or begin supplier qualification.
               Whether you need returnable PP crates for an automotive line or
               board grades in bulk, our team responds within one business day.
-            </p>
+            </motion.p>
 
-            <div style={{ marginTop: "2.25rem", animation: "fadeUp 0.6s ease 0.48s both" }}>
+            <motion.div {...fadeUp(0.8)} style={{ marginTop: "2.25rem" }}>
               <Link
                 href="/"
                 style={{
@@ -461,7 +501,7 @@ export default function ContactPage() {
                 <IconArrowRight size={12} style={{ transform: "rotate(180deg)" }} />
                 Back to homepage
               </Link>
-            </div>
+            </motion.div>
 
           </div>
         </div>
@@ -477,10 +517,16 @@ export default function ContactPage() {
           <div className="cp-body-grid">
 
             {/* ── Left column: contact info + why us ─────────────────────────── */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+            <motion.div
+              {...fadeUpScroll(0)}
+              style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
+            >
 
               {/* Contact details card */}
-              <div
+              <motion.div
+                {...fadeUpScroll(0.1)}
+                whileHover={{ y: -3 }}
+                transition={{ ...SPRING_HOVER }}
                 style={{
                   background: C.cardBg,
                   border:     `1px solid ${C.borderMid}`,
@@ -528,9 +574,12 @@ export default function ContactPage() {
                 </div>
 
                 {/* Contact items */}
-                {contactItems.map((item) => (
-                  <div
+                {contactItems.map((item, index) => (
+                  <motion.div
                     key={item.label}
+                    {...fadeUpScroll(index * 0.1)}
+                    whileHover={{ y: -3 }}
+                    transition={{ ...SPRING_HOVER }}
                     style={{
                       display:      "flex",
                       gap:          "1rem",
@@ -596,7 +645,7 @@ export default function ContactPage() {
                         </div>
                       )}
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
 
                 {/* Hours */}
@@ -644,10 +693,13 @@ export default function ContactPage() {
                   </a>
                   .
                 </div>
-              </div>
+              </motion.div>
 
               {/* Why work with us card */}
-              <div
+              <motion.div
+                {...fadeUpScroll(0.2)}
+                whileHover={{ y: -3 }}
+                transition={{ ...SPRING_HOVER }}
                 style={{
                   background:  C.surfaceBg,
                   border:      `1px solid ${C.borderMid}`,
@@ -690,12 +742,12 @@ export default function ContactPage() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
 
-            </div>
+            </motion.div>
 
             {/* ── Right column: enquiry form ──────────────────────────────────── */}
-            <div>
+            <motion.div {...fadeRightScroll(0.15)}>
               <div
                 style={{
                   background:  C.cardBg,
@@ -949,7 +1001,7 @@ export default function ContactPage() {
                   </form>
                 )}
               </div>
-            </div>
+            </motion.div>
 
           </div>
         </div>

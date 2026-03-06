@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, FormEvent } from "react";
+import React, { useState, useEffect, useRef, FormEvent } from "react";
 import Link from "next/link";
 import {
   IconPhone, IconMail, IconMapPin, IconBuildingFactory2, IconPackage, IconStack2,
@@ -9,23 +9,24 @@ import {
 } from "@tabler/icons-react";
 import { productPath } from "@/lib/pgg-data";
 import emailjs from "@emailjs/browser";
+import { motion, useInView } from "framer-motion";
 
 
 /* ─── Tokens ─────────────────────────────────────────────────────────────────── */
 const C = {
   cream: "#FAF7F2",
-  parchment: "#352D25",
+  parchment: "#142236",
   charcoal: "#FAF7F2",
   warm: "rgba(250,247,242,0.60)",
   taupe: "rgba(250,247,242,0.60)",
-  saffron: "#C8B89A",
-  saffrondark: "#0D0B09",
-  dark: "#1C1A17",
-  deepWarm: "#2A2118",
+  saffron: "#5B9BD5",
+  saffrondark: "#0A1628",
+  dark: "#0B1422",
+  deepWarm: "#0F1A2E",
   navy: "#0F1A2E",
   granite: "rgba(250,247,242,0.60)",
-  goldStart: "#FAF7F2",
-  goldEnd: "#C8B89A",
+  goldStart: "#E0EEFF",
+  goldEnd: "#5B9BD5",
   border: "rgba(250,247,242,0.10)",
   borderMid: "rgba(250,247,242,0.18)",
 };
@@ -50,28 +51,10 @@ const GLOBAL_CSS = `
   }
 
   ::selection { background: ${C.saffron}; color: #fff; }
+  @keyframes typewriterBlink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
   a { text-decoration: none; color: inherit; }
 
-  /* ── Hero entrance animations ────────────────── */
-  @keyframes heroFadeUp {
-    from { opacity: 0; transform: translateY(22px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes ruleGrow {
-    from { transform: scaleX(0); transform-origin: left; }
-    to   { transform: scaleX(1); transform-origin: left; }
-  }
-  @keyframes statReveal {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes eyebrowSlide {
-    from { opacity: 0; letter-spacing: 0.18em; }
-    to   { opacity: 1; letter-spacing: 0.03em; }
-  }
-  .hero-eyebrow-anim {
-    animation: eyebrowSlide 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s both;
-  }
+  /* ── Hero entrance animations (handled by Framer Motion) ── */
 
   /* ── Client logo marquee ─────────────────────────────────── */
   @keyframes marquee {
@@ -92,12 +75,14 @@ const GLOBAL_CSS = `
   .logo-img {
     height: 36px; width: auto; max-width: 120px;
     object-fit: contain;
-    filter: grayscale(0.5);
-    opacity: 0.5;
-    transition: filter 0.35s, opacity 0.35s;
+    filter: brightness(1.8);
+    opacity: 1;
+    transition: filter 0.3s;
     display: block;
   }
-  .logo-img:hover { filter: grayscale(0.19); opacity: 0.81; }
+  .logo-img:hover { filter: brightness(2.5); }
+  .logo-img.logo-invert { filter: invert(1) brightness(1.2); }
+  .logo-img.logo-invert:hover { filter: invert(1) brightness(1.6); }
 
   /* ── Hero image carousel (Ken Burns crossfade) ──────────── */
   @keyframes heroSlide1 {
@@ -154,27 +139,8 @@ const GLOBAL_CSS = `
     .hero-eyebrow-text { white-space: normal !important; font-size: 0.95rem !important; }
     .hero-stat-box { padding: 0 0.75rem !important; }
   }
-  .hero-h1-line1 {
-    display: block;
-    animation: heroFadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.22s both;
-  }
-  .hero-h1-line2 {
-    display: block;
-    animation: heroFadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.4s both;
-  }
-  .hero-rule-anim {
-    animation: ruleGrow 0.85s cubic-bezier(0.22,1,0.36,1) 0.55s both;
-  }
-  .hero-body-anim {
-    animation: heroFadeUp 0.85s ease 0.65s both;
-  }
-  .hero-cta-anim {
-    animation: heroFadeUp 0.85s ease 0.8s both;
-  }
-  .hero-stat-anim-0 { animation: statReveal 0.7s ease 0.9s  both; }
-  .hero-stat-anim-1 { animation: statReveal 0.7s ease 1.0s  both; }
-  .hero-stat-anim-2 { animation: statReveal 0.7s ease 1.1s  both; }
-  .hero-stat-anim-3 { animation: statReveal 0.7s ease 1.2s  both; }
+  /* hero-h1, hero-rule, hero-body, hero-cta, hero-stat animations
+     now handled by Framer Motion — CSS keyframe rules removed */
 
   /* ── Section number pulse ────────────────────── */
   @keyframes numFade {
@@ -209,7 +175,7 @@ const GLOBAL_CSS = `
   /* Navbar */
   .navbar-scrolled {
     border-bottom: 1px solid ${C.borderMid} !important;
-    box-shadow: 0 1px 20px rgba(28,26,23,0.05) !important;
+    box-shadow: 0 1px 20px rgba(0,0,0,0.2) !important;
   }
 
   .nav-link {
@@ -261,42 +227,60 @@ const GLOBAL_CSS = `
   .card-heritage {
     background: ${C.parchment};
     border-bottom: 2px solid ${C.saffron};
-    box-shadow: 0 2px 12px rgba(28,26,23,0.07);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
     transition: transform 0.22s ease, box-shadow 0.22s ease;
   }
   .card-heritage:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 36px rgba(28,26,23,0.13);
+    box-shadow: 0 10px 36px rgba(0,0,0,0.3);
   }
   .saffron-badge {
     display: inline-flex; align-items: center; gap: 8px;
-    background: ${C.saffron}; color: #fff;
+    background: rgba(250,247,242,0.14); color: #FAF7F2;
     font-family: ${F.body}; font-size: 0.68rem; font-weight: 600;
     letter-spacing: 0.13em; text-transform: uppercase;
     padding: 5px 14px; border-radius: 20px;
+    border: 1px solid rgba(250,247,242,0.22);
   }
 
-  /* Buttons */
+  /* Buttons — 3D emboss */
   .btn-primary {
     display: inline-flex; align-items: center; gap: 8px;
-    background: ${C.navy}; color: ${C.cream};
-    font-family: ${F.body}; font-size: 0.8rem; font-weight: 500;
+    background: linear-gradient(180deg, #6BAAE0 0%, #3A7BBF 100%); color: #fff;
+    font-family: ${F.body}; font-size: 0.8rem; font-weight: 600;
     letter-spacing: 0.09em; text-transform: uppercase;
-    padding: 13px 28px; border: none; border-radius: 1px;
-    cursor: pointer; transition: background 0.2s, transform 0.15s;
+    padding: 13px 28px; border: none; border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 0 #2A5A8A, 0 4px 12px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.25);
+    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+    text-shadow: 0 1px 0 rgba(0,0,0,0.15);
   }
-  .btn-primary:hover { background: ${C.dark}; transform: translateY(-1px); }
-  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:hover {
+    background: linear-gradient(180deg, #8AC0F0 0%, #5B9BD5 100%);
+    box-shadow: 0 3px 0 #2A5A8A, 0 6px 20px rgba(91,155,213,0.4), inset 0 1px 0 rgba(255,255,255,0.35);
+    transform: translateY(-2px);
+  }
+  .btn-primary:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 #2A5A8A, 0 2px 6px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
 
   .btn-outline {
     display: inline-flex; align-items: center; gap: 8px;
-    background: transparent; color: ${C.charcoal};
+    background: rgba(250,247,242,0.06); color: ${C.charcoal};
     font-family: ${F.body}; font-size: 0.8rem; font-weight: 500;
     letter-spacing: 0.09em; text-transform: uppercase;
-    padding: 12px 28px; border: 1px solid ${C.borderMid}; border-radius: 1px;
-    cursor: pointer; transition: all 0.2s;
+    padding: 12px 28px; border: 1px solid ${C.borderMid}; border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.2), 0 4px 10px rgba(0,0,0,0.15), inset 0 1px 0 rgba(250,247,242,0.08);
+    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
   }
-  .btn-outline:hover { background: ${C.charcoal}; color: ${C.cream}; border-color: ${C.charcoal}; }
+  .btn-outline:hover {
+    background: rgba(250,247,242,0.14); color: ${C.cream}; border-color: rgba(250,247,242,0.35);
+    box-shadow: 0 3px 0 rgba(0,0,0,0.25), 0 6px 16px rgba(250,247,242,0.1), inset 0 1px 0 rgba(250,247,242,0.12);
+    transform: translateY(-2px);
+  }
+  .btn-outline:active { transform: translateY(1px); box-shadow: 0 1px 0 rgba(0,0,0,0.2), inset 0 1px 0 rgba(250,247,242,0.06); }
 
   /* Form */
   .form-input {
@@ -305,12 +289,12 @@ const GLOBAL_CSS = `
     padding: 11px 15px; font-family: ${F.body}; font-size: 0.9rem; color: ${C.charcoal};
     outline: none; transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .form-input:focus { border-color: ${C.saffron}; box-shadow: 0 0 0 3px rgba(241,143,1,0.15); }
+  .form-input:focus { border-color: ${C.saffron}; box-shadow: 0 0 0 3px rgba(91,155,213,0.2); }
   .form-input::placeholder { color: ${C.taupe}; opacity: 0.55; }
 
   /* Cards */
   .product-card { border-radius: 1px; transition: border-color 0.22s, box-shadow 0.22s; }
-  .product-card:hover { border-color: ${C.charcoal} !important; box-shadow: 0 6px 22px rgba(28,26,23,0.07); }
+  .product-card:hover { border-color: ${C.charcoal} !important; box-shadow: 0 6px 22px rgba(0,0,0,0.3); }
 
   .industry-tile {
     background: ${C.parchment};
@@ -452,15 +436,19 @@ const GLOBAL_CSS = `
   .hp-pp-overlay {
     position: absolute; inset: 0; pointer-events: none;
     background:
-      linear-gradient(to top, rgba(28,26,23,0.96) 0%, rgba(28,26,23,0.72) 38%, rgba(28,26,23,0.22) 68%, rgba(28,26,23,0.04) 100%),
-      linear-gradient(to right, rgba(28,26,23,0.55) 0%, rgba(28,26,23,0.0) 55%);
+      linear-gradient(to top, rgba(15,26,46,0.96) 0%, rgba(15,26,46,0.72) 38%, rgba(15,26,46,0.22) 68%, rgba(15,26,46,0.04) 100%),
+      linear-gradient(to right, rgba(15,26,46,0.55) 0%, rgba(15,26,46,0.0) 55%);
+    opacity: 1; transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
   }
+  .hp-cat-pp:hover .hp-pp-overlay { opacity: 0.82; }
   .hp-paper-overlay {
     position: absolute; inset: 0; pointer-events: none;
     background:
-      linear-gradient(to top, rgba(237,229,216,0.98) 0%, rgba(237,229,216,0.80) 36%, rgba(237,229,216,0.32) 62%, rgba(237,229,216,0.0) 100%),
-      linear-gradient(to right, rgba(237,229,216,0.65) 0%, rgba(237,229,216,0.0) 55%);
+      linear-gradient(to top, rgba(15,26,46,0.96) 0%, rgba(15,26,46,0.72) 36%, rgba(15,26,46,0.32) 62%, rgba(15,26,46,0.0) 100%),
+      linear-gradient(to right, rgba(15,26,46,0.55) 0%, rgba(15,26,46,0.0) 55%);
+    opacity: 1; transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
   }
+  .hp-cat-paper:hover .hp-paper-overlay { opacity: 0.82; }
   .hp-cat-content { position: relative; z-index: 2; padding: clamp(1.4rem, 4.5vw, 3.5rem); }
   .hp-cat-index-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
   .hp-cat-index-num { font-family: ${F.body}; font-size: 0.58rem; letter-spacing: 0.22em; }
@@ -475,8 +463,8 @@ const GLOBAL_CSS = `
   .hp-cat-stats { display: flex; gap: 0; flex-wrap: wrap; margin-bottom: 2rem; border-top: 1px solid; padding-top: 1rem; }
   .hp-cat-stat { font-family: ${F.body}; font-size: 0.62rem; letter-spacing: 0.06em; padding-right: 1.4rem; margin-right: 1.4rem; border-right: 1px solid; }
   .hp-cat-stat:last-child { border-right: none; padding-right: 0; margin-right: 0; }
-  .hp-cat-cta { display: inline-flex; align-items: center; gap: 8px; font-family: ${F.body}; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid; padding-bottom: 3px; transition: gap 0.25s; }
-  .hp-cat-pp:hover .hp-cat-cta, .hp-cat-paper:hover .hp-cat-cta { gap: 14px; }
+  .hp-cat-cta { display: inline-flex; align-items: center; gap: 8px; font-family: ${F.body}; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid; padding-bottom: 3px; transition: gap 0.25s, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+  .hp-cat-pp:hover .hp-cat-cta, .hp-cat-paper:hover .hp-cat-cta { gap: 14px; transform: translateX(4px); }
   .hp-cat-pp .hp-cat-index-num  { color: rgba(250,247,242,0.35); }
   .hp-cat-pp .hp-cat-index-rule { background: rgba(250,247,242,0.12); }
   .hp-cat-pp .hp-cat-index-tag  { color: rgba(250,247,242,0.40); }
@@ -486,15 +474,15 @@ const GLOBAL_CSS = `
   .hp-cat-pp .hp-cat-stat       { color: rgba(250,247,242,0.50); border-color: rgba(250,247,242,0.14); }
   .hp-cat-pp .hp-cat-cta        { color: rgba(250,247,242,0.65); border-color: rgba(250,247,242,0.30); }
   .hp-cat-pp:hover .hp-cat-cta  { color: #FAF7F2; border-color: rgba(250,247,242,0.7); }
-  .hp-cat-paper .hp-cat-index-num  { color: rgba(28,26,23,0.30); }
-  .hp-cat-paper .hp-cat-index-rule { background: rgba(28,26,23,0.12); }
-  .hp-cat-paper .hp-cat-index-tag  { color: rgba(28,26,23,0.38); }
-  .hp-cat-paper .hp-cat-eyebrow    { color: rgba(28,26,23,0.48); }
-  .hp-cat-paper .hp-cat-title      { color: ${C.charcoal}; }
-  .hp-cat-paper .hp-cat-stats      { border-color: rgba(28,26,23,0.14); }
-  .hp-cat-paper .hp-cat-stat       { color: rgba(28,26,23,0.50); border-color: rgba(28,26,23,0.14); }
-  .hp-cat-paper .hp-cat-cta        { color: rgba(28,26,23,0.60); border-color: rgba(28,26,23,0.28); }
-  .hp-cat-paper:hover .hp-cat-cta  { color: ${C.charcoal}; border-color: rgba(28,26,23,0.65); }
+  .hp-cat-paper .hp-cat-index-num  { color: rgba(250,247,242,0.35); }
+  .hp-cat-paper .hp-cat-index-rule { background: rgba(250,247,242,0.12); }
+  .hp-cat-paper .hp-cat-index-tag  { color: rgba(250,247,242,0.40); }
+  .hp-cat-paper .hp-cat-eyebrow    { color: rgba(250,247,242,0.48); }
+  .hp-cat-paper .hp-cat-title      { color: #FAF7F2; }
+  .hp-cat-paper .hp-cat-stats      { border-color: rgba(250,247,242,0.14); }
+  .hp-cat-paper .hp-cat-stat       { color: rgba(250,247,242,0.50); border-color: rgba(250,247,242,0.14); }
+  .hp-cat-paper .hp-cat-cta        { color: rgba(250,247,242,0.65); border-color: rgba(250,247,242,0.30); }
+  .hp-cat-paper:hover .hp-cat-cta  { color: #FAF7F2; border-color: rgba(250,247,242,0.7); }
   @media (max-width: 680px) {
     .hp-cat-row { flex-direction: column; min-height: auto; }
     .hp-cat-pp, .hp-cat-paper { flex: 1 !important; min-height: 75vw; }
@@ -535,6 +523,37 @@ function Logo({ inverted = false }: { inverted?: boolean }) {
         </span>
       </div>
     </div>
+  );
+}
+
+/* ─── Typewriter component ──────────────────────────────────────────────────── */
+function Typewriter({ text, delay = 0, speed = 45, style }: {
+  text: string; delay?: number; speed?: number; style?: React.CSSProperties;
+}) {
+  const [displayed, setDisplayed] = useState("");
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setStarted(true), delay * 1000);
+    return () => clearTimeout(t);
+  }, [delay]);
+
+  useEffect(() => {
+    if (!started) return;
+    if (displayed.length >= text.length) return;
+    const t = setTimeout(() => {
+      setDisplayed(text.slice(0, displayed.length + 1));
+    }, speed);
+    return () => clearTimeout(t);
+  }, [started, displayed, text, speed]);
+
+  return (
+    <span style={style}>
+      {displayed}
+      {displayed.length < text.length && started && (
+        <span style={{ opacity: 0.7, animation: "typewriterBlink 0.6s step-end infinite" }}>|</span>
+      )}
+    </span>
   );
 }
 
@@ -608,7 +627,81 @@ function AnimatedStat({ raw, label, note, animClass, numColor, labelColor, noteC
   );
 }
 
+/* ─── Floating Particles (ambient hero background) ───────────────────────────── */
+function FloatingParticles() {
+  const particles = [
+    { top: "8%",  left: "5%",  size: 4, opacity: 0.07, anim: "float-p1", dur: "11s", delay: "0s" },
+    { top: "15%", left: "22%", size: 3, opacity: 0.05, anim: "float-p2", dur: "13s", delay: "1.5s" },
+    { top: "30%", left: "12%", size: 5, opacity: 0.09, anim: "float-p3", dur: "9s",  delay: "0.8s" },
+    { top: "45%", left: "35%", size: 2, opacity: 0.06, anim: "float-p1", dur: "14s", delay: "3s" },
+    { top: "60%", left: "8%",  size: 6, opacity: 0.04, anim: "float-p4", dur: "12s", delay: "2s" },
+    { top: "72%", left: "28%", size: 3, opacity: 0.08, anim: "float-p2", dur: "10s", delay: "4s" },
+    { top: "20%", left: "55%", size: 4, opacity: 0.06, anim: "float-p3", dur: "11s", delay: "1s" },
+    { top: "10%", left: "75%", size: 5, opacity: 0.05, anim: "float-p1", dur: "13s", delay: "2.5s" },
+    { top: "40%", left: "68%", size: 3, opacity: 0.10, anim: "float-p4", dur: "9s",  delay: "0.3s" },
+    { top: "55%", left: "82%", size: 2, opacity: 0.07, anim: "float-p2", dur: "15s", delay: "3.5s" },
+    { top: "78%", left: "60%", size: 4, opacity: 0.05, anim: "float-p3", dur: "12s", delay: "1.8s" },
+    { top: "85%", left: "90%", size: 6, opacity: 0.04, anim: "float-p1", dur: "10s", delay: "4.5s" },
+    { top: "35%", left: "92%", size: 3, opacity: 0.08, anim: "float-p4", dur: "14s", delay: "0.5s" },
+    { top: "65%", left: "45%", size: 5, opacity: 0.06, anim: "float-p2", dur: "11s", delay: "2.8s" },
+  ];
+
+  return (
+    <div style={{
+      position: "absolute", inset: 0, overflow: "hidden",
+      pointerEvents: "none", zIndex: 0,
+    }}>
+      <style>{`
+        @keyframes float-p1 {
+          0%, 100% { transform: translateY(0) translateX(0); }
+          50% { transform: translateY(-25px) translateX(8px); }
+        }
+        @keyframes float-p2 {
+          0%, 100% { transform: translateY(0) translateX(0); }
+          50% { transform: translateY(-35px) translateX(-12px); }
+        }
+        @keyframes float-p3 {
+          0%, 100% { transform: translateY(0) translateX(0); }
+          50% { transform: translateY(-20px) translateX(15px); }
+        }
+        @keyframes float-p4 {
+          0%, 100% { transform: translateY(0) translateX(0); }
+          50% { transform: translateY(-40px) translateX(-6px); }
+        }
+      `}</style>
+
+      {/* Subtle radial glow behind headline area */}
+      <div style={{
+        position: "absolute",
+        top: "30%", left: "20%",
+        width: "600px", height: "600px",
+        transform: "translate(-50%, -50%)",
+        background: "radial-gradient(circle, rgba(91,155,213,0.07) 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
+
+      {particles.map((p, i) => (
+        <div key={i} style={{
+          position: "absolute",
+          top: p.top,
+          left: p.left,
+          width: `${p.size}px`,
+          height: `${p.size}px`,
+          borderRadius: "50%",
+          background: `rgba(91,155,213,${p.opacity})`,
+          boxShadow: `0 0 ${p.size * 2}px rgba(91,155,213,${p.opacity * 0.5})`,
+          animation: `${p.anim} ${p.dur} ease-in-out ${p.delay} infinite`,
+        }} />
+      ))}
+    </div>
+  );
+}
+
 /* ─── Hero ───────────────────────────────────────────────────────────────────── */
+
+/* Framer Motion shared easing */
+const heroEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 function Hero() {
   const scrollToContact = () =>
     document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
@@ -622,25 +715,30 @@ function Hero() {
 
   return (
     <section style={{
-      minHeight: "100vh", background: C.cream,
+      minHeight: "100vh", background: C.deepWarm,
       display: "flex", flexDirection: "column", justifyContent: "center",
-      padding: "clamp(50px, 8vh, 90px) clamp(1.5rem, 5vw, 4rem) clamp(48px, 8vh, 80px)",
+      padding: "clamp(80px, 10vh, 110px) clamp(1.5rem, 5vw, 4rem) clamp(48px, 8vh, 80px)",
       position: "relative", zIndex: 1,
     }}>
-      <div className="hero-grid" style={{ maxWidth: "1400px", margin: "0 auto", width: "100%" }}>
+      <FloatingParticles />
+      <div className="hero-grid" style={{ maxWidth: "1400px", margin: "0 auto", width: "100%", position: "relative", zIndex: 1 }}>
 
         {/* ── LEFT COLUMN ─────────────────────────────────────── */}
         <div>
-          {/* Eyebrow */}
-          <div className="hero-eyebrow-anim"
+          {/* Eyebrow — fade in + slide from left with slight blur */}
+          <motion.div
+            initial={{ opacity: 0, x: -30, filter: "blur(6px)" }}
+            animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.9, delay: 0.3, ease: heroEase }}
+            className="hero-eyebrow-anim"
             style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
-            <span className="saffron-badge">Est. 1995 · Pune, India</span>
-            <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: "rgba(28,26,23,0.12)" }} />
-            <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: "rgba(28,26,23,0.45)",
+            <span className="saffron-badge"><Typewriter text="Est. 1995 · Pune, India" delay={0.5} speed={40} /></span>
+            <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: "rgba(250,247,242,0.25)" }} />
+            <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: "rgba(250,247,242,0.75)",
               letterSpacing: "0.12em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
-              PP · Board · Paper
+              <Typewriter text="PP · Board · Paper" delay={1.5} speed={50} />
             </span>
-          </div>
+          </motion.div>
 
           {/* Headline */}
           <h1 className="hero-headline" style={{
@@ -649,37 +747,52 @@ function Hero() {
             lineHeight: 1.06, color: C.charcoal,
             letterSpacing: "-0.02em", marginBottom: "0",
           }}>
-            <span className="hero-h1-line1" style={{ display: "block" }}>
+            <motion.span
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.4, ease: heroEase }}
+              style={{ display: "block" }}>
               Industrial Packaging for{" "}
               <span style={{
-                background: "linear-gradient(135deg, #1C1A17 0%, #7A736D 100%)",
+                background: "linear-gradient(135deg, #E0EEFF 0%, #5B9BD5 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
               }}>Automotive, Pharma &amp; Electronics</span>
-            </span>
-            <span className="hero-h1-line2" style={{
-              display: "block", fontSize: "0.72em", fontWeight: 400,
-              letterSpacing: "0em", color: "rgba(28,26,23,0.55)", marginTop: "0.22em",
-            }}>
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.6, ease: heroEase }}
+              style={{
+                display: "block", fontSize: "0.72em", fontWeight: 400,
+                letterSpacing: "0em", color: "rgba(250,247,242,0.55)", marginTop: "0.22em",
+              }}>
               Precision PP Trays, Boxes &amp; Separators — Made in India Since 1995
-            </span>
+            </motion.span>
           </h1>
 
-          {/* Rule */}
-          <div className="hero-rule-anim"
-            style={{ height: "1px", background: "rgba(28,26,23,0.12)", margin: "2.75rem 0" }} />
+          {/* Rule — scale from left */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.85, delay: 0.7, ease: heroEase }}
+            style={{ height: "1px", background: "rgba(250,247,242,0.12)", margin: "2.75rem 0", transformOrigin: "left" }} />
 
-          {/* Body + CTAs */}
-          <div className="hero-body-anim">
+          {/* Body + CTAs — fade up together */}
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.85, delay: 0.8, ease: heroEase }}
+          >
             <p style={{ fontFamily: F.body, fontSize: "1.05rem", lineHeight: 1.85,
-              color: "rgba(28,26,23,0.65)", marginBottom: "2.5rem", fontWeight: 300 }}>
+              color: "rgba(250,247,242,0.65)", marginBottom: "2.5rem", fontWeight: 300 }}>
               Pune Global Group manufactures precision PP trays, separators, boxes
               and crates for automotive, pharma and electronics industries — export-ready,
               custom-spec, from our Pune facility. We also convert FBB sheets and
               trade paper &amp; board grades across 21 states.
             </p>
-            <div className="hero-cta-anim" style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
               <Link href="/products" className="btn-primary" style={{ textDecoration: "none" }}>
                 View Products <IconArrowRight size={14} />
               </Link>
@@ -687,7 +800,7 @@ function Hero() {
                 Get a Quote <IconChevronRight size={14} />
               </button>
             </div>
-          </div>
+          </motion.div>
 
         </div>
 
@@ -698,7 +811,7 @@ function Hero() {
             height: "clamp(400px, 60vh, 620px)",
             borderRadius: "10px",
             overflow: "hidden",
-            boxShadow: "0 8px 48px rgba(28,26,23,0.10)",
+            boxShadow: "0 8px 48px rgba(0,0,0,0.30)",
           }}>
           <div className="hero-carousel-wrap">
             {[
@@ -715,17 +828,21 @@ function Hero() {
             ))}
           </div>
 
-          {/* Certification badge overlay */}
-          <div style={{
-            position: "absolute", bottom: "1.5rem", right: "1.5rem",
-            background: "rgba(20,18,16,0.88)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
-            borderRadius: "8px",
-            padding: "0.8rem 1.1rem",
-            display: "flex", alignItems: "center", gap: "0.75rem",
-            border: "1px solid rgba(250,247,242,0.10)",
-          }}>
+          {/* Certification badge overlay — ISO badges gentle fade in */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.2, ease: heroEase }}
+            style={{
+              position: "absolute", bottom: "1.5rem", right: "1.5rem",
+              background: "rgba(20,18,16,0.88)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              borderRadius: "8px",
+              padding: "0.8rem 1.1rem",
+              display: "flex", alignItems: "center", gap: "0.75rem",
+              border: "1px solid rgba(250,247,242,0.10)",
+            }}>
             <IconCircleCheck size={18} style={{ color: C.saffron, flexShrink: 0 }} />
             <div>
               <div style={{
@@ -741,7 +858,7 @@ function Hero() {
                 ISO 9001:2015 · FSC · BRC
               </div>
             </div>
-          </div>
+          </motion.div>
           </div>
 
           {/* Spacer */}
@@ -751,17 +868,27 @@ function Hero() {
           <div style={{
             display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
             gap: 0, alignSelf: "end",
-            border: `1px solid rgba(28,26,23,0.08)`,
+            border: `1px solid rgba(250,247,242,0.08)`,
             borderRadius: "8px",
             overflow: "hidden",
           }}>
             {stats.map((stat, i) => (
-              <div key={stat.label} style={{
-                padding: "0.85rem 0.75rem",
-                textAlign: "center",
-                borderRight: i < stats.length - 1 ? "1px solid rgba(28,26,23,0.08)" : "none",
-                background: i % 2 === 0 ? "rgba(28,26,23,0.02)" : "transparent",
-              }}>
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 24, scale: 0.92 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 70,
+                  damping: 16,
+                  delay: 1.2 + i * 0.35,
+                }}
+                style={{
+                  padding: "0.85rem 0.75rem",
+                  textAlign: "center",
+                  borderRight: i < stats.length - 1 ? "1px solid rgba(250,247,242,0.08)" : "none",
+                  background: i % 2 === 0 ? "rgba(250,247,242,0.03)" : "transparent",
+                }}>
                 <div style={{
                   fontFamily: F.display, fontWeight: 700,
                   fontSize: "1.35rem", color: C.charcoal, lineHeight: 1,
@@ -778,11 +905,11 @@ function Hero() {
                 </div>
                 <div style={{
                   fontFamily: F.italic, fontStyle: "italic",
-                  fontSize: "0.72rem", color: "rgba(28,26,23,0.45)",
+                  fontSize: "0.72rem", color: "rgba(250,247,242,0.45)",
                 }}>
                   {stat.note}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -913,90 +1040,103 @@ function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
   }, [hovered, i, p.imgs.length]);
 
   return (
-    <Link href={productPath(p.slug)}
+    <motion.div
       className="sr product-card" data-delay={`${0.07 * i}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      whileHover={{ y: -6, transition: { type: "spring", stiffness: 300, damping: 25 } }}
       style={{
-        background: hovered ? "#fff" : C.cream,
-        border: "none",
-        overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
-        textDecoration: "none",
-        transition: "background 0.25s",
+        boxShadow: hovered ? "0 12px 40px rgba(0,0,0,0.3)" : "0 2px 8px rgba(0,0,0,0.1)",
+        transition: "box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
       }}>
-      {/* Image area — expands on hover */}
-      <div style={{
-        height: hovered ? "240px" : "160px",
-        overflow: "hidden",
-        position: "relative",
-        transition: "height 0.45s cubic-bezier(0.4, 0, 0.2, 1)",
-        flexShrink: 0,
-      }}>
-        {p.imgs.map((src, j) => (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img key={src} src={src} alt={`${p.name} — ${j + 1}`}
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-              opacity: j === idx ? 1 : 0,
-              transition: "opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1)",
-            }} />
-        ))}
-        {/* Image index dots — always visible, subtler when not hovered */}
-        <div style={{
-          position: "absolute",
-          bottom: "10px",
-          left: "50%",
-          transform: "translateX(-50%)",
+      <Link href={productPath(p.slug)}
+        style={{
+          background: hovered ? C.dark : C.parchment,
+          border: "none",
+          overflow: "hidden",
           display: "flex",
-          gap: "5px",
-          opacity: hovered ? 1 : 0.55,
-          transition: "opacity 0.3s",
-          zIndex: 2,
+          flexDirection: "column",
+          textDecoration: "none",
+          transition: "background 0.25s",
+          height: "100%",
         }}>
-          {p.imgs.map((_, j) => (
-            <span key={j} style={{
-              width: j === idx ? "16px" : "5px",
-              height: "5px",
-              borderRadius: "3px",
-              background: j === idx ? "#fff" : "rgba(255,255,255,0.5)",
-              transition: "width 0.35s ease, background 0.25s ease",
-              display: "block",
-            }} />
+        {/* Image area — expands on hover */}
+        <div style={{
+          height: hovered ? "240px" : "160px",
+          overflow: "hidden",
+          position: "relative",
+          transition: "height 0.45s cubic-bezier(0.4, 0, 0.2, 1)",
+          flexShrink: 0,
+        }}>
+          {p.imgs.map((src, j) => (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img key={src} src={src} alt={`${p.name} — ${j + 1}`}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+                opacity: j === idx ? 1 : 0,
+                transition: "opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1)",
+              }} />
           ))}
+          {/* Image index dots — always visible, subtler when not hovered */}
+          <div style={{
+            position: "absolute",
+            bottom: "10px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            gap: "5px",
+            opacity: hovered ? 1 : 0.55,
+            transition: "opacity 0.3s",
+            zIndex: 2,
+          }}>
+            {p.imgs.map((_, j) => (
+              <span key={j} style={{
+                width: j === idx ? "16px" : "5px",
+                height: "5px",
+                borderRadius: "3px",
+                background: j === idx ? "#fff" : "rgba(255,255,255,0.5)",
+                transition: "width 0.35s ease, background 0.25s ease",
+                display: "block",
+              }} />
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Text body */}
-      <div style={{ padding: "1.25rem 1.25rem 1.5rem",
-        display: "flex", flexDirection: "column", gap: "0.35rem", flex: 1 }}>
-        <span style={{ fontFamily: F.body, fontSize: "0.63rem", letterSpacing: "0.1em",
-          textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>
-          {p.spec}
-        </span>
-        <h4 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "0.98rem",
-          color: C.charcoal, lineHeight: 1.25 }}>
-          {p.name}
-        </h4>
-        <p style={{ fontFamily: F.body, fontSize: "0.79rem", color: C.taupe,
-          lineHeight: 1.7, flex: 1, fontWeight: 300 }}>
-          {p.desc}
-        </p>
-        <span style={{ marginTop: "0.75rem", display: "inline-flex", alignItems: "center",
-          gap: "4px", color: C.charcoal, fontFamily: F.body, fontWeight: 500,
-          fontSize: "0.74rem", letterSpacing: "0.04em",
-          borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "1px",
-          alignSelf: "flex-start" }}>
-          View Details <IconChevronRight size={11} />
-        </span>
-      </div>
-    </Link>
+        {/* Text body */}
+        <div style={{ padding: "1.25rem 1.25rem 1.5rem",
+          display: "flex", flexDirection: "column", gap: "0.35rem", flex: 1 }}>
+          <span style={{ fontFamily: F.body, fontSize: "0.63rem", letterSpacing: "0.1em",
+            textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>
+            {p.spec}
+          </span>
+          <h4 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "0.98rem",
+            color: C.charcoal, lineHeight: 1.25 }}>
+            {p.name}
+          </h4>
+          <p style={{ fontFamily: F.body, fontSize: "0.79rem", color: C.taupe,
+            lineHeight: 1.7, flex: 1, fontWeight: 300 }}>
+            {p.desc}
+          </p>
+          <span style={{ marginTop: "0.75rem", display: "inline-flex", alignItems: "center",
+            gap: "4px", color: C.charcoal, fontFamily: F.body, fontWeight: 500,
+            fontSize: "0.74rem", letterSpacing: "0.04em",
+            borderBottom: `1px solid ${C.borderMid}`, paddingBottom: "1px",
+            alignSelf: "flex-start" }}>
+            <motion.span animate={{ x: hovered ? 4 : 0 }} transition={{ type: "spring", stiffness: 300, damping: 25 }}>
+              View Details
+            </motion.span>
+            <motion.span animate={{ x: hovered ? 6 : 0, opacity: hovered ? 1 : 0.6 }} transition={{ type: "spring", stiffness: 300, damping: 25 }} style={{ display: "inline-flex" }}>
+              <IconChevronRight size={11} />
+            </motion.span>
+          </span>
+        </div>
+      </Link>
+    </motion.div>
   );
 }
 
@@ -1035,90 +1175,103 @@ function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
   }, [hovered, i, p.imgs.length]);
 
   return (
-    <Link href={productPath(p.slug)}
+    <motion.div
       className="sr product-card" data-delay={`${0.07 * i}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      whileHover={{ y: -6, transition: { type: "spring", stiffness: 300, damping: 25 } }}
       style={{
-        background: hovered ? "#fff" : C.cream,
-        border: `1px solid ${C.border}`,
-        overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
-        textDecoration: "none",
-        transition: "background 0.25s",
+        boxShadow: hovered ? "0 12px 40px rgba(0,0,0,0.3)" : "0 2px 8px rgba(0,0,0,0.1)",
+        transition: "box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
       }}>
-      {/* Image area — expands on hover */}
-      <div style={{
-        height: imgH,
-        overflow: "hidden",
-        position: "relative",
-        transition: "height 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-        flexShrink: 0,
-      }}>
-        {p.imgs.map((src, j) => (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img key={src} src={src} alt={`${p.name} — ${j + 1}`}
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-              opacity: j === idx ? 1 : 0,
-              transition: "opacity 0.55s ease",
-            }} />
-        ))}
-        {/* Dot indicators — visible on hover */}
-        <div style={{
-          position: "absolute",
-          bottom: "8px",
-          left: "50%",
-          transform: "translateX(-50%)",
+      <Link href={productPath(p.slug)}
+        style={{
+          background: hovered ? C.dark : C.parchment,
+          border: `1px solid ${C.border}`,
+          overflow: "hidden",
           display: "flex",
-          gap: "4px",
-          opacity: hovered ? 1 : 0,
-          transition: "opacity 0.3s",
-          zIndex: 2,
+          flexDirection: "column",
+          textDecoration: "none",
+          transition: "background 0.25s",
+          height: "100%",
         }}>
-          {p.imgs.map((_, j) => (
-            <span key={j} style={{
-              width: "5px",
-              height: "5px",
-              borderRadius: "50%",
-              background: j === idx ? "#fff" : "rgba(255,255,255,0.45)",
-              transition: "background 0.2s, transform 0.2s",
-              transform: j === idx ? "scale(1.3)" : "scale(1)",
-              display: "block",
-            }} />
+        {/* Image area — expands on hover */}
+        <div style={{
+          height: imgH,
+          overflow: "hidden",
+          position: "relative",
+          transition: "height 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+          flexShrink: 0,
+        }}>
+          {p.imgs.map((src, j) => (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img key={src} src={src} alt={`${p.name} — ${j + 1}`}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+                opacity: j === idx ? 1 : 0,
+                transition: "opacity 0.55s ease",
+              }} />
           ))}
+          {/* Dot indicators — visible on hover */}
+          <div style={{
+            position: "absolute",
+            bottom: "8px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            gap: "4px",
+            opacity: hovered ? 1 : 0,
+            transition: "opacity 0.3s",
+            zIndex: 2,
+          }}>
+            {p.imgs.map((_, j) => (
+              <span key={j} style={{
+                width: "5px",
+                height: "5px",
+                borderRadius: "50%",
+                background: j === idx ? "#fff" : "rgba(255,255,255,0.45)",
+                transition: "background 0.2s, transform 0.2s",
+                transform: j === idx ? "scale(1.3)" : "scale(1)",
+                display: "block",
+              }} />
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Text body */}
-      <div style={{ padding: "1.5rem 1.5rem 1.75rem",
-        display: "flex", flexDirection: "column", gap: "0.4rem", flex: 1 }}>
-        <span style={{ fontFamily: F.body, fontSize: "0.63rem", letterSpacing: "0.1em",
-          textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>
-          {p.spec}
-        </span>
-        <h4 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1.05rem",
-          color: C.charcoal, lineHeight: 1.25 }}>
-          {p.name}
-        </h4>
-        <p style={{ fontFamily: F.body, fontSize: "0.82rem", color: C.taupe,
-          lineHeight: 1.75, flex: 1, fontWeight: 300 }}>
-          {p.desc}
-        </p>
-        <span style={{ marginTop: "0.85rem", display: "inline-flex", alignItems: "center",
-          gap: "4px", color: C.charcoal, fontFamily: F.body, fontWeight: 500,
-          fontSize: "0.74rem", letterSpacing: "0.04em", borderBottom: `1px solid ${C.borderMid}`,
-          paddingBottom: "1px", alignSelf: "flex-start" }}>
-          View Details <IconChevronRight size={11} />
-        </span>
-      </div>
-    </Link>
+        {/* Text body */}
+        <div style={{ padding: "1.5rem 1.5rem 1.75rem",
+          display: "flex", flexDirection: "column", gap: "0.4rem", flex: 1 }}>
+          <span style={{ fontFamily: F.body, fontSize: "0.63rem", letterSpacing: "0.1em",
+            textTransform: "uppercase", color: C.saffron, fontWeight: 600 }}>
+            {p.spec}
+          </span>
+          <h4 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1.05rem",
+            color: C.charcoal, lineHeight: 1.25 }}>
+            {p.name}
+          </h4>
+          <p style={{ fontFamily: F.body, fontSize: "0.82rem", color: C.taupe,
+            lineHeight: 1.75, flex: 1, fontWeight: 300 }}>
+            {p.desc}
+          </p>
+          <span style={{ marginTop: "0.85rem", display: "inline-flex", alignItems: "center",
+            gap: "4px", color: C.charcoal, fontFamily: F.body, fontWeight: 500,
+            fontSize: "0.74rem", letterSpacing: "0.04em", borderBottom: `1px solid ${C.borderMid}`,
+            paddingBottom: "1px", alignSelf: "flex-start" }}>
+            <motion.span animate={{ x: hovered ? 4 : 0 }} transition={{ type: "spring", stiffness: 300, damping: 25 }}>
+              View Details
+            </motion.span>
+            <motion.span animate={{ x: hovered ? 6 : 0, opacity: hovered ? 1 : 0.6 }} transition={{ type: "spring", stiffness: 300, damping: 25 }} style={{ display: "inline-flex" }}>
+              <IconChevronRight size={11} />
+            </motion.span>
+          </span>
+        </div>
+      </Link>
+    </motion.div>
   );
 }
 
@@ -1203,36 +1356,55 @@ function ProductsSection() {
   ];
 
   return (
-    <section id="products" className="section-dark" style={{ background: C.deepWarm, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
+    <section id="products" className="section-dark" style={{ background: "#152844", padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
-        <div className="sr" style={{ marginBottom: "3.5rem" }}>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          style={{ marginBottom: "3.5rem" }}>
           <span style={{
             fontFamily: F.body, fontWeight: 500, fontSize: "0.72rem",
             letterSpacing: "0.18em", textTransform: "uppercase",
-            color: "rgba(250,247,242,0.45)", display: "block", marginBottom: "0.85rem",
+            color: "#5B9BD5", display: "block", marginBottom: "0.85rem",
           }}>
             Our Products
           </span>
-          <h2 style={{ fontFamily: F.italic, fontWeight: 400,
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+            style={{ fontFamily: F.italic, fontWeight: 400,
             fontSize: "clamp(2rem, 4vw, 3rem)", color: C.cream,
             letterSpacing: "-0.01em", lineHeight: 1.1, margin: "0 0 1.1rem",
             fontStyle: "italic" }}>
             From Raw Board to Finished Packaging
-          </h2>
-          <p style={{ fontFamily: F.body, fontSize: "1.0625rem", color: "rgba(250,247,242,0.60)",
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            style={{ fontFamily: F.body, fontSize: "1.0625rem", color: "rgba(250,247,242,0.60)",
             lineHeight: 1.75, maxWidth: "560px", margin: "0 0 2rem", fontWeight: 300 }}>
             Two manufacturing verticals — PP corrugated packaging and paper/board
             conversion — serving automotive, pharma, FMCG and export industries
             across 21 states.
-          </p>
+          </motion.p>
           <div style={{ width: "48px", height: "1px", background: "rgba(250,247,242,0.15)" }} />
-        </div>
+        </motion.div>
 
       </div>
 
       {/* Two-panel product showcase */}
-      <div className="hp-cat-row">
+      <motion.div className="hp-cat-row"
+        initial={{ opacity: 0, scale: 0.97 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}>
 
         {/* PP Corrugated */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1284,8 +1456,31 @@ function ProductsSection() {
           </div>
         </Link>
 
-      </div>
+      </motion.div>
     </section>
+  );
+}
+
+/* ─── Animated Infra Metric ─────────────────────────────────────────────────── */
+function InfraMetricValue({ value }: { value: string }) {
+  const ref = React.useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+  // Parse: extract leading number (int or float), prefix (like ±), and suffix (like " mm")
+  const match = value.match(/^([^\d]*?)([\d.]+)(.*)$/);
+  const prefix = match ? match[1] : "";
+  const num = match ? parseFloat(match[2]) : 0;
+  const suffix = match ? match[3] : value;
+  const isDecimal = match ? match[2].includes(".") : false;
+  const counted = useCountUp(isDecimal ? num * 10 : num, 1400, inView);
+  const display = match
+    ? `${prefix}${isDecimal ? (counted / 10).toFixed(1) : counted}${suffix}`
+    : value;
+
+  return (
+    <div ref={ref} style={{ fontFamily: F.display, fontWeight: 700,
+      fontSize: "1.5rem", color: C.charcoal, lineHeight: 1 }}>
+      {inView ? display : value}
+    </div>
   );
 }
 
@@ -1335,7 +1530,7 @@ function InfraCallout() {
       {/* Soft wash over images for text clarity */}
       <div aria-hidden style={{
         position: "absolute", inset: 0,
-        background: "linear-gradient(180deg, rgba(237,229,216,0.55) 0%, rgba(237,229,216,0.50) 50%, rgba(237,229,216,0.55) 100%)",
+        background: "linear-gradient(180deg, rgba(15,26,46,0.80) 0%, rgba(15,26,46,0.75) 50%, rgba(15,26,46,0.80) 100%)",
       }} />
 
       <div style={{ maxWidth: "1400px", margin: "0 auto", position: "relative", zIndex: 1 }}>
@@ -1345,7 +1540,12 @@ function InfraCallout() {
 
           {/* Left: header + metrics */}
           <div>
-            <div className="infra-callout-header" style={{
+            <motion.div className="infra-callout-header"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              style={{
               display: "flex", alignItems: "center", justifyContent: "space-between",
               gap: "2rem", flexWrap: "wrap", marginBottom: "2.5rem",
             }}>
@@ -1355,8 +1555,8 @@ function InfraCallout() {
                   fontFamily: F.body, fontStyle: "normal",
                   fontSize: "0.62rem", fontWeight: 600,
                   letterSpacing: "0.14em", textTransform: "uppercase",
-                  color: "rgba(28,26,23,0.50)",
-                  border: "1px solid rgba(28,26,23,0.15)",
+                  color: "#5B9BD5",
+                  border: "1px solid rgba(91,155,213,0.35)",
                   borderRadius: "999px", padding: "0.3em 1em",
                   marginBottom: "0.85rem",
                 }}>
@@ -1374,34 +1574,36 @@ function InfraCallout() {
                 fontFamily: F.body, fontSize: "0.98rem", fontWeight: 500,
                 color: C.charcoal, textDecoration: "none", letterSpacing: "0.07em",
                 textTransform: "uppercase",
-                border: `1px solid rgba(28,26,23,0.22)`,
+                border: `1px solid rgba(250,247,242,0.22)`,
                 padding: "11px 22px", borderRadius: "1px", whiteSpace: "nowrap",
                 transition: "border-color 0.2s, background 0.2s",
               }}
-              onMouseEnter={e => { const a = e.currentTarget; a.style.borderColor = "rgba(28,26,23,0.5)"; a.style.background = "rgba(28,26,23,0.05)"; }}
-              onMouseLeave={e => { const a = e.currentTarget; a.style.borderColor = "rgba(28,26,23,0.22)"; a.style.background = "transparent"; }}>
+              onMouseEnter={e => { const a = e.currentTarget; a.style.borderColor = "rgba(250,247,242,0.5)"; a.style.background = "rgba(250,247,242,0.05)"; }}
+              onMouseLeave={e => { const a = e.currentTarget; a.style.borderColor = "rgba(250,247,242,0.22)"; a.style.background = "transparent"; }}>
                 View Full Facility <IconArrowRight size={13} />
               </Link>
-            </div>
+            </motion.div>
 
             <div className="infra-metrics-grid" style={{
               display: "grid", gridTemplateColumns: "repeat(6, 1fr)",
-              gap: "1px", background: "rgba(28,26,23,0.10)",
+              gap: "1px", background: "rgba(250,247,242,0.10)",
             }}>
-              {metrics.map((m) => (
-                <div key={m.label} style={{
+              {metrics.map((m, index) => (
+                <motion.div key={m.label}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: index * 0.1 }}
+                  style={{
                   background: C.parchment, padding: "1.5rem 1rem", textAlign: "center",
                 }}>
-                  <div style={{ fontFamily: F.display, fontWeight: 700,
-                    fontSize: "1.5rem", color: C.charcoal, lineHeight: 1 }}>
-                    {m.value}
-                  </div>
+                  <InfraMetricValue value={m.value} />
                   <div style={{ fontFamily: F.body, fontSize: "0.66rem",
-                    color: "rgba(28,26,23,0.55)", letterSpacing: "0.07em",
+                    color: "rgba(250,247,242,0.55)", letterSpacing: "0.07em",
                     textTransform: "uppercase", marginTop: "6px" }}>
                     {m.label}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -1498,7 +1700,7 @@ function IndustriesSection() {
                 color: C.saffron, lineHeight: 1, marginBottom: "1.25rem", opacity: 0.4 }}>
                 {ind.num}
               </div>
-              <div style={{ width: "38px", height: "38px", background: "rgba(212,134,14,0.08)",
+              <div style={{ width: "38px", height: "38px", background: "rgba(200,184,154,0.10)",
                 borderRadius: "1px", display: "flex", alignItems: "center",
                 justifyContent: "center", marginBottom: "1rem" }}>
                 {ind.icon}
@@ -1532,7 +1734,7 @@ function IndustriesSection() {
                 color: C.saffron, lineHeight: 1, marginBottom: "1.25rem", opacity: 0.4 }}>
                 {ind.num}
               </div>
-              <div style={{ width: "38px", height: "38px", background: "rgba(212,134,14,0.08)",
+              <div style={{ width: "38px", height: "38px", background: "rgba(200,184,154,0.10)",
                 borderRadius: "1px", display: "flex", alignItems: "center",
                 justifyContent: "center", marginBottom: "1rem" }}>
                 {ind.icon}
@@ -1557,7 +1759,7 @@ function IndustriesSection() {
 function ClientLogoBand() {
   // Only include logo files that exist in public/clients/
   // Add berger-paints.png, tnpl.png, venkys.svg, wurth.svg, yojana.svg when ready
-  const clients = [
+  const clients: { name: string; file: string; invert?: boolean }[] = [
     { name: "Asian Paints",   file: "asian-paints.svg"   },
     { name: "ITC",            file: "itc.svg"            },
     { name: "Finolex",        file: "finolex.svg"        },
@@ -1565,7 +1767,7 @@ function ClientLogoBand() {
     { name: "General Motors", file: "general-motors.svg" },
     { name: "Mitsubishi",     file: "mitsubishi.svg"     },
     { name: "Suguna",         file: "suguna.jpg"         },
-    { name: "Sun Pharma",     file: "sun-pharma.svg"     },
+    { name: "Sun Pharma",     file: "sun-pharma.svg", invert: true },
     { name: "Cipla",          file: "cipla.svg"          },
     { name: "Dr. Reddy's",    file: "dr-reddys.svg"      },
     { name: "Alkem Labs",     file: "alkem.png"          },
@@ -1575,7 +1777,7 @@ function ClientLogoBand() {
 
   return (
     <section style={{
-      background: C.parchment,
+      background: "#152844",
       borderTop: `1px solid ${C.border}`,
       borderBottom: `1px solid ${C.border}`,
       padding: "3.5rem 0 3rem",
@@ -1586,7 +1788,7 @@ function ClientLogoBand() {
         textAlign: "center",
         fontFamily: F.body, fontSize: "0.58rem", fontWeight: 600,
         letterSpacing: "0.24em", textTransform: "uppercase",
-        color: C.taupe, opacity: 0.55, marginBottom: "2.25rem",
+        color: "#5B9BD5", opacity: 1, marginBottom: "2.25rem",
       }}>
         Our packaging is used by
       </p>
@@ -1596,13 +1798,13 @@ function ClientLogoBand() {
         {/* Left fade */}
         <div aria-hidden="true" style={{
           position: "absolute", left: 0, top: 0, bottom: 0, width: "140px",
-          background: `linear-gradient(to right, ${C.parchment} 30%, transparent)`,
+          background: `linear-gradient(to right, #152844 30%, transparent)`,
           zIndex: 2, pointerEvents: "none",
         }} />
         {/* Right fade */}
         <div aria-hidden="true" style={{
           position: "absolute", right: 0, top: 0, bottom: 0, width: "140px",
-          background: `linear-gradient(to left, ${C.parchment} 30%, transparent)`,
+          background: `linear-gradient(to left, #152844 30%, transparent)`,
           zIndex: 2, pointerEvents: "none",
         }} />
 
@@ -1613,7 +1815,7 @@ function ClientLogoBand() {
               <img
                 src={`/clients/${c.file}`}
                 alt={c.name}
-                className="logo-img"
+                className={`logo-img${c.invert ? " logo-invert" : ""}`}
                 onError={(e) => {
                   const el = e.currentTarget as HTMLImageElement;
                   el.style.display = "none";
@@ -1665,7 +1867,12 @@ function BlogTeaser() {
     <section className="section-dark" style={{ background: C.deepWarm, padding: "80px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
-        <div className="sr blog-teaser-header" style={{
+        <motion.div className="blog-teaser-header"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          style={{
           display: "flex", alignItems: "flex-end", justifyContent: "space-between",
           marginBottom: "3rem", flexWrap: "wrap", gap: "1rem",
         }}>
@@ -1688,21 +1895,26 @@ function BlogTeaser() {
           }}>
             All Articles <IconArrowRight size={12} />
           </Link>
-        </div>
+        </motion.div>
 
         <div className="blog-teaser-grid"
           style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
             gap: "1px", background: "rgba(250,247,242,0.08)" }}>
           {posts.map((post, i) => (
-            <Link key={post.slug} href={`/blog/${post.slug}`}
-              className="sr" data-delay={`${0.1 * i}`}
-              style={{
-                display: "block", textDecoration: "none",
-                background: C.deepWarm, padding: "2rem",
-                transition: "background 0.22s",
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(250,247,242,0.05)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = C.deepWarm; }}>
+            <motion.div key={post.slug}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: i * 0.1 }}>
+              <Link href={`/blog/${post.slug}`}
+                style={{
+                  display: "block", textDecoration: "none",
+                  background: C.deepWarm, padding: "2rem",
+                  transition: "background 0.22s",
+                  height: "100%",
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(250,247,242,0.05)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = C.deepWarm; }}>
               <div style={{ display: "flex", justifyContent: "space-between",
                 alignItems: "center", marginBottom: "1.25rem" }}>
                 <span style={{ fontFamily: F.body, fontSize: "0.64rem", fontWeight: 600,
@@ -1728,7 +1940,8 @@ function BlogTeaser() {
                 borderBottom: "1px solid rgba(250,247,242,0.22)", paddingBottom: "1px" }}>
                 Read Article <IconChevronRight size={11} />
               </span>
-            </Link>
+              </Link>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -1739,12 +1952,17 @@ function BlogTeaser() {
 /* ─── About Section ──────────────────────────────────────────────────────────── */
 function AboutSection() {
   return (
-    <section id="about" style={{ background: C.cream, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
+    <section id="about" style={{ background: C.deepWarm, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
         <div className="about-grid" style={{ display: "flex", gap: "5rem", alignItems: "flex-start" }}>
 
           {/* Left */}
-          <div className="sr-left" style={{ flex: "1 1 55%", position: "relative" }}>
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            style={{ flex: "1 1 55%", position: "relative" }}>
             <div style={{
               position: "absolute", top: "-10px", left: "-10px",
               fontFamily: F.display, fontWeight: 700,
@@ -1784,10 +2002,15 @@ function AboutSection() {
             <Link href="/infrastructure" className="btn-outline" style={{ textDecoration: "none" }}>
               Our Converting Facility <IconArrowRight size={13} />
             </Link>
-          </div>
+          </motion.div>
 
           {/* Right — key figures card */}
-          <div className="sr-right" style={{ flex: "0 0 340px" }}>
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+            style={{ flex: "0 0 340px" }}>
             <div style={{
               background: C.parchment, border: `1px solid ${C.borderMid}`,
               borderTop: `3px solid ${C.saffron}`, padding: "2.5rem",
@@ -1849,7 +2072,7 @@ function AboutSection() {
               ))}
 
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </div>
@@ -1898,14 +2121,14 @@ function ContactSection() {
   ];
 
   return (
-    <section id="contact" style={{ background: C.parchment, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
+    <section id="contact" style={{ background: C.deepWarm, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
         <div className="sr" style={{ marginBottom: "3.5rem" }}>
           <span className="eyebrow">Get In Touch</span>
           <h2 style={{ fontFamily: F.display, fontWeight: 700,
             fontSize: "clamp(2rem, 4vw, 3.2rem)", color: C.charcoal,
-            letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+            letterSpacing: "-0.02em", lineHeight: 1.25, paddingBottom: "0.1em" }}>
             Start Your Packaging Project.
           </h2>
         </div>
@@ -1914,10 +2137,10 @@ function ContactSection() {
 
           {/* Contact info */}
           <div className="sr-left" style={{ flex: "1 1 40%" }}>
-            <div style={{ background: C.cream, border: `1px solid ${C.borderMid}`, padding: "2.5rem" }}>
+            <div style={{ background: C.parchment, border: `1px solid ${C.borderMid}`, padding: "2.5rem" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px",
                 paddingBottom: "1.5rem", borderBottom: `2px solid ${C.saffron}`, marginBottom: "2rem" }}>
-                <TuriyaLogo size={34} />
+                <TuriyaLogo size={34} onDark />
                 <div>
                   <div style={{ fontFamily: F.body, fontWeight: 600, fontSize: "1.1rem",
                     color: C.charcoal, letterSpacing: "0.08em", textTransform: "uppercase" }}>
@@ -1934,7 +2157,7 @@ function ContactSection() {
                 <div key={item.label} style={{ display: "flex", gap: "1rem",
                   alignItems: "flex-start", marginBottom: "1.5rem" }}>
                   <div style={{ width: "34px", height: "34px",
-                    background: "rgba(212,134,14,0.08)", borderRadius: "1px",
+                    background: "rgba(200,184,154,0.10)", borderRadius: "1px",
                     display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     {item.icon}
                   </div>
@@ -1971,8 +2194,8 @@ function ContactSection() {
 
           {/* Form */}
           <div className="sr-right" style={{ flex: "1 1 55%" }}>
-            <div style={{ background: C.cream, border: `1px solid ${C.borderMid}`,
-              borderTop: `3px solid ${C.charcoal}`, padding: "2.5rem" }}>
+            <div style={{ background: C.parchment, border: `1px solid ${C.borderMid}`,
+              borderTop: `3px solid ${C.saffron}`, padding: "2.5rem" }}>
               <h3 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1.4rem",
                 color: C.charcoal, marginBottom: "0.5rem" }}>
                 Request a Quote
@@ -2054,7 +2277,7 @@ function ContactSection() {
                   <button type="submit" className="btn-primary"
                     disabled={status === "submitting"}
                     style={{
-                      background: C.saffron, color: "#fff",
+                      color: "#fff",
                       border: "none", padding: "13px 32px",
                       fontFamily: F.body, fontWeight: 600,
                       fontSize: "0.82rem", letterSpacing: "0.09em",
@@ -2091,7 +2314,7 @@ export default function HomePage() {
       <style dangerouslySetInnerHTML={{ __html: GLOBAL_CSS }} />
       <style dangerouslySetInnerHTML={{ __html:
         `@keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }` }} />
-      <main style={{ paddingTop: "70px" }}>
+      <main className="section-dark" style={{ paddingTop: "0" }}>
         <Hero />
         <ClientLogoBand />
         <ProductsSection />
