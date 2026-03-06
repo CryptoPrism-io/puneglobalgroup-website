@@ -18,14 +18,20 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 /* ─── Design Tokens ──────────────────────────────────────────────────────────── */
 const C = {
   cream:     "#FAF7F2",
-  parchment: "#F0EAE0",
-  charcoal:  "#1C1A17",
-  warm:      "#4A4540",
-  taupe:     "#7A736D",
+  navy:      "#0F1A2E",
+  navyLight: "#152238",
+  navyMid:   "#1A2A40",
+  navyDark:  "#0A1220",
+  steel:     "#5B9BD5",
+  gold:      "#C8B89A",
   saffron:   "#F5A623",
-  dark:      "#141210",
-  border:    "rgba(28,26,23,0.10)",
-  borderMid: "rgba(28,26,23,0.16)",
+  border:    "rgba(250,247,242,0.08)",
+  borderMid: "rgba(250,247,242,0.12)",
+  textMain:  "#FAF7F2",
+  textMuted: "rgba(250,247,242,0.60)",
+  textFaint: "rgba(250,247,242,0.40)",
+  cardBg:    "rgba(250,247,242,0.04)",
+  surfaceBg: "rgba(250,247,242,0.06)",
 };
 
 const F = {
@@ -125,25 +131,25 @@ const PAGE_CSS = `
   /* ── Form inputs ── */
   .cp-input {
     width: 100%;
-    background: #fff;
+    background: ${C.surfaceBg};
     border: 1px solid ${C.borderMid};
     border-radius: 1px;
     padding: 11px 15px;
     font-family: ${F.body};
     font-size: 0.9rem;
-    color: ${C.charcoal};
+    color: ${C.cream};
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
     appearance: none;
     -webkit-appearance: none;
   }
   .cp-input:focus {
-    border-color: ${C.charcoal};
-    box-shadow: 0 0 0 3px rgba(28,26,23,0.05);
+    border-color: ${C.gold};
+    box-shadow: 0 0 0 3px rgba(200,184,154,0.12);
   }
   .cp-input::placeholder {
-    color: ${C.taupe};
-    opacity: 0.55;
+    color: ${C.textFaint};
+    opacity: 1;
   }
 
   /* ── Select wrapper (custom arrow) ── */
@@ -160,18 +166,18 @@ const PAGE_CSS = `
     height: 0;
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
-    border-top: 5px solid ${C.taupe};
+    border-top: 5px solid ${C.textFaint};
     pointer-events: none;
   }
   .cp-input-select {
     width: 100%;
-    background: #fff;
+    background: ${C.surfaceBg};
     border: 1px solid ${C.borderMid};
     border-radius: 1px;
     padding: 11px 36px 11px 15px;
     font-family: ${F.body};
     font-size: 0.9rem;
-    color: ${C.charcoal};
+    color: ${C.cream};
     outline: none;
     cursor: pointer;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -179,18 +185,19 @@ const PAGE_CSS = `
     -webkit-appearance: none;
   }
   .cp-input-select:focus {
-    border-color: ${C.charcoal};
-    box-shadow: 0 0 0 3px rgba(28,26,23,0.05);
+    border-color: ${C.gold};
+    box-shadow: 0 0 0 3px rgba(200,184,154,0.12);
   }
-  .cp-input-select option[value=""] { color: rgba(122,115,109,0.55); }
+  .cp-input-select option { background: ${C.navyMid}; color: ${C.cream}; }
+  .cp-input-select option[value=""] { color: rgba(250,247,242,0.40); }
 
   /* ── Primary submit button ── */
   .cp-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: ${C.charcoal};
-    color: ${C.cream};
+    background: ${C.gold};
+    color: ${C.navyDark};
     font-family: ${F.body};
     font-size: 0.8rem;
     font-weight: 500;
@@ -203,7 +210,7 @@ const PAGE_CSS = `
     transition: background 0.2s, transform 0.15s;
   }
   .cp-btn:hover:not(:disabled) {
-    background: ${C.dark};
+    background: #D4C4A8;
     transform: translateY(-1px);
   }
   .cp-btn:active { transform: translateY(0); }
@@ -224,7 +231,7 @@ const PAGE_CSS = `
     gap: 10px;
     font-family: ${F.body};
     font-size: 0.88rem;
-    color: ${C.warm};
+    color: ${C.textMuted};
     line-height: 1.55;
     font-weight: 300;
   }
@@ -253,9 +260,9 @@ function LogoMark({ size = 36 }: { size?: number }) {
       aria-hidden="true"
       style={{ transform: "rotate(-45deg)", display: "block", flexShrink: 0 }}
     >
-      <path d="M6 6 L38 6 Q44 6, 44 12 L18 38 Q12 44, 6 44 L6 6 Z" fill={C.charcoal} />
+      <path d="M6 6 L38 6 Q44 6, 44 12 L18 38 Q12 44, 6 44 L6 6 Z" fill={C.cream} />
       <path d="M56 6 L94 6 L94 38 Q94 44, 88 44 L56 12 Q56 6, 62 6 Z" fill={C.saffron} />
-      <path d="M94 56 L94 94 L62 94 Q56 94, 56 88 L82 62 Q88 56, 94 56 Z" fill={C.charcoal} />
+      <path d="M94 56 L94 94 L62 94 Q56 94, 56 88 L82 62 Q88 56, 94 56 Z" fill={C.cream} />
       <circle cx="25" cy="75" r="12" fill={C.saffron} opacity="0.15" />
       <circle cx="25" cy="75" r="5" fill={C.saffron} />
       <circle cx="25" cy="75" r="1.8" fill="#8B1A1A" />
@@ -279,7 +286,7 @@ function FieldLabel({
         fontFamily:    F.body,
         fontWeight:    500,
         fontSize:      "0.72rem",
-        color:         C.warm,
+        color:         C.textMuted,
         letterSpacing: "0.06em",
         textTransform: "uppercase",
         marginBottom:  "6px",
@@ -377,12 +384,12 @@ export default function ContactPage() {
     <>
       <style dangerouslySetInnerHTML={{ __html: PAGE_CSS }} />
 
-      <main style={{ paddingTop: "70px", background: C.cream, minHeight: "100vh" }}>
+      <main className="section-dark" style={{ paddingTop: "70px", background: C.navy, minHeight: "100vh" }}>
 
         {/* ── Dark hero header ────────────────────────────────────────────────── */}
         <div
           style={{
-            background: C.charcoal,
+            background: C.navyDark,
             padding:    "clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem) clamp(3rem, 6vw, 4.5rem)",
             position:   "relative",
             overflow:   "hidden",
@@ -475,7 +482,7 @@ export default function ContactPage() {
               {/* Contact details card */}
               <div
                 style={{
-                  background: C.cream,
+                  background: C.cardBg,
                   border:     `1px solid ${C.borderMid}`,
                   padding:    "2.5rem",
                 }}
@@ -498,7 +505,7 @@ export default function ContactPage() {
                         fontFamily:    F.body,
                         fontWeight:    600,
                         fontSize:      "1rem",
-                        color:         C.charcoal,
+                        color:         C.cream,
                         letterSpacing: "0.07em",
                         textTransform: "uppercase",
                         lineHeight:    1.2,
@@ -511,7 +518,7 @@ export default function ContactPage() {
                         fontFamily: F.italic,
                         fontStyle:  "italic",
                         fontSize:   "0.94rem",
-                        color:      C.taupe,
+                        color:      C.textMuted,
                         marginTop:  "2px",
                       }}
                     >
@@ -535,7 +542,7 @@ export default function ContactPage() {
                       style={{
                         width:           "32px",
                         height:          "32px",
-                        background:      "rgba(245,166,35,0.08)",
+                        background:      "rgba(245,166,35,0.12)",
                         borderRadius:    "1px",
                         display:         "flex",
                         alignItems:      "center",
@@ -566,13 +573,13 @@ export default function ContactPage() {
                           style={{
                             fontFamily:     F.body,
                             fontSize:       "0.97rem",
-                            color:          C.charcoal,
+                            color:          C.cream,
                             lineHeight:     1.55,
                             textDecoration: "none",
                             transition:     "color 0.2s",
                           }}
                           onMouseEnter={e => (e.currentTarget.style.color = C.saffron)}
-                          onMouseLeave={e => (e.currentTarget.style.color = C.charcoal)}
+                          onMouseLeave={e => (e.currentTarget.style.color = C.cream)}
                         >
                           {item.value}
                         </a>
@@ -581,7 +588,7 @@ export default function ContactPage() {
                           style={{
                             fontFamily: F.body,
                             fontSize:   "0.97rem",
-                            color:      C.charcoal,
+                            color:      C.cream,
                             lineHeight: 1.55,
                           }}
                         >
@@ -601,7 +608,7 @@ export default function ContactPage() {
                     fontFamily: F.italic,
                     fontStyle:  "italic",
                     fontSize:   "1rem",
-                    color:      C.taupe,
+                    color:      C.textMuted,
                     lineHeight: 1.6,
                   }}
                 >
@@ -616,7 +623,7 @@ export default function ContactPage() {
                     borderTop:  `1px solid ${C.border}`,
                     fontFamily: F.body,
                     fontSize:   "0.82rem",
-                    color:      C.taupe,
+                    color:      C.textMuted,
                     lineHeight: 1.65,
                     fontWeight: 300,
                   }}
@@ -625,13 +632,13 @@ export default function ContactPage() {
                   <a
                     href="tel:+919823383230"
                     style={{
-                      color:          C.charcoal,
+                      color:          C.cream,
                       fontWeight:     500,
                       textDecoration: "none",
                       transition:     "color 0.2s",
                     }}
                     onMouseEnter={e => (e.currentTarget.style.color = C.saffron)}
-                    onMouseLeave={e => (e.currentTarget.style.color = C.charcoal)}
+                    onMouseLeave={e => (e.currentTarget.style.color = C.cream)}
                   >
                     +91 98233 83230
                   </a>
@@ -642,7 +649,7 @@ export default function ContactPage() {
               {/* Why work with us card */}
               <div
                 style={{
-                  background:  C.parchment,
+                  background:  C.surfaceBg,
                   border:      `1px solid ${C.borderMid}`,
                   padding:     "2rem 2.25rem",
                 }}
@@ -665,7 +672,7 @@ export default function ContactPage() {
                     fontFamily:    F.display,
                     fontWeight:    600,
                     fontSize:      "1.15rem",
-                    color:         C.charcoal,
+                    color:         C.cream,
                     lineHeight:    1.25,
                     marginBottom:  "1.5rem",
                     letterSpacing: "-0.01em",
@@ -691,18 +698,19 @@ export default function ContactPage() {
             <div>
               <div
                 style={{
-                  background:  C.cream,
+                  background:  C.cardBg,
                   border:      `1px solid ${C.borderMid}`,
-                  borderTop:   `3px solid ${C.charcoal}`,
+                  borderTop:   `3px solid ${C.gold}`,
                   padding:     "2.75rem",
                 }}
               >
                 <h2
+                  className="h2-dark"
                   style={{
                     fontFamily:    F.display,
                     fontWeight:    700,
                     fontSize:      "1.85rem",
-                    color:         C.charcoal,
+                    color:         C.cream,
                     marginBottom:  "0.45rem",
                     letterSpacing: "-0.01em",
                     lineHeight:    1.12,
@@ -714,7 +722,7 @@ export default function ContactPage() {
                   style={{
                     fontFamily:   F.body,
                     fontSize:     "1.02rem",
-                    color:        C.taupe,
+                    color:        C.textMuted,
                     lineHeight:   1.68,
                     marginBottom: "2.25rem",
                     fontWeight:   300,
@@ -729,22 +737,22 @@ export default function ContactPage() {
                   /* ── Success state ────────────────────────────────────────── */
                   <div
                     style={{
-                      background: "rgba(245,166,35,0.04)",
-                      border:     "1px solid rgba(245,166,35,0.22)",
+                      background: "rgba(200,184,154,0.06)",
+                      border:     "1px solid rgba(200,184,154,0.22)",
                       padding:    "2.75rem 2rem",
                       textAlign:  "center",
                     }}
                   >
                     <IconCircleCheck
                       size={42}
-                      style={{ color: C.saffron, marginBottom: "1rem" }}
+                      style={{ color: C.gold, marginBottom: "1rem" }}
                     />
                     <div
                       style={{
                         fontFamily:   F.display,
                         fontWeight:   600,
                         fontSize:     "1.25rem",
-                        color:        C.charcoal,
+                        color:        C.cream,
                         marginBottom: "0.5rem",
                       }}
                     >
@@ -754,7 +762,7 @@ export default function ContactPage() {
                       style={{
                         fontFamily: F.body,
                         fontSize:   "1.02rem",
-                        color:      C.taupe,
+                        color:      C.textMuted,
                         lineHeight: 1.68,
                         fontWeight: 300,
                       }}
@@ -879,12 +887,12 @@ export default function ContactPage() {
                     {status === "error" && (
                       <div
                         style={{
-                          background: "rgba(180,30,30,0.05)",
-                          border:     "1px solid rgba(180,30,30,0.18)",
+                          background: "rgba(220,60,60,0.10)",
+                          border:     "1px solid rgba(220,60,60,0.25)",
                           padding:    "11px 15px",
                           fontFamily: F.body,
                           fontSize:   "0.86rem",
-                          color:      "#B41E1E",
+                          color:      "#F08080",
                           lineHeight: 1.5,
                         }}
                       >
@@ -929,8 +937,8 @@ export default function ContactPage() {
                           fontFamily: F.italic,
                           fontStyle:  "italic",
                           fontSize:   "1rem",
-                          color:      C.taupe,
-                          opacity:    0.7,
+                          color:      C.textFaint,
+                          opacity:    1,
                           margin:     0,
                         }}
                       >

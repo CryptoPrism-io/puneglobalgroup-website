@@ -18,15 +18,19 @@ import {
 } from "@tabler/icons-react";
 
 const C = {
-  cream:     "#FAF7F2",
-  parchment: "#F0EAE0",
-  charcoal:  "#1C1A17",
-  warm:      "#4A4540",
-  taupe:     "#7A736D",
-  saffron:   "#F5A623",
-  dark:      "#141210",
-  border:    "rgba(28,26,23,0.1)",
-  borderMid: "rgba(28,26,23,0.18)",
+  cream:      "#FAF7F2",
+  forest:     "#1A2A1E",
+  forestLight:"#1F2D22",
+  forestMid:  "#243828",
+  forestDark: "#0F1A12",
+  gold:       "#C8B89A",
+  saffron:    "#F5A623",
+  border:     "rgba(250,247,242,0.08)",
+  borderMid:  "rgba(250,247,242,0.12)",
+  textMain:   "#FAF7F2",
+  textMuted:  "rgba(250,247,242,0.60)",
+  textFaint:  "rgba(250,247,242,0.40)",
+  cardBg:     "rgba(250,247,242,0.04)",
 };
 
 const F = {
@@ -37,7 +41,7 @@ const F = {
 
 const CSS = `
   *, *::before, *::after { box-sizing: border-box; }
-  body { margin: 0; background: ${C.cream}; }
+  body { margin: 0; background: ${C.forest}; }
 
   .sr { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .sr.visible { opacity: 1; transform: translateY(0); }
@@ -49,7 +53,7 @@ const CSS = `
     font-size: 0.68rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: ${C.taupe};
+    color: ${C.textFaint};
     margin-bottom: 1rem;
   }
 
@@ -67,7 +71,7 @@ const CSS = `
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1px;
-    background: ${C.borderMid};
+    background: ${C.border};
   }
   @media (max-width: 640px) {
     .leadership-grid { grid-template-columns: 1fr; }
@@ -77,13 +81,13 @@ const CSS = `
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1px;
-    background: ${C.borderMid};
+    background: ${C.border};
   }
   .industries-grid-4 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1px;
-    background: ${C.borderMid};
+    background: ${C.border};
   }
   @media (max-width: 860px) {
     .industries-grid-3 { grid-template-columns: 1fr 1fr; }
@@ -180,12 +184,12 @@ export default function AboutPage() {
   ];
 
   return (
-    <div style={{ paddingTop: "70px" }}>
+    <div className="section-dark" style={{ paddingTop: "70px" }}>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
       {/* ── Page Header ─────────────────────────────── */}
       <section style={{
-        background: C.charcoal,
+        background: C.forestDark,
         padding: "80px clamp(1.5rem, 5vw, 4rem) 70px",
         position: "relative",
         overflow: "hidden",
@@ -226,7 +230,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Our Story ────────────────────────────────── */}
-      <section style={{ background: C.cream, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
+      <section style={{ background: C.forest, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
           <div className="about-hero-grid">
 
@@ -236,16 +240,16 @@ export default function AboutPage() {
                 position: "absolute", top: "-10px", left: "-10px",
                 fontFamily: F.display, fontWeight: 700,
                 fontSize: "clamp(6rem, 14vw, 11rem)",
-                color: C.charcoal, opacity: 0.03, lineHeight: 1,
+                color: C.cream, opacity: 0.03, lineHeight: 1,
                 userSelect: "none", pointerEvents: "none", letterSpacing: "-0.04em",
               }}>
                 1995
               </div>
 
               <span className="eyebrow">Our Story</span>
-              <h2 style={{
+              <h2 className="h2-dark" style={{
                 fontFamily: F.display, fontWeight: 700,
-                fontSize: "clamp(1.9rem, 3.5vw, 3rem)", color: C.charcoal,
+                fontSize: "clamp(1.9rem, 3.5vw, 3rem)", color: C.cream,
                 letterSpacing: "-0.02em", lineHeight: 1.15, marginBottom: "2rem",
               }}>
                 Founded on Trust.<br />
@@ -253,9 +257,9 @@ export default function AboutPage() {
               </h2>
 
               <p style={{ fontFamily: F.body, fontSize: "1rem", lineHeight: 1.9,
-                color: C.taupe, marginBottom: "1.25rem", fontWeight: 300 }}>
+                color: C.textMuted, marginBottom: "1.25rem", fontWeight: 300 }}>
                 Pune Global Group was founded in 1995 by{" "}
-                <strong style={{ color: C.charcoal, fontWeight: 600 }}>Umesh Sahu</strong>{" "}
+                <strong style={{ color: C.cream, fontWeight: 600 }}>Umesh Sahu</strong>{" "}
                 (MBA, Pune University) as a paper and board trading firm in Pune, Maharashtra —
                 supplying corrugators, printers and box makers with ITC, TNPL and imported
                 grades. Over three decades, we built in-house converting capabilities:
@@ -264,16 +268,16 @@ export default function AboutPage() {
               </p>
 
               <p style={{ fontFamily: F.body, fontSize: "1rem", lineHeight: 1.9,
-                color: C.taupe, marginBottom: "1.25rem", fontWeight: 300 }}>
+                color: C.textMuted, marginBottom: "1.25rem", fontWeight: 300 }}>
                 His son{" "}
-                <strong style={{ color: C.charcoal, fontWeight: 600 }}>Yogesh Sahu</strong>{" "}
+                <strong style={{ color: C.cream, fontWeight: 600 }}>Yogesh Sahu</strong>{" "}
                 (MSc Fintech, Strathclyde Business School) joined the business, expanding our
                 capabilities into industrial PP packaging manufacturing — precision-engineered
                 returnable trays, boxes and crates for automotive, pharma and electronics OEMs.
               </p>
 
               <p style={{ fontFamily: F.body, fontSize: "1rem", lineHeight: 1.9,
-                color: C.taupe, marginBottom: "2.5rem", fontWeight: 300 }}>
+                color: C.textMuted, marginBottom: "2.5rem", fontWeight: 300 }}>
                 Today we operate from our converting facility at BU Bhandari MIDC, Sanaswadi,
                 and our commercial office in Gulmohar Center Point, Pune — serving
                 50+ clients across India.
@@ -282,9 +286,9 @@ export default function AboutPage() {
               <Link href="/infrastructure" style={{
                 display: "inline-flex", alignItems: "center", gap: "0.5rem",
                 fontFamily: F.body, fontWeight: 600, fontSize: "0.8rem",
-                color: C.charcoal, textDecoration: "none",
+                color: C.cream, textDecoration: "none",
                 letterSpacing: "0.05em", textTransform: "uppercase",
-                borderBottom: `1px solid ${C.charcoal}`, paddingBottom: "2px",
+                borderBottom: `1px solid ${C.gold}`, paddingBottom: "2px",
               }}>
                 Our Converting Facility <IconArrowRight size={13} />
               </Link>
@@ -293,13 +297,13 @@ export default function AboutPage() {
             {/* Right — stats card */}
             <div className="sr" data-delay="0.15" style={{ flex: "0 0 340px" }}>
               <div style={{
-                background: C.parchment,
+                background: C.forestMid,
                 border: `1px solid ${C.borderMid}`,
-                borderTop: `3px solid ${C.saffron}`,
+                borderTop: `3px solid ${C.gold}`,
                 padding: "2.5rem",
               }}>
                 <span style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.68rem",
-                  color: C.taupe, letterSpacing: "0.14em", textTransform: "uppercase",
+                  color: C.textFaint, letterSpacing: "0.14em", textTransform: "uppercase",
                   display: "block", marginBottom: "1.5rem" }}>
                   At a Glance
                 </span>
@@ -316,7 +320,7 @@ export default function AboutPage() {
                     borderBottom: `1px solid ${C.border}`,
                   }}>
                     <span style={{ fontFamily: F.body, fontWeight: 400,
-                      fontSize: "0.95rem", color: C.warm }}>
+                      fontSize: "0.95rem", color: C.textMuted }}>
                       {item.label}
                     </span>
                     <span style={{ fontFamily: F.display, fontWeight: 700,
@@ -327,7 +331,7 @@ export default function AboutPage() {
                 ))}
 
                 <span style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.68rem",
-                  color: C.taupe, letterSpacing: "0.14em", textTransform: "uppercase",
+                  color: C.textFaint, letterSpacing: "0.14em", textTransform: "uppercase",
                   display: "block", marginBottom: "1rem", marginTop: "2rem" }}>
                   Certifications
                 </span>
@@ -342,10 +346,10 @@ export default function AboutPage() {
                     <IconCircleCheck size={15} style={{ color: C.saffron, marginTop: "2px", flexShrink: 0 }} />
                     <div>
                       <div style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.95rem",
-                        color: C.charcoal, marginBottom: "2px" }}>
+                        color: C.cream, marginBottom: "2px" }}>
                         {v.label}
                       </div>
-                      <div style={{ fontFamily: F.body, fontSize: "0.82rem", color: C.taupe,
+                      <div style={{ fontFamily: F.body, fontSize: "0.82rem", color: C.textMuted,
                         lineHeight: 1.5, fontWeight: 300 }}>
                         {v.desc}
                       </div>
@@ -360,12 +364,12 @@ export default function AboutPage() {
       </section>
 
       {/* ── Leadership ───────────────────────────────── */}
-      <section style={{ background: C.parchment, padding: "80px clamp(1.5rem, 5vw, 4rem)" }}>
+      <section style={{ background: C.forestLight, padding: "80px clamp(1.5rem, 5vw, 4rem)" }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
           <div className="sr" style={{ marginBottom: "3rem" }}>
             <span className="eyebrow">Leadership</span>
-            <h2 style={{ fontFamily: F.display, fontWeight: 700,
-              fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", color: C.charcoal,
+            <h2 className="h2-dark" style={{ fontFamily: F.display, fontWeight: 700,
+              fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", color: C.cream,
               letterSpacing: "-0.02em", lineHeight: 1.15, margin: "0 0 0.5rem" }}>
               The People Behind the Brand.
             </h2>
@@ -386,11 +390,11 @@ export default function AboutPage() {
               },
             ].map((person, i) => (
               <div key={person.name} className="sr" data-delay={`${0.1 * i}`}
-                style={{ background: C.parchment, padding: "2.5rem 2.75rem" }}>
+                style={{ background: C.forestMid, padding: "2.5rem 2.75rem" }}>
                 <div style={{
                   fontFamily: F.display, fontWeight: 700,
                   fontSize: "clamp(1.4rem, 2.5vw, 2rem)",
-                  color: C.charcoal, marginBottom: "0.3rem",
+                  color: C.cream, marginBottom: "0.3rem",
                 }}>
                   {person.name}
                 </div>
@@ -399,12 +403,12 @@ export default function AboutPage() {
                   textTransform: "uppercase", marginBottom: "0.3rem" }}>
                   {person.role}
                 </div>
-                <div style={{ fontFamily: F.body, fontSize: "0.8rem", color: C.taupe,
+                <div style={{ fontFamily: F.body, fontSize: "0.8rem", color: C.textMuted,
                   fontStyle: "italic", marginBottom: "1.25rem" }}>
                   {person.qual}
                 </div>
                 <p style={{ fontFamily: F.body, fontSize: "0.92rem", lineHeight: 1.85,
-                  color: C.warm, fontWeight: 300, margin: 0 }}>
+                  color: C.textMuted, fontWeight: 300, margin: 0 }}>
                   {person.bio}
                 </p>
               </div>
@@ -414,17 +418,17 @@ export default function AboutPage() {
       </section>
 
       {/* ── Who We Serve ─────────────────────────────── */}
-      <section id="industries" style={{ background: C.cream, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
+      <section id="industries" style={{ background: C.forest, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
           <div className="sr" style={{ marginBottom: "3.5rem" }}>
             <span className="eyebrow">Who We Serve</span>
-            <h2 style={{ fontFamily: F.display, fontWeight: 700,
-              fontSize: "clamp(2rem, 4vw, 3.2rem)", color: C.charcoal,
+            <h2 className="h2-dark" style={{ fontFamily: F.display, fontWeight: 700,
+              fontSize: "clamp(2rem, 4vw, 3.2rem)", color: C.cream,
               letterSpacing: "-0.02em", lineHeight: 1.1, margin: "0 0 1rem" }}>
               Paper, Board &amp; PP Packaging.
             </h2>
-            <p style={{ fontFamily: F.body, fontSize: "1rem", color: C.taupe,
+            <p style={{ fontFamily: F.body, fontSize: "1rem", color: C.textMuted,
               lineHeight: 1.8, maxWidth: "500px", margin: 0, fontWeight: 300 }}>
               From paper traders and corrugators to automotive OEMs and pharma brands —
               we supply the right grade, converted to the right size, on time.
@@ -434,7 +438,7 @@ export default function AboutPage() {
           {/* Paper trade customers */}
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.25rem" }}>
             <span style={{ fontFamily: F.body, fontWeight: 500, fontSize: "0.68rem",
-              letterSpacing: "0.12em", textTransform: "uppercase", color: C.taupe }}>
+              letterSpacing: "0.12em", textTransform: "uppercase", color: C.textFaint }}>
               Paper Trade Customers
             </span>
             <div style={{ flex: 1, height: "1px", background: C.border }} />
@@ -443,22 +447,22 @@ export default function AboutPage() {
           <div className="industries-grid-3" style={{ marginBottom: "3rem" }}>
             {tradeCustomers.map((ind, i) => (
               <div key={ind.name} className="ind-tile sr" data-delay={`${0.1 * i}`}
-                style={{ background: C.cream }}>
+                style={{ background: C.forestMid }}>
                 <div style={{ fontFamily: F.display, fontWeight: 700, fontSize: "2.8rem",
                   color: C.saffron, lineHeight: 1, marginBottom: "1.25rem", opacity: 0.4 }}>
                   {ind.num}
                 </div>
-                <div style={{ width: "38px", height: "38px", background: "rgba(212,134,14,0.08)",
+                <div style={{ width: "38px", height: "38px", background: "rgba(245,166,35,0.12)",
                   borderRadius: "1px", display: "flex", alignItems: "center",
                   justifyContent: "center", marginBottom: "1rem" }}>
                   {ind.icon}
                 </div>
                 <h3 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1.05rem",
-                  color: C.charcoal, marginBottom: "0.6rem" }}>
+                  color: C.cream, marginBottom: "0.6rem" }}>
                   {ind.name}
                 </h3>
                 <p style={{ fontFamily: F.body, fontSize: "0.85rem", lineHeight: 1.75,
-                  color: C.taupe, fontWeight: 300, margin: 0 }}>
+                  color: C.textMuted, fontWeight: 300, margin: 0 }}>
                   {ind.desc}
                 </p>
               </div>
@@ -468,7 +472,7 @@ export default function AboutPage() {
           {/* End-use industries */}
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.25rem" }}>
             <span style={{ fontFamily: F.body, fontWeight: 500, fontSize: "0.68rem",
-              letterSpacing: "0.12em", textTransform: "uppercase", color: C.taupe }}>
+              letterSpacing: "0.12em", textTransform: "uppercase", color: C.textFaint }}>
               End-Use Industries
             </span>
             <div style={{ flex: 1, height: "1px", background: C.border }} />
@@ -477,22 +481,22 @@ export default function AboutPage() {
           <div className="industries-grid-4">
             {endIndustries.map((ind, i) => (
               <div key={ind.name} className="ind-tile sr" data-delay={`${0.1 * i}`}
-                style={{ background: C.cream }}>
+                style={{ background: C.forestMid }}>
                 <div style={{ fontFamily: F.display, fontWeight: 700, fontSize: "2.8rem",
                   color: C.saffron, lineHeight: 1, marginBottom: "1.25rem", opacity: 0.4 }}>
                   {ind.num}
                 </div>
-                <div style={{ width: "38px", height: "38px", background: "rgba(212,134,14,0.08)",
+                <div style={{ width: "38px", height: "38px", background: "rgba(245,166,35,0.12)",
                   borderRadius: "1px", display: "flex", alignItems: "center",
                   justifyContent: "center", marginBottom: "1rem" }}>
                   {ind.icon}
                 </div>
                 <h3 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1.05rem",
-                  color: C.charcoal, marginBottom: "0.6rem" }}>
+                  color: C.cream, marginBottom: "0.6rem" }}>
                   {ind.name}
                 </h3>
                 <p style={{ fontFamily: F.body, fontSize: "0.85rem", lineHeight: 1.75,
-                  color: C.taupe, fontWeight: 300, margin: 0 }}>
+                  color: C.textMuted, fontWeight: 300, margin: 0 }}>
                   {ind.desc}
                 </p>
               </div>
@@ -502,18 +506,18 @@ export default function AboutPage() {
       </section>
 
       {/* ── Locations ────────────────────────────────── */}
-      <section style={{ background: C.parchment, padding: "80px clamp(1.5rem, 5vw, 4rem)" }}>
+      <section style={{ background: C.forestLight, padding: "80px clamp(1.5rem, 5vw, 4rem)" }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
           <div className="sr" style={{ marginBottom: "3rem" }}>
             <span className="eyebrow">Where We Operate</span>
-            <h2 style={{ fontFamily: F.display, fontWeight: 700,
-              fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", color: C.charcoal,
+            <h2 className="h2-dark" style={{ fontFamily: F.display, fontWeight: 700,
+              fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", color: C.cream,
               letterSpacing: "-0.02em", lineHeight: 1.15, margin: "0 0 0.5rem" }}>
               Two Locations. One Team.
             </h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "1px", background: C.borderMid }}>
+            gap: "1px", background: C.border }}>
             {[
               {
                 icon: <IconBuildingFactory2 size={22} color={C.saffron} />,
@@ -528,47 +532,47 @@ export default function AboutPage() {
                 note: "Sales · Trading · Customer support",
               },
             ].map((loc) => (
-              <div key={loc.label} className="sr" style={{ background: C.parchment, padding: "2.5rem 2.75rem" }}>
-                <div style={{ width: "40px", height: "40px", background: "rgba(212,134,14,0.08)",
+              <div key={loc.label} className="sr" style={{ background: C.forestMid, padding: "2.5rem 2.75rem" }}>
+                <div style={{ width: "40px", height: "40px", background: "rgba(245,166,35,0.12)",
                   borderRadius: "1px", display: "flex", alignItems: "center",
                   justifyContent: "center", marginBottom: "1.25rem" }}>
                   {loc.icon}
                 </div>
                 <div style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.68rem",
                   letterSpacing: "0.14em", textTransform: "uppercase",
-                  color: C.taupe, marginBottom: "0.6rem" }}>
+                  color: C.textFaint, marginBottom: "0.6rem" }}>
                   {loc.label}
                 </div>
                 <p style={{ fontFamily: F.display, fontSize: "1.1rem", fontWeight: 600,
-                  color: C.charcoal, lineHeight: 1.6, whiteSpace: "pre-line",
+                  color: C.cream, lineHeight: 1.6, whiteSpace: "pre-line",
                   margin: "0 0 0.75rem" }}>
                   {loc.address}
                 </p>
-                <p style={{ fontFamily: F.body, fontSize: "0.82rem", color: C.taupe,
+                <p style={{ fontFamily: F.body, fontSize: "0.82rem", color: C.textMuted,
                   fontWeight: 300, margin: 0 }}>
                   {loc.note}
                 </p>
               </div>
             ))}
-            <div className="sr" data-delay="0.1" style={{ background: C.parchment, padding: "2.5rem 2.75rem" }}>
-              <div style={{ width: "40px", height: "40px", background: "rgba(212,134,14,0.08)",
+            <div className="sr" data-delay="0.1" style={{ background: C.forestMid, padding: "2.5rem 2.75rem" }}>
+              <div style={{ width: "40px", height: "40px", background: "rgba(245,166,35,0.12)",
                 borderRadius: "1px", display: "flex", alignItems: "center",
                 justifyContent: "center", marginBottom: "1.25rem" }}>
                 <IconPhone size={22} color={C.saffron} />
               </div>
               <div style={{ fontFamily: F.body, fontWeight: 600, fontSize: "0.68rem",
                 letterSpacing: "0.14em", textTransform: "uppercase",
-                color: C.taupe, marginBottom: "1rem" }}>
+                color: C.textFaint, marginBottom: "1rem" }}>
                 Get In Touch
               </div>
               <a href="tel:+919823383230" style={{ display: "flex", alignItems: "center",
                 gap: "0.5rem", fontFamily: F.display, fontSize: "1.1rem", fontWeight: 600,
-                color: C.charcoal, textDecoration: "none", marginBottom: "0.6rem" }}>
+                color: C.cream, textDecoration: "none", marginBottom: "0.6rem" }}>
                 <IconPhone size={16} color={C.saffron} /> +91 98233 83230
               </a>
               <a href="mailto:yogesh.sahu@puneglobalgroup.in" style={{ display: "flex",
                 alignItems: "center", gap: "0.5rem", fontFamily: F.body, fontSize: "0.9rem",
-                color: C.warm, textDecoration: "none", fontWeight: 400 }}>
+                color: C.textMuted, textDecoration: "none", fontWeight: 400 }}>
                 <IconMail size={15} color={C.saffron} /> yogesh.sahu@puneglobalgroup.in
               </a>
             </div>
@@ -577,12 +581,12 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA Bar ──────────────────────────────────── */}
-      <section className="section-dark" style={{ background: C.charcoal, padding: "70px clamp(1.5rem, 5vw, 4rem)" }}>
+      <section className="section-dark" style={{ background: C.forestDark, padding: "70px clamp(1.5rem, 5vw, 4rem)" }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto",
           display: "flex", justifyContent: "space-between",
           alignItems: "center", flexWrap: "wrap", gap: "2rem" }}>
           <div>
-            <h2 style={{ fontFamily: F.display, fontWeight: 700,
+            <h2 className="h2-dark" style={{ fontFamily: F.display, fontWeight: 700,
               fontSize: "clamp(1.5rem, 3vw, 2.2rem)",
               color: C.cream, letterSpacing: "-0.02em", margin: "0 0 0.5rem" }}>
               Ready to work together?
@@ -596,7 +600,7 @@ export default function AboutPage() {
             display: "inline-flex", alignItems: "center", gap: "0.5rem",
             fontFamily: F.body, fontWeight: 600, fontSize: "0.85rem",
             letterSpacing: "0.06em", textTransform: "uppercase",
-            background: C.saffron, color: C.charcoal, textDecoration: "none",
+            background: C.gold, color: C.forestDark, textDecoration: "none",
             padding: "1rem 2.5rem", borderRadius: "3px",
           }}>
             Get a Quote <IconArrowRight size={14} />

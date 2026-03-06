@@ -31,20 +31,20 @@ const FACILITY_SHOTS = [
 // ————————————————————————————————————————————
 const C = {
   cream: "#FAF7F2",
-  parchment: "#EDE5D8",
-  charcoal: "#1C1A17",
-  warm: "#7A736D",
-  taupe: "#7A736D",
-  saffron: "#1C1A17",
-  saffrondark: "#0D0B09",
-  dark: "#1C1A17",
-  deepWarm: "#1C1A17",
-  navy: "#1C1A17",
-  granite: "#7A736D",
+  parchment: "#1A2A40",
+  charcoal: "#FAF7F2",
+  warm: "rgba(250,247,242,0.60)",
+  taupe: "rgba(250,247,242,0.60)",
+  saffron: "#5B9BD5",
+  saffrondark: "#0A1220",
+  dark: "#0A1220",
+  deepWarm: "#0A1220",
+  navy: "#0F1A2E",
+  granite: "rgba(250,247,242,0.60)",
   goldStart: "#FAF7F2",
   goldEnd: "#C8B89A",
-  border: "rgba(28,26,23,0.10)",
-  borderMid: "rgba(28,26,23,0.18)",
+  border: "rgba(250,247,242,0.08)",
+  borderMid: "rgba(250,247,242,0.12)",
 };
 
 const F = {
@@ -55,7 +55,7 @@ const F = {
 
 const GLOBAL_CSS = `
   *, *::before, *::after { box-sizing: border-box; }
-  body { margin: 0; background: #FAF7F2; }
+  body { margin: 0; background: #0F1A2E; }
 
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(28px); }
@@ -91,12 +91,12 @@ const GLOBAL_CSS = `
   .card-heritage {
     background: ${C.parchment};
     border-bottom: 2px solid ${C.saffron};
-    box-shadow: 0 2px 12px rgba(28,26,23,0.07);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
     transition: transform 0.22s ease, box-shadow 0.22s ease;
   }
   .card-heritage:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 36px rgba(28,26,23,0.13);
+    box-shadow: 0 10px 36px rgba(0,0,0,0.30);
   }
 
   .infra-nav-link {
@@ -130,7 +130,7 @@ const GLOBAL_CSS = `
   .mc-img.active { opacity: 1; }
   .mc-label { position: absolute; bottom: 8px; left: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.58rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(250,247,242,0.85); background: rgba(20,18,16,0.5); padding: 2px 8px; border-radius: 2px; }
   .mc-dots { display: flex; gap: 5px; align-items: center; justify-content: center; padding: 8px 0 2px; }
-  .mc-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(28,26,23,0.18); border: none; padding: 0; cursor: pointer; transition: background 0.25s, width 0.25s, border-radius 0.25s; }
+  .mc-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(250,247,242,0.18); border: none; padding: 0; cursor: pointer; transition: background 0.25s, width 0.25s, border-radius 0.25s; }
   .mc-dot.active { background: ${C.charcoal}; width: 14px; border-radius: 3px; }
 
   /* Facility gallery */
@@ -147,9 +147,9 @@ const GLOBAL_CSS = `
     background: none; border: none; padding: 4px; }
   .infra-hamburger span { display: block; width: 22px; height: 1.5px; background: ${C.charcoal}; }
   .infra-dropdown { display: none; position: absolute; top: 64px; left: 0; right: 0;
-    background: ${C.cream}; border-bottom: 1px solid ${C.borderMid};
+    background: ${C.navy}; border-bottom: 1px solid ${C.borderMid};
     padding: 1rem clamp(1rem, 3vw, 2.5rem); flex-direction: column; gap: 0.85rem;
-    box-shadow: 0 4px 20px rgba(28,26,23,0.07); z-index: 99; }
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25); z-index: 99; }
   .infra-dropdown.open { display: flex; }
 
   /* === Mobile responsive === */
@@ -299,7 +299,7 @@ export default function InfrastructurePage() {
   useScrollReveal();
 
   return (
-    <div style={{ background: C.cream, minHeight: "100vh", fontFamily: F.body, paddingTop: "70px" }}>
+    <div className="section-dark" style={{ background: C.navy, minHeight: "100vh", fontFamily: F.body, paddingTop: "70px" }}>
       <style>{GLOBAL_CSS}</style>
 
       {/* ——— Hero ——— */}
@@ -664,7 +664,7 @@ export default function InfrastructurePage() {
                 <div
                   key={item.badge}
                   style={{
-                    background: "#fff",
+                    background: C.parchment,
                     border: `1px solid ${C.border}`,
                     borderRadius: "4px",
                     padding: "1.25rem",
@@ -824,7 +824,7 @@ export default function InfrastructurePage() {
           <div
             className="sr"
             style={{
-              background: "#fff",
+              background: C.parchment,
               borderRadius: "6px",
               padding: "2.5rem",
               border: `1px solid ${C.borderMid}`,
@@ -911,7 +911,7 @@ export default function InfrastructurePage() {
             </div>
             <span style={{ fontFamily: F.body, fontSize: "0.74rem", fontWeight: 500, color: "rgba(250,247,242,0.75)", marginTop: "1.5rem", letterSpacing: "0.04em" }}>Explore PP Systems →</span>
           </Link>
-          <Link href="/products/paper-board" style={{ textDecoration: "none", background: "#fff", border: `1px solid ${C.borderMid}`, borderRadius: "6px", padding: "2.5rem", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px", position: "relative", overflow: "hidden" }}>
+          <Link href="/products/paper-board" style={{ textDecoration: "none", background: C.parchment, border: `1px solid ${C.borderMid}`, borderRadius: "6px", padding: "2.5rem", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "200px", position: "relative", overflow: "hidden" }}>
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: C.charcoal }} />
             <div>
               <p style={{ fontFamily: F.body, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: C.taupe, margin: "0 0 0.75rem" }}>Traded &amp; Converted</p>
@@ -989,8 +989,8 @@ export default function InfrastructurePage() {
               href="/#contact"
               style={{
                 fontFamily: F.body,
-                background: C.cream,
-                color: C.charcoal,
+                background: C.goldEnd,
+                color: C.dark,
                 textDecoration: "none",
                 fontSize: "0.875rem",
                 fontWeight: 600,
@@ -1022,7 +1022,7 @@ export default function InfrastructurePage() {
       </section>
 
       {/* ——— Three Business Lines ——— */}
-      <section style={{ background: C.cream, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
+      <section style={{ background: C.navy, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
           <div style={{ marginBottom: "4rem" }}>
@@ -1096,7 +1096,7 @@ export default function InfrastructurePage() {
                 cta: "Browse All Grades",
               },
             ].map((line) => (
-              <div key={line.num} style={{ background: C.cream, padding: "2.75rem",
+              <div key={line.num} style={{ background: C.parchment, padding: "2.75rem",
                 display: "flex", flexDirection: "column" }}>
                 <div style={{ fontFamily: F.display, fontWeight: 700, fontSize: "3.5rem",
                   color: C.saffron, lineHeight: 1, marginBottom: "1.5rem" }}>

@@ -14,20 +14,20 @@ import emailjs from "@emailjs/browser";
 /* ─── Tokens ─────────────────────────────────────────────────────────────────── */
 const C = {
   cream: "#FAF7F2",
-  parchment: "#EDE5D8",
-  charcoal: "#1C1A17",
-  warm: "#7A736D",
-  taupe: "#7A736D",
-  saffron: "#1C1A17",
+  parchment: "#352D25",
+  charcoal: "#FAF7F2",
+  warm: "rgba(250,247,242,0.60)",
+  taupe: "rgba(250,247,242,0.60)",
+  saffron: "#C8B89A",
   saffrondark: "#0D0B09",
   dark: "#1C1A17",
-  deepWarm: "#1C1A17",
-  navy: "#1C1A17",
-  granite: "#7A736D",
+  deepWarm: "#2A2118",
+  navy: "#0F1A2E",
+  granite: "rgba(250,247,242,0.60)",
   goldStart: "#FAF7F2",
   goldEnd: "#C8B89A",
-  border: "rgba(28,26,23,0.10)",
-  borderMid: "rgba(28,26,23,0.18)",
+  border: "rgba(250,247,242,0.10)",
+  borderMid: "rgba(250,247,242,0.18)",
 };
 
 const F = {
@@ -41,7 +41,7 @@ const GLOBAL_CSS = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; font-size: 16px; }
   body {
-    background: ${C.cream};
+    background: ${C.deepWarm};
     color: ${C.charcoal};
     font-family: ${F.body};
     -webkit-font-smoothing: antialiased;
@@ -301,7 +301,7 @@ const GLOBAL_CSS = `
   /* Form */
   .form-input {
     width: 100%;
-    background: #fff; border: 1px solid ${C.borderMid}; border-radius: 1px;
+    background: ${C.parchment}; border: 1px solid ${C.borderMid}; border-radius: 1px;
     padding: 11px 15px; font-family: ${F.body}; font-size: 0.9rem; color: ${C.charcoal};
     outline: none; transition: border-color 0.2s, box-shadow 0.2s;
   }
@@ -313,7 +313,7 @@ const GLOBAL_CSS = `
   .product-card:hover { border-color: ${C.charcoal} !important; box-shadow: 0 6px 22px rgba(28,26,23,0.07); }
 
   .industry-tile {
-    background: ${C.cream};
+    background: ${C.parchment};
     border: 1px solid ${C.border};
     border-bottom: 2px solid transparent;
     padding: 2rem 1.75rem;
@@ -322,7 +322,7 @@ const GLOBAL_CSS = `
   }
   .industry-tile:hover {
     border-bottom-color: ${C.saffron};
-    background: #fff;
+    background: ${C.dark};
     transform: translateY(-3px);
   }
 

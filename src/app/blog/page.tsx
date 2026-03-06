@@ -6,14 +6,18 @@ import { blogPosts, BlogPost } from "@/lib/pgg-data";
 
 const C = {
   cream:     "#FAF7F2",
-  parchment: "#F0EAE0",
-  charcoal:  "#1C1A17",
-  warm:      "#4A4540",
-  taupe:     "#7A736D",
-  dark:      "#141210",
-  border:    "rgba(28,26,23,0.1)",
-  borderMid: "rgba(28,26,23,0.18)",
-  goldEnd:   "#C8B89A",
+  navy:      "#0F1A2E",
+  navyLight: "#152238",
+  navyMid:   "#1A2A40",
+  navyDark:  "#0A1220",
+  steel:     "#5B9BD5",
+  gold:      "#C8B89A",
+  border:    "rgba(250,247,242,0.08)",
+  borderMid: "rgba(250,247,242,0.12)",
+  textMain:  "#FAF7F2",
+  textMuted: "rgba(250,247,242,0.60)",
+  textFaint: "rgba(250,247,242,0.40)",
+  cardBg:    "rgba(250,247,242,0.04)",
 };
 
 const F = {
@@ -24,9 +28,8 @@ const F = {
 
 const CSS = `
   *, *::before, *::after { box-sizing: border-box; }
-  body { margin: 0; background: ${C.cream}; }
+  body { margin: 0; background: ${C.navy}; }
 
-  /* ── Animations ──────────────────── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -39,33 +42,32 @@ const CSS = `
   .sr.visible { opacity: 1; transform: translateY(0); }
 
   .gold-text {
-    background: linear-gradient(135deg, ${C.cream} 0%, ${C.goldEnd} 100%);
+    background: linear-gradient(135deg, ${C.cream} 0%, ${C.gold} 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     display: inline;
   }
 
-  /* ── Featured post ───────────────── */
   .feat-wrap {
     display: grid;
     grid-template-columns: 55% 1fr;
-    border: 1px solid ${C.border};
+    border: 1px solid ${C.borderMid};
     border-radius: 4px;
     overflow: hidden;
-    background: #fff;
+    background: ${C.navyMid};
     text-decoration: none;
     transition: box-shadow 0.35s ease, border-color 0.35s ease;
     min-height: 380px;
   }
   .feat-wrap:hover {
-    box-shadow: 0 20px 60px rgba(28,26,23,0.11);
-    border-color: ${C.borderMid};
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    border-color: rgba(250,247,242,0.18);
   }
   .feat-img-wrap {
     position: relative;
     overflow: hidden;
-    background: ${C.parchment};
+    background: ${C.navyMid};
   }
   .feat-img-wrap img {
     position: absolute;
@@ -80,10 +82,9 @@ const CSS = `
   .feat-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(20,18,16,0.38) 0%, rgba(20,18,16,0.05) 100%);
+    background: linear-gradient(135deg, rgba(10,18,32,0.38) 0%, rgba(10,18,32,0.05) 100%);
   }
 
-  /* ── Blog card grid ──────────────── */
   .blog-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -104,22 +105,21 @@ const CSS = `
   }
 
   .bcard {
-    background: ${C.cream};
+    background: ${C.navy};
     text-decoration: none;
     display: flex;
     flex-direction: column;
     transition: background 0.25s ease;
     position: relative;
   }
-  .bcard:hover { background: #fff; }
+  .bcard:hover { background: ${C.navyLight}; }
 
-  /* Image thumbnail */
   .bcard-img {
     height: 210px;
     overflow: hidden;
     position: relative;
     flex-shrink: 0;
-    background: ${C.parchment};
+    background: ${C.navyMid};
   }
   .bcard-img img {
     width: 100%;
@@ -135,7 +135,6 @@ const CSS = `
     height: 2px;
   }
 
-  /* Card body */
   .bcard-body {
     padding: 1.5rem 1.5rem 1.75rem;
     flex: 1;
@@ -145,11 +144,9 @@ const CSS = `
     border-top: 1px solid ${C.border};
   }
 
-  /* Read arrow */
   .rarrow { display: inline-block; transition: transform 0.22s ease; }
   .bcard:hover .rarrow { transform: translateX(5px); }
   .feat-wrap:hover .rarrow { transform: translateX(5px); }
-
 `;
 
 function useScrollReveal() {
@@ -166,19 +163,15 @@ function useScrollReveal() {
 function BlogCard({ post, index }: { post: BlogPost; index: number }) {
   return (
     <Link href={`/blog/${post.slug}`} className="bcard sr" style={{ transitionDelay: `${(index % 3) * 0.08}s` } as React.CSSProperties}>
-      {/* Image */}
       <div className="bcard-img">
         {post.coverImage
           // eslint-disable-next-line @next/next/no-img-element
           ? <img src={post.coverImage} alt="" />
-          : <div style={{ background: C.parchment, width: "100%", height: "100%" }} />
+          : <div style={{ background: C.navyMid, width: "100%", height: "100%" }} />
         }
         <div className="bcard-accent" style={{ background: post.categoryColor }} />
       </div>
-
-      {/* Body */}
       <div className="bcard-body">
-        {/* Category + read time */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
           <span style={{
             fontFamily: F.body, fontSize: "0.63rem", fontWeight: 600,
@@ -188,42 +181,35 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
           }}>
             {post.category}
           </span>
-          <span style={{ fontFamily: F.body, fontSize: "0.72rem", color: C.taupe }}>
+          <span style={{ fontFamily: F.body, fontSize: "0.72rem", color: C.textMuted }}>
             {post.readTime} read
           </span>
         </div>
-
-        {/* Date */}
-        <div style={{ fontFamily: F.body, fontSize: "0.81rem", color: "#6B6B6B",
+        <div style={{ fontFamily: F.body, fontSize: "0.81rem", color: C.textFaint,
           letterSpacing: "0.04em", marginBottom: "0.5rem", fontWeight: 400 }}>
           {post.date}
         </div>
-
-        {/* Title */}
         <h2 style={{
           fontFamily: F.display, fontSize: "1.1rem", fontWeight: 700,
-          color: C.charcoal, margin: 0, lineHeight: 1.35, flex: 1,
-        }}>
+          color: C.cream, margin: 0, lineHeight: 1.35, flex: 1,
+          WebkitTextFillColor: "inherit",
+        } as React.CSSProperties}>
           {post.title}
         </h2>
-
-        {/* Excerpt — truncated */}
         <p style={{
-          fontFamily: F.body, fontSize: "0.825rem", color: C.taupe,
+          fontFamily: F.body, fontSize: "0.825rem", color: C.textMuted,
           margin: 0, lineHeight: 1.65,
           display: "-webkit-box", WebkitLineClamp: 2,
           WebkitBoxOrient: "vertical", overflow: "hidden",
         } as React.CSSProperties}>
           {post.excerpt}
         </p>
-
-        {/* CTA */}
         <div style={{
           fontFamily: F.body, fontSize: "0.78rem", fontWeight: 600,
-          color: C.charcoal, letterSpacing: "0.03em", marginTop: "0.25rem",
+          color: C.cream, letterSpacing: "0.03em", marginTop: "0.25rem",
           display: "flex", alignItems: "center", gap: "0.3rem",
         }}>
-          Read Article <span className="rarrow">→</span>
+          Read Article <span className="rarrow">{"\u2192"}</span>
         </div>
       </div>
     </Link>
@@ -246,22 +232,18 @@ export default function BlogPage() {
   const cards = sorted.slice(1);
 
   return (
-    <div style={{ background: C.cream, minHeight: "100vh", fontFamily: F.body, paddingTop: "70px" }}>
+    <div className="section-dark" style={{ background: C.navy, minHeight: "100vh", fontFamily: F.body, paddingTop: "70px" }}>
       <style>{CSS}</style>
 
-      {/* ══ Masthead ═══════════════════════════════════════════════════════ */}
       <section style={{
-        background: C.charcoal,
+        background: C.navyDark,
         padding: "clamp(50px, 7vh, 80px) clamp(1.5rem, 5vw, 4rem) clamp(1.5rem, 3vh, 2.5rem)",
         position: "relative", overflow: "hidden",
       }}>
-        {/* Grain */}
         <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity: 0.04 }} aria-hidden>
           <filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.68" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
           <rect width="100%" height="100%" filter="url(#g)" />
         </svg>
-
-        {/* Large decorative numeral behind text */}
         <div aria-hidden style={{
           position: "absolute", right: "2rem", top: "50%", transform: "translateY(-50%)",
           fontFamily: F.display, fontSize: "clamp(8rem, 18vw, 16rem)",
@@ -269,10 +251,7 @@ export default function BlogPage() {
           color: "rgba(250,247,242,0.035)", lineHeight: 1,
           pointerEvents: "none", userSelect: "none",
         }}>01</div>
-
         <div style={{ maxWidth: "1100px", margin: "0 auto", position: "relative" }}>
-
-          {/* Issue label */}
           <div style={{
             display: "flex", alignItems: "center", gap: "1rem", marginBottom: "2rem",
             animation: "fadeUp 0.6s ease both",
@@ -295,8 +274,6 @@ export default function BlogPage() {
               {blogPosts.length} Articles
             </span>
           </div>
-
-          {/* Headline */}
           <h1 style={{
             fontFamily: F.display,
             fontSize: "clamp(2.4rem, 5.5vw, 4rem)",
@@ -308,7 +285,6 @@ export default function BlogPage() {
             Packaging<br />
             <em style={{ fontStyle: "italic", fontWeight: 500 }}><span className="gold-text">Intelligence</span></em>
           </h1>
-
           <p style={{
             fontFamily: F.body, fontSize: "0.95rem", color: "rgba(250,247,242,0.65)",
             lineHeight: 1.75, margin: 0, maxWidth: "520px",
@@ -320,25 +296,20 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* ══ Content ════════════════════════════════════════════════════════ */}
       <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "3.5rem 2.5rem 5rem" }}>
-
-        {/* ── Featured post ──────────────────────────── */}
         <div style={{ marginBottom: "1px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
             <span style={{
               fontFamily: F.body, fontSize: "0.63rem", fontWeight: 600,
-              letterSpacing: "0.16em", textTransform: "uppercase", color: C.taupe,
+              letterSpacing: "0.16em", textTransform: "uppercase", color: C.textFaint,
             }}>Latest</span>
-            <div style={{ flex: "0 0 32px", height: "1px", background: C.taupe, opacity: 0.35 }} />
+            <div style={{ flex: "0 0 32px", height: "1px", background: C.steel, opacity: 0.5 }} />
             <span style={{
               fontFamily: F.italic, fontStyle: "italic",
-              fontSize: "0.75rem", color: C.taupe, opacity: 0.6,
+              fontSize: "0.75rem", color: C.textFaint, opacity: 0.6,
             }}>#01</span>
           </div>
-
           <Link href={`/blog/${featured.slug}`} className="feat-wrap sr">
-            {/* Left: image */}
             <div className="feat-img-wrap">
               {featured.coverImage && (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -350,14 +321,11 @@ export default function BlogPage() {
                 height: "3px", background: featured.categoryColor,
               }} />
             </div>
-
-            {/* Right: content */}
             <div style={{
               padding: "3rem 2.75rem",
               display: "flex", flexDirection: "column", justifyContent: "center",
               gap: "1.25rem", borderLeft: `1px solid ${C.border}`,
             }}>
-              {/* Category */}
               <span style={{
                 fontFamily: F.body, fontSize: "0.63rem", fontWeight: 600,
                 letterSpacing: "0.13em", textTransform: "uppercase",
@@ -365,61 +333,49 @@ export default function BlogPage() {
               }}>
                 {featured.category}
               </span>
-
-              {/* Date */}
-              <div style={{ fontFamily: F.body, fontSize: "0.81rem", color: "#6B6B6B",
+              <div style={{ fontFamily: F.body, fontSize: "0.81rem", color: C.textFaint,
                 marginBottom: "0.75rem", fontWeight: 400 }}>
                 {featured.date}
               </div>
-
-              {/* Title */}
-              <h2 style={{
+              <h2 className="h2-dark" style={{
                 fontFamily: F.display,
                 fontSize: "clamp(1.5rem, 2.8vw, 2.1rem)",
-                fontWeight: 800, color: C.charcoal,
+                fontWeight: 800, color: C.cream,
                 margin: 0, lineHeight: 1.18,
               }}>
                 {featured.title}
               </h2>
-
-              {/* Rule */}
-              <div style={{ width: "36px", height: "2px", background: C.charcoal, opacity: 0.2 }} />
-
-              {/* Excerpt */}
+              <div style={{ width: "36px", height: "2px", background: C.gold, opacity: 0.35 }} />
               <p style={{
-                fontFamily: F.body, fontSize: "0.9rem", color: C.warm,
+                fontFamily: F.body, fontSize: "0.9rem", color: "rgba(250,247,242,0.75)",
                 margin: 0, lineHeight: 1.75,
               }}>
                 {featured.excerpt}
               </p>
-
-              {/* Meta + CTA */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "0.5rem" }}>
-                <span style={{ fontFamily: F.body, fontSize: "0.75rem", color: C.taupe }}>
-                  {featured.date} · {featured.readTime} read
+                <span style={{ fontFamily: F.body, fontSize: "0.75rem", color: C.textMuted }}>
+                  {featured.date} {"\u00B7"} {featured.readTime} read
                 </span>
                 <span style={{
                   fontFamily: F.body, fontSize: "0.82rem", fontWeight: 600,
-                  color: C.charcoal, letterSpacing: "0.02em",
+                  color: C.cream, letterSpacing: "0.02em",
                   display: "flex", alignItems: "center", gap: "0.3rem",
                 }}>
-                  Read Article <span className="rarrow">→</span>
+                  Read Article <span className="rarrow">{"\u2192"}</span>
                 </span>
               </div>
             </div>
           </Link>
         </div>
 
-        {/* ── Cards grid ──────────────────────────────── */}
         <div style={{ marginTop: "3rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
             <span style={{
               fontFamily: F.body, fontSize: "0.63rem", fontWeight: 600,
-              letterSpacing: "0.16em", textTransform: "uppercase", color: C.taupe,
+              letterSpacing: "0.16em", textTransform: "uppercase", color: C.textFaint,
             }}>More Articles</span>
-            <div style={{ flex: "0 0 32px", height: "1px", background: C.taupe, opacity: 0.35 }} />
+            <div style={{ flex: "0 0 32px", height: "1px", background: C.steel, opacity: 0.5 }} />
           </div>
-
           <div className="blog-grid">
             {cards.map((post, i) => (
               <BlogCard key={post.slug} post={post} index={i} />
@@ -427,10 +383,9 @@ export default function BlogPage() {
           </div>
         </div>
 
-        {/* ── CTA ─────────────────────────────────────── */}
         <div className="sr" style={{
           marginTop: "4rem",
-          background: C.dark,
+          background: C.navyDark,
           borderRadius: "4px",
           padding: "3.5rem",
           display: "grid",
@@ -453,16 +408,16 @@ export default function BlogPage() {
               color: "rgba(250,247,242,0.5)", margin: 0, lineHeight: 1.7,
             }}>
               Hands-on expertise across pharma, FMCG, automotive, and electronics packaging.
-              Honest answers — not a sales pitch.
+              Honest answers {"\u2014"} not a sales pitch.
             </p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", alignItems: "flex-end" }}>
             <Link href="/#contact" style={{
-              fontFamily: F.body, background: C.cream, color: C.charcoal,
+              fontFamily: F.body, background: C.gold, color: C.navy,
               textDecoration: "none", fontSize: "0.875rem", fontWeight: 600,
               padding: "0.9rem 1.75rem", borderRadius: "3px", whiteSpace: "nowrap",
             }}>
-              Ask a Question →
+              Ask a Question {"\u2192"}
             </Link>
             <a href="tel:+919823383230" style={{
               fontFamily: F.body, fontSize: "0.78rem",
@@ -474,16 +429,15 @@ export default function BlogPage() {
         </div>
       </main>
 
-      {/* ══ Footer ═════════════════════════════════════════════════════════ */}
       <footer style={{
-        background: C.dark, borderTop: `1px solid rgba(250,247,242,0.07)`,
+        background: C.navyDark, borderTop: `1px solid ${C.border}`,
         padding: "2rem 2.5rem", textAlign: "center",
       }}>
         <p style={{
           fontFamily: F.body, fontSize: "0.75rem",
           color: "rgba(250,247,242,0.3)", margin: 0,
         }}>
-          © {new Date().getFullYear()} Pune Global Group · GSTIN 27FYYPS5999K1ZO ·{" "}
+          {"\u00A9"} {new Date().getFullYear()} Pune Global Group {"\u00B7"} GSTIN 27FYYPS5999K1ZO {"\u00B7"}{" "}
           <a href="mailto:yogesh.sahu@puneglobalgroup.in" style={{ color: "rgba(250,247,242,0.3)", textDecoration: "none" }}>
             yogesh.sahu@puneglobalgroup.in
           </a>
