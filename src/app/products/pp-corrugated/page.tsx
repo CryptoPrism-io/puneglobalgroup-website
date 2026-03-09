@@ -85,6 +85,79 @@ const CSS = `
   .family-grid { scrollbar-width: none; -ms-overflow-style: none; }
   .family-grid::-webkit-scrollbar { display: none; }
 
+  /* Scroll hint — fade + arrows + swipe pill */
+  .scroll-hint-wrap { position: relative; }
+  .scroll-hint-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 48px;
+    background: linear-gradient(to right, transparent, ${C.dark});
+    pointer-events: none;
+    z-index: 2;
+    display: none;
+  }
+  .scroll-hint-wrap.even::after { background: linear-gradient(to right, transparent, ${C.dark}); }
+  .scroll-hint-wrap.odd::after  { background: linear-gradient(to right, transparent, #0E1018); }
+
+  /* Arrow buttons */
+  .scroll-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(250,247,242,0.15);
+    background: rgba(15,20,30,0.7);
+    backdrop-filter: blur(8px);
+    color: rgba(250,247,242,0.8);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    padding: 0;
+  }
+  .scroll-arrow:hover {
+    background: rgba(91,155,213,0.25);
+    border-color: rgba(91,155,213,0.4);
+    color: #fff;
+  }
+  .scroll-arrow:active { transform: translateY(-50%) scale(0.92); }
+  .scroll-arrow.left  { left: 8px; }
+  .scroll-arrow.right { right: 8px; }
+  .scroll-arrow.hidden { opacity: 0; pointer-events: none; }
+
+  .scroll-hint-pill {
+    display: none;
+    align-items: center; gap: 6px;
+    position: absolute; bottom: -28px; right: 0;
+    font-family: ${F.body}; font-size: 0.62rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(250,247,242,0.35);
+    z-index: 3;
+  }
+  .scroll-hint-pill span {
+    display: inline-block;
+    animation: hintNudge 1.5s ease-in-out 3;
+  }
+  @keyframes hintNudge {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+  }
+  @keyframes hintFade {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  @media(max-width: 580px) {
+    .scroll-hint-wrap::after { display: block; }
+    .scroll-hint-pill {
+      display: flex;
+      animation: hintFade 5s ease-in-out forwards;
+    }
+  }
+
   /* Product cards */
   .variant-card { transition: border-color 0.22s, box-shadow 0.22s, transform 0.22s; cursor:pointer; }
   .variant-card:hover { border-color:${C.pp} !important; transform:translateY(-4px);
@@ -144,6 +217,10 @@ const CSS = `
     .sys-flow { flex-direction:column !important; align-items:stretch !important; }
     .sys-flow > div { flex: 1 0 auto !important; width: 100%; }
     .lc-wrap { overflow-x:auto; }
+    .dual-family-wrap { flex-direction: column !important; gap: 2.5rem !important; }
+    .dual-family-wrap > div[style*="paddingRight"] { padding-right: 0 !important; }
+    .dual-family-wrap > div[style*="paddingLeft"] { padding-left: 0 !important; }
+    .dual-family-wrap > div[style*="width: 1px"] { display: none !important; }
   }
   @media(max-width:580px) {
     /* Family grid: horizontal scroll carousel instead of single column */
@@ -153,11 +230,12 @@ const CSS = `
       scroll-snap-type: x mandatory !important;
       -webkit-overflow-scrolling: touch !important;
       scrollbar-width: none !important;
-      gap: 12px !important;
-      padding-bottom: 1rem !important;
+      gap: 16px !important;
+      padding: 0 1rem 1rem !important;
+      scroll-padding-left: 1rem !important;
     }
     .family-grid::-webkit-scrollbar { display: none; }
-    .family-grid > * { flex: 0 0 85vw !important; max-width: 320px !important; scroll-snap-align: start !important; }
+    .family-grid > * { flex: 0 0 85vw !important; max-width: 360px !important; scroll-snap-align: start !important; border-radius: 8px !important; overflow: hidden !important; }
     .cap-grid { grid-template-columns: 1fr 1fr !important; }
     /* Carousel: taller hit area on small screens */
     .carousel-wrap { height: 248px !important; }
@@ -183,6 +261,63 @@ function useScrollReveal() {
     els.forEach(el => obs.observe(el));
     return () => obs.disconnect();
   }, []);
+}
+
+/* ─── Scrollable Row with Arrow Buttons ──────────────────────────────────────── */
+function ScrollableRow({ children, bgClass = "even" }: { children: React.ReactNode; bgClass?: string }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canLeft, setCanLeft] = useState(false);
+  const [canRight, setCanRight] = useState(true);
+
+  const checkScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanLeft(el.scrollLeft > 10);
+    setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+  };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    checkScroll();
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    return () => el.removeEventListener("scroll", checkScroll);
+  }, []);
+
+  const scroll = (dir: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const card = el.querySelector<HTMLElement>(":scope > *");
+    const w = card ? card.offsetWidth + 20 : el.clientWidth * 0.8;
+    el.scrollBy({ left: dir * w, behavior: "smooth" });
+  };
+
+  return (
+    <div className={`scroll-hint-wrap ${bgClass}`}>
+      <div
+        ref={scrollRef}
+        className="family-grid"
+        style={{
+          display: "flex", gap: "1.25rem",
+          overflowX: "auto", scrollSnapType: "x mandatory",
+          scrollbarWidth: "none", paddingBottom: "0.5rem",
+        }}
+      >
+        {children}
+      </div>
+      <button
+        className={`scroll-arrow left${canLeft ? "" : " hidden"}`}
+        onClick={() => scroll(-1)}
+        aria-label="Scroll left"
+      >←</button>
+      <button
+        className={`scroll-arrow right${canRight ? "" : " hidden"}`}
+        onClick={() => scroll(1)}
+        aria-label="Scroll right"
+      >→</button>
+      <div className="scroll-hint-pill">Swipe <span>→</span></div>
+    </div>
+  );
 }
 
 /* ─── 3-Image Card Carousel ──────────────────────────────────────────────────── */
@@ -377,20 +512,11 @@ function FamilySection({ family, index }: { family: typeof ppFamilies[0]; index:
         </p>
 
         {/* Variants — horizontal scroll row */}
-        <div
-          className="family-grid"
-          style={{
-            display: "flex",
-            gap: "1.25rem",
-            overflowX: "auto",
-            scrollSnapType: "x mandatory",
-            paddingBottom: "0.5rem",
-          }}
-        >
+        <ScrollableRow bgClass={index % 2 === 0 ? "even" : "odd"}>
           {family.variants.map((v, i) => (
             <VariantCard key={v.code} variant={v} delay={i * 0.08} />
           ))}
-        </div>
+        </ScrollableRow>
       </div>
     </motion.section>
   );
@@ -696,7 +822,6 @@ export default function PPCorrugatedPage() {
     <div className="section-dark" style={{ background: C.dark, minHeight: "100vh", paddingTop: "70px" }}>
       <style>{CSS}</style>
       <Hero />
-      <CapabilityBar />
 
       {/* Product families — above the fold priority */}
       {ppFamilies.map((family, i) => {
@@ -716,7 +841,7 @@ export default function PPCorrugatedPage() {
               viewport={{ once: true, amount: 0.12 }}
               transition={{ duration: 0.6, ease }}
             >
-              <div style={{ maxWidth: "1400px", margin: "0 auto", display: "flex", gap: "0", alignItems: "stretch" }}>
+              <div className="dual-family-wrap" style={{ maxWidth: "1400px", margin: "0 auto", display: "flex", gap: "0", alignItems: "stretch" }}>
                 {/* Layer Pads */}
                 <div style={{ flex: 1, paddingRight: "2.5rem" }}>
                   <div style={{ marginBottom: "1.5rem" }}>
@@ -727,11 +852,11 @@ export default function PPCorrugatedPage() {
                     </div>
                     <p style={{ fontFamily: F.body, fontSize: "0.88rem", color: C.warm, lineHeight: 1.7, maxWidth: "480px", fontWeight: 300 }}>{family.descriptor}</p>
                   </div>
-                  <div style={{ display: "flex", gap: "1.25rem", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none" }}>
+                  <ScrollableRow bgClass="even">
                     {family.variants.map((v, vi) => (
                       <VariantCard key={v.code} variant={v} delay={vi * 0.08} />
                     ))}
-                  </div>
+                  </ScrollableRow>
                 </div>
                 {/* Vertical divider */}
                 <div style={{ width: "1px", background: C.borderStr, flexShrink: 0 }} />
@@ -745,11 +870,11 @@ export default function PPCorrugatedPage() {
                     </div>
                     <p style={{ fontFamily: F.body, fontSize: "0.88rem", color: C.warm, lineHeight: 1.7, maxWidth: "480px", fontWeight: 300 }}>{sepFamily.descriptor}</p>
                   </div>
-                  <div style={{ display: "flex", gap: "1.25rem", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none" }}>
+                  <ScrollableRow bgClass="even">
                     {sepFamily.variants.map((v, vi) => (
                       <VariantCard key={v.code} variant={v} delay={vi * 0.08} />
                     ))}
-                  </div>
+                  </ScrollableRow>
                 </div>
               </div>
             </motion.section>
@@ -817,6 +942,7 @@ export default function PPCorrugatedPage() {
         </div>
       </motion.section>
 
+      <CapabilityBar />
     </div>
   );
 }

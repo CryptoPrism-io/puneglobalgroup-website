@@ -98,7 +98,7 @@ function Navbar() {
       className="blog-nav"
       style={{
         position: "sticky",
-        top: 0,
+        top: "70px",
         zIndex: 100,
         background: scrolled ? "rgba(15,26,46,0.95)" : C.navy,
         backdropFilter: "blur(8px)",

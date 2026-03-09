@@ -456,8 +456,8 @@ export default function PaperBoardPage() {
             />
             <div style={{
               position: "absolute", bottom: "1.5rem", right: "1.5rem",
-              background: "rgba(20,18,16,0.88)",
-              backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+              background: "rgba(15,20,30,0.45)",
+              backdropFilter: "blur(20px) saturate(1.4)", WebkitBackdropFilter: "blur(20px) saturate(1.4)",
               borderRadius: "8px", padding: "0.8rem 1.1rem",
               display: "flex", alignItems: "center", gap: "0.75rem",
               border: "1px solid rgba(250,247,242,0.10)",
@@ -479,44 +479,6 @@ export default function PaperBoardPage() {
             </div>
           </div>
 
-        </div>
-      </section>
-
-      {/* Capability bar */}
-      <section style={{ padding: "3rem clamp(1.5rem, 5vw, 4rem)", background: "#141F16" }}>
-        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-          <div className="cap-grid-paper" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
-            {CAPS.map((cap, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.12 }}
-                transition={{ duration: 0.6, ease, delay: i * 0.08 }}
-                style={{
-                  padding: "1.5rem 1.25rem",
-                  borderRight: i < CAPS.length - 1 ? "1px solid rgba(250,247,242,0.08)" : "none",
-                }}
-              >
-                <div style={{
-                  fontFamily: F.display, fontSize: "clamp(1.4rem, 2.2vw, 1.9rem)",
-                  fontWeight: 600, color: C.cream, lineHeight: 1.1, marginBottom: "0.4rem",
-                }}>
-                  {cap.stat}
-                </div>
-                <div style={{
-                  fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
-                  color: "rgba(250,247,242,0.7)", textTransform: "uppercase",
-                  letterSpacing: "0.08em", marginBottom: "0.2rem",
-                }}>
-                  {cap.label}
-                </div>
-                <div style={{ fontFamily: F.mono, fontSize: "0.62rem", color: "rgba(250,247,242,0.35)" }}>
-                  {cap.sub}
-                </div>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -622,6 +584,44 @@ export default function PaperBoardPage() {
           </div>
         </div>
       </motion.section>
+
+      {/* Capability bar */}
+      <section style={{ padding: "3rem clamp(1.5rem, 5vw, 4rem)", background: "#141F16" }}>
+        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+          <div className="cap-grid-paper" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
+            {CAPS.map((cap, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.12 }}
+                transition={{ duration: 0.6, ease, delay: i * 0.08 }}
+                style={{
+                  padding: "1.5rem 1.25rem",
+                  borderRight: i < CAPS.length - 1 ? "1px solid rgba(250,247,242,0.08)" : "none",
+                }}
+              >
+                <div style={{
+                  fontFamily: F.display, fontSize: "clamp(1.4rem, 2.2vw, 1.9rem)",
+                  fontWeight: 600, color: C.cream, lineHeight: 1.1, marginBottom: "0.4rem",
+                }}>
+                  {cap.stat}
+                </div>
+                <div style={{
+                  fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
+                  color: "rgba(250,247,242,0.7)", textTransform: "uppercase",
+                  letterSpacing: "0.08em", marginBottom: "0.2rem",
+                }}>
+                  {cap.label}
+                </div>
+                <div style={{ fontFamily: F.mono, fontSize: "0.62rem", color: "rgba(250,247,242,0.35)" }}>
+                  {cap.sub}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer style={{ background: C.dark, padding: "2rem clamp(1.5rem, 5vw, 4rem)" }}>

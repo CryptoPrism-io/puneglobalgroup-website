@@ -195,6 +195,9 @@ const CSS = `
   .cat-paper:hover .cat-cta  { color: #FAF7F2; border-color: rgba(250,247,242,0.7); }
 
   /* Mobile */
+  @media(max-width: 900px) {
+    .hero-illustration { display: none !important; }
+  }
   @media(max-width: 680px) {
     .cat-row { flex-direction: column; min-height: auto; }
     .cat-pp, .cat-paper { flex: 1 !important; min-height: 78vw; }
@@ -216,39 +219,106 @@ export default function ProductsPage() {
       <section style={{
         background: C.deepWarm,
         padding: "clamp(50px, 7vh, 80px) clamp(1.5rem, 5vw, 4rem) clamp(1.5rem, 3vh, 2.5rem)",
+        position: "relative", overflow: "hidden",
       }}>
-        <div style={{ maxWidth: "800px" }}>
-          <motion.span
-            className="saffron-badge"
-            style={{ marginBottom: "1.5rem", display: "inline-flex", background: "rgba(250,247,242,0.12)", color: C.cream, border: "1px solid rgba(250,247,242,0.20)" }}
-            {...fadeUp}
-            transition={{ duration: 0.6, ease, delay: 0 }}
+        <div style={{ maxWidth: "1400px", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem" }}>
+          <div style={{ maxWidth: "800px", position: "relative", zIndex: 2 }}>
+            <motion.span
+              className="saffron-badge"
+              style={{ marginBottom: "1.5rem", display: "inline-flex", background: "rgba(250,247,242,0.12)", color: C.cream, border: "1px solid rgba(250,247,242,0.20)" }}
+              {...fadeUp}
+              transition={{ duration: 0.6, ease, delay: 0 }}
+            >
+              Packaging Solutions
+            </motion.span>
+            <motion.h1
+              style={{
+                fontFamily: F.display, fontWeight: 900,
+                fontSize: "clamp(3rem, 6vw, 5rem)", color: C.cream,
+                lineHeight: 1.06, letterSpacing: "-0.02em",
+                marginTop: "1rem", marginBottom: "1.25rem",
+              }}
+              {...fadeUp}
+              transition={{ duration: 0.6, ease, delay: 0.08 }}
+            >
+              Our <span className="gold-text">Products</span>
+            </motion.h1>
+            <motion.p
+              style={{
+                fontFamily: F.italic, fontStyle: "italic",
+                fontSize: "1.2rem", color: "rgba(250,247,242,0.65)",
+                lineHeight: 1.6,
+              }}
+              {...fadeUp}
+              transition={{ duration: 0.6, ease, delay: 0.16 }}
+            >
+              Precision-engineered packaging for automotive, pharma, FMCG and industrial sectors.
+            </motion.p>
+          </div>
+
+          {/* Packaging illustration */}
+          <motion.div
+            className="hero-illustration"
+            initial={{ opacity: 0, scale: 0.85, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1, ease, delay: 0.3 }}
+            style={{ flexShrink: 0, position: "relative", zIndex: 1 }}
           >
-            Packaging Solutions
-          </motion.span>
-          <motion.h1
-            style={{
-              fontFamily: F.display, fontWeight: 900,
-              fontSize: "clamp(3rem, 6vw, 5rem)", color: C.cream,
-              lineHeight: 1.06, letterSpacing: "-0.02em",
-              marginTop: "1rem", marginBottom: "1.25rem",
-            }}
-            {...fadeUp}
-            transition={{ duration: 0.6, ease, delay: 0.08 }}
-          >
-            Our <span className="gold-text">Products</span>
-          </motion.h1>
-          <motion.p
-            style={{
-              fontFamily: F.italic, fontStyle: "italic",
-              fontSize: "1.2rem", color: "rgba(250,247,242,0.65)",
-              lineHeight: 1.6,
-            }}
-            {...fadeUp}
-            transition={{ duration: 0.6, ease, delay: 0.16 }}
-          >
-            Precision-engineered packaging for automotive, pharma, FMCG and industrial sectors.
-          </motion.p>
+            <svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: "block", filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.3))" }}>
+              {/* Subtle glow */}
+              <circle cx="150" cy="150" r="120" fill="rgba(91,155,213,0.04)" />
+
+              {/* ── Open-top box (center, large) ── */}
+              <path d="M110 110 L150 135 L190 110 L150 85 Z" fill="rgba(91,155,213,0.15)" stroke="rgba(91,155,213,0.5)" strokeWidth="1.5" strokeLinejoin="round" />
+              <path d="M110 110 L110 160 L150 185 L150 135 Z" fill="rgba(91,155,213,0.1)" stroke="rgba(91,155,213,0.4)" strokeWidth="1.5" strokeLinejoin="round" />
+              <path d="M190 110 L190 160 L150 185 L150 135 Z" fill="rgba(91,155,213,0.08)" stroke="rgba(91,155,213,0.35)" strokeWidth="1.5" strokeLinejoin="round" />
+              {/* Open lid flaps */}
+              <path d="M110 110 L102 100 L140 78 L150 85" fill="rgba(91,155,213,0.06)" stroke="rgba(91,155,213,0.35)" strokeWidth="1.2" strokeLinejoin="round" />
+              <path d="M190 110 L198 100 L160 78 L150 85" fill="rgba(91,155,213,0.04)" stroke="rgba(91,155,213,0.3)" strokeWidth="1.2" strokeLinejoin="round" />
+              {/* Box stripes */}
+              <line x1="120" y1="120" x2="140" y2="132" stroke="rgba(91,155,213,0.2)" strokeWidth="1" />
+              <line x1="124" y1="117" x2="144" y2="129" stroke="rgba(91,155,213,0.2)" strokeWidth="1" />
+
+              {/* ── Tray (top-left, shallow open) ── */}
+              <path d="M30 105 L62 120 L94 105 L62 90 Z" fill="rgba(200,184,154,0.12)" stroke="rgba(200,184,154,0.45)" strokeWidth="1.2" strokeLinejoin="round" />
+              <path d="M30 105 L30 120 L62 135 L62 120 Z" fill="rgba(200,184,154,0.08)" stroke="rgba(200,184,154,0.35)" strokeWidth="1.2" strokeLinejoin="round" />
+              <path d="M94 105 L94 120 L62 135 L62 120 Z" fill="rgba(200,184,154,0.06)" stroke="rgba(200,184,154,0.3)" strokeWidth="1.2" strokeLinejoin="round" />
+              {/* Tray dividers (separator lines inside) */}
+              <line x1="46" y1="98" x2="46" y2="112" stroke="rgba(200,184,154,0.3)" strokeWidth="0.8" />
+              <line x1="62" y1="92" x2="62" y2="120" stroke="rgba(200,184,154,0.25)" strokeWidth="0.8" />
+              <line x1="78" y1="98" x2="78" y2="112" stroke="rgba(200,184,154,0.3)" strokeWidth="0.8" />
+
+              {/* ── Separator / layer pad (right, flat) ── */}
+              <path d="M200 85 L240 100 L270 88 L230 73 Z" fill="rgba(91,155,213,0.1)" stroke="rgba(91,155,213,0.35)" strokeWidth="1.2" strokeLinejoin="round" />
+              <path d="M200 85 L200 90 L240 105 L240 100 Z" fill="rgba(91,155,213,0.07)" stroke="rgba(91,155,213,0.3)" strokeWidth="1" strokeLinejoin="round" />
+              <path d="M270 88 L270 93 L240 105 L240 100 Z" fill="rgba(91,155,213,0.05)" stroke="rgba(91,155,213,0.25)" strokeWidth="1" strokeLinejoin="round" />
+              {/* Second layer pad stacked */}
+              <path d="M203 80 L243 95 L273 83 L233 68 Z" fill="rgba(91,155,213,0.06)" stroke="rgba(91,155,213,0.25)" strokeWidth="1" strokeLinejoin="round" />
+
+              {/* ── Paper reel (bottom-left) ── */}
+              <ellipse cx="55" cy="210" rx="28" ry="10" fill="rgba(200,184,154,0.08)" stroke="rgba(200,184,154,0.35)" strokeWidth="1.2" />
+              <path d="M27 210 L27 175 Q27 165, 55 165 Q83 165, 83 175 L83 210" fill="none" stroke="rgba(200,184,154,0.35)" strokeWidth="1.2" />
+              <ellipse cx="55" cy="175" rx="28" ry="10" fill="rgba(200,184,154,0.1)" stroke="rgba(200,184,154,0.4)" strokeWidth="1.2" />
+              {/* Core hole */}
+              <ellipse cx="55" cy="175" rx="8" ry="3" fill="rgba(17,18,22,0.6)" stroke="rgba(200,184,154,0.25)" strokeWidth="0.8" />
+              {/* Unrolling tail */}
+              <path d="M83 185 Q95 185, 100 195 Q105 205, 115 208" stroke="rgba(200,184,154,0.3)" strokeWidth="1.2" strokeLinecap="round" fill="none" />
+
+              {/* ── Sheet stack (bottom-right) ── */}
+              <path d="M195 205 L245 225 L275 210 L225 190 Z" fill="rgba(250,247,242,0.06)" stroke="rgba(250,247,242,0.2)" strokeWidth="1" strokeLinejoin="round" />
+              <path d="M197 200 L247 220 L277 205 L227 185 Z" fill="rgba(250,247,242,0.05)" stroke="rgba(250,247,242,0.18)" strokeWidth="1" strokeLinejoin="round" />
+              <path d="M199 195 L249 215 L279 200 L229 180 Z" fill="rgba(250,247,242,0.04)" stroke="rgba(250,247,242,0.15)" strokeWidth="1" strokeLinejoin="round" />
+              <path d="M201 190 L251 210 L281 195 L231 175 Z" fill="rgba(250,247,242,0.03)" stroke="rgba(250,247,242,0.12)" strokeWidth="1" strokeLinejoin="round" />
+
+              {/* ── Small crate (top-center-right) ── */}
+              <path d="M210 135 L235 148 L260 135 L235 122 Z" fill="rgba(91,155,213,0.1)" stroke="rgba(91,155,213,0.35)" strokeWidth="1" strokeLinejoin="round" />
+              <path d="M210 135 L210 158 L235 171 L235 148 Z" fill="rgba(91,155,213,0.07)" stroke="rgba(91,155,213,0.3)" strokeWidth="1" strokeLinejoin="round" />
+              <path d="M260 135 L260 158 L235 171 L235 148 Z" fill="rgba(91,155,213,0.05)" stroke="rgba(91,155,213,0.25)" strokeWidth="1" strokeLinejoin="round" />
+              {/* Crate slots */}
+              <line x1="215" y1="140" x2="215" y2="155" stroke="rgba(91,155,213,0.2)" strokeWidth="0.7" />
+              <line x1="225" y1="144" x2="225" y2="162" stroke="rgba(91,155,213,0.2)" strokeWidth="0.7" />
+            </svg>
+          </motion.div>
         </div>
       </section>
 

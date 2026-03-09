@@ -430,8 +430,8 @@ export default function InfrastructurePage() {
         {/* Certification badge — bottom right over image */}
         <div style={{
           position: "absolute", top: "2rem", right: "2rem", zIndex: 2,
-          background: "rgba(20,18,16,0.82)",
-          backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+          background: "rgba(15,20,30,0.45)",
+          backdropFilter: "blur(20px) saturate(1.4)", WebkitBackdropFilter: "blur(20px) saturate(1.4)",
           borderRadius: "8px", padding: "0.8rem 1.1rem",
           display: "flex", alignItems: "center", gap: "0.75rem",
           border: "1px solid rgba(250,247,242,0.12)",
@@ -708,7 +708,7 @@ export default function InfrastructurePage() {
                   badge: "Zero Defect",
                   label: "Pre-Despatch Inspection",
                   desc: "100% visual and dimensional inspection before every shipment leaves our facility",
-                  accent: C.charcoal,
+                  accent: "#DC2626",
                 },
               ].map((item) => (
                 <div

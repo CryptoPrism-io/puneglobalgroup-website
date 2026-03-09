@@ -69,11 +69,11 @@ const GLOBAL_CSS = `
   .logo-track:hover { animation-play-state: paused; }
   .logo-item {
     flex: 0 0 auto;
-    padding: 0 3rem;
+    padding: 0 clamp(1.2rem, 3vw, 3rem);
     display: flex; align-items: center; justify-content: center;
   }
   .logo-img {
-    height: 36px; width: auto; max-width: 120px;
+    height: clamp(24px, 4vw, 36px); width: auto; max-width: clamp(80px, 12vw, 120px);
     object-fit: contain;
     filter: brightness(1.8);
     opacity: 1;
@@ -133,11 +133,14 @@ const GLOBAL_CSS = `
     .svc-cta  { font-size: 0.82rem !important; }
   }
   @media (max-width: 520px) {
-    .hero-eyebrow-anim { gap: 0.5rem !important; margin-bottom: 2rem !important; }
+    .hero-eyebrow-anim { gap: 0.5rem !important; margin-bottom: 1rem !important; }
     .hero-eyebrow-divider { display: none !important; }
     .hero-eyebrow-est { display: none !important; }
-    .hero-eyebrow-text { white-space: normal !important; font-size: 0.95rem !important; }
-    .hero-stat-box { padding: 0 0.75rem !important; }
+    .hero-headline { font-size: clamp(1.3rem, 5.5vw, 1.8rem) !important; }
+    .hero-carousel-box { height: 180px !important; }
+    .hero-stat-note { display: none !important; }
+    .hero-stat-num { font-size: 0.82rem !important; }
+    .hero-stats-mini > div { padding: 0.45rem 0.2rem !important; }
   }
   /* hero-h1, hero-rule, hero-body, hero-cta, hero-stat animations
      now handled by Framer Motion — CSS keyframe rules removed */
@@ -346,6 +349,7 @@ const GLOBAL_CSS = `
     .hero-stats-row { flex-wrap: wrap !important; width: 100% !important; }
     .hero-stat-box { flex: 1 1 40% !important; border-left: 1px solid ${C.borderMid} !important; border-right: none !important; margin-bottom: 1rem; }
     .about-grid { flex-direction: column !important; }
+    .about-grid > * { flex: 1 1 auto !important; }
     .contact-grid { flex-direction: column !important; }
     .footer-grid { flex-direction: column !important; gap: 3rem !important; }
     .footer-cols { flex-direction: column !important; gap: 2rem !important; }
@@ -364,8 +368,34 @@ const GLOBAL_CSS = `
     align-items: stretch;
   }
   @media (max-width: 960px) {
-    .hero-grid { grid-template-columns: 1fr !important; }
-    .hero-img-col { display: none !important; }
+    .hero-section { justify-content: flex-start !important; }
+    .hero-grid { display: flex !important; flex-direction: column !important; gap: 0 !important; flex: 1 !important; justify-content: center !important; }
+    .hero-text-col, .hero-img-col { display: contents !important; }
+    .hero-spacer { display: none !important; }
+    .hero-eyebrow-anim { order: 1; margin-bottom: 1.5rem !important; }
+    .hero-headline { order: 2; margin-bottom: 0.5rem !important; }
+    .hero-carousel-box { order: 3; height: 280px !important; margin: 1.75rem 0 !important; border-radius: 10px !important; }
+    .hero-rule { display: none !important; }
+    .hero-body-cta { order: 5; margin-top: 0.5rem !important; }
+    .hero-body-cta p { margin-bottom: 1.75rem !important; }
+    .hero-stats-mini { order: 6; grid-template-columns: repeat(4, 1fr) !important; margin-top: 2rem !important; margin-left: calc(-1 * clamp(1.5rem, 5vw, 4rem)) !important; margin-right: calc(-1 * clamp(1.5rem, 5vw, 4rem)) !important; border-radius: 0 !important; align-self: stretch !important; }
+    .hero-subtitle-line { display: none !important; }
+  }
+  @media (max-width: 768px) {
+    .hero-headline { font-size: clamp(1.45rem, 6vw, 2.2rem) !important; }
+    .hero-eyebrow-anim .saffron-badge { font-size: 0.55rem !important; padding: 4px 10px !important; }
+    .hero-body-cta p { font-size: 0.82rem !important; line-height: 1.7 !important; margin-bottom: 1.5rem !important; }
+    .hero-body-cta .btn-primary,
+    .hero-body-cta .btn-outline { font-size: 0.68rem !important; padding: 10px 20px !important; }
+    .hero-carousel-box { height: 240px !important; }
+    .hero-stats-mini > div { padding: 0.75rem 0.4rem !important; }
+    .hero-stat-num { font-size: 0.95rem !important; }
+    .hero-stat-label { font-size: 0.45rem !important; }
+    .hero-stat-note { font-size: 0.55rem !important; }
+    .hero-cert-badge { padding: 0.45rem 0.65rem !important; gap: 0.45rem !important; bottom: 0.6rem !important; right: 0.6rem !important; }
+    .hero-cert-badge svg { width: 14px !important; height: 14px !important; }
+    .hero-cert-label { font-size: 0.44rem !important; }
+    .hero-cert-text { font-size: 0.62rem !important; }
   }
 
   @media (max-width: 768px) {
@@ -379,33 +409,114 @@ const GLOBAL_CSS = `
       scroll-snap-type: x mandatory !important;
       -webkit-overflow-scrolling: touch !important;
       scrollbar-width: none !important;
-      gap: 0 !important;
+      gap: 16px !important;
+      padding: 0 clamp(1.5rem, 5vw, 4rem) !important;
+      scroll-padding-left: clamp(1.5rem, 5vw, 4rem) !important;
+      background: transparent !important;
     }
     .pp-product-grid::-webkit-scrollbar { display: none; }
-    .pp-product-grid > * { flex: 0 0 78vw !important; max-width: 290px !important; scroll-snap-align: start !important; }
+    .pp-product-grid > * { flex: 0 0 82vw !important; max-width: 340px !important; scroll-snap-align: start !important; border-radius: 8px !important; overflow: hidden !important; }
     /* Paper products: horizontal scroll carousel on mobile */
     .products-detail-grid {
       display: flex !important; overflow-x: auto !important;
       scroll-snap-type: x mandatory !important;
       -webkit-overflow-scrolling: touch !important;
       scrollbar-width: none !important;
-      gap: 12px !important; background: transparent !important;
+      gap: 16px !important;
+      padding: 0 clamp(1.5rem, 5vw, 4rem) !important;
+      scroll-padding-left: clamp(1.5rem, 5vw, 4rem) !important;
+      background: transparent !important;
     }
     .products-detail-grid::-webkit-scrollbar { display: none; }
-    .products-detail-grid > * { flex: 0 0 78vw !important; max-width: 290px !important; scroll-snap-align: start !important; }
-    .industries-grid { grid-template-columns: 1fr 1fr !important; }
+    .products-detail-grid > * { flex: 0 0 82vw !important; max-width: 340px !important; scroll-snap-align: start !important; border-radius: 8px !important; overflow: hidden !important; }
+    .industries-grid { grid-template-columns: 1fr 1fr !important; gap: 1px !important; }
+    .industry-tile { padding: 0.85rem 1rem !important; display: flex !important; align-items: center !important; gap: 0.75rem !important; flex-direction: row !important; }
+    .industry-tile > div:first-child { display: none !important; }
+    .industry-tile > p { display: none !important; }
+    .industry-tile > div:nth-child(2) { width: 30px !important; height: 30px !important; margin-bottom: 0 !important; flex-shrink: 0 !important; }
+    .industry-tile > h3 { margin-bottom: 0 !important; font-size: 0.82rem !important; }
     .infra-metrics-grid { grid-template-columns: repeat(3, 1fr) !important; }
-    .blog-teaser-grid { grid-template-columns: 1fr !important; }
-    section { padding-top: 64px !important; padding-bottom: 64px !important; }
-    .infra-section { padding-top: 44px !important; padding-bottom: 44px !important; }
+    .blog-teaser-grid { grid-template-columns: 1fr 1fr !important; }
+    section { padding-top: 48px !important; padding-bottom: 48px !important; }
+    section.hero-section { padding-top: 90px !important; }
+    .infra-section { padding-top: 32px !important; padding-bottom: 32px !important; }
   }
   @media (max-width: 480px) {
-    .industries-grid { grid-template-columns: 1fr !important; }
+    .industries-grid { grid-template-columns: 1fr 1fr !important; }
+    .blog-teaser-grid { grid-template-columns: 1fr !important; }
     .infra-metrics-grid { grid-template-columns: repeat(2, 1fr) !important; }
     .blog-teaser-header { flex-direction: column !important; align-items: flex-start !important; gap: 1rem !important; }
   }
   @media (max-width: 640px) {
     .contact-form-grid { grid-template-columns: 1fr !important; }
+  }
+
+  /* ── Scroll hint — fade + arrows + swipe pill ─────────── */
+  .scroll-hint-wrap { position: relative; }
+  .scroll-hint-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 48px;
+    background: linear-gradient(to right, transparent, ${C.deepWarm});
+    pointer-events: none;
+    z-index: 2;
+    display: none;
+  }
+  .scroll-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(250,247,242,0.15);
+    background: rgba(15,20,30,0.7);
+    backdrop-filter: blur(8px);
+    color: rgba(250,247,242,0.8);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    padding: 0;
+  }
+  .scroll-arrow:hover {
+    background: rgba(91,155,213,0.25);
+    border-color: rgba(91,155,213,0.4);
+    color: #fff;
+  }
+  .scroll-arrow:active { transform: translateY(-50%) scale(0.92); }
+  .scroll-arrow.left  { left: 8px; }
+  .scroll-arrow.right { right: 8px; }
+  .scroll-arrow.hidden { opacity: 0; pointer-events: none; }
+  .scroll-hint-pill {
+    display: none;
+    align-items: center; gap: 6px;
+    position: absolute; bottom: -24px; right: 0;
+    font-family: ${F.body}; font-size: 0.62rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(250,247,242,0.35);
+    z-index: 3;
+  }
+  .scroll-hint-pill span {
+    display: inline-block;
+    animation: hintNudge 1.5s ease-in-out 3;
+  }
+  @keyframes hintNudge {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+  }
+  @keyframes hintFade {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  @media (max-width: 768px) {
+    .scroll-hint-wrap::after { display: block; }
+    .scroll-hint-pill {
+      display: flex;
+      animation: hintFade 5s ease-in-out forwards;
+    }
   }
 
   /* ── Homepage product panels ─────────────────────────────── */
@@ -714,7 +825,7 @@ function Hero() {
   ];
 
   return (
-    <section style={{
+    <section className="hero-section" style={{
       minHeight: "100vh", background: C.deepWarm,
       display: "flex", flexDirection: "column", justifyContent: "center",
       padding: "clamp(80px, 10vh, 110px) clamp(1.5rem, 5vw, 4rem) clamp(48px, 8vh, 80px)",
@@ -724,7 +835,7 @@ function Hero() {
       <div className="hero-grid" style={{ maxWidth: "1400px", margin: "0 auto", width: "100%", position: "relative", zIndex: 1 }}>
 
         {/* ── LEFT COLUMN ─────────────────────────────────────── */}
-        <div>
+        <div className="hero-text-col">
           {/* Eyebrow — fade in + slide from left with slight blur */}
           <motion.div
             initial={{ opacity: 0, x: -30, filter: "blur(6px)" }}
@@ -761,6 +872,7 @@ function Hero() {
               }}>Automotive, Pharma &amp; Electronics</span>
             </motion.span>
             <motion.span
+              className="hero-subtitle-line"
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.6, ease: heroEase }}
@@ -774,6 +886,7 @@ function Hero() {
 
           {/* Rule — scale from left */}
           <motion.div
+            className="hero-rule"
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.85, delay: 0.7, ease: heroEase }}
@@ -781,6 +894,7 @@ function Hero() {
 
           {/* Body + CTAs — fade up together */}
           <motion.div
+            className="hero-body-cta"
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, delay: 0.8, ease: heroEase }}
@@ -806,7 +920,7 @@ function Hero() {
 
         {/* ── RIGHT COLUMN — image + stats beneath ───────── */}
         <div className="hero-img-col" style={{ display: "grid", gridTemplateRows: "auto 1fr auto", gap: 0 }}>
-          <div style={{
+          <div className="hero-carousel-box" style={{
             position: "relative",
             height: "clamp(400px, 60vh, 620px)",
             borderRadius: "10px",
@@ -830,28 +944,29 @@ function Hero() {
 
           {/* Certification badge overlay — ISO badges gentle fade in */}
           <motion.div
+            className="hero-cert-badge"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 1.2, ease: heroEase }}
             style={{
               position: "absolute", bottom: "1.5rem", right: "1.5rem",
-              background: "rgba(20,18,16,0.88)",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
+              background: "rgba(15,20,30,0.45)",
+              backdropFilter: "blur(20px) saturate(1.4)",
+              WebkitBackdropFilter: "blur(20px) saturate(1.4)",
               borderRadius: "8px",
               padding: "0.8rem 1.1rem",
               display: "flex", alignItems: "center", gap: "0.75rem",
-              border: "1px solid rgba(250,247,242,0.10)",
+              border: "1px solid rgba(250,247,242,0.15)",
             }}>
             <IconCircleCheck size={18} style={{ color: C.saffron, flexShrink: 0 }} />
             <div>
-              <div style={{
+              <div className="hero-cert-label" style={{
                 fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
                 textTransform: "uppercase", color: "rgba(250,247,242,0.45)", marginBottom: "3px",
               }}>
                 Certified Quality
               </div>
-              <div style={{
+              <div className="hero-cert-text" style={{
                 fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
                 color: C.cream, letterSpacing: "0.01em",
               }}>
@@ -862,10 +977,10 @@ function Hero() {
           </div>
 
           {/* Spacer */}
-          <div />
+          <div className="hero-spacer" />
 
           {/* Stats — 4 columns under the image, aligned with CTAs on left */}
-          <div style={{
+          <div className="hero-stats-mini" style={{
             display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
             gap: 0, alignSelf: "end",
             border: `1px solid rgba(250,247,242,0.08)`,
@@ -889,21 +1004,21 @@ function Hero() {
                   borderRight: i < stats.length - 1 ? "1px solid rgba(250,247,242,0.08)" : "none",
                   background: i % 2 === 0 ? "rgba(250,247,242,0.03)" : "transparent",
                 }}>
-                <div style={{
+                <div className="hero-stat-num" style={{
                   fontFamily: F.display, fontWeight: 700,
                   fontSize: "1.35rem", color: C.charcoal, lineHeight: 1,
                   marginBottom: "4px",
                 }}>
                   {stat.raw}
                 </div>
-                <div style={{
+                <div className="hero-stat-label" style={{
                   fontFamily: F.body, fontWeight: 500, fontSize: "0.58rem",
                   color: C.warm, letterSpacing: "0.06em", textTransform: "uppercase",
                   marginBottom: "2px",
                 }}>
                   {stat.label}
                 </div>
-                <div style={{
+                <div className="hero-stat-note" style={{
                   fontFamily: F.italic, fontStyle: "italic",
                   fontSize: "0.72rem", color: "rgba(250,247,242,0.45)",
                 }}>
@@ -1141,12 +1256,52 @@ function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
 }
 
 function PPProductGrid() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canLeft, setCanLeft] = useState(false);
+  const [canRight, setCanRight] = useState(true);
+
+  const checkScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanLeft(el.scrollLeft > 10);
+    setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+  };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    checkScroll();
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    return () => el.removeEventListener("scroll", checkScroll);
+  }, []);
+
+  const scroll = (dir: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const card = el.querySelector<HTMLElement>(":scope > *");
+    const w = card ? card.offsetWidth + 16 : el.clientWidth * 0.8;
+    el.scrollBy({ left: dir * w, behavior: "smooth" });
+  };
+
   return (
-    <div className="pp-product-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "1px",
-      background: C.borderMid }}>
-      {PP_PRODUCTS.map((p, i) => (
-        <PPProductCard key={p.name} p={p} i={i} />
-      ))}
+    <div className="scroll-hint-wrap">
+      <div ref={scrollRef} className="pp-product-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "1px",
+        background: C.borderMid }}>
+        {PP_PRODUCTS.map((p, i) => (
+          <PPProductCard key={p.name} p={p} i={i} />
+        ))}
+      </div>
+      <button
+        className={`scroll-arrow left${canLeft ? "" : " hidden"}`}
+        onClick={() => scroll(-1)}
+        aria-label="Scroll left"
+      >←</button>
+      <button
+        className={`scroll-arrow right${canRight ? "" : " hidden"}`}
+        onClick={() => scroll(1)}
+        aria-label="Scroll right"
+      >→</button>
+      <div className="scroll-hint-pill">Swipe <span>→</span></div>
     </div>
   );
 }
@@ -1496,7 +1651,7 @@ function InfraCallout() {
   ];
 
   return (
-    <div className="infra-section" style={{ background: C.parchment, padding: "64px clamp(1.5rem, 5vw, 4rem)", position: "relative", overflow: "hidden" }}>
+    <div className="infra-section" style={{ background: C.parchment, padding: "clamp(32px, 6vw, 64px) clamp(1.5rem, 5vw, 4rem)", position: "relative", overflow: "hidden" }}>
 
       {/* Raindrop pulse keyframes */}
       <style>{`
@@ -1547,7 +1702,7 @@ function InfraCallout() {
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               style={{
               display: "flex", alignItems: "center", justifyContent: "space-between",
-              gap: "2rem", flexWrap: "wrap", marginBottom: "2.5rem",
+              gap: "clamp(1rem, 2vw, 2rem)", flexWrap: "wrap", marginBottom: "clamp(1.25rem, 3vw, 2.5rem)",
             }}>
               <div>
                 <span style={{
@@ -1665,10 +1820,10 @@ function IndustriesSection() {
   ];
 
   return (
-    <section id="industries" style={{ background: C.parchment, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
+    <section id="industries" style={{ background: C.parchment, padding: "clamp(48px, 8vw, 100px) clamp(1.5rem, 5vw, 4rem)" }}>
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
-        <div className="sr" style={{ marginBottom: "3.5rem" }}>
+        <div className="sr" style={{ marginBottom: "clamp(1.5rem, 4vw, 3.5rem)" }}>
           <span className="eyebrow">Who We Serve</span>
           <h2 style={{ fontFamily: F.display, fontWeight: 700,
             fontSize: "clamp(2rem, 4vw, 3.2rem)", color: C.charcoal,
@@ -1780,7 +1935,7 @@ function ClientLogoBand() {
       background: "#152844",
       borderTop: `1px solid ${C.border}`,
       borderBottom: `1px solid ${C.border}`,
-      padding: "3.5rem 0 3rem",
+      padding: "clamp(1.5rem, 4vw, 3.5rem) 0 clamp(1.25rem, 3vw, 3rem)",
       position: "relative",
     }}>
       {/* Section label */}
@@ -1788,7 +1943,7 @@ function ClientLogoBand() {
         textAlign: "center",
         fontFamily: F.body, fontSize: "0.58rem", fontWeight: 600,
         letterSpacing: "0.24em", textTransform: "uppercase",
-        color: "#5B9BD5", opacity: 1, marginBottom: "2.25rem",
+        color: "#5B9BD5", opacity: 1, marginBottom: "clamp(1rem, 2.5vw, 2.25rem)",
       }}>
         Our packaging is used by
       </p>
@@ -1797,13 +1952,13 @@ function ClientLogoBand() {
       <div style={{ position: "relative", overflow: "hidden", width: "100%" }}>
         {/* Left fade */}
         <div aria-hidden="true" style={{
-          position: "absolute", left: 0, top: 0, bottom: 0, width: "140px",
+          position: "absolute", left: 0, top: 0, bottom: 0, width: "clamp(40px, 10vw, 140px)",
           background: `linear-gradient(to right, #152844 30%, transparent)`,
           zIndex: 2, pointerEvents: "none",
         }} />
         {/* Right fade */}
         <div aria-hidden="true" style={{
-          position: "absolute", right: 0, top: 0, bottom: 0, width: "140px",
+          position: "absolute", right: 0, top: 0, bottom: 0, width: "clamp(40px, 10vw, 140px)",
           background: `linear-gradient(to left, #152844 30%, transparent)`,
           zIndex: 2, pointerEvents: "none",
         }} />
@@ -1909,29 +2064,36 @@ function BlogTeaser() {
               <Link href={`/blog/${post.slug}`}
                 style={{
                   display: "block", textDecoration: "none",
-                  background: C.deepWarm, padding: "2rem",
+                  background: C.deepWarm,
                   transition: "background 0.22s",
                   height: "100%",
+                  overflow: "hidden",
                 }}
                 onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(250,247,242,0.05)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = C.deepWarm; }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`/blog/${post.slug}.jpg`} alt="" style={{
+                width: "100%", height: "160px", objectFit: "cover", display: "block",
+                transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+              }} />
+              <div style={{ padding: "1.5rem 1.75rem 2rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between",
-                alignItems: "center", marginBottom: "1.25rem" }}>
+                alignItems: "center", marginBottom: "1rem" }}>
                 <span style={{ fontFamily: F.body, fontSize: "0.64rem", fontWeight: 600,
                   letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(250,247,242,0.45)" }}>
                   {post.category}
                 </span>
                 <span style={{ fontFamily: F.italic, fontStyle: "italic",
-                  fontSize: "1.15rem", color: "rgba(250,247,242,0.35)" }}>
-                  {post.read} read
+                  fontSize: "0.92rem", color: "rgba(250,247,242,0.35)" }}>
+                  {post.read}
                 </span>
               </div>
               <h3 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1rem",
-                color: C.cream, lineHeight: 1.4, marginBottom: "0.75rem" }}>
+                color: C.cream, lineHeight: 1.4, marginBottom: "0.65rem" }}>
                 {post.title}
               </h3>
-              <p style={{ fontFamily: F.body, fontSize: "1.02rem", color: "rgba(250,247,242,0.55)",
-                lineHeight: 1.7, marginBottom: "1.5rem", fontWeight: 300 }}>
+              <p style={{ fontFamily: F.body, fontSize: "0.88rem", color: "rgba(250,247,242,0.55)",
+                lineHeight: 1.7, marginBottom: "1.25rem", fontWeight: 300 }}>
                 {post.excerpt}
               </p>
               <span style={{ fontFamily: F.body, fontSize: "0.74rem", fontWeight: 500,
@@ -1940,6 +2102,7 @@ function BlogTeaser() {
                 borderBottom: "1px solid rgba(250,247,242,0.22)", paddingBottom: "1px" }}>
                 Read Article <IconChevronRight size={11} />
               </span>
+              </div>
               </Link>
             </motion.div>
           ))}
@@ -1998,6 +2161,16 @@ function AboutSection() {
               and our commercial office in Gulmohar Center Point, Pune — serving
               50+ clients across India.
             </p>
+
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <div style={{
+              borderRadius: "8px", overflow: "hidden", marginBottom: "2rem",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+            }}>
+              <img src="/infrastructure/facility/converting-floor.jpg" alt="PGG Converting Facility at MIDC Sanaswadi" style={{
+                width: "100%", height: "220px", objectFit: "cover", display: "block",
+              }} />
+            </div>
 
             <Link href="/infrastructure" className="btn-outline" style={{ textDecoration: "none" }}>
               Our Converting Facility <IconArrowRight size={13} />
