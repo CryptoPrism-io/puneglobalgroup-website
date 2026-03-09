@@ -451,33 +451,31 @@ const GLOBAL_CSS = `
     .contact-form-grid { grid-template-columns: 1fr !important; }
   }
 
-  /* ── Scroll hint — fade + arrows + swipe pill ─────────── */
+  /* ── Scroll controls — bottom bar with arrows + counter ── */
   .scroll-hint-wrap { position: relative; }
-  .scroll-hint-wrap::after {
-    content: '';
-    position: absolute;
-    top: 0; right: 0; bottom: 0;
-    width: 48px;
-    background: linear-gradient(to right, transparent, ${C.deepWarm});
-    pointer-events: none;
-    z-index: 2;
-    display: none;
+  .scroll-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .scroll-counter {
+    font-family: 'DM Mono', 'Courier New', monospace;
+    font-size: 0.68rem;
+    color: rgba(250,247,242,0.4);
+    letter-spacing: 0.05em;
   }
   .scroll-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 36px; height: 36px;
+    width: 32px; height: 32px;
     border-radius: 50%;
     border: 1px solid rgba(250,247,242,0.15);
     background: rgba(15,20,30,0.7);
-    backdrop-filter: blur(8px);
-    color: rgba(250,247,242,0.8);
+    color: rgba(250,247,242,0.7);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
-    z-index: 5;
     transition: all 0.2s;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     padding: 0;
   }
   .scroll-arrow:hover {
@@ -485,39 +483,8 @@ const GLOBAL_CSS = `
     border-color: rgba(91,155,213,0.4);
     color: #fff;
   }
-  .scroll-arrow:active { transform: translateY(-50%) scale(0.92); }
-  .scroll-arrow.left  { left: 8px; }
-  .scroll-arrow.right { right: 8px; }
-  .scroll-arrow.hidden { opacity: 0; pointer-events: none; }
-  .scroll-hint-pill {
-    display: none;
-    align-items: center; gap: 6px;
-    position: absolute; bottom: -24px; right: 0;
-    font-family: ${F.body}; font-size: 0.62rem; font-weight: 500;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(250,247,242,0.35);
-    z-index: 3;
-  }
-  .scroll-hint-pill span {
-    display: inline-block;
-    animation: hintNudge 1.5s ease-in-out 3;
-  }
-  @keyframes hintNudge {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(5px); }
-  }
-  @keyframes hintFade {
-    0% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-  @media (max-width: 768px) {
-    .scroll-hint-wrap::after { display: block; }
-    .scroll-hint-pill {
-      display: flex;
-      animation: hintFade 5s ease-in-out forwards;
-    }
-  }
+  .scroll-arrow:active { transform: scale(0.92); }
+  .scroll-arrow.hidden { opacity: 0.25; pointer-events: none; }
 
   /* ── Homepage product panels ─────────────────────────────── */
   .hp-cat-row {
@@ -1259,12 +1226,20 @@ function PPProductGrid() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canLeft, setCanLeft] = useState(false);
   const [canRight, setCanRight] = useState(true);
+  const [current, setCurrent] = useState(1);
+  const total = PP_PRODUCTS.length;
 
   const checkScroll = () => {
     const el = scrollRef.current;
     if (!el) return;
     setCanLeft(el.scrollLeft > 10);
     setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+    const card = el.querySelector<HTMLElement>(":scope > *");
+    if (card) {
+      const cardW = card.offsetWidth + 16;
+      const idx = Math.round(el.scrollLeft / cardW) + 1;
+      setCurrent(Math.min(Math.max(idx, 1), total));
+    }
   };
 
   useEffect(() => {
@@ -1291,17 +1266,19 @@ function PPProductGrid() {
           <PPProductCard key={p.name} p={p} i={i} />
         ))}
       </div>
-      <button
-        className={`scroll-arrow left${canLeft ? "" : " hidden"}`}
-        onClick={() => scroll(-1)}
-        aria-label="Scroll left"
-      >←</button>
-      <button
-        className={`scroll-arrow right${canRight ? "" : " hidden"}`}
-        onClick={() => scroll(1)}
-        aria-label="Scroll right"
-      >→</button>
-      <div className="scroll-hint-pill">Swipe <span>→</span></div>
+      <div className="scroll-controls">
+        <span className="scroll-counter">{current} / {total}</span>
+        <button
+          className={`scroll-arrow${canLeft ? "" : " hidden"}`}
+          onClick={() => scroll(-1)}
+          aria-label="Scroll left"
+        >←</button>
+        <button
+          className={`scroll-arrow${canRight ? "" : " hidden"}`}
+          onClick={() => scroll(1)}
+          aria-label="Scroll right"
+        >→</button>
+      </div>
     </div>
   );
 }

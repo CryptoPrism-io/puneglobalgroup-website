@@ -105,6 +105,14 @@ const CSS = `
   }
   @media (max-width: 560px) {
     .blog-grid { grid-template-columns: 1fr; }
+    .blog-cta-band {
+      grid-template-columns: 1fr !important;
+      padding: 2rem !important;
+      text-align: center;
+    }
+    .blog-cta-band > div:last-child {
+      align-items: stretch !important;
+    }
   }
 
   .bcard {
@@ -420,6 +428,7 @@ export default function BlogPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.6, ease: EASE }}
+          className="blog-cta-band"
           style={{
             marginTop: "4rem",
             background: C.navyDark,

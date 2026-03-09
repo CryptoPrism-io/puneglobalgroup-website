@@ -85,37 +85,31 @@ const CSS = `
   .family-grid { scrollbar-width: none; -ms-overflow-style: none; }
   .family-grid::-webkit-scrollbar { display: none; }
 
-  /* Scroll hint — fade + arrows + swipe pill */
+  /* Scroll controls — bottom bar with arrows + counter */
   .scroll-hint-wrap { position: relative; }
-  .scroll-hint-wrap::after {
-    content: '';
-    position: absolute;
-    top: 0; right: 0; bottom: 0;
-    width: 48px;
-    background: linear-gradient(to right, transparent, ${C.dark});
-    pointer-events: none;
-    z-index: 2;
-    display: none;
+  .scroll-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1rem;
   }
-  .scroll-hint-wrap.even::after { background: linear-gradient(to right, transparent, ${C.dark}); }
-  .scroll-hint-wrap.odd::after  { background: linear-gradient(to right, transparent, #0E1018); }
-
-  /* Arrow buttons */
+  .scroll-counter {
+    font-family: ${F.mono};
+    font-size: 0.68rem;
+    color: rgba(250,247,242,0.4);
+    letter-spacing: 0.05em;
+  }
   .scroll-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 36px; height: 36px;
+    width: 32px; height: 32px;
     border-radius: 50%;
     border: 1px solid rgba(250,247,242,0.15);
     background: rgba(15,20,30,0.7);
-    backdrop-filter: blur(8px);
-    color: rgba(250,247,242,0.8);
+    color: rgba(250,247,242,0.7);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
-    z-index: 5;
     transition: all 0.2s;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     padding: 0;
   }
   .scroll-arrow:hover {
@@ -123,40 +117,8 @@ const CSS = `
     border-color: rgba(91,155,213,0.4);
     color: #fff;
   }
-  .scroll-arrow:active { transform: translateY(-50%) scale(0.92); }
-  .scroll-arrow.left  { left: 8px; }
-  .scroll-arrow.right { right: 8px; }
-  .scroll-arrow.hidden { opacity: 0; pointer-events: none; }
-
-  .scroll-hint-pill {
-    display: none;
-    align-items: center; gap: 6px;
-    position: absolute; bottom: -28px; right: 0;
-    font-family: ${F.body}; font-size: 0.62rem; font-weight: 500;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(250,247,242,0.35);
-    z-index: 3;
-  }
-  .scroll-hint-pill span {
-    display: inline-block;
-    animation: hintNudge 1.5s ease-in-out 3;
-  }
-  @keyframes hintNudge {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(5px); }
-  }
-  @keyframes hintFade {
-    0% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-  @media(max-width: 580px) {
-    .scroll-hint-wrap::after { display: block; }
-    .scroll-hint-pill {
-      display: flex;
-      animation: hintFade 5s ease-in-out forwards;
-    }
-  }
+  .scroll-arrow:active { transform: scale(0.92); }
+  .scroll-arrow.hidden { opacity: 0.25; pointer-events: none; }
 
   /* Product cards */
   .variant-card { transition: border-color 0.22s, box-shadow 0.22s, transform 0.22s; cursor:pointer; }
@@ -264,16 +226,24 @@ function useScrollReveal() {
 }
 
 /* ─── Scrollable Row with Arrow Buttons ──────────────────────────────────────── */
-function ScrollableRow({ children, bgClass = "even" }: { children: React.ReactNode; bgClass?: string }) {
+function ScrollableRow({ children, bgClass = "even", count = 0 }: { children: React.ReactNode; bgClass?: string; count?: number }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canLeft, setCanLeft] = useState(false);
   const [canRight, setCanRight] = useState(true);
+  const [current, setCurrent] = useState(1);
 
   const checkScroll = () => {
     const el = scrollRef.current;
     if (!el) return;
     setCanLeft(el.scrollLeft > 10);
     setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+    // Calculate current card index
+    const card = el.querySelector<HTMLElement>(":scope > *");
+    if (card && count > 0) {
+      const cardW = card.offsetWidth + 20;
+      const idx = Math.round(el.scrollLeft / cardW) + 1;
+      setCurrent(Math.min(Math.max(idx, 1), count));
+    }
   };
 
   useEffect(() => {
@@ -301,21 +271,26 @@ function ScrollableRow({ children, bgClass = "even" }: { children: React.ReactNo
           display: "flex", gap: "1.25rem",
           overflowX: "auto", scrollSnapType: "x mandatory",
           scrollbarWidth: "none", paddingBottom: "0.5rem",
+          ...(count <= 2 ? { justifyContent: "center" } : {}),
         }}
       >
         {children}
       </div>
-      <button
-        className={`scroll-arrow left${canLeft ? "" : " hidden"}`}
-        onClick={() => scroll(-1)}
-        aria-label="Scroll left"
-      >←</button>
-      <button
-        className={`scroll-arrow right${canRight ? "" : " hidden"}`}
-        onClick={() => scroll(1)}
-        aria-label="Scroll right"
-      >→</button>
-      <div className="scroll-hint-pill">Swipe <span>→</span></div>
+      {count > 1 && (
+        <div className="scroll-controls">
+          <span className="scroll-counter">{current} / {count}</span>
+          <button
+            className={`scroll-arrow${canLeft ? "" : " hidden"}`}
+            onClick={() => scroll(-1)}
+            aria-label="Scroll left"
+          >←</button>
+          <button
+            className={`scroll-arrow${canRight ? "" : " hidden"}`}
+            onClick={() => scroll(1)}
+            aria-label="Scroll right"
+          >→</button>
+        </div>
+      )}
     </div>
   );
 }
@@ -512,7 +487,7 @@ function FamilySection({ family, index }: { family: typeof ppFamilies[0]; index:
         </p>
 
         {/* Variants — horizontal scroll row */}
-        <ScrollableRow bgClass={index % 2 === 0 ? "even" : "odd"}>
+        <ScrollableRow bgClass={index % 2 === 0 ? "even" : "odd"} count={family.variants.length}>
           {family.variants.map((v, i) => (
             <VariantCard key={v.code} variant={v} delay={i * 0.08} />
           ))}
@@ -852,7 +827,7 @@ export default function PPCorrugatedPage() {
                     </div>
                     <p style={{ fontFamily: F.body, fontSize: "0.88rem", color: C.warm, lineHeight: 1.7, maxWidth: "480px", fontWeight: 300 }}>{family.descriptor}</p>
                   </div>
-                  <ScrollableRow bgClass="even">
+                  <ScrollableRow bgClass="even" count={family.variants.length}>
                     {family.variants.map((v, vi) => (
                       <VariantCard key={v.code} variant={v} delay={vi * 0.08} />
                     ))}
@@ -870,7 +845,7 @@ export default function PPCorrugatedPage() {
                     </div>
                     <p style={{ fontFamily: F.body, fontSize: "0.88rem", color: C.warm, lineHeight: 1.7, maxWidth: "480px", fontWeight: 300 }}>{sepFamily.descriptor}</p>
                   </div>
-                  <ScrollableRow bgClass="even">
+                  <ScrollableRow bgClass="even" count={sepFamily.variants.length}>
                     {sepFamily.variants.map((v, vi) => (
                       <VariantCard key={v.code} variant={v} delay={vi * 0.08} />
                     ))}
