@@ -36,6 +36,10 @@ app.use((req, res, next) => {
 // ── Make prisma available to routes ──────────────────────────
 app.locals.prisma = prisma;
 
+// ── Routes ────────────────────────────────────────────────────
+const leadsRouter = require('./src/routes/leads');
+app.use('/leads', leadsRouter);
+
 // ── Placeholder home route ───────────────────────────────────
 app.get('/', (req, res) => {
   res.render('layout', { title: 'Dashboard', body: '<h1>Outreach CRM</h1><p>Coming soon.</p>' });
