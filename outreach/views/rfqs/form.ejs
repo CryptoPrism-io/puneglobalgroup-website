@@ -1,0 +1,120 @@
+<style>
+.rfq-mat-table { width: 100%; border-collapse: collapse; }
+.rfq-mat-table th { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); padding: 0.5rem 0.6rem; border-bottom: 2px solid var(--border); text-align: left; }
+.rfq-mat-table td { padding: 0.4rem 0.4rem; vertical-align: middle; }
+.rfq-mat-table td input, .rfq-mat-table td select { width: 100%; font-size: 0.85rem; }
+</style>
+
+<div class="page-header">
+  <h1>New Supplier RFQ</h1>
+  <a href="/quotes/<%= quote.id %>" class="btn btn-secondary btn-sm">← Back to Quote</a>
+</div>
+
+<form method="POST" action="/rfqs">
+  <input type="hidden" name="quoteId" value="<%= quote.id %>">
+
+  <!-- Quote reference -->
+  <div class="form-card" style="margin-bottom:1.5rem">
+    <h2 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-bottom:1rem">
+      Source Quote
+    </h2>
+    <div style="background:var(--bg-warm);border:1px solid var(--border);border-radius:var(--radius);padding:0.75rem 1rem;font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:var(--navy-800)">
+      <strong><%= quote.quoteNo %></strong>
+      <% if (quote.lead) { %>
+        <span style="color:var(--text-secondary)"> — <%= quote.lead.companyName %></span>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Supplier details -->
+  <div class="form-card" style="margin-bottom:1.5rem">
+    <h2 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-bottom:1rem">
+      Supplier Details
+    </h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
+      <div class="form-group" style="margin:0">
+        <label>Supplier Name <span style="color:var(--error)">*</span></label>
+        <input type="text" name="supplierName" required placeholder="e.g. Balaji Polymers">
+      </div>
+      <div class="form-group" style="margin:0">
+        <label>Email</label>
+        <input type="email" name="supplierEmail" placeholder="supplier@example.com">
+      </div>
+      <div class="form-group" style="margin:0">
+        <label>Phone</label>
+        <input type="tel" name="supplierPhone" placeholder="+91 98765 43210">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:1rem;margin-top:1rem">
+      <div class="form-group" style="margin:0">
+        <label>Response Deadline</label>
+        <input type="date" name="responseDeadline">
+      </div>
+      <div class="form-group" style="margin:0">
+        <label>Notes</label>
+        <textarea name="notes" rows="2" placeholder="Any special instructions or notes…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Materials table (pre-filled from BOM) -->
+  <div class="form-card" style="margin-bottom:1.5rem">
+    <h2 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-bottom:1rem">
+      Materials (<%= bomItems.length %> items from BOM)
+    </h2>
+    <div class="table-wrapper" style="overflow-x:auto">
+      <table class="rfq-mat-table">
+        <thead>
+          <tr>
+            <th style="min-width:180px">Material Name</th>
+            <th style="min-width:160px">Specification</th>
+            <th style="min-width:90px">Quantity</th>
+            <th style="min-width:80px">Unit</th>
+            <th style="min-width:110px">Est. Rate (₹)</th>
+            <th style="min-width:150px">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% bomItems.forEach(function(item) { %>
+            <tr>
+              <td><input type="text" name="items.materialName" value="<%= item.materialName %>" required></td>
+              <td><input type="text" name="items.specification" value="<%= item.specification || '' %>"></td>
+              <td><input type="number" name="items.quantity" value="<%= item.quantity || '' %>" step="0.0001" min="0"></td>
+              <td>
+                <select name="items.unit">
+                  <% ['sqm','kg','pcs','tonnes'].forEach(function(u) { %>
+                    <option value="<%= u %>" <%= item.unit === u ? 'selected' : '' %>><%= u %></option>
+                  <% }); %>
+                </select>
+              </td>
+              <td><input type="number" name="items.estimatedRate" value="<%= item.estimatedRate || '' %>" step="0.01" min="0" placeholder="0.00"></td>
+              <td><input type="text" name="items.notes" value="" placeholder="Optional note"></td>
+            </tr>
+          <% }); %>
+          <% if (bomItems.length === 0) { %>
+            <tr>
+              <td><input type="text" name="items.materialName" placeholder="Material name" required></td>
+              <td><input type="text" name="items.specification" placeholder="Specification"></td>
+              <td><input type="number" name="items.quantity" step="0.0001" min="0"></td>
+              <td>
+                <select name="items.unit">
+                  <option value="sqm">sqm</option>
+                  <option value="kg">kg</option>
+                  <option value="pcs">pcs</option>
+                  <option value="tonnes">tonnes</option>
+                </select>
+              </td>
+              <td><input type="number" name="items.estimatedRate" step="0.01" min="0" placeholder="0.00"></td>
+              <td><input type="text" name="items.notes" placeholder="Optional note"></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Create RFQ</button>
+    <a href="/quotes/<%= quote.id %>" class="btn btn-secondary">Cancel</a>
+  </div>
+</form>

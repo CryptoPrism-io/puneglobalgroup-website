@@ -1,0 +1,67 @@
+<div class="page-header">
+  <h1>Supplier RFQs</h1>
+</div>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>RFQ #</th>
+        <th>Quote #</th>
+        <th>Lead</th>
+        <th>Supplier</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Items</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (rfqs.length === 0) { %>
+        <tr>
+          <td colspan="8" style="text-align:center;color:var(--text-tertiary);padding:2rem">
+            No RFQs yet. Create one from a <a href="/quotes">Quote</a>.
+          </td>
+        </tr>
+      <% } else { %>
+        <% rfqs.forEach(function(rfq) { %>
+          <%
+            var statusStyles = {
+              DRAFT:    'background:#e5e7eb;color:#374151',
+              SENT:     'background:var(--info-soft);color:var(--info)',
+              RECEIVED: 'background:var(--success-soft);color:var(--success)',
+            };
+            var statusStyle = statusStyles[rfq.status] || '';
+            var createdDate = new Date(rfq.createdAt).toLocaleDateString('en-IN');
+          %>
+          <tr>
+            <td>
+              <a href="/rfqs/<%= rfq.id %>" style="font-weight:600;color:var(--navy-800);font-family:'JetBrains Mono',monospace;font-size:0.85rem">
+                <%= rfq.rfqNo %>
+              </a>
+            </td>
+            <td>
+              <% if (rfq.quote) { %>
+                <a href="/quotes/<%= rfq.quote.id %>" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem">
+                  <%= rfq.quote.quoteNo %>
+                </a>
+              <% } else { %>—<% } %>
+            </td>
+            <td>
+              <% if (rfq.quote && rfq.quote.lead) { %>
+                <a href="/leads/<%= rfq.quote.lead.id %>"><%= rfq.quote.lead.companyName %></a>
+              <% } else { %>—<% } %>
+            </td>
+            <td><%= rfq.supplierName %></td>
+            <td><span class="badge" style="<%= statusStyle %>"><%= rfq.status %></span></td>
+            <td style="color:var(--text-tertiary);font-size:0.85rem"><%= createdDate %></td>
+            <td style="text-align:center"><%= rfq._count.items %></td>
+            <td><a href="/rfqs/<%= rfq.id %>" class="btn btn-secondary btn-sm">View</a></td>
+          </tr>
+        <% }); %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<p class="text-muted" style="margin-top:0.75rem;font-size:0.82rem"><%= rfqs.length %> RFQ<%= rfqs.length !== 1 ? 's' : '' %> found</p>

@@ -1,0 +1,170 @@
+<%
+  var statusStyles = {
+    DRAFT:    'background:#e5e7eb;color:#374151',
+    SENT:     'background:var(--info-soft);color:var(--info)',
+    RECEIVED: 'background:var(--success-soft);color:var(--success)',
+  };
+  var statusStyle = statusStyles[rfq.status] || '';
+  var isDraft    = rfq.status === 'DRAFT';
+  var isSent     = rfq.status === 'SENT';
+  var isReceived = rfq.status === 'RECEIVED';
+%>
+
+<style>
+.rfq-meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.meta-cell { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.9rem 1.1rem; }
+.meta-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); margin-bottom: 0.2rem; }
+.meta-value { font-size: 0.95rem; font-weight: 600; color: var(--navy-800); }
+.action-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.mat-table td input[type="text"], .mat-table td input[type="number"] { width: 100%; font-size: 0.85rem; }
+</style>
+
+<div class="page-header">
+  <div style="display:flex;align-items:center;gap:1rem">
+    <h1 style="font-family:'JetBrains Mono',monospace;font-size:1.35rem"><%= rfq.rfqNo %></h1>
+    <span class="badge" style="<%= statusStyle %>"><%= rfq.status %></span>
+  </div>
+  <div class="action-bar">
+    <% if (rfq.quote) { %>
+      <a href="/quotes/<%= rfq.quote.id %>" class="btn btn-secondary btn-sm">← Quote <%= rfq.quote.quoteNo %></a>
+    <% } %>
+    <a href="/rfqs" class="btn btn-secondary btn-sm">All RFQs</a>
+    <% if (isDraft) { %>
+      <form method="POST" action="/rfqs/<%= rfq.id %>/send" style="display:inline"
+            onsubmit="return confirm('Mark this RFQ as SENT to supplier?')">
+        <button type="submit" class="btn btn-primary btn-sm">Mark as Sent</button>
+      </form>
+    <% } %>
+  </div>
+</div>
+
+<!-- Meta grid -->
+<div class="rfq-meta-grid">
+  <div class="meta-cell">
+    <div class="meta-label">Supplier</div>
+    <div class="meta-value"><%= rfq.supplierName %></div>
+  </div>
+  <div class="meta-cell">
+    <div class="meta-label">Email</div>
+    <div class="meta-value" style="font-size:0.85rem;font-weight:400">
+      <% if (rfq.supplierEmail) { %>
+        <a href="mailto:<%= rfq.supplierEmail %>"><%= rfq.supplierEmail %></a>
+      <% } else { %>—<% } %>
+    </div>
+  </div>
+  <div class="meta-cell">
+    <div class="meta-label">Phone</div>
+    <div class="meta-value" style="font-size:0.85rem;font-weight:400"><%= rfq.supplierPhone || '—' %></div>
+  </div>
+  <div class="meta-cell">
+    <div class="meta-label">Response Deadline</div>
+    <div class="meta-value" style="font-size:0.9rem">
+      <%= rfq.responseDeadline ? new Date(rfq.responseDeadline).toLocaleDateString('en-IN') : '—' %>
+    </div>
+  </div>
+</div>
+
+<!-- Source quote + date + notes -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+  <div class="meta-cell">
+    <div class="meta-label">Source Quote</div>
+    <div class="meta-value" style="font-size:0.9rem">
+      <% if (rfq.quote) { %>
+        <a href="/quotes/<%= rfq.quote.id %>" style="color:var(--navy-800);font-family:'JetBrains Mono',monospace">
+          <%= rfq.quote.quoteNo %>
+        </a>
+        <% if (rfq.quote.lead) { %>
+          — <a href="/leads/<%= rfq.quote.lead.id %>" style="color:var(--text-secondary);font-weight:400;font-family:inherit">
+            <%= rfq.quote.lead.companyName %>
+          </a>
+        <% } %>
+      <% } else { %>—<% } %>
+    </div>
+  </div>
+  <div class="meta-cell">
+    <div class="meta-label">Created</div>
+    <div class="meta-value" style="font-size:0.9rem;font-weight:400">
+      <%= new Date(rfq.createdAt).toLocaleDateString('en-IN') %>
+      <% if (rfq.sentAt) { %>
+        &nbsp;·&nbsp; Sent: <%= new Date(rfq.sentAt).toLocaleDateString('en-IN') %>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<% if (rfq.notes) { %>
+  <div class="form-card" style="margin-bottom:1.5rem">
+    <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-tertiary);margin-bottom:0.4rem">Notes</div>
+    <p style="font-size:0.9rem;white-space:pre-wrap;color:var(--text-secondary)"><%= rfq.notes %></p>
+  </div>
+<% } %>
+
+<!-- Materials table -->
+<div class="form-card" style="margin-bottom:1.5rem">
+  <h2 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-bottom:1rem">
+    Materials (<%= rfq.items.length %>)
+  </h2>
+
+  <% if (isSent) { %>
+    <!-- Record Response form wraps the table -->
+    <form method="POST" action="/rfqs/<%= rfq.id %>/response">
+  <% } %>
+
+  <div class="table-wrapper" style="overflow-x:auto">
+    <table class="mat-table" style="min-width:700px">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Material</th>
+          <th>Specification</th>
+          <th>Qty</th>
+          <th>Unit</th>
+          <th>Est. Rate (₹)</th>
+          <% if (isSent || isReceived) { %><th>Supplier Quoted Rate (₹)</th><% } %>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% rfq.items.forEach(function(item, idx) { %>
+          <tr>
+            <td style="color:var(--text-tertiary);font-size:0.8rem"><%= idx + 1 %></td>
+            <td style="font-weight:600;font-size:0.9rem"><%= item.materialName %></td>
+            <td style="font-size:0.85rem;color:var(--text-secondary)"><%= item.specification || '—' %></td>
+            <td class="mono" style="font-size:0.85rem"><%= item.quantity != null ? parseFloat(item.quantity).toString() : '—' %></td>
+            <td style="font-size:0.85rem"><%= item.unit %></td>
+            <td class="mono" style="font-size:0.85rem">
+              <%= item.estimatedRate != null ? '₹' + item.estimatedRate : '—' %>
+            </td>
+            <% if (isSent) { %>
+              <td>
+                <input type="hidden" name="items.id" value="<%= item.id %>">
+                <input type="number" name="items.supplierQuotedRate"
+                       value="<%= item.supplierQuotedRate || '' %>"
+                       step="0.01" min="0" placeholder="0.00"
+                       style="width:110px">
+              </td>
+            <% } else if (isReceived) { %>
+              <td class="mono" style="font-weight:600;color:var(--success)">
+                <%= item.supplierQuotedRate != null ? '₹' + item.supplierQuotedRate : '—' %>
+              </td>
+            <% } %>
+            <td style="font-size:0.82rem;color:var(--text-secondary)"><%= item.notes || '—' %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if (isSent) { %>
+      <div class="form-actions" style="margin-top:1rem">
+        <button type="submit" class="btn btn-primary">Save Response</button>
+      </div>
+    </form>
+  <% } %>
+</div>
+
+<% if (isReceived) { %>
+  <div class="flash flash-success" style="margin-bottom:1rem">
+    Supplier response received. Quoted rates are shown in the table above.
+  </div>
+<% } %>
