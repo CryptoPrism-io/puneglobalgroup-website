@@ -1,0 +1,117 @@
+<%
+  var isEdit = contact !== null && contact !== undefined;
+  var action = isEdit ? '/contacts/' + contact.id : '/contacts';
+  var v = isEdit ? contact : {};
+  function val(field) { return v[field] || ''; }
+  function sel(field, option) { return val(field) === option ? 'selected' : ''; }
+  function chk(field, option) { return val(field) === option ? 'checked' : ''; }
+  var preselectedLeadId = isEdit ? contact.leadId : (defaultLeadId || '');
+%>
+
+<div class="page-header">
+  <h1><%= isEdit ? 'Edit Contact — ' + contact.name : 'New Contact' %></h1>
+  <% if (isEdit && contact.lead) { %>
+    <a href="/leads/<%= contact.lead.id %>?tab=contacts" class="btn btn-secondary">← Back to Lead</a>
+  <% } else if (defaultLeadId) { %>
+    <a href="/leads/<%= defaultLeadId %>?tab=contacts" class="btn btn-secondary">← Back to Lead</a>
+  <% } else { %>
+    <a href="/contacts" class="btn btn-secondary">← Contacts</a>
+  <% } %>
+</div>
+
+<div class="form-card" style="max-width:640px">
+  <form method="POST" action="<%= action %>">
+
+    <div class="form-group">
+      <label>Company (Lead) *</label>
+      <select name="leadId" required>
+        <option value="">— Select Lead —</option>
+        <% leads.forEach(function(l) { %>
+          <option value="<%= l.id %>" <%= parseInt(preselectedLeadId) === l.id ? 'selected' : '' %>><%= l.companyName %></option>
+        <% }); %>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" name="name" value="<%= val('name') %>" required placeholder="e.g. Rajesh Kumar">
+      </div>
+      <div class="form-group">
+        <label>Designation</label>
+        <input type="text" name="designation" value="<%= val('designation') %>" placeholder="e.g. Purchase Manager">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Department</label>
+      <select name="department">
+        <option value="">— Select —</option>
+        <option value="Purchase" <%= sel('department','Purchase') %>>Purchase</option>
+        <option value="Production" <%= sel('department','Production') %>>Production</option>
+        <option value="Packaging" <%= sel('department','Packaging') %>>Packaging</option>
+        <option value="Management" <%= sel('department','Management') %>>Management</option>
+        <option value="Other" <%= sel('department','Other') %>>Other</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="tel" name="phone" value="<%= val('phone') %>" placeholder="+91 98765 43210">
+      </div>
+      <div class="form-group">
+        <label>WhatsApp</label>
+        <input type="tel" name="whatsapp" value="<%= val('whatsapp') %>" placeholder="+91 98765 43210">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="email" value="<%= val('email') %>" placeholder="rajesh@company.com">
+    </div>
+
+    <div class="form-group">
+      <label>LinkedIn URL</label>
+      <input type="text" name="linkedinUrl" value="<%= val('linkedinUrl') %>" placeholder="https://linkedin.com/in/…">
+    </div>
+
+    <div class="form-group">
+      <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-weight:400">
+        <input type="checkbox" name="isPrimary" <%= (v.isPrimary ? 'checked' : '') %> style="width:auto">
+        <span style="font-weight:600;font-size:0.8rem;color:var(--text-secondary)">Primary contact for this company</span>
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label>DISC Type</label>
+      <div style="display:flex;gap:1.25rem;margin-top:0.25rem">
+        <% ['D','I','S','C'].forEach(function(d) { %>
+          <label style="display:flex;align-items:center;gap:0.4rem;font-weight:400;font-size:0.9rem;cursor:pointer">
+            <input type="radio" name="discType" value="<%= d %>" <%= chk('discType', d) %>>
+            <strong><%= d %></strong>
+          </label>
+        <% }); %>
+        <label style="display:flex;align-items:center;gap:0.4rem;font-weight:400;font-size:0.9rem;cursor:pointer">
+          <input type="radio" name="discType" value="" <%= !v.discType ? 'checked' : '' %>>
+          Unknown
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea name="notes" rows="3" placeholder="Anything notable about this contact…"><%= val('notes') %></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary"><%= isEdit ? 'Save Changes' : 'Add Contact' %></button>
+      <% if (isEdit) { %>
+        <form method="POST" action="/contacts/<%= contact.id %>/delete" style="display:inline" onsubmit="return confirm('Delete this contact?')">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      <% } %>
+    </div>
+
+  </form>
+</div>

@@ -1,0 +1,70 @@
+<div class="page-header">
+  <h1>Contacts</h1>
+  <a href="/contacts/new" class="btn btn-primary">+ New Contact</a>
+</div>
+
+<form method="GET" action="/contacts" class="filter-bar">
+  <input type="text" name="search" placeholder="Search name, email, phone, designation…" value="<%= search %>" style="min-width:280px">
+  <button type="submit" class="btn btn-primary btn-sm">Search</button>
+  <% if (search) { %>
+    <a href="/contacts" class="btn btn-secondary btn-sm">Clear</a>
+  <% } %>
+</form>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Designation</th>
+        <th>Company</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>WhatsApp</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (contacts.length === 0) { %>
+        <tr>
+          <td colspan="7" style="text-align:center;color:var(--text-tertiary);padding:2rem">
+            No contacts found.<% if (!search) { %> <a href="/contacts/new">Add the first contact.</a><% } %>
+          </td>
+        </tr>
+      <% } else { %>
+        <% contacts.forEach(function(c) { %>
+          <tr>
+            <td style="font-weight:500">
+              <%= c.name %>
+              <% if (c.isPrimary) { %>
+                <span class="badge badge-paid" style="margin-left:4px">Primary</span>
+              <% } %>
+            </td>
+            <td><%= c.designation || '—' %></td>
+            <td>
+              <% if (c.lead) { %>
+                <a href="/leads/<%= c.lead.id %>"><%= c.lead.companyName %></a>
+              <% } else { %>
+                —
+              <% } %>
+            </td>
+            <td><%= c.phone || '—' %></td>
+            <td>
+              <% if (c.email) { %>
+                <a href="mailto:<%= c.email %>"><%= c.email %></a>
+              <% } else { %>
+                —
+              <% } %>
+            </td>
+            <td><%= c.whatsapp || '—' %></td>
+            <td>
+              <a href="/contacts/<%= c.id %>" class="btn btn-secondary btn-sm">Edit</a>
+            </td>
+          </tr>
+        <% }); %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<p class="text-muted" style="margin-top:0.75rem;font-size:0.82rem"><%= contacts.length %> contact<%= contacts.length !== 1 ? 's' : '' %> found</p>
