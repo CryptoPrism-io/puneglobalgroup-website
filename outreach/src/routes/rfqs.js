@@ -80,7 +80,7 @@ router.post('/', async (req, res) => {
     const parsedItems = materialNames.map((name, i) => ({
       materialName:  name?.trim() || '',
       specification: specifications[i]?.trim() || null,
-      quantity:      quantities[i] ? parseFloat(quantities[i]) : null,
+      quantity:      quantities[i] ? quantities[i].toString().trim() : '0',
       unit:          units[i] || 'sqm',
       estimatedRate: estimatedRates[i] ? estimatedRates[i].toString().trim() : null,
       notes:         itemNotes[i]?.trim() || null,
