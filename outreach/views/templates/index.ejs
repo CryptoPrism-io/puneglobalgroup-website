@@ -1,0 +1,94 @@
+<div class="page-header">
+  <h1>Message Templates</h1>
+  <a href="/templates/new" class="btn btn-primary">+ New Template</a>
+</div>
+
+<form method="GET" action="/templates" class="filter-bar">
+  <select name="channel">
+    <option value="ALL" <%= filters.channel === 'ALL' ? 'selected' : '' %>>All Channels</option>
+    <option value="EMAIL" <%= filters.channel === 'EMAIL' ? 'selected' : '' %>>Email</option>
+    <option value="WHATSAPP" <%= filters.channel === 'WHATSAPP' ? 'selected' : '' %>>WhatsApp</option>
+    <option value="BOTH" <%= filters.channel === 'BOTH' ? 'selected' : '' %>>Both</option>
+  </select>
+  <select name="category">
+    <option value="ALL" <%= filters.category === 'ALL' ? 'selected' : '' %>>All Categories</option>
+    <option value="STOCK_UPDATE" <%= filters.category === 'STOCK_UPDATE' ? 'selected' : '' %>>Stock Update</option>
+    <option value="QUOTE_FOLLOWUP" <%= filters.category === 'QUOTE_FOLLOWUP' ? 'selected' : '' %>>Quote Follow-up</option>
+    <option value="COLD_INTRO" <%= filters.category === 'COLD_INTRO' ? 'selected' : '' %>>Cold Intro</option>
+    <option value="FESTIVE" <%= filters.category === 'FESTIVE' ? 'selected' : '' %>>Festive</option>
+    <option value="QUALITY_EDUCATION" <%= filters.category === 'QUALITY_EDUCATION' ? 'selected' : '' %>>Quality Education</option>
+    <option value="CUSTOM" <%= filters.category === 'CUSTOM' ? 'selected' : '' %>>Custom</option>
+  </select>
+  <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+  <a href="/templates" class="btn btn-secondary btn-sm">Clear</a>
+</form>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Channel</th>
+        <th>Category</th>
+        <th>Subject</th>
+        <th>Active</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (templates.length === 0) { %>
+        <tr>
+          <td colspan="6" style="text-align:center;color:var(--text-tertiary);padding:2rem">
+            No templates found. <a href="/templates/new">Create your first template.</a>
+          </td>
+        </tr>
+      <% } else { %>
+        <% templates.forEach(function(tmpl) { %>
+          <%
+            var channelLow = (tmpl.channel || 'email').toLowerCase();
+            var channelBadgeStyle = '';
+            if (tmpl.channel === 'EMAIL') {
+              channelBadgeStyle = 'background:var(--info-soft);color:var(--info);border:1px solid rgba(37,99,235,0.2)';
+            } else if (tmpl.channel === 'WHATSAPP') {
+              channelBadgeStyle = 'background:rgba(22,163,74,0.08);color:#16a34a;border:1px solid rgba(22,163,74,0.2)';
+            } else {
+              channelBadgeStyle = 'background:rgba(13,148,136,0.08);color:#0d9488;border:1px solid rgba(13,148,136,0.2)';
+            }
+            var catLabel = (tmpl.category || 'CUSTOM').replace(/_/g, ' ');
+            var subjectPreview = tmpl.subject ? (tmpl.subject.length > 50 ? tmpl.subject.substring(0, 50) + '…' : tmpl.subject) : '—';
+          %>
+          <tr>
+            <td>
+              <a href="/templates/<%= tmpl.id %>/edit" style="font-weight:600;color:var(--navy-800)">
+                <%= tmpl.name %>
+              </a>
+            </td>
+            <td>
+              <span class="badge" style="<%= channelBadgeStyle %>"><%= tmpl.channel %></span>
+            </td>
+            <td><span class="text-muted"><%= catLabel %></span></td>
+            <td><span class="text-muted" style="font-size:0.82rem"><%= subjectPreview %></span></td>
+            <td>
+              <% if (tmpl.isActive) { %>
+                <span style="color:var(--success);font-weight:600;font-size:0.82rem">Yes</span>
+              <% } else { %>
+                <span style="color:var(--text-tertiary);font-size:0.82rem">No</span>
+              <% } %>
+            </td>
+            <td style="display:flex;gap:0.4rem;align-items:center">
+              <a href="/templates/<%= tmpl.id %>/edit" class="btn btn-secondary btn-sm">Edit</a>
+              <form method="POST" action="/templates/<%= tmpl.id %>/delete" style="display:inline"
+                    onsubmit="return confirm('Delete template \'<%= tmpl.name.replace(/'/g, '') %>\'? This cannot be undone.')">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }); %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<p class="text-muted" style="margin-top:0.75rem;font-size:0.82rem">
+  <%= templates.length %> template<%= templates.length !== 1 ? 's' : '' %> found
+</p>
