@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — PGG Outreach</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body style="justify-content:center; align-items:center; background:var(--navy-800); flex-direction:column; gap:2rem;">
+
+  <div style="text-align:center;">
+    <svg width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(-45deg); margin-bottom:1rem;">
+      <path d="M6 6 L38 6 Q44 6, 44 12 L18 38 Q12 44, 6 44 L6 6 Z" fill="#FAF7F2"/>
+      <path d="M56 6 L94 6 L94 38 Q94 44, 88 44 L56 12 Q56 6, 62 6 Z" fill="#F5A623"/>
+      <path d="M94 56 L94 94 L62 94 Q56 94, 56 88 L82 62 Q88 56, 94 56 Z" fill="#FAF7F2"/>
+      <circle cx="25" cy="75" r="12" fill="#F5A623" opacity="0.15"/>
+      <circle cx="25" cy="75" r="5" fill="#F5A623"/>
+      <circle cx="25" cy="75" r="1.8" fill="#8B1A1A"/>
+    </svg>
+    <h1 style="font-family:'Fraunces',serif; color:var(--text-inverse); font-size:1.5rem; font-weight:700; letter-spacing:-0.03em; margin-bottom:0.25rem;">PGG Outreach</h1>
+    <p style="color:rgba(255,255,255,0.4); font-size:0.8rem;">Pune Global Group — CRM</p>
+  </div>
+
+  <div style="background:var(--surface); border-radius:var(--radius-lg); padding:2rem; width:100%; max-width:360px; box-shadow:var(--shadow-lg);">
+    <% if (error) { %>
+      <div class="flash flash-error" style="margin-bottom:1rem;"><%= error %></div>
+    <% } %>
+
+    <form method="POST" action="/login">
+      <div class="form-group">
+        <label>Username</label>
+        <select name="username" style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:0.9rem; font-family:'DM Sans',sans-serif; background:var(--surface);">
+          <option value="admin">Admin — Production</option>
+          <option value="demo">Demo — Test Environment</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" required autofocus
+          style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:0.9rem; font-family:'DM Sans',sans-serif;">
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:0.5rem;">
+        Sign In
+      </button>
+    </form>
+  </div>
+
+  <p style="color:rgba(255,255,255,0.2); font-size:0.7rem;">Est. 1995 &middot; Pune, India</p>
+</body>
+</html>
