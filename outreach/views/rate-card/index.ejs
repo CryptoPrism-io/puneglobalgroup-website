@@ -1,0 +1,132 @@
+<div class="page-header">
+  <h1>Rate Card</h1>
+</div>
+
+<!-- Add Rate Form -->
+<div class="form-card" style="margin-bottom:2rem">
+  <h2 style="font-size:1rem;font-weight:600;color:var(--navy-700);margin-bottom:1rem">Add Rate Entry</h2>
+  <form method="POST" action="/rate-card">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Category *</label>
+        <input type="text" name="category" required placeholder="e.g. PP_SHEET, PAPER, CONVERSION">
+      </div>
+      <div class="form-group">
+        <label>Name *</label>
+        <input type="text" name="name" required placeholder="e.g. 3mm Hollow PP Sheet">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Unit *</label>
+        <select name="unit" required>
+          <option value="per_sqm">per sqm</option>
+          <option value="per_piece">per piece</option>
+          <option value="per_kg">per kg</option>
+          <option value="per_tonne">per tonne</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Default Rate (₹) *</label>
+        <input type="number" name="defaultRate" required step="0.01" min="0" placeholder="0.00">
+      </div>
+      <div class="form-group">
+        <label>Last Purchase Rate (₹)</label>
+        <input type="number" name="lastPurchaseRate" step="0.01" min="0" placeholder="optional">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <input type="text" name="notes" placeholder="optional notes">
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Add Rate</button>
+    </div>
+  </form>
+</div>
+
+<!-- Rate Tables grouped by category -->
+<% if (categories.length === 0) { %>
+  <div style="padding:2rem;text-align:center;color:var(--text-tertiary);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)">
+    No rate entries yet. Add your first rate above.
+  </div>
+<% } else { %>
+  <% categories.forEach(function(cat) { %>
+    <div style="margin-bottom:2rem">
+      <h2 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-secondary);margin-bottom:0.75rem;padding-bottom:0.4rem;border-bottom:2px solid var(--border)">
+        <%= cat %>
+        <span style="font-weight:400;color:var(--text-tertiary);margin-left:0.5rem">(<%= grouped[cat].length %> entries)</span>
+      </h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Unit</th>
+              <th>Default Rate (₹)</th>
+              <th>Last Purchase (₹)</th>
+              <th>Notes</th>
+              <th style="width:260px">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% grouped[cat].forEach(function(rate) { %>
+              <tr id="rate-row-<%= rate.id %>">
+                <td style="font-weight:500"><%= rate.name %></td>
+                <td><span class="badge" style="background:var(--saffron-soft);color:var(--saffron);font-size:0.75rem"><%= rate.unit %></span></td>
+                <td class="mono">₹<%= parseFloat(rate.defaultRate).toFixed(2) %></td>
+                <td class="mono"><%= rate.lastPurchaseRate ? '₹' + parseFloat(rate.lastPurchaseRate).toFixed(2) : '—' %></td>
+                <td style="color:var(--text-tertiary);font-size:0.85rem"><%= rate.notes || '—' %></td>
+                <td>
+                  <!-- Inline edit toggle -->
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEdit(<%= rate.id %>)">Edit</button>
+                  <!-- Delete form -->
+                  <form method="POST" action="/rate-card/<%= rate.id %>/delete" style="display:inline" onsubmit="return confirm('Delete this rate entry?')">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                  </form>
+                </td>
+              </tr>
+              <!-- Inline edit row (hidden by default) -->
+              <tr id="edit-row-<%= rate.id %>" style="display:none;background:var(--bg-warm)">
+                <td colspan="6" style="padding:1rem 1.25rem">
+                  <form method="POST" action="/rate-card/<%= rate.id %>" style="display:flex;align-items:flex-end;gap:0.75rem;flex-wrap:wrap">
+                    <div class="form-group" style="margin-bottom:0;min-width:130px">
+                      <label style="font-size:0.8rem">Default Rate (₹)</label>
+                      <input type="number" name="defaultRate" step="0.01" min="0"
+                             value="<%= rate.defaultRate %>" required style="width:130px">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;min-width:130px">
+                      <label style="font-size:0.8rem">Last Purchase (₹)</label>
+                      <input type="number" name="lastPurchaseRate" step="0.01" min="0"
+                             value="<%= rate.lastPurchaseRate || '' %>" style="width:130px" placeholder="optional">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;flex:1;min-width:200px">
+                      <label style="font-size:0.8rem">Notes</label>
+                      <input type="text" name="notes" value="<%= rate.notes || '' %>" placeholder="optional">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEdit(<%= rate.id %>)">Cancel</button>
+                  </form>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% }); %>
+<% } %>
+
+<script>
+function toggleEdit(id) {
+  var editRow = document.getElementById('edit-row-' + id);
+  var rateRow = document.getElementById('rate-row-' + id);
+  if (editRow.style.display === 'none') {
+    editRow.style.display = 'table-row';
+    rateRow.style.background = 'var(--saffron-soft)';
+  } else {
+    editRow.style.display = 'none';
+    rateRow.style.background = '';
+  }
+}
+</script>

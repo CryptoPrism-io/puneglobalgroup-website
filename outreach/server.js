@@ -42,11 +42,13 @@ const contactsRouter = require('./src/routes/contacts');
 const activitiesRouter = require('./src/routes/activities');
 const scrapeBatchesRouter = require('./src/routes/scrapeBatches');
 const analyticsRouter = require('./src/routes/analytics');
+const rateCardRouter = require('./src/routes/rateCard');
 app.use('/leads', leadsRouter);
 app.use('/contacts', contactsRouter);
 app.use('/activities', activitiesRouter);
 app.use('/scrape-batches', scrapeBatchesRouter);
 app.use('/analytics', analyticsRouter);
+app.use('/rate-card', rateCardRouter);
 
 // ── Dashboard ─────────────────────────────────────────────
 app.get('/', async (req, res) => {
