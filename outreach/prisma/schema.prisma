@@ -56,6 +56,7 @@ model Lead {
   activities             Activity[]
   scrapeBatch            ScrapeBatch? @relation(fields: [scrapeBatchId], references: [id])
   quotes                 Quote[]
+  outreachMessages       OutreachMessage[]
 }
 
 model Contact {
@@ -76,6 +77,7 @@ model Contact {
   notes       String?
   activities  Activity[]
   quotes      Quote[]
+  outreachMessages OutreachMessage[]
 }
 
 model Activity {
@@ -207,4 +209,61 @@ model RateCard {
   lastPurchaseRate String?
   notes           String?
   @@unique([category, name])
+}
+
+model MessageTemplate {
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  name            String
+  channel         String
+  category        String
+  subject         String?
+  body            String
+  attachmentType  String    @default("NONE")
+  isActive        Boolean   @default(true)
+  campaigns       Campaign[]
+  messages        OutreachMessage[]
+}
+
+model Campaign {
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  name            String
+  templateId      Int
+  template        MessageTemplate @relation(fields: [templateId], references: [id])
+  channel         String
+  status          String    @default("DRAFT")
+  filters         Json?
+  excludedLeadIds Json?
+  totalRecipients Int       @default(0)
+  sentCount       Int       @default(0)
+  failedCount     Int       @default(0)
+  sentAt          DateTime?
+  completedAt     DateTime?
+  messages        OutreachMessage[]
+}
+
+model OutreachMessage {
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
+  campaignId      Int?
+  campaign        Campaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  leadId          Int
+  lead            Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  contactId       Int?
+  contact         Contact?  @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  channel         String
+  templateId      Int?
+  template        MessageTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  subject         String?
+  body            String
+  status          String    @default("QUEUED")
+  sentAt          DateTime?
+  deliveredAt     DateTime?
+  readAt          DateTime?
+  errorMessage    String?
+  resendEmailId   String?
+  trackingData    Json?
 }
