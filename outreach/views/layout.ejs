@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title + ' — ' : '' %>PGG Outreach</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-brand">PGG Outreach</div>
+    <div class="nav-links">
+      <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Dashboard</a>
+      <span class="nav-divider">|</span>
+      <a href="/leads" class="<%= currentPath.startsWith('/leads') ? 'active' : '' %>">Leads</a>
+      <a href="/contacts" class="<%= currentPath.startsWith('/contacts') ? 'active' : '' %>">Contacts</a>
+      <span class="nav-divider">|</span>
+      <a href="/scrape-batches" class="<%= currentPath.startsWith('/scrape-batches') ? 'active' : '' %>">Scrape Log</a>
+      <a href="/analytics" class="<%= currentPath.startsWith('/analytics') ? 'active' : '' %>">Analytics</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <% if (typeof success !== 'undefined' && success) { %>
+      <div class="flash flash-success"><%= success %></div>
+    <% } %>
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="flash flash-error"><%= error %></div>
+    <% } %>
+
+    <%- typeof body !== 'undefined' ? body : '' %>
+  </main>
+
+  <footer class="site-footer">
+    <p>Pune Global Group — Outreach CRM</p>
+  </footer>
+</body>
+</html>
