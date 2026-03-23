@@ -1,0 +1,132 @@
+<div class="page-header">
+  <h1>Analytics</h1>
+</div>
+
+<!-- Pipeline Breakdown -->
+<div class="section">
+  <h2>Pipeline Breakdown</h2>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Stage</th>
+          <th class="text-right">Count</th>
+          <th class="text-right">% of Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% stages.forEach(function(stage) { %>
+        <%
+          var count = stageCounts[stage] || 0;
+          var pct = grandTotal > 0 ? ((count / grandTotal) * 100).toFixed(1) : '0.0';
+          var stageLow = stage.toLowerCase();
+        %>
+        <tr>
+          <td><span class="badge badge-<%= stageLow %>"><%= stage %></span></td>
+          <td class="text-right text-mono"><%= count %></td>
+          <td class="text-right text-mono">
+            <% if (count > 0) { %>
+              <span style="color:var(--text-secondary)"><%= pct %>%</span>
+              <span style="display:inline-block;margin-left:0.5rem;width:60px;height:6px;background:var(--border);border-radius:3px;vertical-align:middle;overflow:hidden">
+                <span style="display:block;width:<%= pct %>%;height:100%;background:var(--saffron);border-radius:3px"></span>
+              </span>
+            <% } else { %>
+              <span class="text-light">—</span>
+            <% } %>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+      <tfoot>
+        <tr class="totals-row">
+          <td><strong>Total</strong></td>
+          <td class="text-right text-mono"><strong><%= grandTotal %></strong></td>
+          <td class="text-right text-mono"><strong>100%</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- Source Effectiveness -->
+<div class="section">
+  <h2>Source Effectiveness</h2>
+  <% var hasAnySources = sourceStats.some(function(s) { return s.total > 0; }); %>
+  <% if (!hasAnySources) { %>
+    <p class="text-muted" style="font-size:0.9rem">No leads with source data yet.</p>
+  <% } else { %>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Source</th>
+          <th class="text-right">Total Leads</th>
+          <th class="text-right">Won</th>
+          <th class="text-right">Win Rate %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% sourceStats.forEach(function(s) { %>
+        <% if (s.total > 0) { %>
+        <tr>
+          <td style="font-weight:500"><%= s.source %></td>
+          <td class="text-right text-mono"><%= s.total %></td>
+          <td class="text-right text-mono"><%= s.won %></td>
+          <td class="text-right text-mono">
+            <% if (s.won > 0) { %>
+              <span style="color:var(--success);font-weight:600"><%= s.winRate %>%</span>
+            <% } else { %>
+              <span class="text-light">0%</span>
+            <% } %>
+          </td>
+        </tr>
+        <% } %>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</div>
+
+<!-- ICP Effectiveness -->
+<div class="section">
+  <h2>ICP Effectiveness</h2>
+  <% var hasAnyICP = icpStats.some(function(s) { return s.total > 0; }); %>
+  <% if (!hasAnyICP) { %>
+    <p class="text-muted" style="font-size:0.9rem">No leads with ICP data yet.</p>
+  <% } else { %>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>ICP Type</th>
+          <th class="text-right">Total Leads</th>
+          <th class="text-right">Won</th>
+          <th class="text-right">Win Rate %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% icpStats.forEach(function(s) { %>
+        <% if (s.total > 0) { %>
+        <%
+          var icpLow = s.icpType.toLowerCase();
+        %>
+        <tr>
+          <td><span class="badge badge-<%= icpLow %>"><%= s.icpType %></span></td>
+          <td class="text-right text-mono"><%= s.total %></td>
+          <td class="text-right text-mono"><%= s.won %></td>
+          <td class="text-right text-mono">
+            <% if (s.won > 0) { %>
+              <span style="color:var(--success);font-weight:600"><%= s.winRate %>%</span>
+            <% } else { %>
+              <span class="text-light">0%</span>
+            <% } %>
+          </td>
+        </tr>
+        <% } %>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</div>
