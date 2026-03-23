@@ -1,0 +1,173 @@
+<%
+  function fmtDate(d) { return d ? new Date(d).toLocaleString('en-IN') : '—'; }
+  function fmtDateShort(d) { return d ? new Date(d).toLocaleDateString('en-IN') : '—'; }
+
+  var channelBadgeStyle = '';
+  if (campaign.channel === 'EMAIL') {
+    channelBadgeStyle = 'background:var(--info-soft);color:var(--info);border:1px solid rgba(37,99,235,0.2)';
+  } else {
+    channelBadgeStyle = 'background:rgba(22,163,74,0.08);color:#16a34a;border:1px solid rgba(22,163,74,0.2)';
+  }
+
+  var statusStyle = '';
+  if (campaign.status === 'DRAFT') {
+    statusStyle = 'background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db';
+  } else if (campaign.status === 'SENDING') {
+    statusStyle = 'background:var(--info-soft);color:var(--info);border:1px solid rgba(37,99,235,0.2)';
+  } else if (campaign.status === 'SENT') {
+    statusStyle = 'background:var(--success-soft);color:var(--success);border:1px solid rgba(13,148,136,0.2)';
+  } else if (campaign.status === 'PARTIAL') {
+    statusStyle = 'background:var(--warning-soft);color:var(--warning);border:1px solid rgba(217,119,6,0.2)';
+  }
+
+  var total = campaign.totalRecipients || 0;
+  var sent = campaign.sentCount || 0;
+  var failed = campaign.failedCount || 0;
+  var progressPct = total > 0 ? Math.round(((sent + failed) / total) * 100) : 0;
+%>
+
+<% if (campaign.status === 'SENDING') { %>
+  <meta http-equiv="refresh" content="5">
+<% } %>
+
+<!-- Header -->
+<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem">
+  <div>
+    <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem">
+      <h1 style="font-family:'Fraunces',serif;font-size:1.65rem;font-weight:700;color:var(--navy-800);letter-spacing:-0.03em"><%= campaign.name %></h1>
+      <span class="badge" style="<%= channelBadgeStyle %>"><%= campaign.channel %></span>
+      <span class="badge<%= campaign.status === 'SENDING' ? ' badge-sending-anim' : '' %>"
+            style="<%= statusStyle %>"><%= campaign.status %></span>
+    </div>
+    <p class="text-muted" style="font-size:0.85rem">
+      Template: <strong><%= campaign.template ? campaign.template.name : '—' %></strong>
+      <% if (campaign.sentAt) { %>
+        &nbsp;·&nbsp; Sent: <%= fmtDateShort(campaign.sentAt) %>
+      <% } else { %>
+        &nbsp;·&nbsp; Created: <%= fmtDateShort(campaign.createdAt) %>
+      <% } %>
+    </p>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+    <% if (campaign.status === 'DRAFT') { %>
+      <form method="POST" action="/campaigns/<%= campaign.id %>/send" style="display:inline">
+        <button type="submit" class="btn btn-primary"
+                onclick="return confirm('Start sending this campaign to all recipients?')">
+          Send Campaign
+        </button>
+      </form>
+    <% } %>
+    <a href="/campaigns" class="btn btn-secondary btn-sm">← Campaigns</a>
+  </div>
+</div>
+
+<!-- Progress + Stats -->
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
+  <div class="form-card" style="max-width:none;padding:1.25rem">
+    <div class="text-light" style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.4rem">Total Recipients</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:1.75rem;font-weight:700;color:var(--navy-800)"><%= total || '—' %></div>
+  </div>
+  <div class="form-card" style="max-width:none;padding:1.25rem">
+    <div class="text-light" style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.4rem">Sent</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:1.75rem;font-weight:700;color:var(--success)"><%= sent %></div>
+  </div>
+  <div class="form-card" style="max-width:none;padding:1.25rem">
+    <div class="text-light" style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.4rem">Failed</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:1.75rem;font-weight:700;color:<%= failed > 0 ? 'var(--error)' : 'var(--text-tertiary)' %>"><%= failed %></div>
+  </div>
+</div>
+
+<% if (total > 0 && (campaign.status === 'SENDING' || campaign.status === 'SENT' || campaign.status === 'PARTIAL')) { %>
+  <div style="margin-bottom:1.75rem">
+    <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:var(--text-secondary);margin-bottom:0.4rem">
+      <span>Progress</span>
+      <span><%= sent + failed %> of <%= total %> processed (<%= progressPct %>%)</span>
+    </div>
+    <div style="background:var(--border);border-radius:999px;height:8px;overflow:hidden">
+      <div style="width:<%= progressPct %>%;height:100%;border-radius:999px;
+                  background:<%= failed > 0 && sent === 0 ? 'var(--error)' : failed > 0 ? 'var(--warning)' : 'var(--success)' %>;
+                  transition:width 0.4s ease"></div>
+    </div>
+  </div>
+<% } %>
+
+<!-- Messages table -->
+<div class="section">
+  <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:0.75rem">
+    Messages (<%= campaign.messages.length %>)
+  </h2>
+
+  <% if (campaign.messages.length === 0) { %>
+    <div class="form-card" style="max-width:none;text-align:center;padding:2rem;color:var(--text-tertiary)">
+      <% if (campaign.status === 'DRAFT') { %>
+        No messages sent yet. Click <strong>Send Campaign</strong> above to start.
+      <% } else { %>
+        No messages found.
+      <% } %>
+    </div>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Lead</th>
+            <th>Contact</th>
+            <th>Status</th>
+            <th>Sent At</th>
+            <th>Error</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% campaign.messages.forEach(function(msg) { %>
+            <%
+              var msgStatusStyle = '';
+              if (msg.status === 'QUEUED') {
+                msgStatusStyle = 'background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db';
+              } else if (msg.status === 'SENT') {
+                msgStatusStyle = 'background:var(--info-soft);color:var(--info);border:1px solid rgba(37,99,235,0.2)';
+              } else if (msg.status === 'DELIVERED') {
+                msgStatusStyle = 'background:rgba(13,148,136,0.08);color:#0d9488;border:1px solid rgba(13,148,136,0.2)';
+              } else if (msg.status === 'READ') {
+                msgStatusStyle = 'background:var(--success-soft);color:var(--success);border:1px solid rgba(13,148,136,0.2)';
+              } else if (msg.status === 'FAILED') {
+                msgStatusStyle = 'background:var(--error-soft);color:var(--error);border:1px solid rgba(220,38,38,0.2)';
+              }
+            %>
+            <tr>
+              <td>
+                <% if (msg.lead) { %>
+                  <a href="/leads/<%= msg.lead.id %>" style="font-weight:600;color:var(--navy-800)">
+                    <%= msg.lead.companyName %>
+                  </a>
+                <% } else { %>
+                  <span class="text-light">—</span>
+                <% } %>
+              </td>
+              <td><span class="text-muted"><%= msg.contact ? msg.contact.name : '—' %></span></td>
+              <td><span class="badge" style="<%= msgStatusStyle %>"><%= msg.status %></span></td>
+              <td><span class="text-mono text-muted" style="font-size:0.78rem"><%= fmtDate(msg.sentAt) %></span></td>
+              <td>
+                <% if (msg.errorMessage) { %>
+                  <span style="color:var(--error);font-size:0.8rem" title="<%= msg.errorMessage %>">
+                    <%= msg.errorMessage.length > 60 ? msg.errorMessage.substring(0, 60) + '…' : msg.errorMessage %>
+                  </span>
+                <% } else { %>
+                  <span class="text-light">—</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>
+
+<style>
+@keyframes sendingPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.badge-sending-anim { animation: sendingPulse 1.4s ease-in-out infinite; }
+</style>

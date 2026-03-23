@@ -1,0 +1,285 @@
+<div class="page-header">
+  <h1>New Campaign</h1>
+  <a href="/campaigns" class="btn btn-secondary">← Back to Campaigns</a>
+</div>
+
+<form method="POST" action="/campaigns" id="campaign-form">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:1100px">
+
+    <!-- Left: Campaign Setup -->
+    <div>
+      <div class="form-card" style="max-width:none;margin-bottom:1.5rem">
+        <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1.25rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">Campaign Setup</h2>
+
+        <div class="form-group">
+          <label>Campaign Name *</label>
+          <input type="text" name="name" required placeholder="e.g. Stock Update — March 2026">
+        </div>
+
+        <div class="form-group">
+          <label>Channel</label>
+          <div style="display:flex;gap:1.5rem;margin-top:0.25rem">
+            <label style="display:flex;align-items:center;gap:0.4rem;font-weight:400;font-size:0.9rem;cursor:pointer">
+              <input type="radio" name="channel" value="EMAIL" checked> EMAIL
+            </label>
+            <label style="display:flex;align-items:center;gap:0.4rem;font-weight:400;font-size:0.9rem;cursor:pointer">
+              <input type="radio" name="channel" value="WHATSAPP"> WHATSAPP
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Template *</label>
+          <select name="templateId" required>
+            <option value="">— Select active template —</option>
+            <% templates.forEach(function(tmpl) { %>
+              <option value="<%= tmpl.id %>">
+                [<%= tmpl.channel %>] <%= tmpl.name %> (<%= (tmpl.category || '').replace(/_/g, ' ') %>)
+              </option>
+            <% }); %>
+          </select>
+          <% if (templates.length === 0) { %>
+            <p class="text-light" style="font-size:0.78rem;margin-top:0.3rem">
+              No active templates found. <a href="/templates/new">Create one first.</a>
+            </p>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Recipient Filters -->
+      <div class="form-card" style="max-width:none;margin-bottom:1.5rem">
+        <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1.25rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">Recipient Filters</h2>
+        <p class="text-muted" style="font-size:0.82rem;margin-bottom:1.25rem">Filter which leads receive this campaign. Leave all blank to include all active leads.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Stage</label>
+            <select name="stage" id="f-stage">
+              <option value="">All Stages</option>
+              <% STAGES.forEach(function(s) { %>
+                <option value="<%= s %>"><%= s %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>ICP Type</label>
+            <select name="icpType" id="f-icpType">
+              <option value="">All ICP</option>
+              <option value="PAPER">PAPER</option>
+              <option value="PP">PP</option>
+              <option value="BOTH">BOTH</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Industry</label>
+            <select name="industry" id="f-industry">
+              <option value="">All Industries</option>
+              <option value="automotive">Automotive</option>
+              <option value="pharma">Pharma</option>
+              <option value="fmcg">FMCG</option>
+              <option value="electronics">Electronics</option>
+              <option value="engineering">Engineering</option>
+              <option value="printing">Printing</option>
+              <option value="corrugator">Corrugator</option>
+              <option value="packaging">Packaging</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" name="city" id="f-city" placeholder="e.g. Pune">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Search</label>
+          <input type="text" name="search" id="f-search" placeholder="Company name, notes…">
+        </div>
+
+        <button type="button" class="btn btn-secondary" onclick="previewRecipients()">
+          Preview Recipients
+        </button>
+      </div>
+
+      <!-- Send Options -->
+      <div class="form-card" style="max-width:none">
+        <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1.25rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">Send Options</h2>
+
+        <div class="form-group">
+          <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+            <input type="checkbox" name="sendNow" value="on" checked>
+            <span>Send Now</span>
+          </label>
+          <p class="text-light" style="font-size:0.78rem;margin-top:0.25rem">
+            If checked, the campaign will start sending immediately after creation. Uncheck to save as DRAFT.
+          </p>
+        </div>
+
+        <!-- Hidden inputs populated by JS -->
+        <input type="hidden" name="excludedLeadIds" id="excluded-lead-ids" value="[]">
+        <input type="hidden" name="filters" id="filters-json" value="{}">
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Create Campaign</button>
+          <a href="/campaigns" class="btn btn-secondary">Cancel</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Recipient Preview -->
+    <div>
+      <div class="form-card" style="max-width:none;min-height:300px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">
+          <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin:0">
+            Recipients <span id="recipient-count" style="font-size:0.85rem;color:var(--text-tertiary);font-family:'DM Sans',sans-serif;font-weight:400"></span>
+          </h2>
+          <div id="preview-status" class="text-light" style="font-size:0.8rem"></div>
+        </div>
+
+        <div id="recipient-empty" style="text-align:center;color:var(--text-tertiary);padding:2rem 0;font-size:0.88rem">
+          Set filters above and click <strong>Preview Recipients</strong> to see who will receive this campaign.
+        </div>
+
+        <div id="recipient-table-wrap" style="display:none;overflow-x:auto">
+          <table id="recipient-table" style="font-size:0.82rem">
+            <thead>
+              <tr>
+                <th style="width:32px"><input type="checkbox" id="check-all" title="Select all" checked></th>
+                <th>Company</th>
+                <th>City</th>
+                <th>Contact</th>
+                <th>Email / Phone</th>
+              </tr>
+            </thead>
+            <tbody id="recipient-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</form>
+
+<script>
+var currentLeads = [];
+
+function buildFilterParams() {
+  var params = new URLSearchParams();
+  var stage = document.getElementById('f-stage').value;
+  var icpType = document.getElementById('f-icpType').value;
+  var industry = document.getElementById('f-industry').value;
+  var city = document.getElementById('f-city').value;
+  var search = document.getElementById('f-search').value;
+  if (stage) params.set('stage', stage);
+  if (icpType) params.set('icpType', icpType);
+  if (industry) params.set('industry', industry);
+  if (city) params.set('city', city);
+  if (search) params.set('search', search);
+  return params;
+}
+
+function getCheckedIds() {
+  var checkboxes = document.querySelectorAll('.lead-check');
+  var excluded = [];
+  checkboxes.forEach(function(cb) {
+    if (!cb.checked) excluded.push(parseInt(cb.dataset.leadId));
+  });
+  return excluded;
+}
+
+function updateExcludedInput() {
+  document.getElementById('excluded-lead-ids').value = JSON.stringify(getCheckedIds());
+}
+
+function updateFiltersInput() {
+  var params = buildFilterParams();
+  var filtersObj = {};
+  params.forEach(function(v, k) { filtersObj[k] = v; });
+  document.getElementById('filters-json').value = JSON.stringify(filtersObj);
+}
+
+async function previewRecipients() {
+  var statusEl = document.getElementById('preview-status');
+  var emptyEl = document.getElementById('recipient-empty');
+  var tableWrap = document.getElementById('recipient-table-wrap');
+  var tbody = document.getElementById('recipient-tbody');
+  var countEl = document.getElementById('recipient-count');
+
+  statusEl.textContent = 'Loading…';
+  emptyEl.style.display = 'none';
+  tableWrap.style.display = 'none';
+
+  var params = buildFilterParams();
+  updateFiltersInput();
+
+  try {
+    var resp = await fetch('/campaigns/preview-recipients?' + params.toString());
+    if (!resp.ok) throw new Error('Server error');
+    var leads = await resp.json();
+    currentLeads = leads;
+
+    statusEl.textContent = '';
+    countEl.textContent = '(' + leads.length + ')';
+
+    if (leads.length === 0) {
+      emptyEl.textContent = 'No leads match the current filters.';
+      emptyEl.style.display = 'block';
+      updateExcludedInput();
+      return;
+    }
+
+    tbody.innerHTML = '';
+    leads.forEach(function(lead) {
+      var contact = lead.contact;
+      var contactName = contact ? (contact.name || '—') : '—';
+      var contactReach = contact ? (contact.email || contact.whatsapp || contact.phone || '—') : '—';
+
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><input type="checkbox" class="lead-check" data-lead-id="' + lead.id + '" checked></td>' +
+        '<td><a href="/leads/' + lead.id + '" target="_blank" style="color:var(--navy-800);font-weight:600">' + escHtml(lead.companyName) + '</a></td>' +
+        '<td class="text-muted">' + escHtml(lead.city || '—') + '</td>' +
+        '<td>' + escHtml(contactName) + '</td>' +
+        '<td class="text-mono" style="font-size:0.75rem;color:var(--text-secondary)">' + escHtml(contactReach) + '</td>';
+      tbody.appendChild(tr);
+    });
+
+    // Attach change listeners
+    document.querySelectorAll('.lead-check').forEach(function(cb) {
+      cb.addEventListener('change', updateExcludedInput);
+    });
+
+    // Check-all toggle
+    document.getElementById('check-all').addEventListener('change', function() {
+      var checked = this.checked;
+      document.querySelectorAll('.lead-check').forEach(function(cb) { cb.checked = checked; });
+      updateExcludedInput();
+    });
+
+    tableWrap.style.display = '';
+    updateExcludedInput();
+  } catch (err) {
+    statusEl.textContent = 'Error: ' + err.message;
+    emptyEl.style.display = 'block';
+    emptyEl.textContent = 'Failed to load recipients. Try again.';
+  }
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// On form submit: update hidden inputs with final excluded list and filters
+document.getElementById('campaign-form').addEventListener('submit', function() {
+  updateExcludedInput();
+  updateFiltersInput();
+});
+</script>

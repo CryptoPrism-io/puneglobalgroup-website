@@ -1,0 +1,90 @@
+<div class="page-header">
+  <h1>Campaigns</h1>
+  <a href="/campaigns/new" class="btn btn-primary">+ New Campaign</a>
+</div>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Template</th>
+        <th>Channel</th>
+        <th>Status</th>
+        <th>Recipients</th>
+        <th>Sent</th>
+        <th>Failed</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (campaigns.length === 0) { %>
+        <tr>
+          <td colspan="9" style="text-align:center;color:var(--text-tertiary);padding:2rem">
+            No campaigns yet. <a href="/campaigns/new">Create your first campaign.</a>
+          </td>
+        </tr>
+      <% } else { %>
+        <% campaigns.forEach(function(campaign) { %>
+          <%
+            // Channel badge style
+            var channelBadgeStyle = '';
+            if (campaign.channel === 'EMAIL') {
+              channelBadgeStyle = 'background:var(--info-soft);color:var(--info);border:1px solid rgba(37,99,235,0.2)';
+            } else {
+              channelBadgeStyle = 'background:rgba(22,163,74,0.08);color:#16a34a;border:1px solid rgba(22,163,74,0.2)';
+            }
+
+            // Status badge style
+            var statusStyle = '';
+            var statusLabel = campaign.status;
+            if (campaign.status === 'DRAFT') {
+              statusStyle = 'background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db';
+            } else if (campaign.status === 'SENDING') {
+              statusStyle = 'background:var(--info-soft);color:var(--info);border:1px solid rgba(37,99,235,0.2)';
+            } else if (campaign.status === 'SENT') {
+              statusStyle = 'background:var(--success-soft);color:var(--success);border:1px solid rgba(13,148,136,0.2)';
+            } else if (campaign.status === 'PARTIAL') {
+              statusStyle = 'background:var(--warning-soft);color:var(--warning);border:1px solid rgba(217,119,6,0.2)';
+            }
+
+            var dateStr = campaign.sentAt
+              ? new Date(campaign.sentAt).toLocaleDateString('en-IN')
+              : new Date(campaign.createdAt).toLocaleDateString('en-IN');
+          %>
+          <tr>
+            <td>
+              <a href="/campaigns/<%= campaign.id %>" style="font-weight:600;color:var(--navy-800)">
+                <%= campaign.name %>
+              </a>
+            </td>
+            <td><span class="text-muted"><%= campaign.template ? campaign.template.name : '—' %></span></td>
+            <td><span class="badge" style="<%= channelBadgeStyle %>"><%= campaign.channel %></span></td>
+            <td>
+              <span class="badge<%= campaign.status === 'SENDING' ? ' badge-sending-anim' : '' %>"
+                    style="<%= statusStyle %>"><%= statusLabel %></span>
+            </td>
+            <td><span class="text-mono"><%= campaign.totalRecipients != null ? campaign.totalRecipients : '—' %></span></td>
+            <td><span class="text-mono" style="color:var(--success)"><%= campaign.sentCount != null ? campaign.sentCount : '—' %></span></td>
+            <td><span class="text-mono" style="color:<%= (campaign.failedCount || 0) > 0 ? 'var(--error)' : 'var(--text-tertiary)' %>"><%= campaign.failedCount != null ? campaign.failedCount : '—' %></span></td>
+            <td><span class="text-muted text-mono" style="font-size:0.78rem"><%= dateStr %></span></td>
+            <td><a href="/campaigns/<%= campaign.id %>" class="btn btn-secondary btn-sm">View</a></td>
+          </tr>
+        <% }); %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<p class="text-muted" style="margin-top:0.75rem;font-size:0.82rem">
+  <%= campaigns.length %> campaign<%= campaigns.length !== 1 ? 's' : '' %>
+</p>
+
+<style>
+@keyframes sendingPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.badge-sending-anim { animation: sendingPulse 1.4s ease-in-out infinite; }
+</style>

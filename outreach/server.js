@@ -45,6 +45,8 @@ const analyticsRouter = require('./src/routes/analytics');
 const rateCardRouter = require('./src/routes/rateCard');
 const quotesRouter = require('./src/routes/quotes');
 const rfqsRouter = require('./src/routes/rfqs');
+const templatesRouter = require('./src/routes/templates');
+const campaignsRouter = require('./src/routes/campaigns');
 app.use('/leads', leadsRouter);
 app.use('/contacts', contactsRouter);
 app.use('/activities', activitiesRouter);
@@ -53,6 +55,8 @@ app.use('/analytics', analyticsRouter);
 app.use('/rate-card', rateCardRouter);
 app.use('/quotes', quotesRouter);
 app.use('/rfqs', rfqsRouter);
+app.use('/templates', templatesRouter);
+app.use('/campaigns', campaignsRouter);
 
 // ── Dashboard ─────────────────────────────────────────────
 app.get('/', async (req, res) => {
