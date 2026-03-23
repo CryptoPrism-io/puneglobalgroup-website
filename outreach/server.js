@@ -4,7 +4,7 @@ const express = require('express');
 const path = require('path');
 const { Pool } = require('pg');
 const { PrismaPg } = require('@prisma/adapter-pg');
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('./src/generated/prisma');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
