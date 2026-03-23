@@ -1,0 +1,331 @@
+<%
+  var isEdit = quote !== null && quote !== undefined;
+  var action = isEdit ? '/quotes/' + quote.id : '/quotes';
+  var v = isEdit ? quote : {};
+  var items = isEdit && quote.items ? quote.items : [];
+  function val(field) { return (v[field] !== undefined && v[field] !== null) ? v[field] : ''; }
+  function sel(obj, field, option) { return (obj && obj[field] === option) ? 'selected' : ''; }
+%>
+
+<style>
+.item-row { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; position: relative; }
+.item-row .item-title { font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
+.item-remove-btn { background: none; border: none; color: var(--error); cursor: pointer; font-size: 1rem; padding: 0 0.25rem; }
+.item-remove-btn:hover { color: #b91c1c; }
+.rate-section { background: var(--bg-warm); border-radius: var(--radius-sm); padding: 0.75rem 1rem; margin-top: 0.75rem; }
+.rate-section-title { font-size: 0.75rem; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+.form-row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.75rem; }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.quote-totals { background: var(--navy-800); color: var(--text-inverse); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-top: 1.5rem; }
+.totals-row { display: flex; justify-content: space-between; font-size: 0.9rem; padding: 0.25rem 0; }
+.totals-row.grand { font-size: 1.1rem; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.15); margin-top: 0.5rem; padding-top: 0.75rem; }
+</style>
+
+<div class="page-header">
+  <h1><%= isEdit ? 'Edit Quote — ' + quote.quoteNo : 'New Quote' %></h1>
+  <div style="display:flex;gap:0.5rem">
+    <% if (isEdit) { %>
+      <a href="/quotes/<%= quote.id %>" class="btn btn-secondary">← Back</a>
+    <% } else if (lead) { %>
+      <a href="/leads/<%= lead.id %>" class="btn btn-secondary">← Back to Lead</a>
+    <% } else { %>
+      <a href="/quotes" class="btn btn-secondary">← Quotes</a>
+    <% } %>
+  </div>
+</div>
+
+<form method="POST" action="<%= action %>" id="quoteForm">
+  <% if (!isEdit) { %>
+    <input type="hidden" name="leadId" value="<%= lead ? lead.id : '' %>">
+  <% } %>
+
+  <!-- Header info -->
+  <div class="form-card" style="margin-bottom:1.5rem">
+    <h2 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-bottom:1rem">Quote Info</h2>
+
+    <% if (lead) { %>
+      <div style="padding:0.6rem 1rem;background:var(--saffron-soft);border-radius:var(--radius-sm);margin-bottom:1rem;font-size:0.9rem">
+        <strong><%= lead.companyName %></strong>
+        <% if (lead.state) { %> · <%= lead.state %><% } %>
+        <span style="margin-left:0.75rem;font-size:0.8rem;color:var(--text-secondary)">GST: <strong><%= gstType %></strong></span>
+      </div>
+    <% } %>
+
+    <div class="form-row">
+      <% if (contacts && contacts.length > 0) { %>
+        <div class="form-group">
+          <label>Contact</label>
+          <select name="contactId">
+            <option value="">— None —</option>
+            <% contacts.forEach(function(c) { %>
+              <option value="<%= c.id %>" <%= (isEdit && quote.contactId === c.id) ? 'selected' : '' %>><%= c.name %><%= c.designation ? ' (' + c.designation + ')' : '' %></option>
+            <% }); %>
+          </select>
+        </div>
+      <% } %>
+      <div class="form-group">
+        <label>Default Margin %</label>
+        <input type="number" name="marginPercent" step="0.1" min="0" max="100" value="<%= val('marginPercent') || 20 %>" id="defaultMargin">
+      </div>
+      <div class="form-group">
+        <label>Valid Until</label>
+        <input type="date" name="validUntil" value="<%= isEdit && quote.validUntil ? new Date(quote.validUntil).toISOString().split('T')[0] : '' %>">
+      </div>
+    </div>
+  </div>
+
+  <!-- Line items -->
+  <div class="form-card" style="margin-bottom:1.5rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <h2 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin:0">Line Items</h2>
+      <button type="button" class="btn btn-secondary btn-sm" onclick="addItem()">+ Add Item</button>
+    </div>
+
+    <div id="itemsContainer">
+      <% if (items.length === 0) { %>
+        <!-- Rendered by JS on first addItem() -->
+      <% } else { %>
+        <% items.forEach(function(item, idx) { %>
+          <div class="item-row" id="item-<%= idx %>">
+            <div class="item-title">
+              Item <%= idx + 1 %>: <span class="item-name-label"><%= item.productName || '' %></span>
+              <button type="button" class="item-remove-btn" onclick="removeItem(this)" title="Remove item">✕</button>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Product Type *</label>
+                <select name="items.productType" required onchange="updateItemTitle(this)">
+                  <% PRODUCT_TYPES.forEach(function(pt) { %>
+                    <option value="<%= pt %>" <%= item.productType === pt ? 'selected' : '' %>><%= pt %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Product Name *</label>
+                <input type="text" name="items.productName" value="<%= item.productName %>" required placeholder="e.g. 3mm PP Box 400×300×200">
+              </div>
+            </div>
+            <div class="form-row-4">
+              <div class="form-group">
+                <label>Length (mm)</label>
+                <input type="number" name="items.length" value="<%= item.length || '' %>" min="0">
+              </div>
+              <div class="form-group">
+                <label>Breadth (mm)</label>
+                <input type="number" name="items.breadth" value="<%= item.breadth || '' %>" min="0">
+              </div>
+              <div class="form-group">
+                <label>Height (mm)</label>
+                <input type="number" name="items.height" value="<%= item.height || '' %>" min="0">
+              </div>
+              <div class="form-group">
+                <label>Qty *</label>
+                <input type="number" name="items.qty" value="<%= item.qty || 1 %>" required step="0.01" min="0.01">
+              </div>
+            </div>
+            <div class="form-row-4">
+              <div class="form-group">
+                <label>Sheet Thickness</label>
+                <input type="text" name="items.sheetThickness" value="<%= item.sheetThickness || '' %>" placeholder="e.g. 3mm">
+              </div>
+              <div class="form-group">
+                <label>GSM</label>
+                <input type="number" name="items.gsm" value="<%= item.gsm || '' %>">
+              </div>
+              <div class="form-group">
+                <label>Grade</label>
+                <input type="text" name="items.grade" value="<%= item.grade || '' %>" placeholder="e.g. Virgin">
+              </div>
+              <div class="form-group">
+                <label>Closure Type</label>
+                <input type="text" name="items.closureType" value="<%= item.closureType || '' %>" placeholder="e.g. Tuck-in">
+              </div>
+            </div>
+            <div class="rate-section">
+              <div class="rate-section-title">Rates (₹)</div>
+              <div class="form-row-4">
+                <div class="form-group">
+                  <label>Sheet Rate/sqm</label>
+                  <input type="number" name="items.sheetRatePerSqm" value="<%= item.sheetRatePerSqm || 0 %>" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                  <label>Cutting</label>
+                  <input type="number" name="items.cuttingRate" value="<%= item.cuttingRate || 0 %>" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                  <label>Welding</label>
+                  <input type="number" name="items.weldingRate" value="<%= item.weldingRate || 0 %>" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                  <label>Printing</label>
+                  <input type="number" name="items.printingRate" value="<%= item.printingRate || 0 %>" step="0.01" min="0">
+                </div>
+              </div>
+              <div class="form-row-4">
+                <div class="form-group">
+                  <label>Sheeting</label>
+                  <input type="number" name="items.sheetingRate" value="<%= item.sheetingRate || 0 %>" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                  <label>Slitting</label>
+                  <input type="number" name="items.slittingRate" value="<%= item.slittingRate || 0 %>" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                  <label>Rewinding</label>
+                  <input type="number" name="items.rewindingRate" value="<%= item.rewindingRate || 0 %>" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                  <label>Extras Cost</label>
+                  <input type="number" name="items.extrasCost" value="<%= item.extrasCost || 0 %>" step="0.01" min="0">
+                </div>
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>Margin %</label>
+                  <input type="number" name="items.marginPercent" value="<%= item.marginPercent || 20 %>" step="0.1" min="0" max="100">
+                </div>
+                <div class="form-group">
+                  <label>GST Rate %</label>
+                  <select name="items.gstRate">
+                    <% [0, 5, 12, 18, 28].forEach(function(r) { %>
+                      <option value="<%= r %>" <%= parseFloat(item.gstRate) === r ? 'selected' : '' %>><%= r %>%</option>
+                    <% }); %>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:0.75rem;margin-bottom:0">
+              <label>Remarks</label>
+              <input type="text" name="items.remarks" value="<%= item.remarks || '' %>" placeholder="optional per-item notes">
+            </div>
+          </div>
+        <% }); %>
+      <% } %>
+    </div>
+
+    <% if (items.length === 0) { %>
+      <div id="emptyItemsMsg" style="text-align:center;color:var(--text-tertiary);padding:1.5rem;border:1px dashed var(--border);border-radius:var(--radius)">
+        No items yet. Click "+ Add Item" to add a line item.
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Notes & Terms -->
+  <div class="form-card" style="margin-bottom:1.5rem">
+    <h2 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-bottom:1rem">Notes & Terms</h2>
+    <div class="form-group">
+      <label>Internal Notes</label>
+      <textarea name="notes" rows="3" placeholder="Internal notes (not shown on PDF)"><%= val('notes') %></textarea>
+    </div>
+    <div class="form-group">
+      <label>Terms & Conditions</label>
+      <textarea name="terms" rows="4" placeholder="Payment terms, delivery, warranty etc. (shown on PDF)"><%= val('terms') %></textarea>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%= isEdit ? 'Save Changes' : 'Create Quote' %></button>
+    <% if (isEdit) { %>
+      <a href="/quotes/<%= quote.id %>" class="btn btn-secondary">Cancel</a>
+    <% } %>
+  </div>
+</form>
+
+<script>
+var itemCount = <%= items.length %>;
+var defaultMarginEl = document.getElementById('defaultMargin');
+var PRODUCT_TYPES = <%- JSON.stringify(PRODUCT_TYPES) %>;
+
+function getDefaultMargin() {
+  return defaultMarginEl ? defaultMarginEl.value || '20' : '20';
+}
+
+function removeItem(btn) {
+  var row = btn.closest('.item-row');
+  row.parentNode.removeChild(row);
+  updateItemNumbers();
+  toggleEmptyMsg();
+}
+
+function updateItemNumbers() {
+  var rows = document.querySelectorAll('#itemsContainer .item-row');
+  rows.forEach(function(row, i) {
+    var title = row.querySelector('.item-title');
+    if (title) {
+      var nameLabel = row.querySelector('.item-name-label');
+      var name = nameLabel ? nameLabel.textContent : '';
+      title.childNodes[0].textContent = 'Item ' + (i + 1) + ': ';
+    }
+  });
+}
+
+function updateItemTitle(sel) {
+  // update name label on product name change
+}
+
+function toggleEmptyMsg() {
+  var msg = document.getElementById('emptyItemsMsg');
+  if (!msg) return;
+  var rows = document.querySelectorAll('#itemsContainer .item-row');
+  msg.style.display = rows.length === 0 ? 'block' : 'none';
+}
+
+function addItem() {
+  var emptyMsg = document.getElementById('emptyItemsMsg');
+  if (emptyMsg) emptyMsg.style.display = 'none';
+
+  var idx = itemCount++;
+  var margin = getDefaultMargin();
+  var ptOptions = PRODUCT_TYPES.map(function(pt) {
+    return '<option value="' + pt + '">' + pt + '</option>';
+  }).join('');
+
+  var html = '<div class="item-row" id="item-' + idx + '">' +
+    '<div class="item-title">Item ' + (document.querySelectorAll('#itemsContainer .item-row').length + 1) + ': <span class="item-name-label"></span>' +
+    '<button type="button" class="item-remove-btn" onclick="removeItem(this)" title="Remove item">✕</button></div>' +
+    '<div class="form-row-2">' +
+      '<div class="form-group"><label>Product Type *</label><select name="items.productType" required>' + ptOptions + '</select></div>' +
+      '<div class="form-group"><label>Product Name *</label><input type="text" name="items.productName" required placeholder="e.g. 3mm PP Box 400×300×200"></div>' +
+    '</div>' +
+    '<div class="form-row-4">' +
+      '<div class="form-group"><label>Length (mm)</label><input type="number" name="items.length" min="0"></div>' +
+      '<div class="form-group"><label>Breadth (mm)</label><input type="number" name="items.breadth" min="0"></div>' +
+      '<div class="form-group"><label>Height (mm)</label><input type="number" name="items.height" min="0"></div>' +
+      '<div class="form-group"><label>Qty *</label><input type="number" name="items.qty" value="1" required step="0.01" min="0.01"></div>' +
+    '</div>' +
+    '<div class="form-row-4">' +
+      '<div class="form-group"><label>Sheet Thickness</label><input type="text" name="items.sheetThickness" placeholder="e.g. 3mm"></div>' +
+      '<div class="form-group"><label>GSM</label><input type="number" name="items.gsm"></div>' +
+      '<div class="form-group"><label>Grade</label><input type="text" name="items.grade" placeholder="e.g. Virgin"></div>' +
+      '<div class="form-group"><label>Closure Type</label><input type="text" name="items.closureType" placeholder="e.g. Tuck-in"></div>' +
+    '</div>' +
+    '<div class="rate-section">' +
+      '<div class="rate-section-title">Rates (₹)</div>' +
+      '<div class="form-row-4">' +
+        '<div class="form-group"><label>Sheet Rate/sqm</label><input type="number" name="items.sheetRatePerSqm" value="0" step="0.01" min="0"></div>' +
+        '<div class="form-group"><label>Cutting</label><input type="number" name="items.cuttingRate" value="0" step="0.01" min="0"></div>' +
+        '<div class="form-group"><label>Welding</label><input type="number" name="items.weldingRate" value="0" step="0.01" min="0"></div>' +
+        '<div class="form-group"><label>Printing</label><input type="number" name="items.printingRate" value="0" step="0.01" min="0"></div>' +
+      '</div>' +
+      '<div class="form-row-4">' +
+        '<div class="form-group"><label>Sheeting</label><input type="number" name="items.sheetingRate" value="0" step="0.01" min="0"></div>' +
+        '<div class="form-group"><label>Slitting</label><input type="number" name="items.slittingRate" value="0" step="0.01" min="0"></div>' +
+        '<div class="form-group"><label>Rewinding</label><input type="number" name="items.rewindingRate" value="0" step="0.01" min="0"></div>' +
+        '<div class="form-group"><label>Extras Cost</label><input type="number" name="items.extrasCost" value="0" step="0.01" min="0"></div>' +
+      '</div>' +
+      '<div class="form-row-2">' +
+        '<div class="form-group"><label>Margin %</label><input type="number" name="items.marginPercent" value="' + margin + '" step="0.1" min="0" max="100"></div>' +
+        '<div class="form-group"><label>GST Rate %</label><select name="items.gstRate">' +
+          '<option value="0">0%</option><option value="5">5%</option><option value="12">12%</option>' +
+          '<option value="18" selected>18%</option><option value="28">28%</option>' +
+        '</select></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="form-group" style="margin-top:0.75rem;margin-bottom:0"><label>Remarks</label><input type="text" name="items.remarks" placeholder="optional per-item notes"></div>' +
+  '</div>';
+
+  document.getElementById('itemsContainer').insertAdjacentHTML('beforeend', html);
+  updateItemNumbers();
+}
+</script>

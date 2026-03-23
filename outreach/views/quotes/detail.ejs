@@ -1,0 +1,236 @@
+<%
+  var statusColors = {
+    DRAFT:    'background:#e5e7eb;color:#374151',
+    SENT:     'background:var(--info-soft);color:var(--info)',
+    ACCEPTED: 'background:var(--success-soft);color:var(--success)',
+    REJECTED: 'background:var(--error-soft);color:var(--error)',
+  };
+  var statusStyle = statusColors[quote.status] || '';
+  var canEdit = quote.status === 'DRAFT';
+  var canSend = quote.status === 'DRAFT';
+  var canAccept = quote.status === 'SENT';
+  var canReject = quote.status === 'SENT' || quote.status === 'DRAFT';
+%>
+
+<style>
+.quote-meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.meta-cell { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.9rem 1.1rem; }
+.meta-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); margin-bottom: 0.2rem; }
+.meta-value { font-size: 1rem; font-weight: 600; color: var(--navy-800); }
+.totals-panel { background: var(--navy-800); color: var(--text-inverse); border-radius: var(--radius); padding: 1.25rem 1.5rem; }
+.totals-row { display: flex; justify-content: space-between; font-size: 0.9rem; padding: 0.2rem 0; }
+.totals-row.grand { font-size: 1.15rem; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.15); margin-top: 0.5rem; padding-top: 0.75rem; }
+.action-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+</style>
+
+<div class="page-header">
+  <div style="display:flex;align-items:center;gap:1rem">
+    <h1 style="font-family:'JetBrains Mono',monospace;font-size:1.35rem"><%= quote.quoteNo %></h1>
+    <span class="badge" style="<%= statusStyle %>"><%= quote.status %></span>
+  </div>
+  <div class="action-bar">
+    <a href="/leads/<%= quote.lead.id %>" class="btn btn-secondary btn-sm">← Lead</a>
+    <a href="/quotes/<%= quote.id %>/pdf" class="btn btn-secondary btn-sm" target="_blank">PDF</a>
+    <% if (canEdit) { %>
+      <a href="/quotes/<%= quote.id %>/edit" class="btn btn-secondary btn-sm">Edit</a>
+    <% } %>
+    <% if (canSend) { %>
+      <form method="POST" action="/quotes/<%= quote.id %>/send" style="display:inline" onsubmit="return confirm('Mark this quote as SENT?')">
+        <button class="btn btn-primary btn-sm">Mark Sent</button>
+      </form>
+    <% } %>
+    <% if (canAccept) { %>
+      <form method="POST" action="/quotes/<%= quote.id %>/accept" style="display:inline" onsubmit="return confirm('Mark this quote as ACCEPTED?')">
+        <button class="btn btn-primary btn-sm" style="background:var(--success)">Accept</button>
+      </form>
+    <% } %>
+    <% if (canReject) { %>
+      <button class="btn btn-danger btn-sm" onclick="document.getElementById('rejectModal').style.display='flex'">Reject</button>
+    <% } %>
+  </div>
+</div>
+
+<!-- Meta grid -->
+<div class="quote-meta-grid">
+  <div class="meta-cell">
+    <div class="meta-label">Company</div>
+    <div class="meta-value"><a href="/leads/<%= quote.lead.id %>" style="color:var(--navy-800)"><%= quote.lead.companyName %></a></div>
+  </div>
+  <div class="meta-cell">
+    <div class="meta-label">Contact</div>
+    <div class="meta-value"><%= quote.contact ? quote.contact.name : '—' %></div>
+  </div>
+  <div class="meta-cell">
+    <div class="meta-label">GST Type</div>
+    <div class="meta-value" style="font-size:0.85rem"><%= quote.gstType %></div>
+  </div>
+  <div class="meta-cell">
+    <div class="meta-label">Valid Until</div>
+    <div class="meta-value" style="font-size:0.9rem">
+      <%= quote.validUntil ? new Date(quote.validUntil).toLocaleDateString('en-IN') : '—' %>
+    </div>
+  </div>
+</div>
+
+<!-- Items table -->
+<div class="form-card" style="margin-bottom:1.5rem">
+  <h2 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-bottom:1rem">
+    Line Items (<%= quote.items.length %>)
+  </h2>
+  <div class="table-wrapper" style="overflow-x:auto">
+    <table style="min-width:900px">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Product</th>
+          <th>Dimensions</th>
+          <th>Qty</th>
+          <th>Sheet Area</th>
+          <th>Unit Cost</th>
+          <th>Margin</th>
+          <th>Selling Price</th>
+          <th>GST</th>
+          <th>Taxable Amt</th>
+          <th>Line Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% quote.items.forEach(function(item, idx) { %>
+          <tr>
+            <td style="color:var(--text-tertiary);font-size:0.8rem"><%= idx + 1 %></td>
+            <td>
+              <div style="font-weight:600;font-size:0.9rem"><%= item.productName %></div>
+              <div style="font-size:0.75rem;color:var(--text-tertiary)"><%= item.productType %></div>
+              <% if (item.sheetThickness || item.grade) { %>
+                <div style="font-size:0.75rem;color:var(--text-tertiary)"><%= [item.sheetThickness, item.grade].filter(Boolean).join(' · ') %></div>
+              <% } %>
+            </td>
+            <td class="mono" style="font-size:0.8rem;white-space:nowrap">
+              <% if (item.length || item.breadth || item.height) { %>
+                <%= [item.length, item.breadth, item.height].filter(Boolean).join('×') %> mm
+              <% } else { %>
+                —
+              <% } %>
+            </td>
+            <td class="mono"><%= parseFloat(item.qty).toFixed(0) %></td>
+            <td class="mono" style="font-size:0.8rem"><%= parseFloat(item.sheetArea).toFixed(4) %> m²</td>
+            <td class="mono">₹<%= parseFloat(item.unitCost).toFixed(2) %></td>
+            <td class="mono" style="color:var(--saffron)"><%= parseFloat(item.marginPercent).toFixed(1) %>%</td>
+            <td class="mono" style="font-weight:600">₹<%= parseFloat(item.sellingPrice).toFixed(2) %></td>
+            <td class="mono" style="font-size:0.8rem"><%= parseFloat(item.gstRate).toFixed(0) %>%</td>
+            <td class="mono">₹<%= parseFloat(item.taxableAmt).toFixed(2) %></td>
+            <td class="mono" style="font-weight:700">₹<%= parseFloat(item.lineTotal).toFixed(2) %></td>
+          </tr>
+          <% if (item.remarks) { %>
+            <tr style="background:var(--bg-warm)">
+              <td></td>
+              <td colspan="10" style="font-size:0.8rem;color:var(--text-secondary);padding-top:0.25rem;padding-bottom:0.5rem">
+                <em>Note: <%= item.remarks %></em>
+              </td>
+            </tr>
+          <% } %>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Totals + Notes -->
+<div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;margin-bottom:1.5rem">
+  <div>
+    <% if (quote.notes || quote.terms) { %>
+      <div class="form-card" style="height:100%">
+        <% if (quote.notes) { %>
+          <div style="margin-bottom:1rem">
+            <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-tertiary);margin-bottom:0.4rem">Internal Notes</div>
+            <p style="font-size:0.9rem;color:var(--text-secondary);white-space:pre-wrap"><%= quote.notes %></p>
+          </div>
+        <% } %>
+        <% if (quote.terms) { %>
+          <div>
+            <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-tertiary);margin-bottom:0.4rem">Terms & Conditions</div>
+            <p style="font-size:0.9rem;color:var(--text-secondary);white-space:pre-wrap"><%= quote.terms %></p>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+  <div class="totals-panel">
+    <div class="totals-row">
+      <span>Subtotal (taxable)</span>
+      <span class="mono">₹<%= parseFloat(quote.subtotal).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+    </div>
+    <% if (quote.gstType === 'CGST_SGST') { %>
+      <div class="totals-row">
+        <span>CGST</span>
+        <span class="mono">₹<%= parseFloat(quote.totalCgst).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+      </div>
+      <div class="totals-row">
+        <span>SGST</span>
+        <span class="mono">₹<%= parseFloat(quote.totalSgst).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+      </div>
+    <% } else { %>
+      <div class="totals-row">
+        <span>IGST</span>
+        <span class="mono">₹<%= parseFloat(quote.totalIgst).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+      </div>
+    <% } %>
+    <div class="totals-row">
+      <span>Total GST</span>
+      <span class="mono">₹<%= parseFloat(quote.totalGst).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+    </div>
+    <div class="totals-row grand">
+      <span>Grand Total</span>
+      <span class="mono">₹<%= parseFloat(quote.grandTotal).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></span>
+    </div>
+  </div>
+</div>
+
+<!-- RFQs section -->
+<% if (quote.rfqs && quote.rfqs.length > 0) { %>
+  <div class="form-card" style="margin-bottom:1.5rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <h2 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin:0">Supplier RFQs</h2>
+      <a href="/rfqs/new?quoteId=<%= quote.id %>" class="btn btn-secondary btn-sm">+ New RFQ</a>
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>RFQ No</th><th>Supplier</th><th>Status</th><th>Created</th><th></th></tr>
+        </thead>
+        <tbody>
+          <% quote.rfqs.forEach(function(rfq) { %>
+            <tr>
+              <td class="mono" style="font-size:0.85rem"><%= rfq.rfqNo %></td>
+              <td><%= rfq.supplierName %></td>
+              <td><span class="badge"><%= rfq.status %></span></td>
+              <td style="color:var(--text-tertiary);font-size:0.8rem"><%= new Date(rfq.createdAt).toLocaleDateString('en-IN') %></td>
+              <td><a href="/rfqs/<%= rfq.id %>" class="btn btn-secondary btn-sm">View</a></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% } else { %>
+  <div style="margin-bottom:1.5rem">
+    <a href="/rfqs/new?quoteId=<%= quote.id %>" class="btn btn-secondary btn-sm">+ Create Supplier RFQ</a>
+  </div>
+<% } %>
+
+<!-- Reject modal -->
+<div id="rejectModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center">
+  <div style="background:var(--surface);border-radius:var(--radius-lg);padding:1.75rem;max-width:440px;width:90%;box-shadow:var(--shadow-lg)">
+    <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem">Reject Quote</h3>
+    <form method="POST" action="/quotes/<%= quote.id %>/reject">
+      <div class="form-group">
+        <label>Reason (optional)</label>
+        <textarea name="reason" rows="3" placeholder="Why was this quote rejected?"></textarea>
+      </div>
+      <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1rem">
+        <button type="button" class="btn btn-secondary" onclick="document.getElementById('rejectModal').style.display='none'">Cancel</button>
+        <button type="submit" class="btn btn-danger">Confirm Reject</button>
+      </div>
+    </form>
+  </div>
+</div>
