@@ -39,8 +39,10 @@ app.locals.prisma = prisma;
 // ── Routes ────────────────────────────────────────────────────
 const leadsRouter = require('./src/routes/leads');
 const contactsRouter = require('./src/routes/contacts');
+const activitiesRouter = require('./src/routes/activities');
 app.use('/leads', leadsRouter);
 app.use('/contacts', contactsRouter);
+app.use('/activities', activitiesRouter);
 
 // ── Placeholder home route ───────────────────────────────────
 app.get('/', (req, res) => {
