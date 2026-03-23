@@ -1,0 +1,40 @@
+<% if (status === 'connected') { %>
+  <meta http-equiv="refresh" content="30">
+<% } else if (status === 'connecting' && qrCode) { %>
+  <meta http-equiv="refresh" content="5">
+<% } %>
+
+<div style="max-width:520px; margin:2rem auto;">
+  <div class="form-card" style="max-width:none; text-align:center;">
+
+    <% if (status === 'connected') { %>
+      <h1 style="font-family:'Fraunces',serif; font-size:1.5rem; font-weight:700; color:var(--navy-800); margin-bottom:1rem;">WhatsApp Status</h1>
+      <div style="margin-bottom:1.5rem;">
+        <span class="badge" style="background:var(--success-soft); color:var(--success); font-size:0.95rem; padding:0.4rem 1rem;">Connected</span>
+      </div>
+      <p class="text-muted" style="margin-bottom:1.5rem;">WhatsApp is active and ready to send messages.</p>
+      <form method="POST" action="/whatsapp/disconnect">
+        <button type="submit" class="btn btn-danger">Disconnect</button>
+      </form>
+
+    <% } else if (status === 'connecting' && qrCode) { %>
+      <h1 style="font-family:'Fraunces',serif; font-size:1.5rem; font-weight:700; color:var(--navy-800); margin-bottom:1rem;">Scan QR Code</h1>
+      <p class="text-muted" style="margin-bottom:1rem;">Open WhatsApp on your phone &rarr; Settings &rarr; Linked Devices &rarr; Link a Device</p>
+      <div style="margin:1.5rem 0;">
+        <img src="<%= qrCode %>" style="max-width:300px; border:1px solid var(--border); border-radius:var(--radius); padding:0.5rem;" alt="WhatsApp QR Code">
+      </div>
+      <p class="text-muted" style="font-size:0.85rem;">Page refreshes automatically every 5 seconds.</p>
+
+    <% } else { %>
+      <h1 style="font-family:'Fraunces',serif; font-size:1.5rem; font-weight:700; color:var(--navy-800); margin-bottom:1rem;">WhatsApp Not Connected</h1>
+      <p class="text-muted" style="margin-bottom:1.5rem;">
+        Connect WhatsApp to send messages directly from lead profiles.<br>
+        You will need to scan a QR code with the WhatsApp app on your phone.
+      </p>
+      <form method="POST" action="/whatsapp/connect">
+        <button type="submit" class="btn btn-primary">Connect WhatsApp</button>
+      </form>
+    <% } %>
+
+  </div>
+</div>
