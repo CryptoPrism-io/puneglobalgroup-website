@@ -1,0 +1,199 @@
+<%
+  var isEdit = lead !== null && lead !== undefined;
+  var action = isEdit ? '/leads/' + lead.id : '/leads';
+  var v = isEdit ? lead : {};
+  function val(field) { return v[field] || ''; }
+  function sel(field, option) { return val(field) === option ? 'selected' : ''; }
+  function chk(field, option) { return val(field) === option ? 'checked' : ''; }
+%>
+
+<div class="page-header">
+  <h1><%= isEdit ? 'Edit Lead — ' + lead.companyName : 'New Lead' %></h1>
+  <% if (isEdit) { %>
+    <a href="/leads/<%= lead.id %>" class="btn btn-secondary">← Back to Lead</a>
+  <% } else { %>
+    <a href="/leads" class="btn btn-secondary">← Back to Leads</a>
+  <% } %>
+</div>
+
+<form method="POST" action="<%= action %>">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:1000px">
+
+    <!-- Left column -->
+    <div>
+      <div class="form-card" style="max-width:none;margin-bottom:1.5rem">
+        <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1.25rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">Company Info</h2>
+
+        <div class="form-group">
+          <label>Company Name *</label>
+          <input type="text" name="companyName" value="<%= val('companyName') %>" required placeholder="e.g. Acme Packaging Pvt Ltd">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Industry</label>
+            <select name="industry">
+              <option value="">— Select —</option>
+              <option value="automotive" <%= sel('industry','automotive') %>>Automotive</option>
+              <option value="pharma" <%= sel('industry','pharma') %>>Pharma</option>
+              <option value="fmcg" <%= sel('industry','fmcg') %>>FMCG</option>
+              <option value="electronics" <%= sel('industry','electronics') %>>Electronics</option>
+              <option value="engineering" <%= sel('industry','engineering') %>>Engineering</option>
+              <option value="printing" <%= sel('industry','printing') %>>Printing</option>
+              <option value="corrugator" <%= sel('industry','corrugator') %>>Corrugator</option>
+              <option value="packaging" <%= sel('industry','packaging') %>>Packaging</option>
+              <option value="other" <%= sel('industry','other') %>>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" name="city" value="<%= val('city') %>" placeholder="e.g. Pune">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" name="state" value="<%= val('state') %>" placeholder="e.g. Maharashtra">
+          </div>
+          <div class="form-group">
+            <label>Pincode</label>
+            <input type="text" name="pincode" value="<%= val('pincode') %>" placeholder="411001">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Address</label>
+          <textarea name="address" rows="2" placeholder="Full address"><%= val('address') %></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Website</label>
+            <input type="text" name="website" value="<%= val('website') %>" placeholder="https://example.com">
+          </div>
+          <div class="form-group">
+            <label>GSTIN</label>
+            <input type="text" name="gstin" value="<%= val('gstin') %>" placeholder="27AAACR5055K1ZS">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Employee Count</label>
+            <input type="number" name="employeeCount" value="<%= val('employeeCount') %>" min="1" placeholder="50">
+          </div>
+          <div class="form-group">
+            <label>Year Established</label>
+            <input type="number" name="yearEstablished" value="<%= val('yearEstablished') %>" min="1900" max="2099" placeholder="2005">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Estimated Annual Revenue</label>
+          <select name="estimatedRevenue">
+            <option value="">— Select —</option>
+            <option value="<1Cr" <%= sel('estimatedRevenue','<1Cr') %>>&lt;1 Cr</option>
+            <option value="1-5Cr" <%= sel('estimatedRevenue','1-5Cr') %>>1–5 Cr</option>
+            <option value="5-10Cr" <%= sel('estimatedRevenue','5-10Cr') %>>5–10 Cr</option>
+            <option value="10-50Cr" <%= sel('estimatedRevenue','10-50Cr') %>>10–50 Cr</option>
+            <option value="50-100Cr" <%= sel('estimatedRevenue','50-100Cr') %>>50–100 Cr</option>
+            <option value="100Cr+" <%= sel('estimatedRevenue','100Cr+') %>>100 Cr+</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Business Intel -->
+      <div class="form-card" style="max-width:none">
+        <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1.25rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">Business Intel</h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Current Packaging</label>
+            <input type="text" name="currentPackaging" value="<%= val('currentPackaging') %>" placeholder="e.g. corrugated boxes">
+          </div>
+          <div class="form-group">
+            <label>Current Supplier</label>
+            <input type="text" name="currentSupplier" value="<%= val('currentSupplier') %>" placeholder="e.g. XYZ Packaging">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Estimated Monthly Volume</label>
+          <input type="text" name="estimatedMonthlyVolume" value="<%= val('estimatedMonthlyVolume') %>" placeholder="e.g. 5000 boxes / month">
+        </div>
+
+        <div class="form-group">
+          <label>Pain Points</label>
+          <textarea name="painPoints" rows="3" placeholder="Key challenges they face…"><%= val('painPoints') %></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Opportunities</label>
+          <textarea name="opportunities" rows="3" placeholder="Why we can win this account…"><%= val('opportunities') %></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div>
+      <div class="form-card" style="max-width:none;margin-bottom:1.5rem">
+        <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1.25rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">ICP &amp; Source</h2>
+
+        <div class="form-group">
+          <label>ICP Type</label>
+          <div style="display:flex;gap:1.25rem;margin-top:0.25rem">
+            <% ['PAPER','PP','BOTH','UNKNOWN'].forEach(function(opt) { %>
+              <label style="display:flex;align-items:center;gap:0.4rem;font-weight:400;font-size:0.9rem;cursor:pointer">
+                <input type="radio" name="icpType" value="<%= opt %>" <%= chk('icpType', opt) || (opt === 'UNKNOWN' && !v.icpType ? 'checked' : '') %>>
+                <%= opt %>
+              </label>
+            <% }); %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Source</label>
+          <select name="source">
+            <option value="MANUAL" <%= sel('source','MANUAL') %>>Manual</option>
+            <option value="GOOGLE" <%= sel('source','GOOGLE') %>>Google</option>
+            <option value="LINKEDIN" <%= sel('source','LINKEDIN') %>>LinkedIn</option>
+            <option value="INDIAMART" <%= sel('source','INDIAMART') %>>IndiaMart</option>
+            <option value="GEM" <%= sel('source','GEM') %>>GeM</option>
+            <option value="MEITY" <%= sel('source','MEITY') %>>MeitY</option>
+            <option value="REFERRAL" <%= sel('source','REFERRAL') %>>Referral</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Source URL</label>
+          <input type="text" name="sourceUrl" value="<%= val('sourceUrl') %>" placeholder="https://indiamart.com/…">
+        </div>
+
+        <div class="form-group">
+          <label>Fit Notes</label>
+          <textarea name="fitNotes" rows="3" placeholder="Why this lead fits (or doesn't)…"><%= val('fitNotes') %></textarea>
+        </div>
+      </div>
+
+      <div class="form-card" style="max-width:none">
+        <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1.25rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">Notes</h2>
+
+        <div class="form-group">
+          <label>General Notes</label>
+          <textarea name="notes" rows="5" placeholder="Any additional notes…"><%= val('notes') %></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary"><%= isEdit ? 'Save Changes' : 'Create Lead' %></button>
+          <% if (isEdit) { %>
+            <a href="/leads/<%= lead.id %>" class="btn btn-secondary">Cancel</a>
+          <% } else { %>
+            <a href="/leads" class="btn btn-secondary">Cancel</a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</form>

@@ -1,0 +1,104 @@
+<div class="page-header">
+  <h1>Leads</h1>
+  <a href="/leads/new" class="btn btn-primary">+ New Lead</a>
+</div>
+
+<form method="GET" action="/leads" class="filter-bar">
+  <input type="text" name="search" placeholder="Search company, city, notes…" value="<%= filters.search %>" style="min-width:200px">
+  <select name="stage">
+    <option value="">All Stages</option>
+    <% STAGES.forEach(function(s) { %>
+      <option value="<%= s %>" <%= filters.stage === s ? 'selected' : '' %>><%= s %></option>
+    <% }); %>
+  </select>
+  <select name="icpType">
+    <option value="">All ICP</option>
+    <option value="PAPER" <%= filters.icpType === 'PAPER' ? 'selected' : '' %>>PAPER</option>
+    <option value="PP" <%= filters.icpType === 'PP' ? 'selected' : '' %>>PP</option>
+    <option value="BOTH" <%= filters.icpType === 'BOTH' ? 'selected' : '' %>>BOTH</option>
+    <option value="UNKNOWN" <%= filters.icpType === 'UNKNOWN' ? 'selected' : '' %>>UNKNOWN</option>
+  </select>
+  <select name="source">
+    <option value="">All Sources</option>
+    <option value="GOOGLE" <%= filters.source === 'GOOGLE' ? 'selected' : '' %>>Google</option>
+    <option value="LINKEDIN" <%= filters.source === 'LINKEDIN' ? 'selected' : '' %>>LinkedIn</option>
+    <option value="INDIAMART" <%= filters.source === 'INDIAMART' ? 'selected' : '' %>>IndiaMart</option>
+    <option value="GEM" <%= filters.source === 'GEM' ? 'selected' : '' %>>GeM</option>
+    <option value="MEITY" <%= filters.source === 'MEITY' ? 'selected' : '' %>>MeitY</option>
+    <option value="REFERRAL" <%= filters.source === 'REFERRAL' ? 'selected' : '' %>>Referral</option>
+    <option value="MANUAL" <%= filters.source === 'MANUAL' ? 'selected' : '' %>>Manual</option>
+  </select>
+  <select name="industry">
+    <option value="">All Industries</option>
+    <option value="automotive" <%= filters.industry === 'automotive' ? 'selected' : '' %>>Automotive</option>
+    <option value="pharma" <%= filters.industry === 'pharma' ? 'selected' : '' %>>Pharma</option>
+    <option value="fmcg" <%= filters.industry === 'fmcg' ? 'selected' : '' %>>FMCG</option>
+    <option value="electronics" <%= filters.industry === 'electronics' ? 'selected' : '' %>>Electronics</option>
+    <option value="engineering" <%= filters.industry === 'engineering' ? 'selected' : '' %>>Engineering</option>
+    <option value="printing" <%= filters.industry === 'printing' ? 'selected' : '' %>>Printing</option>
+    <option value="corrugator" <%= filters.industry === 'corrugator' ? 'selected' : '' %>>Corrugator</option>
+    <option value="packaging" <%= filters.industry === 'packaging' ? 'selected' : '' %>>Packaging</option>
+    <option value="other" <%= filters.industry === 'other' ? 'selected' : '' %>>Other</option>
+  </select>
+  <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+  <a href="/leads" class="btn btn-secondary btn-sm">Clear</a>
+</form>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Industry</th>
+        <th>City</th>
+        <th>ICP</th>
+        <th>Stage</th>
+        <th>Fit</th>
+        <th>Source</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (leads.length === 0) { %>
+        <tr>
+          <td colspan="8" style="text-align:center;color:var(--text-tertiary);padding:2rem">
+            No leads found. <a href="/leads/new">Create your first lead.</a>
+          </td>
+        </tr>
+      <% } else { %>
+        <% leads.forEach(function(lead) { %>
+          <%
+            var score = lead.fitScore;
+            var icpLow = (lead.icpType || 'unknown').toLowerCase();
+            var stageLow = (lead.stage || 'new').toLowerCase();
+          %>
+          <tr>
+            <td>
+              <a href="/leads/<%= lead.id %>" style="font-weight:600;color:var(--navy-800)">
+                <%= lead.companyName %>
+              </a>
+              <% if (lead.isArchived) { %>
+                <span class="badge" style="background:#f3f4f6;color:#6b7280;margin-left:4px">archived</span>
+              <% } %>
+            </td>
+            <td><%= lead.industry || '—' %></td>
+            <td><%= lead.city || '—' %></td>
+            <td><span class="badge badge-<%= icpLow %>"><%= lead.icpType %></span></td>
+            <td><span class="badge badge-<%= stageLow %>"><%= lead.stage %></span></td>
+            <td>
+              <% if (score !== null && score !== undefined) { %>
+                <span class="fit-score <%= score >= 7 ? 'fit-high' : score >= 4 ? 'fit-mid' : 'fit-low' %>"><%= score %></span>
+              <% } else { %>
+                <span class="text-light">—</span>
+              <% } %>
+            </td>
+            <td><span class="text-muted"><%= lead.source || '—' %></span></td>
+            <td><a href="/leads/<%= lead.id %>" class="btn btn-secondary btn-sm">View</a></td>
+          </tr>
+        <% }); %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<p class="text-muted" style="margin-top:0.75rem;font-size:0.82rem"><%= leads.length %> lead<%= leads.length !== 1 ? 's' : '' %> found</p>

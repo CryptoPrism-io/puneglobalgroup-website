@@ -1,0 +1,319 @@
+<%
+  var icpLow = (lead.icpType || 'unknown').toLowerCase();
+  var stageLow = (lead.stage || 'new').toLowerCase();
+  var score = lead.fitScore;
+  function fmtDate(d) { return d ? new Date(d).toLocaleDateString('en-IN') : '—'; }
+  function orDash(v) { return v || '—'; }
+%>
+
+<!-- Lead Header -->
+<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem">
+  <div>
+    <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem">
+      <h1 style="font-family:'Fraunces',serif;font-size:1.65rem;font-weight:700;color:var(--navy-800);letter-spacing:-0.03em"><%= lead.companyName %></h1>
+      <span class="badge badge-<%= stageLow %>"><%= lead.stage %></span>
+      <span class="badge badge-<%= icpLow %>"><%= lead.icpType %></span>
+      <% if (score !== null && score !== undefined) { %>
+        <span class="fit-score <%= score >= 7 ? 'fit-high' : score >= 4 ? 'fit-mid' : 'fit-low' %>" title="Fit Score"><%= score %></span>
+      <% } %>
+      <% if (lead.isArchived) { %>
+        <span class="badge" style="background:#f3f4f6;color:#6b7280">archived</span>
+      <% } %>
+    </div>
+    <p class="text-muted" style="font-size:0.85rem">
+      <%= orDash(lead.industry) %>
+      <% if (lead.city) { %> · <%= lead.city %><% } %>
+      <% if (lead.state) { %>, <%= lead.state %><% } %>
+    </p>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+    <!-- Stage transitions -->
+    <% validNextStages.forEach(function(s) { %>
+      <form method="POST" action="/leads/<%= lead.id %>/stage" style="display:inline">
+        <input type="hidden" name="newStage" value="<%= s %>">
+        <button type="submit" class="btn btn-sm btn-secondary">→ <%= s %></button>
+      </form>
+    <% }); %>
+    <a href="/leads/<%= lead.id %>/edit" class="btn btn-secondary btn-sm">Edit</a>
+    <form method="POST" action="/leads/<%= lead.id %>/archive" style="display:inline">
+      <button type="submit" class="btn btn-sm btn-danger"><%= lead.isArchived ? 'Unarchive' : 'Archive' %></button>
+    </form>
+    <a href="/leads" class="btn btn-secondary btn-sm">← Leads</a>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <a href="/leads/<%= lead.id %>?tab=info" class="tab <%= tab === 'info' ? 'active' : '' %>">Info</a>
+  <a href="/leads/<%= lead.id %>?tab=contacts" class="tab <%= tab === 'contacts' ? 'active' : '' %>">Contacts (<%= lead.contacts.length %>)</a>
+  <a href="/leads/<%= lead.id %>?tab=activity" class="tab <%= tab === 'activity' ? 'active' : '' %>">Activity (<%= lead.activities.length %>)</a>
+  <a href="/leads/<%= lead.id %>?tab=sales-intel" class="tab <%= tab === 'sales-intel' ? 'active' : '' %>">Sales Intel</a>
+</div>
+
+<!-- ── Tab: Info ───────────────────────────────────────────── -->
+<% if (!tab || tab === 'info') { %>
+<div class="tab-content active">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem">
+    <div>
+      <div class="form-card" style="max-width:none;margin-bottom:1.5rem">
+        <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1rem">Company Details</h2>
+        <div class="detail-grid" style="gap:0.75rem">
+          <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Website</span><br>
+            <% if (lead.website) { %><a href="<%= lead.website %>" target="_blank"><%= lead.website %></a><% } else { %>—<% } %>
+          </div>
+          <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">GSTIN</span><br><span class="text-mono"><%= orDash(lead.gstin) %></span></div>
+          <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Employees</span><br><%= orDash(lead.employeeCount) %></div>
+          <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Est. Revenue</span><br><%= orDash(lead.estimatedRevenue) %></div>
+          <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Year Est.</span><br><%= orDash(lead.yearEstablished) %></div>
+          <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Pincode</span><br><%= orDash(lead.pincode) %></div>
+        </div>
+        <% if (lead.address) { %>
+          <div style="margin-top:0.75rem"><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Address</span><br><%= lead.address %></div>
+        <% } %>
+      </div>
+
+      <div class="form-card" style="max-width:none">
+        <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1rem">Source</h2>
+        <div class="detail-grid" style="gap:0.75rem">
+          <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Source</span><br>
+            <span class="badge badge-<%= (lead.source||'manual').toLowerCase() %>"><%= lead.source %></span>
+          </div>
+          <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Scraped At</span><br><%= fmtDate(lead.scrapedAt) %></div>
+        </div>
+        <% if (lead.sourceUrl) { %>
+          <div style="margin-top:0.75rem"><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Source URL</span><br><a href="<%= lead.sourceUrl %>" target="_blank" style="word-break:break-all"><%= lead.sourceUrl %></a></div>
+        <% } %>
+        <% if (lead.fitNotes) { %>
+          <div style="margin-top:0.75rem"><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Fit Notes</span><br><%= lead.fitNotes %></div>
+        <% } %>
+      </div>
+    </div>
+
+    <div>
+      <div class="form-card" style="max-width:none;margin-bottom:1.5rem">
+        <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1rem">Business Intel</h2>
+        <div style="display:flex;flex-direction:column;gap:0.75rem">
+          <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Current Packaging</span><br><%= orDash(lead.currentPackaging) %></div>
+          <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Current Supplier</span><br><%= orDash(lead.currentSupplier) %></div>
+          <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Est. Monthly Volume</span><br><%= orDash(lead.estimatedMonthlyVolume) %></div>
+          <% if (lead.painPoints) { %>
+            <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Pain Points</span><br><%= lead.painPoints %></div>
+          <% } %>
+          <% if (lead.opportunities) { %>
+            <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Opportunities</span><br><%= lead.opportunities %></div>
+          <% } %>
+        </div>
+      </div>
+
+      <% if (lead.notes) { %>
+        <div class="form-card" style="max-width:none">
+          <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:0.75rem">Notes</h2>
+          <p style="white-space:pre-wrap"><%= lead.notes %></p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+<% } %>
+
+<!-- ── Tab: Contacts ───────────────────────────────────────── -->
+<% if (tab === 'contacts') { %>
+<div class="tab-content active">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+    <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800)">Contacts</h2>
+    <a href="/contacts/new?leadId=<%= lead.id %>" class="btn btn-primary btn-sm">+ Add Contact</a>
+  </div>
+  <% if (lead.contacts.length === 0) { %>
+    <p class="text-muted">No contacts yet. <a href="/contacts/new?leadId=<%= lead.id %>">Add the first contact.</a></p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Designation</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>WhatsApp</th>
+            <th>Primary</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% lead.contacts.forEach(function(c) { %>
+            <tr>
+              <td style="font-weight:500"><%= c.name %></td>
+              <td><%= c.designation || '—' %></td>
+              <td><%= c.phone || '—' %></td>
+              <td><%= c.email ? '<a href="mailto:' + c.email + '">' + c.email + '</a>' : '—' %></td>
+              <td><%= c.whatsapp || '—' %></td>
+              <td><% if (c.isPrimary) { %><span class="badge badge-paid">Primary</span><% } else { %>—<% } %></td>
+              <td><a href="/contacts/<%= c.id %>" class="btn btn-secondary btn-sm">Edit</a></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>
+<% } %>
+
+<!-- ── Tab: Activity ───────────────────────────────────────── -->
+<% if (tab === 'activity') { %>
+<div class="tab-content active">
+  <div style="display:grid;grid-template-columns:1fr 2fr;gap:2rem">
+    <div>
+      <div class="form-card" style="max-width:none">
+        <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1rem">Log Activity</h2>
+        <form method="POST" action="/activities">
+          <input type="hidden" name="leadId" value="<%= lead.id %>">
+          <div class="form-group">
+            <label>Type</label>
+            <select name="type" required>
+              <option value="NOTE">Note</option>
+              <option value="CALL">Call</option>
+              <option value="EMAIL_SENT">Email Sent</option>
+              <option value="EMAIL_RECEIVED">Email Received</option>
+              <option value="WHATSAPP">WhatsApp</option>
+              <option value="MEETING">Meeting</option>
+              <option value="SITE_VISIT">Site Visit</option>
+              <option value="SAMPLE_SENT">Sample Sent</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Contact (optional)</label>
+            <select name="contactId">
+              <option value="">— None —</option>
+              <% lead.contacts.forEach(function(c) { %>
+                <option value="<%= c.id %>"><%= c.name %><%= c.designation ? ' (' + c.designation + ')' : '' %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Subject *</label>
+            <input type="text" name="subject" required placeholder="Brief summary…">
+          </div>
+          <div class="form-group">
+            <label>Details</label>
+            <textarea name="body" rows="4" placeholder="Full notes…"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%">Log Activity</button>
+        </form>
+      </div>
+    </div>
+
+    <div>
+      <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1rem">Timeline</h2>
+      <% if (lead.activities.length === 0) { %>
+        <p class="text-muted">No activities logged yet.</p>
+      <% } else { %>
+        <ul class="timeline">
+          <% lead.activities.forEach(function(a) { %>
+            <li class="timeline-item">
+              <div class="timeline-icon"><%= a.type.charAt(0) %></div>
+              <div class="timeline-body">
+                <div class="subject"><%= a.subject %></div>
+                <% if (a.body) { %>
+                  <div class="text-muted" style="font-size:0.85rem;margin-top:0.2rem;white-space:pre-wrap"><%= a.body %></div>
+                <% } %>
+                <div class="meta">
+                  <span class="badge" style="background:var(--bg-warm);color:var(--text-secondary);font-size:0.65rem"><%= a.type %></span>
+                  <% if (a.contact) { %> · <%= a.contact.name %><% } %>
+                  · <%= fmtDate(a.createdAt) %>
+                </div>
+              </div>
+            </li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </div>
+  </div>
+</div>
+<% } %>
+
+<!-- ── Tab: Sales Intel ────────────────────────────────────── -->
+<% if (tab === 'sales-intel') { %>
+<div class="tab-content active">
+  <form method="POST" action="/leads/<%= lead.id %>">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem">
+      <!-- Left: DISC + SPIN -->
+      <div>
+        <div class="form-card" style="max-width:none;margin-bottom:1.5rem">
+          <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">DISC Profile</h2>
+          <div class="form-group">
+            <label>DISC Type</label>
+            <div style="display:flex;gap:1.25rem;margin-top:0.25rem">
+              <% ['D','I','S','C'].forEach(function(d) { %>
+                <label style="display:flex;align-items:center;gap:0.4rem;font-weight:400;font-size:0.9rem;cursor:pointer">
+                  <input type="radio" name="discType" value="<%= d %>" <%= lead.discType === d ? 'checked' : '' %>>
+                  <strong><%= d %></strong>
+                </label>
+              <% }); %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>DISC Notes</label>
+            <textarea name="discNotes" rows="3" placeholder="Observed behavioural traits…"><%= lead.discNotes || '' %></textarea>
+          </div>
+        </div>
+
+        <div class="form-card" style="max-width:none">
+          <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">SPIN Selling</h2>
+          <div class="form-group">
+            <label>Situation</label>
+            <textarea name="spinSituation" rows="2" placeholder="Their current packaging situation…"><%= lead.spinSituation || '' %></textarea>
+          </div>
+          <div class="form-group">
+            <label>Problem</label>
+            <textarea name="spinProblem" rows="2" placeholder="Problems with current solution…"><%= lead.spinProblem || '' %></textarea>
+          </div>
+          <div class="form-group">
+            <label>Implication</label>
+            <textarea name="spinImplication" rows="2" placeholder="Consequences of not solving…"><%= lead.spinImplication || '' %></textarea>
+          </div>
+          <div class="form-group">
+            <label>Need-Payoff</label>
+            <textarea name="spinNeedPayoff" rows="2" placeholder="Value of solving the problem…"><%= lead.spinNeedPayoff || '' %></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: GROW + Notes -->
+      <div>
+        <div class="form-card" style="max-width:none;margin-bottom:1.5rem">
+          <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">GROW Coaching</h2>
+          <div class="form-group">
+            <label>Goal</label>
+            <textarea name="growGoal" rows="2" placeholder="What do they want to achieve…"><%= lead.growGoal || '' %></textarea>
+          </div>
+          <div class="form-group">
+            <label>Reality</label>
+            <textarea name="growReality" rows="2" placeholder="Current state of affairs…"><%= lead.growReality || '' %></textarea>
+          </div>
+          <div class="form-group">
+            <label>Options</label>
+            <textarea name="growOptions" rows="2" placeholder="Possible paths forward…"><%= lead.growOptions || '' %></textarea>
+          </div>
+          <div class="form-group">
+            <label>Will / Way Forward</label>
+            <textarea name="growWill" rows="2" placeholder="Agreed next steps…"><%= lead.growWill || '' %></textarea>
+          </div>
+        </div>
+
+        <div class="form-card" style="max-width:none">
+          <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">Notes &amp; Tags</h2>
+          <div class="form-group">
+            <label>Notes</label>
+            <textarea name="notes" rows="4" placeholder="General notes…"><%= lead.notes || '' %></textarea>
+          </div>
+          <input type="hidden" name="tags" value="<%= lead.tags ? JSON.stringify(lead.tags) : '[]' %>">
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Intel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<% } %>
