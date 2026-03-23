@@ -43,6 +43,45 @@
   </div>
 </div>
 
+<!-- Quick Send -->
+<div style="margin-top:1rem; padding:1rem; background:var(--bg-warm); border-radius:var(--radius);">
+  <h3 style="margin-bottom:0.5rem; font-size:0.9rem; color:var(--text-secondary); text-transform:uppercase;">Quick Send</h3>
+  <form method="POST" action="/outreach/send">
+    <input type="hidden" name="leadId" value="<%= lead.id %>">
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:end;">
+      <div class="form-group" style="margin:0">
+        <label>Channel</label>
+        <select name="channel" required style="padding:0.35rem;">
+          <option value="EMAIL">Email</option>
+          <option value="WHATSAPP">WhatsApp</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin:0">
+        <label>Contact</label>
+        <select name="contactId" style="padding:0.35rem;">
+          <% (lead.contacts || []).forEach(function(c) { %>
+            <option value="<%= c.id %>"><%= c.name %> (<%= c.email || c.phone || 'no info' %>)</option>
+          <% }); %>
+        </select>
+      </div>
+      <div class="form-group" style="margin:0">
+        <label>Template</label>
+        <select name="templateId" style="padding:0.35rem;">
+          <option value="">-- Freeform --</option>
+          <% (templates || []).forEach(function(t) { %>
+            <option value="<%= t.id %>"><%= t.name %> (<%= t.channel %>)</option>
+          <% }); %>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:0.5rem;">
+      <input type="text" name="subject" placeholder="Subject (email only)" style="width:100%; margin-bottom:0.5rem; padding:0.35rem; border:1px solid var(--border); border-radius:var(--radius-sm);">
+      <textarea name="body" placeholder="Message body (leave blank to use template)" rows="3" style="width:100%; padding:0.35rem; border:1px solid var(--border); border-radius:var(--radius-sm);"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" style="margin-top:0.5rem;">Send</button>
+  </form>
+</div>
+
 <!-- Tabs -->
 <div class="tabs">
   <a href="/leads/<%= lead.id %>?tab=info" class="tab <%= tab === 'info' ? 'active' : '' %>">Info</a>

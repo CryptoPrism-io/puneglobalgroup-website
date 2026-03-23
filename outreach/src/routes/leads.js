@@ -136,11 +136,18 @@ router.get('/:id', async (req, res) => {
     // Compute valid next stages
     const validNextStages = STAGES.filter(s => isValidTransition(lead.stage, s));
 
+    // Load active templates for Quick Send form
+    const templates = await prisma.messageTemplate.findMany({
+      where: { isActive: true },
+      orderBy: { name: 'asc' },
+    });
+
     const body = await ejs.renderFile(path.join(VIEWS, 'leads/detail.ejs'), {
       lead: leadPlain,
       tab,
       validNextStages,
       STAGES,
+      templates,
     });
     res.render('layout', { title: lead.companyName, body });
   } catch (err) {

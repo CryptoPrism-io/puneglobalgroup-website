@@ -47,6 +47,9 @@ const quotesRouter = require('./src/routes/quotes');
 const rfqsRouter = require('./src/routes/rfqs');
 const templatesRouter = require('./src/routes/templates');
 const campaignsRouter = require('./src/routes/campaigns');
+const outreachRouter = require('./src/routes/outreach');
+const whatsappRouter = require('./src/routes/whatsapp');
+const webhooksRouter = require('./src/routes/webhooks');
 app.use('/leads', leadsRouter);
 app.use('/contacts', contactsRouter);
 app.use('/activities', activitiesRouter);
@@ -57,6 +60,9 @@ app.use('/quotes', quotesRouter);
 app.use('/rfqs', rfqsRouter);
 app.use('/templates', templatesRouter);
 app.use('/campaigns', campaignsRouter);
+app.use('/outreach', outreachRouter);
+app.use('/whatsapp', whatsappRouter);
+app.use('/webhooks', webhooksRouter);
 
 // ── Dashboard ─────────────────────────────────────────────
 app.get('/', async (req, res) => {
