@@ -5,64 +5,96 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= typeof title !== 'undefined' ? title + ' — ' : '' %>PGG Outreach</title>
   <link rel="stylesheet" href="/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <span class="brand-icon">PGG</span>
-      <span class="brand-text">Outreach</span>
+      <svg class="brand-logo" width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(-45deg)">
+        <path d="M6 6 L38 6 Q44 6, 44 12 L18 38 Q12 44, 6 44 L6 6 Z" fill="#FAF7F2"/>
+        <path d="M56 6 L94 6 L94 38 Q94 44, 88 44 L56 12 Q56 6, 62 6 Z" fill="#F5A623"/>
+        <path d="M94 56 L94 94 L62 94 Q56 94, 56 88 L82 62 Q88 56, 94 56 Z" fill="#FAF7F2"/>
+        <circle cx="25" cy="75" r="12" fill="#F5A623" opacity="0.15"/>
+        <circle cx="25" cy="75" r="5" fill="#F5A623"/>
+        <circle cx="25" cy="75" r="1.8" fill="#8B1A1A"/>
+      </svg>
+      <div class="brand-text-group">
+        <span class="brand-name">Pune Global Group</span>
+        <span class="brand-sub">Outreach CRM</span>
+      </div>
     </div>
+
+    <button class="sidebar-toggle" onclick="toggleSidebar()" title="Collapse sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+    </button>
+
     <nav class="sidebar-nav">
       <div class="nav-section">
         <a href="/" class="nav-item <%= currentPath === '/' ? 'active' : '' %>">
-          <span class="nav-icon">◉</span> Dashboard
+          <i data-lucide="layout-dashboard" class="nav-icon"></i>
+          <span class="nav-label">Dashboard</span>
         </a>
       </div>
+
       <div class="nav-section-label">CRM</div>
       <div class="nav-section">
         <a href="/leads" class="nav-item <%= currentPath.startsWith('/leads') ? 'active' : '' %>">
-          <span class="nav-icon">◎</span> Leads
+          <i data-lucide="target" class="nav-icon"></i>
+          <span class="nav-label">Leads</span>
         </a>
         <a href="/contacts" class="nav-item <%= currentPath.startsWith('/contacts') ? 'active' : '' %>">
-          <span class="nav-icon">◉</span> Contacts
+          <i data-lucide="users" class="nav-icon"></i>
+          <span class="nav-label">Contacts</span>
         </a>
       </div>
+
       <div class="nav-section-label">Sales</div>
       <div class="nav-section">
         <a href="/quotes" class="nav-item <%= currentPath.startsWith('/quotes') ? 'active' : '' %>">
-          <span class="nav-icon">◉</span> Quotes
+          <i data-lucide="file-text" class="nav-icon"></i>
+          <span class="nav-label">Quotes</span>
         </a>
         <a href="/rfqs" class="nav-item <%= currentPath.startsWith('/rfqs') ? 'active' : '' %>">
-          <span class="nav-icon">◎</span> RFQs
+          <i data-lucide="file-input" class="nav-icon"></i>
+          <span class="nav-label">RFQs</span>
         </a>
         <a href="/rate-card" class="nav-item <%= currentPath.startsWith('/rate-card') ? 'active' : '' %>">
-          <span class="nav-icon">◉</span> Rate Card
+          <i data-lucide="indian-rupee" class="nav-icon"></i>
+          <span class="nav-label">Rate Card</span>
         </a>
       </div>
+
       <div class="nav-section-label">Outreach</div>
       <div class="nav-section">
         <a href="/templates" class="nav-item <%= currentPath.startsWith('/templates') ? 'active' : '' %>">
-          <span class="nav-icon">◎</span> Templates
+          <i data-lucide="layout-template" class="nav-icon"></i>
+          <span class="nav-label">Templates</span>
         </a>
         <a href="/campaigns" class="nav-item <%= currentPath.startsWith('/campaigns') ? 'active' : '' %>">
-          <span class="nav-icon">◉</span> Campaigns
+          <i data-lucide="megaphone" class="nav-icon"></i>
+          <span class="nav-label">Campaigns</span>
         </a>
         <a href="/whatsapp/status" class="nav-item <%= currentPath.startsWith('/whatsapp') ? 'active' : '' %>">
-          <span class="nav-icon">◎</span> WhatsApp
+          <i data-lucide="message-circle" class="nav-icon"></i>
+          <span class="nav-label">WhatsApp</span>
         </a>
       </div>
+
       <div class="nav-section-label">Data</div>
       <div class="nav-section">
         <a href="/scrape-batches" class="nav-item <%= currentPath.startsWith('/scrape-batches') ? 'active' : '' %>">
-          <span class="nav-icon">◉</span> Scrape Log
+          <i data-lucide="globe" class="nav-icon"></i>
+          <span class="nav-label">Scrape Log</span>
         </a>
         <a href="/analytics" class="nav-item <%= currentPath.startsWith('/analytics') ? 'active' : '' %>">
-          <span class="nav-icon">◎</span> Analytics
+          <i data-lucide="bar-chart-3" class="nav-icon"></i>
+          <span class="nav-label">Analytics</span>
         </a>
       </div>
     </nav>
+
     <div class="sidebar-footer">
-      <span class="text-muted" style="font-size:0.7rem;">Pune Global Group</span>
+      <span>Est. 1995 &middot; Pune</span>
     </div>
   </aside>
 
@@ -76,5 +108,19 @@
 
     <%- typeof body !== 'undefined' ? body : '' %>
   </main>
+
+  <script>
+    lucide.createIcons();
+    // Sidebar collapse toggle with localStorage persistence
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      sb.classList.toggle('collapsed');
+      localStorage.setItem('sidebar-collapsed', sb.classList.contains('collapsed'));
+    }
+    // Restore state on load
+    if (localStorage.getItem('sidebar-collapsed') === 'true') {
+      document.getElementById('sidebar').classList.add('collapsed');
+    }
+  </script>
 </body>
 </html>
