@@ -48,6 +48,7 @@
   <a href="/leads/<%= lead.id %>?tab=info" class="tab <%= tab === 'info' ? 'active' : '' %>">Info</a>
   <a href="/leads/<%= lead.id %>?tab=contacts" class="tab <%= tab === 'contacts' ? 'active' : '' %>">Contacts (<%= lead.contacts.length %>)</a>
   <a href="/leads/<%= lead.id %>?tab=activity" class="tab <%= tab === 'activity' ? 'active' : '' %>">Activity (<%= lead.activities.length %>)</a>
+  <a href="/leads/<%= lead.id %>?tab=quotes" class="tab <%= tab === 'quotes' ? 'active' : '' %>">Quotes (<%= lead.quotes ? lead.quotes.length : 0 %>)</a>
   <a href="/leads/<%= lead.id %>?tab=sales-intel" class="tab <%= tab === 'sales-intel' ? 'active' : '' %>">Sales Intel</a>
 </div>
 
@@ -229,6 +230,50 @@
       <% } %>
     </div>
   </div>
+</div>
+<% } %>
+
+<!-- ── Tab: Quotes ─────────────────────────────────────────── -->
+<% if (tab === 'quotes') { %>
+<div class="tab-content active">
+  <a href="/quotes/new?leadId=<%= lead.id %>" class="btn btn-primary" style="margin-bottom:1rem">+ Create Quote</a>
+  <% if (lead.quotes && lead.quotes.length > 0) { %>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Quote #</th>
+            <th>Date</th>
+            <th>Grand Total</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% lead.quotes.forEach(function(q) { %>
+            <%
+              var qStatusStyles = {
+                DRAFT:    'background:#e5e7eb;color:#374151',
+                SENT:     'background:var(--info-soft);color:var(--info)',
+                ACCEPTED: 'background:var(--success-soft);color:var(--success)',
+                REJECTED: 'background:var(--error-soft);color:var(--error)',
+              };
+              var qStatusStyle = qStatusStyles[q.status] || '';
+            %>
+            <tr>
+              <td><a href="/quotes/<%= q.id %>" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:600;color:var(--navy-800)"><%= q.quoteNo %></a></td>
+              <td style="color:var(--text-tertiary);font-size:0.85rem"><%= new Date(q.createdAt).toLocaleDateString('en-IN') %></td>
+              <td class="mono" style="text-align:right;font-weight:600">₹<%= Number(q.grandTotal).toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></td>
+              <td><span class="badge" style="<%= qStatusStyle %>"><%= q.status %></span></td>
+              <td><a href="/quotes/<%= q.id %>" class="btn btn-secondary btn-sm">View</a></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <p class="text-muted">No quotes yet for this lead.</p>
+  <% } %>
 </div>
 <% } %>
 

@@ -44,6 +44,7 @@ const scrapeBatchesRouter = require('./src/routes/scrapeBatches');
 const analyticsRouter = require('./src/routes/analytics');
 const rateCardRouter = require('./src/routes/rateCard');
 const quotesRouter = require('./src/routes/quotes');
+const rfqsRouter = require('./src/routes/rfqs');
 app.use('/leads', leadsRouter);
 app.use('/contacts', contactsRouter);
 app.use('/activities', activitiesRouter);
@@ -51,6 +52,7 @@ app.use('/scrape-batches', scrapeBatchesRouter);
 app.use('/analytics', analyticsRouter);
 app.use('/rate-card', rateCardRouter);
 app.use('/quotes', quotesRouter);
+app.use('/rfqs', rfqsRouter);
 
 // ── Dashboard ─────────────────────────────────────────────
 app.get('/', async (req, res) => {

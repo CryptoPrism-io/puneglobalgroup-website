@@ -123,6 +123,10 @@ router.get('/:id', async (req, res) => {
           orderBy: { createdAt: 'desc' },
           include: { contact: { select: { id: true, name: true } } },
         },
+        quotes: {
+          orderBy: { createdAt: 'desc' },
+          select: { id: true, quoteNo: true, createdAt: true, grandTotal: true, status: true },
+        },
         scrapeBatch: true,
       },
     });
