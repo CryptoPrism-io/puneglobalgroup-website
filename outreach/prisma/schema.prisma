@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Lead {
+  id                     Int       @id @default(autoincrement())
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  companyName            String
+  industry               String?
+  city                   String?
+  state                  String?
+  pincode                String?
+  address                String?
+  website                String?
+  gstin                  String?
+  employeeCount          Int?
+  estimatedRevenue       String?
+  yearEstablished        Int?
+  icpType                String    @default("UNKNOWN")
+  productFit             Json?
+  fitScore               Int?
+  fitNotes               String?
+  stage                  String    @default("NEW")
+  stageChangedAt         DateTime  @default(now())
+  lostReason             String?
+  source                 String    @default("MANUAL")
+  sourceUrl              String?
+  scrapedAt              DateTime?
+  scrapeBatchId          Int?
+  currentPackaging       String?
+  currentSupplier        String?
+  estimatedMonthlyVolume String?
+  painPoints             String?
+  opportunities          String?
+  discType               String?
+  discNotes              String?
+  spinSituation          String?
+  spinProblem            String?
+  spinImplication         String?
+  spinNeedPayoff         String?
+  meddic                 Json?
+  growGoal               String?
+  growReality            String?
+  growOptions            String?
+  growWill               String?
+  notes                  String?
+  tags                   Json?
+  isArchived             Boolean   @default(false)
+  contacts               Contact[]
+  activities             Activity[]
+  scrapeBatch            ScrapeBatch? @relation(fields: [scrapeBatchId], references: [id])
+}
+
+model Contact {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  leadId      Int
+  lead        Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  name        String
+  designation String?
+  department  String?
+  phone       String?
+  email       String?
+  whatsapp    String?
+  linkedinUrl String?
+  isPrimary   Boolean   @default(false)
+  discType    String?
+  notes       String?
+  activities  Activity[]
+}
+
+model Activity {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  leadId    Int
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  contactId Int?
+  contact   Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  type      String
+  subject   String
+  body      String?
+}
+
+model ScrapeBatch {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  source    String
+  query     String
+  leadsFound Int     @default(0)
+  leadsNew   Int     @default(0)
+  notes     String?
+  leads     Lead[]
+}
