@@ -7,30 +7,66 @@
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <nav class="top-nav">
-    <div class="nav-brand">PGG Outreach</div>
-    <div class="nav-links">
-      <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Dashboard</a>
-      <span class="nav-divider">|</span>
-      <a href="/leads" class="<%= currentPath.startsWith('/leads') ? 'active' : '' %>">Leads</a>
-      <a href="/contacts" class="<%= currentPath.startsWith('/contacts') ? 'active' : '' %>">Contacts</a>
-      <span class="nav-divider">|</span>
-      <a href="/quotes" class="<%= currentPath.startsWith('/quotes') ? 'active' : '' %>">Quotes</a>
-      <a href="/rfqs" class="<%= currentPath.startsWith('/rfqs') ? 'active' : '' %>">RFQs</a>
-      <span class="nav-divider">|</span>
-      <a href="/rate-card" class="<%= currentPath.startsWith('/rate-card') ? 'active' : '' %>">Rate Card</a>
-      <span class="nav-divider">|</span>
-      <a href="/templates" class="<%= currentPath.startsWith('/templates') ? 'active' : '' %>">Templates</a>
-      <a href="/campaigns" class="<%= currentPath.startsWith('/campaigns') ? 'active' : '' %>">Campaigns</a>
-      <span class="nav-divider">|</span>
-      <a href="/whatsapp/status" class="<%= currentPath.startsWith('/whatsapp') ? 'active' : '' %>">WhatsApp</a>
-      <span class="nav-divider">|</span>
-      <a href="/scrape-batches" class="<%= currentPath.startsWith('/scrape-batches') ? 'active' : '' %>">Scrape Log</a>
-      <a href="/analytics" class="<%= currentPath.startsWith('/analytics') ? 'active' : '' %>">Analytics</a>
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-icon">PGG</span>
+      <span class="brand-text">Outreach</span>
     </div>
-  </nav>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <a href="/" class="nav-item <%= currentPath === '/' ? 'active' : '' %>">
+          <span class="nav-icon">◉</span> Dashboard
+        </a>
+      </div>
+      <div class="nav-section-label">CRM</div>
+      <div class="nav-section">
+        <a href="/leads" class="nav-item <%= currentPath.startsWith('/leads') ? 'active' : '' %>">
+          <span class="nav-icon">◎</span> Leads
+        </a>
+        <a href="/contacts" class="nav-item <%= currentPath.startsWith('/contacts') ? 'active' : '' %>">
+          <span class="nav-icon">◉</span> Contacts
+        </a>
+      </div>
+      <div class="nav-section-label">Sales</div>
+      <div class="nav-section">
+        <a href="/quotes" class="nav-item <%= currentPath.startsWith('/quotes') ? 'active' : '' %>">
+          <span class="nav-icon">◉</span> Quotes
+        </a>
+        <a href="/rfqs" class="nav-item <%= currentPath.startsWith('/rfqs') ? 'active' : '' %>">
+          <span class="nav-icon">◎</span> RFQs
+        </a>
+        <a href="/rate-card" class="nav-item <%= currentPath.startsWith('/rate-card') ? 'active' : '' %>">
+          <span class="nav-icon">◉</span> Rate Card
+        </a>
+      </div>
+      <div class="nav-section-label">Outreach</div>
+      <div class="nav-section">
+        <a href="/templates" class="nav-item <%= currentPath.startsWith('/templates') ? 'active' : '' %>">
+          <span class="nav-icon">◎</span> Templates
+        </a>
+        <a href="/campaigns" class="nav-item <%= currentPath.startsWith('/campaigns') ? 'active' : '' %>">
+          <span class="nav-icon">◉</span> Campaigns
+        </a>
+        <a href="/whatsapp/status" class="nav-item <%= currentPath.startsWith('/whatsapp') ? 'active' : '' %>">
+          <span class="nav-icon">◎</span> WhatsApp
+        </a>
+      </div>
+      <div class="nav-section-label">Data</div>
+      <div class="nav-section">
+        <a href="/scrape-batches" class="nav-item <%= currentPath.startsWith('/scrape-batches') ? 'active' : '' %>">
+          <span class="nav-icon">◉</span> Scrape Log
+        </a>
+        <a href="/analytics" class="nav-item <%= currentPath.startsWith('/analytics') ? 'active' : '' %>">
+          <span class="nav-icon">◎</span> Analytics
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <span class="text-muted" style="font-size:0.7rem;">Pune Global Group</span>
+    </div>
+  </aside>
 
-  <main class="container">
+  <main class="main-content">
     <% if (typeof success !== 'undefined' && success) { %>
       <div class="flash flash-success"><%= success %></div>
     <% } %>
@@ -40,9 +76,5 @@
 
     <%- typeof body !== 'undefined' ? body : '' %>
   </main>
-
-  <footer class="site-footer">
-    <p>Pune Global Group — Outreach CRM</p>
-  </footer>
 </body>
 </html>
