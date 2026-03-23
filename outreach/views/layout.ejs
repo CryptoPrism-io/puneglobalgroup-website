@@ -24,10 +24,6 @@
       </div>
     </div>
 
-    <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Collapse sidebar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-    </button>
-
     <nav class="sidebar-nav">
       <div class="nav-section">
         <a href="/" class="nav-item <%= currentPath === '/' ? 'active' : '' %>">
@@ -103,6 +99,10 @@
         <a href="/logout" class="logout-link">Sign out</a>
       <% } %>
     </div>
+    <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      <span class="toggle-label">Collapse</span>
+    </button>
   </aside>
 
   <main class="main-content">
