@@ -124,10 +124,15 @@ model QuoteItem {
   sheetRatePerSqm String  // default from rate card, overridable
   sheetCost       String  // sheetArea × sheetRatePerSqm
 
+  // PP conversion rates (per piece)
   cuttingRate     String  // per piece
   weldingRate     String  // per piece (0 if no welding)
   printingRate    String  // per piece (0 if no printing)
-  conversionCost  String  // cuttingRate + weldingRate + printingRate
+  // Paper/Board conversion rates (per piece or per sq.m)
+  sheetingRate    String? // synchro/guillotine sheeting rate
+  slittingRate    String? // slitting rate (if applicable)
+  rewindingRate   String? // rewinding rate (if applicable)
+  conversionCost  String  // sum of applicable conversion rates (PP: cutting+welding+printing; Paper: sheeting+slitting+rewinding)
 
   extrasCost      String  // sum of all extras
   unitCost        String  // sheetCost + conversionCost + extrasCost
@@ -263,6 +268,9 @@ computeQuoteTotals(items[])
 determineGstType(businessState, leadState)
   → "CGST_SGST" | "IGST"
 
+  businessState is hardcoded as "Maharashtra" (PGG's registered state).
+  leadState is pulled from Lead.state field.
+
 computeGstBreakdown(taxableAmt, gstRate, gstType)
   → { cgst, sgst, igst }
 ```
@@ -381,9 +389,10 @@ Add "Quotes" and "RFQs" links between Contacts and Scrape Log.
 ## Integration with Module A
 
 - Quote.leadId → Lead (required FK)
-- Quote creation → Activity logged (type: QUOTE_SENT or similar)
-- Quote ACCEPTED → `changeStage(prisma, leadId, 'QUOTED', 'Quote QT-xxxx accepted')` via pipeline service
-- Quote REJECTED → Activity logged with rejection reason
+- Quote creation → Activity logged (type: QUOTE_CREATED)
+- Quote SENT → `changeStage(prisma, leadId, 'QUOTED', 'Quote QT-xxxx sent')` — advances lead to QUOTED stage
+- Quote ACCEPTED → `changeStage(prisma, leadId, 'WON', 'Quote QT-xxxx accepted')` — advances lead to WON stage
+- Quote REJECTED → Activity logged with rejection reason (lead stays at QUOTED)
 - Lead detail page gets Quotes tab
 
 ## Dependencies
