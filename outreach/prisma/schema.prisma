@@ -55,6 +55,7 @@ model Lead {
   contacts               Contact[]
   activities             Activity[]
   scrapeBatch            ScrapeBatch? @relation(fields: [scrapeBatchId], references: [id])
+  quotes                 Quote[]
 }
 
 model Contact {
@@ -74,6 +75,7 @@ model Contact {
   discType    String?
   notes       String?
   activities  Activity[]
+  quotes      Quote[]
 }
 
 model Activity {
@@ -97,4 +99,112 @@ model ScrapeBatch {
   leadsNew   Int     @default(0)
   notes     String?
   leads     Lead[]
+}
+
+model Quote {
+  id            Int       @id @default(autoincrement())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  quoteNo       String    @unique
+  leadId        Int
+  lead          Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  contactId     Int?
+  contact       Contact?  @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  gstType       String
+  marginPercent String
+  subtotal      String
+  totalCgst     String
+  totalSgst     String
+  totalIgst     String
+  totalGst      String
+  grandTotal    String
+  status        String    @default("DRAFT")
+  validUntil    DateTime?
+  notes         String?
+  terms         String?
+  items         QuoteItem[]
+  rfqs          SupplierRfq[]
+}
+
+model QuoteItem {
+  id              Int     @id @default(autoincrement())
+  quoteId         Int
+  quote           Quote   @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  productType     String
+  productName     String
+  description     String?
+  length          Int?
+  breadth         Int?
+  height          Int?
+  sheetThickness  String?
+  gsm             Int?
+  grade           String?
+  flute           String?
+  closureType     String?
+  extras          Json?
+  qty             String
+  sheetArea       String
+  sheetRatePerSqm String
+  sheetCost       String
+  cuttingRate     String
+  weldingRate     String
+  printingRate    String
+  sheetingRate    String?
+  slittingRate    String?
+  rewindingRate   String?
+  conversionCost  String
+  extrasCost      String
+  unitCost        String
+  marginPercent   String
+  sellingPrice    String
+  gstRate         String
+  taxableAmt      String
+  cgst            String
+  sgst            String
+  igst            String
+  lineTotal       String
+  remarks         String?
+}
+
+model SupplierRfq {
+  id                Int       @id @default(autoincrement())
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  rfqNo             String    @unique
+  quoteId           Int
+  quote             Quote     @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  supplierName      String
+  supplierEmail     String?
+  supplierPhone     String?
+  status            String    @default("DRAFT")
+  sentAt            DateTime?
+  responseDeadline  DateTime?
+  notes             String?
+  items             RfqItem[]
+}
+
+model RfqItem {
+  id                 Int         @id @default(autoincrement())
+  rfqId              Int
+  rfq                SupplierRfq @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  materialName       String
+  specification      String?
+  quantity           String
+  unit               String
+  estimatedRate      String?
+  supplierQuotedRate String?
+  notes              String?
+}
+
+model RateCard {
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  category        String
+  name            String
+  unit            String
+  defaultRate     String
+  lastPurchaseRate String?
+  notes           String?
+  @@unique([category, name])
 }
