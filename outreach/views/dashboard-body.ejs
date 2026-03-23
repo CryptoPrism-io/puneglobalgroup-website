@@ -1,0 +1,189 @@
+<div class="page-header">
+  <h1>Dashboard</h1>
+  <a href="/leads/new" class="btn btn-primary">+ New Lead</a>
+</div>
+
+<!-- Pipeline Funnel -->
+<div class="section">
+  <h2>Pipeline</h2>
+  <div class="pipeline-funnel">
+    <% stages.forEach(function(stage) { %>
+    <a href="/leads?stage=<%= stage %>" class="funnel-stage" style="text-decoration:none">
+      <div class="stage-count"><%= stageCounts[stage] || 0 %></div>
+      <div class="stage-label"><%= stage %></div>
+    </a>
+    <% }); %>
+  </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="dashboard-cards">
+  <div class="card">
+    <h3>Total Leads</h3>
+    <div class="card-value"><%= totalLeads %></div>
+    <div class="text-muted">active (non-archived)</div>
+  </div>
+  <div class="card">
+    <h3>Hot Leads</h3>
+    <div class="card-value"><%= hotLeads.length %></div>
+    <div class="text-muted">fit score &ge; 7</div>
+  </div>
+  <div class="card">
+    <h3>Stale Leads</h3>
+    <div class="card-value"><%= staleLeads.length %></div>
+    <div class="text-muted">no movement &gt; 14 days</div>
+  </div>
+  <div class="card">
+    <h3>Won This Month</h3>
+    <div class="card-value"><%= wonThisMonth %></div>
+    <div class="text-muted">closures this month</div>
+  </div>
+</div>
+
+<!-- ICP Breakdown -->
+<div class="section">
+  <h2>ICP Breakdown</h2>
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem">
+    <% ['PAPER','PP','BOTH','UNKNOWN'].forEach(function(icp) { %>
+    <a href="/leads?icpType=<%= icp %>" style="text-decoration:none">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:0.6rem 1.1rem;min-width:90px;text-align:center">
+        <div style="font-size:1.25rem;font-weight:700;font-family:'JetBrains Mono',monospace"><%= icpCounts[icp] || 0 %></div>
+        <div style="font-size:0.72rem;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.05em"><%= icp %></div>
+      </div>
+    </a>
+    <% }); %>
+  </div>
+</div>
+
+<!-- Hot Leads + Stale Leads side by side -->
+<div class="dashboard-tables">
+
+  <!-- Hot Leads -->
+  <div class="section">
+    <h2>Hot Leads <span style="font-size:0.8rem;font-weight:400;color:var(--text-tertiary)">(fit &ge; 7)</span></h2>
+    <% if (hotLeads.length === 0) { %>
+      <p class="text-muted" style="font-size:0.9rem">No hot leads at this time.</p>
+    <% } else { %>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Industry</th>
+            <th>City</th>
+            <th>Fit</th>
+            <th>Stage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% hotLeads.forEach(function(lead) { %>
+          <%
+            var score = lead.fitScore;
+            var stageLow = (lead.stage || 'new').toLowerCase();
+          %>
+          <tr>
+            <td><a href="/leads/<%= lead.id %>" style="font-weight:600;color:var(--navy-800)"><%= lead.companyName %></a></td>
+            <td><%= lead.industry || '—' %></td>
+            <td><%= lead.city || '—' %></td>
+            <td>
+              <span class="fit-score fit-high"><%= score %></span>
+            </td>
+            <td><span class="badge badge-<%= stageLow %>"><%= lead.stage %></span></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </div>
+
+  <!-- Stale Leads -->
+  <div class="section">
+    <h2>Stale Leads <span style="font-size:0.8rem;font-weight:400;color:var(--text-tertiary)">(stuck &gt; 14 days)</span></h2>
+    <% if (staleLeads.length === 0) { %>
+      <p class="text-muted" style="font-size:0.9rem">No stale leads — pipeline is moving.</p>
+    <% } else { %>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Stage</th>
+            <th>Days Stuck</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% staleLeads.forEach(function(lead) { %>
+          <%
+            var stageLow = (lead.stage || 'new').toLowerCase();
+            var daysStuck = lead.stageChangedAt
+              ? Math.floor((Date.now() - new Date(lead.stageChangedAt).getTime()) / (1000 * 60 * 60 * 24))
+              : '—';
+          %>
+          <tr>
+            <td><a href="/leads/<%= lead.id %>" style="font-weight:600;color:var(--navy-800)"><%= lead.companyName %></a></td>
+            <td><span class="badge badge-<%= stageLow %>"><%= lead.stage %></span></td>
+            <td>
+              <% if (typeof daysStuck === 'number') { %>
+                <span class="text-mono" style="color:<%= daysStuck >= 30 ? 'var(--error)' : 'var(--warning)' %>">
+                  <%= daysStuck %>d
+                </span>
+              <% } else { %>
+                <span class="text-light">—</span>
+              <% } %>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </div>
+
+</div>
+
+<!-- Recent Activity -->
+<div class="section">
+  <h2>Recent Activity</h2>
+  <% if (recentActivities.length === 0) { %>
+    <p class="text-muted" style="font-size:0.9rem">No activities logged yet.</p>
+  <% } else { %>
+  <ul class="timeline">
+    <% recentActivities.forEach(function(act) { %>
+    <%
+      var typeInitial = {
+        EMAIL: 'E', CALL: 'C', MEETING: 'M', NOTE: 'N',
+        STAGE_CHANGE: 'S', TASK: 'T', DEMO: 'D', PROPOSAL: 'P'
+      }[act.type] || act.type[0];
+      var typeColor = {
+        EMAIL: 'var(--info)', CALL: 'var(--success)', MEETING: 'var(--saffron)',
+        NOTE: 'var(--text-secondary)', STAGE_CHANGE: 'var(--navy-700)',
+        TASK: 'var(--warning)', DEMO: '#7c3aed', PROPOSAL: '#9333ea'
+      }[act.type] || 'var(--text-secondary)';
+      var dateStr = act.createdAt
+        ? new Date(act.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })
+        : '';
+    %>
+    <li class="timeline-item">
+      <div class="timeline-icon" style="background:rgba(0,0,0,0.04);color:<%= typeColor %>;border:1px solid rgba(0,0,0,0.07)">
+        <%= typeInitial %>
+      </div>
+      <div class="timeline-body">
+        <div class="subject"><%= act.subject || act.type %></div>
+        <div class="meta">
+          <% if (act.lead) { %>
+            <a href="/leads/<%= act.leadId %>" style="color:var(--text-secondary)"><%= act.lead.companyName %></a>
+          <% } %>
+          <% if (act.contact) { %>
+            &middot; <%= act.contact.name %>
+          <% } %>
+          <% if (dateStr) { %>
+            &middot; <span><%= dateStr %></span>
+          <% } %>
+        </div>
+      </div>
+    </li>
+    <% }); %>
+  </ul>
+  <% } %>
+</div>
