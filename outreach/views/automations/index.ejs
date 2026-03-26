@@ -1,0 +1,63 @@
+<div class="page-header">
+  <h1>Automations</h1>
+  <a href="/automations/new" class="btn btn-primary">+ New Trigger</a>
+</div>
+
+<% if (triggers.length === 0) { %>
+  <p class="text-muted" style="font-size:0.9rem;margin-top:1rem">No automation triggers configured yet.</p>
+<% } else { %>
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Event</th>
+        <th>Action</th>
+        <th>Cooldown</th>
+        <th>Status</th>
+        <th>Last Fired</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% triggers.forEach(function(t) { %>
+      <%
+        var actionSummary = t.actionType.replace(/_/g, ' ').toLowerCase();
+        var eventLabel = t.event.replace(/_/g, ' ');
+        var filterNote = '';
+        if (t.eventFilter) {
+          var parts = [];
+          if (t.eventFilter.toStage) parts.push('to ' + t.eventFilter.toStage);
+          if (t.eventFilter.fromStage) parts.push('from ' + t.eventFilter.fromStage);
+          if (t.eventFilter.source) parts.push('source=' + t.eventFilter.source);
+          if (t.eventFilter.icpType) parts.push('ICP=' + t.eventFilter.icpType);
+          if (parts.length) filterNote = ' (' + parts.join(', ') + ')';
+        }
+      %>
+      <tr>
+        <td><a href="/automations/<%= t.id %>/edit" style="font-weight:600;color:var(--navy-800)"><%= t.name %></a></td>
+        <td><span class="badge"><%= eventLabel %></span><span class="text-muted" style="font-size:0.75rem"><%= filterNote %></span></td>
+        <td style="font-size:0.85rem"><%= actionSummary %></td>
+        <td class="text-muted"><%= t.cooldownHours > 0 ? t.cooldownHours + 'h' : '—' %></td>
+        <td>
+          <form method="POST" action="/automations/<%= t.id %>/toggle" style="display:inline">
+            <button type="submit" class="btn btn-sm" style="background:<%= t.isActive ? 'var(--success-bg)' : 'var(--bg-warm)' %>;color:<%= t.isActive ? 'var(--success)' : 'var(--text-tertiary)' %>;border:none;cursor:pointer">
+              <%= t.isActive ? 'ON' : 'OFF' %>
+            </button>
+          </form>
+        </td>
+        <td class="text-muted" style="font-size:0.82rem">
+          <%= t.lastFiredAt ? new Date(t.lastFiredAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '—' %>
+        </td>
+        <td>
+          <a href="/automations/<%= t.id %>/edit" class="btn btn-sm btn-secondary">Edit</a>
+          <form method="POST" action="/automations/<%= t.id %>/delete" style="display:inline" onsubmit="return confirm('Delete this trigger?')">
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
+<% } %>

@@ -1,0 +1,129 @@
+<div class="page-header">
+  <h1><%= sequence ? 'Edit Sequence' : 'New Sequence' %></h1>
+  <a href="/sequences" class="btn btn-secondary">&larr; Back</a>
+</div>
+
+<% if (sequence && sequence.enrollments && sequence.enrollments.length > 0) { %>
+  <div class="flash flash-error" style="margin-bottom:1rem">
+    Warning: This sequence has <%= sequence.enrollments.length %> active enrollment(s). Editing steps may affect in-progress flows.
+  </div>
+<% } %>
+
+<form method="POST" action="<%= sequence ? '/sequences/' + sequence.id : '/sequences' %>" id="seq-form">
+  <div style="max-width:700px">
+    <div class="form-card" style="max-width:none;margin-bottom:1.5rem">
+      <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1.25rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">Sequence Info</h2>
+
+      <div class="form-group">
+        <label>Name *</label>
+        <input type="text" name="name" required value="<%= sequence ? sequence.name : '' %>" placeholder="e.g. Cold Intro — Paper">
+      </div>
+
+      <div class="form-group">
+        <label>Channel</label>
+        <select name="channel">
+          <option value="EMAIL" <%= sequence && sequence.channel === 'EMAIL' ? 'selected' : '' %>>EMAIL</option>
+          <option value="WHATSAPP" <%= sequence && sequence.channel === 'WHATSAPP' ? 'selected' : '' %>>WHATSAPP</option>
+          <option value="MIXED" <%= sequence && sequence.channel === 'MIXED' ? 'selected' : '' %>>MIXED</option>
+        </select>
+      </div>
+
+      <% if (sequence) { %>
+      <div class="form-group">
+        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+          <input type="checkbox" name="isActive" value="on" <%= sequence.isActive ? 'checked' : '' %>>
+          <span>Active</span>
+        </label>
+      </div>
+      <% } %>
+    </div>
+
+    <div class="form-card" style="max-width:none;margin-bottom:1.5rem">
+      <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1.25rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">Steps</h2>
+      <p class="text-muted" style="font-size:0.82rem;margin-bottom:1rem">Add up to 5 steps. Each step sends a template after a delay from the previous step.</p>
+
+      <div id="steps-container">
+        <% if (sequence && sequence.steps) { %>
+          <% sequence.steps.forEach(function(step, i) { %>
+            <div class="step-row" style="border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:0.75rem;background:var(--surface)">
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem">
+                <strong style="font-size:0.85rem">Step <%= step.stepOrder %></strong>
+                <input type="hidden" name="steps.order" value="<%= step.stepOrder %>">
+                <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.step-row').remove()" style="margin-left:auto">Remove</button>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Template</label>
+                  <select name="steps.templateId" required>
+                    <% templates.forEach(function(t) { %>
+                      <option value="<%= t.id %>" <%= t.id === step.templateId ? 'selected' : '' %>>[<%= t.channel %>] <%= t.name %></option>
+                    <% }); %>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Channel</label>
+                  <select name="steps.channel">
+                    <option value="EMAIL" <%= step.channel === 'EMAIL' ? 'selected' : '' %>>EMAIL</option>
+                    <option value="WHATSAPP" <%= step.channel === 'WHATSAPP' ? 'selected' : '' %>>WHATSAPP</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Delay (days)</label>
+                  <input type="number" name="steps.delayDays" min="0" max="30" value="<%= step.delayDays %>">
+                </div>
+                <div class="form-group">
+                  <label>Delay (hours)</label>
+                  <input type="number" name="steps.delayHours" min="0" max="23" value="<%= step.delayHours %>">
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        <% } %>
+      </div>
+
+      <button type="button" class="btn btn-secondary" onclick="addStep()">+ Add Step</button>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary"><%= sequence ? 'Update Sequence' : 'Create Sequence' %></button>
+      <a href="/sequences" class="btn btn-secondary">Cancel</a>
+    </div>
+  </div>
+</form>
+
+<script>
+var stepCount = document.querySelectorAll('.step-row').length;
+var templatesJson = <%- JSON.stringify(templates) %>;
+
+function addStep() {
+  if (stepCount >= 5) { alert('Maximum 5 steps'); return; }
+  stepCount++;
+  var div = document.createElement('div');
+  div.className = 'step-row';
+  div.style.cssText = 'border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:0.75rem;background:var(--surface)';
+
+  var templateOpts = templatesJson.map(function(t) {
+    return '<option value="' + t.id + '">[' + t.channel + '] ' + escHtml(t.name) + '</option>';
+  }).join('');
+
+  div.innerHTML =
+    '<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem">' +
+      '<strong style="font-size:0.85rem">Step ' + stepCount + '</strong>' +
+      '<input type="hidden" name="steps.order" value="' + stepCount + '">' +
+      '<button type="button" class="btn btn-sm btn-danger" onclick="this.closest(\'.step-row\').remove()" style="margin-left:auto">Remove</button>' +
+    '</div>' +
+    '<div class="form-row">' +
+      '<div class="form-group"><label>Template</label><select name="steps.templateId" required>' + templateOpts + '</select></div>' +
+      '<div class="form-group"><label>Channel</label><select name="steps.channel"><option value="EMAIL">EMAIL</option><option value="WHATSAPP">WHATSAPP</option></select></div>' +
+    '</div>' +
+    '<div class="form-row">' +
+      '<div class="form-group"><label>Delay (days)</label><input type="number" name="steps.delayDays" min="0" max="30" value="0"></div>' +
+      '<div class="form-group"><label>Delay (hours)</label><input type="number" name="steps.delayHours" min="0" max="23" value="0"></div>' +
+    '</div>';
+  document.getElementById('steps-container').appendChild(div);
+}
+
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>

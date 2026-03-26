@@ -1,0 +1,102 @@
+<div class="page-header">
+  <h1><%= sequence.name %></h1>
+  <div style="display:flex;gap:0.5rem">
+    <span class="badge"><%= sequence.channel %></span>
+    <span class="badge" style="background:<%= sequence.isActive ? 'var(--success-bg)' : 'var(--bg-warm)' %>;color:<%= sequence.isActive ? 'var(--success)' : 'var(--text-tertiary)' %>">
+      <%= sequence.isActive ? 'Active' : 'Inactive' %>
+    </span>
+    <a href="/sequences/<%= sequence.id %>/edit" class="btn btn-secondary btn-sm">Edit</a>
+    <a href="/sequences" class="btn btn-secondary btn-sm">&larr; Sequences</a>
+  </div>
+</div>
+
+<!-- Steps Timeline -->
+<div class="section">
+  <h2>Steps <span style="font-size:0.8rem;font-weight:400;color:var(--text-tertiary)">(<%= sequence.steps.length %> total)</span></h2>
+  <% if (sequence.steps.length === 0) { %>
+    <p class="text-muted">No steps defined. <a href="/sequences/<%= sequence.id %>/edit">Add steps</a></p>
+  <% } else { %>
+  <div style="display:flex;flex-direction:column;gap:0.5rem;max-width:600px">
+    <% sequence.steps.forEach(function(step, i) { %>
+    <div style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--navy-700);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0"><%= step.stepOrder %></div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:0.88rem"><%= step.template.name %></div>
+        <div class="text-muted" style="font-size:0.78rem">
+          <%= step.channel %> &middot;
+          <% if (step.delayDays > 0 || step.delayHours > 0) { %>
+            Wait <%= step.delayDays > 0 ? step.delayDays + 'd ' : '' %><%= step.delayHours > 0 ? step.delayHours + 'h' : '' %> after step <%= i === 0 ? 'enrollment' : (step.stepOrder - 1) %>
+          <% } else { %>
+            Send immediately<%= i === 0 ? ' on enrollment' : '' %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <% if (i < sequence.steps.length - 1) { %>
+      <div style="margin-left:14px;width:1px;height:16px;background:var(--border)"></div>
+    <% } %>
+    <% }); %>
+  </div>
+  <% } %>
+</div>
+
+<!-- Enrollments -->
+<div class="section" style="margin-top:2rem">
+  <h2>Enrollments <span style="font-size:0.8rem;font-weight:400;color:var(--text-tertiary)">(<%= sequence.enrollments.length %>)</span></h2>
+  <% if (sequence.enrollments.length === 0) { %>
+    <p class="text-muted" style="font-size:0.9rem">No leads enrolled in this sequence yet.</p>
+  <% } else { %>
+  <div class="table-wrapper">
+    <table style="font-size:0.85rem">
+      <thead>
+        <tr>
+          <th>Lead</th>
+          <th>Contact</th>
+          <th>Current Step</th>
+          <th>Status</th>
+          <th>Enrolled</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% sequence.enrollments.forEach(function(e) { %>
+        <%
+          var statusColor = { ACTIVE: 'var(--success)', COMPLETED: 'var(--info)', STOPPED: 'var(--error)', PAUSED: 'var(--warning)' }[e.status] || 'var(--text-tertiary)';
+        %>
+        <tr>
+          <td><a href="/leads/<%= e.lead.id %>" style="font-weight:600;color:var(--navy-800)"><%= e.lead.companyName %></a></td>
+          <td><%= e.contact ? e.contact.name : '—' %></td>
+          <td><%= e.currentStep %> / <%= sequence.steps.length %></td>
+          <td>
+            <span class="badge" style="color:<%= statusColor %>"><%= e.status %></span>
+            <% if (e.stoppedReason) { %>
+              <span class="text-muted" style="font-size:0.75rem">(<%= e.stoppedReason %>)</span>
+            <% } %>
+          </td>
+          <td class="text-muted"><%= new Date(e.createdAt).toLocaleDateString('en-IN') %></td>
+          <td>
+            <% if (e.status === 'ACTIVE') { %>
+              <form method="POST" action="/sequences/<%= sequence.id %>/enrollments/<%= e.id %>/pause" style="display:inline">
+                <button type="submit" class="btn btn-sm btn-secondary">Pause</button>
+              </form>
+              <form method="POST" action="/sequences/<%= sequence.id %>/enrollments/<%= e.id %>/stop" style="display:inline">
+                <button type="submit" class="btn btn-sm btn-danger">Stop</button>
+              </form>
+            <% } else if (e.status === 'PAUSED') { %>
+              <form method="POST" action="/sequences/<%= sequence.id %>/enrollments/<%= e.id %>/pause" style="display:inline">
+                <button type="submit" class="btn btn-sm btn-secondary">Resume</button>
+              </form>
+              <form method="POST" action="/sequences/<%= sequence.id %>/enrollments/<%= e.id %>/stop" style="display:inline">
+                <button type="submit" class="btn btn-sm btn-danger">Stop</button>
+              </form>
+            <% } else { %>
+              <span class="text-muted" style="font-size:0.78rem">&mdash;</span>
+            <% } %>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</div>

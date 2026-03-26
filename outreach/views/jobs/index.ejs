@@ -1,0 +1,84 @@
+<div class="page-header">
+  <h1>Job Queue</h1>
+</div>
+
+<div style="display:flex;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap">
+  <form method="GET" action="/jobs" style="display:flex;gap:0.75rem;align-items:flex-end;flex-wrap:wrap">
+    <div class="form-group" style="margin-bottom:0">
+      <label style="font-size:0.78rem">Status</label>
+      <select name="status" style="min-width:120px" onchange="this.form.submit()">
+        <option value="">All</option>
+        <% ['PENDING','PROCESSING','COMPLETED','FAILED','DEFERRED','CANCELLED'].forEach(function(s) { %>
+          <option value="<%= s %>" <%= statusFilter === s ? 'selected' : '' %>><%= s %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom:0">
+      <label style="font-size:0.78rem">Type</label>
+      <select name="type" style="min-width:160px" onchange="this.form.submit()">
+        <option value="">All</option>
+        <% ['SEQUENCE_STEP','SCHEDULED_CAMPAIGN','RECURRING_CAMPAIGN','TRIGGER_ACTION','DAILY_SWEEP'].forEach(function(t) { %>
+          <option value="<%= t %>" <%= typeFilter === t ? 'selected' : '' %>><%= t.replace(/_/g, ' ') %></option>
+        <% }); %>
+      </select>
+    </div>
+  </form>
+</div>
+
+<% if (jobs.length === 0) { %>
+  <p class="text-muted" style="font-size:0.9rem">No jobs found.</p>
+<% } else { %>
+<div class="table-wrapper">
+  <table style="font-size:0.82rem">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Scheduled For</th>
+        <th>Attempts</th>
+        <th>Error</th>
+        <th>Processed</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% jobs.forEach(function(job) { %>
+      <%
+        var statusColors = {
+          PENDING: 'var(--warning)', PROCESSING: 'var(--info)', COMPLETED: 'var(--success)',
+          FAILED: 'var(--error)', DEFERRED: 'var(--text-tertiary)', CANCELLED: 'var(--text-tertiary)'
+        };
+        var fmtDate = function(d) { return d ? new Date(d).toLocaleString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '—'; };
+      %>
+      <tr>
+        <td class="text-mono"><%= job.id %></td>
+        <td><span class="badge"><%= job.type.replace(/_/g, ' ') %></span></td>
+        <td><span style="color:<%= statusColors[job.status] || 'inherit' %>;font-weight:600"><%= job.status %></span></td>
+        <td class="text-muted"><%= fmtDate(job.scheduledFor) %></td>
+        <td class="text-mono"><%= job.attempts %> / <%= job.maxAttempts %></td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--error);font-size:0.78rem" title="<%= job.lastError || '' %>">
+          <%= job.lastError || '—' %>
+        </td>
+        <td class="text-muted"><%= fmtDate(job.processedAt) %></td>
+        <td>
+          <% if (job.status === 'FAILED') { %>
+            <form method="POST" action="/jobs/<%= job.id %>/retry" style="display:inline">
+              <button type="submit" class="btn btn-sm btn-secondary">Retry</button>
+            </form>
+          <% } %>
+          <% if (job.status === 'PENDING' || job.status === 'DEFERRED') { %>
+            <form method="POST" action="/jobs/<%= job.id %>/cancel" style="display:inline">
+              <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+            </form>
+          <% } %>
+          <% if (job.status === 'COMPLETED' || job.status === 'CANCELLED') { %>
+            <span class="text-muted">&mdash;</span>
+          <% } %>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
+<% } %>

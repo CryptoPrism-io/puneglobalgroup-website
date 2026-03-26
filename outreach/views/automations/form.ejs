@@ -1,0 +1,170 @@
+<div class="page-header">
+  <h1><%= trigger ? 'Edit Automation' : 'New Automation' %></h1>
+  <a href="/automations" class="btn btn-secondary">&larr; Back</a>
+</div>
+
+<form method="POST" action="<%= trigger ? '/automations/' + trigger.id : '/automations' %>">
+  <div style="max-width:700px">
+    <div class="form-card" style="max-width:none;margin-bottom:1.5rem">
+      <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1.25rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">Trigger Setup</h2>
+
+      <div class="form-group">
+        <label>Name *</label>
+        <input type="text" name="name" required value="<%= trigger ? trigger.name : '' %>" placeholder="e.g. Bounce -> Dormant">
+      </div>
+
+      <div class="form-group">
+        <label>When this event occurs *</label>
+        <select name="event" id="event-select" required onchange="showEventFilters()">
+          <option value="">-- Select event --</option>
+          <% EVENTS.forEach(function(e) { %>
+            <option value="<%= e %>" <%= trigger && trigger.event === e ? 'selected' : '' %>><%= e.replace(/_/g, ' ') %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div id="stage-filters" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label>From Stage (optional)</label>
+            <select name="fromStage">
+              <option value="">Any</option>
+              <% STAGES.forEach(function(s) { %>
+                <option value="<%= s %>" <%= trigger && trigger.eventFilter && trigger.eventFilter.fromStage === s ? 'selected' : '' %>><%= s %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>To Stage (optional)</label>
+            <select name="toStage">
+              <option value="">Any</option>
+              <% STAGES.forEach(function(s) { %>
+                <option value="<%= s %>" <%= trigger && trigger.eventFilter && trigger.eventFilter.toStage === s ? 'selected' : '' %>><%= s %></option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div id="lead-created-filters" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Source (optional)</label>
+            <select name="filterSource">
+              <option value="">Any</option>
+              <option value="GOOGLE" <%= trigger && trigger.eventFilter && trigger.eventFilter.source === 'GOOGLE' ? 'selected' : '' %>>GOOGLE</option>
+              <option value="LINKEDIN" <%= trigger && trigger.eventFilter && trigger.eventFilter.source === 'LINKEDIN' ? 'selected' : '' %>>LINKEDIN</option>
+              <option value="INDIAMART" <%= trigger && trigger.eventFilter && trigger.eventFilter.source === 'INDIAMART' ? 'selected' : '' %>>INDIAMART</option>
+              <option value="GEM" <%= trigger && trigger.eventFilter && trigger.eventFilter.source === 'GEM' ? 'selected' : '' %>>GEM</option>
+              <option value="MANUAL" <%= trigger && trigger.eventFilter && trigger.eventFilter.source === 'MANUAL' ? 'selected' : '' %>>MANUAL</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>ICP Type (optional)</label>
+            <select name="filterIcpType">
+              <option value="">Any</option>
+              <option value="PAPER" <%= trigger && trigger.eventFilter && trigger.eventFilter.icpType === 'PAPER' ? 'selected' : '' %>>PAPER</option>
+              <option value="PP" <%= trigger && trigger.eventFilter && trigger.eventFilter.icpType === 'PP' ? 'selected' : '' %>>PP</option>
+              <option value="BOTH" <%= trigger && trigger.eventFilter && trigger.eventFilter.icpType === 'BOTH' ? 'selected' : '' %>>BOTH</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Cooldown (hours)</label>
+        <input type="number" name="cooldownHours" min="0" max="720" value="<%= trigger ? trigger.cooldownHours : 0 %>" style="max-width:120px">
+        <p class="text-light" style="font-size:0.78rem;margin-top:0.25rem">Don't re-fire for the same lead within this many hours. 0 = no cooldown.</p>
+      </div>
+    </div>
+
+    <div class="form-card" style="max-width:none;margin-bottom:1.5rem">
+      <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1.25rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">Action</h2>
+
+      <div class="form-group">
+        <label>Then do this *</label>
+        <select name="actionType" id="action-select" required onchange="showActionConfig()">
+          <option value="">-- Select action --</option>
+          <% ACTION_TYPES.forEach(function(a) { %>
+            <option value="<%= a %>" <%= trigger && trigger.actionType === a ? 'selected' : '' %>><%= a.replace(/_/g, ' ') %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div id="action-send-template" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Template</label>
+            <select name="actionTemplateId">
+              <option value="">-- Select --</option>
+              <% templates.forEach(function(t) { %>
+                <option value="<%= t.id %>" <%= trigger && trigger.actionConfig && trigger.actionConfig.templateId === t.id ? 'selected' : '' %>>[<%= t.channel %>] <%= t.name %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Channel</label>
+            <select name="actionChannel">
+              <option value="EMAIL" <%= trigger && trigger.actionConfig && trigger.actionConfig.channel === 'EMAIL' ? 'selected' : '' %>>EMAIL</option>
+              <option value="WHATSAPP" <%= trigger && trigger.actionConfig && trigger.actionConfig.channel === 'WHATSAPP' ? 'selected' : '' %>>WHATSAPP</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div id="action-enroll-sequence" style="display:none">
+        <div class="form-group">
+          <label>Sequence</label>
+          <select name="actionSequenceId">
+            <option value="">-- Select --</option>
+            <% sequences.forEach(function(s) { %>
+              <option value="<%= s.id %>" <%= trigger && trigger.actionConfig && trigger.actionConfig.sequenceId === s.id ? 'selected' : '' %>><%= s.name %> (<%= s.channel %>)</option>
+            <% }); %>
+          </select>
+        </div>
+      </div>
+
+      <div id="action-change-stage" style="display:none">
+        <div class="form-group">
+          <label>Move to Stage</label>
+          <select name="actionToStage">
+            <% STAGES.forEach(function(s) { %>
+              <option value="<%= s %>" <%= trigger && trigger.actionConfig && trigger.actionConfig.toStage === s ? 'selected' : '' %>><%= s %></option>
+            <% }); %>
+          </select>
+        </div>
+      </div>
+
+      <div id="action-create-activity" style="display:none">
+        <div class="form-group">
+          <label>Activity Subject</label>
+          <input type="text" name="actionSubject" value="<%= trigger && trigger.actionConfig ? (trigger.actionConfig.subject || '') : '' %>" placeholder="e.g. Auto-flagged as stale">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary"><%= trigger ? 'Update Trigger' : 'Create Trigger' %></button>
+      <a href="/automations" class="btn btn-secondary">Cancel</a>
+    </div>
+  </div>
+</form>
+
+<script>
+function showEventFilters() {
+  var event = document.getElementById('event-select').value;
+  document.getElementById('stage-filters').style.display = event === 'STAGE_CHANGE' ? '' : 'none';
+  document.getElementById('lead-created-filters').style.display = event === 'LEAD_CREATED' ? '' : 'none';
+}
+
+function showActionConfig() {
+  var action = document.getElementById('action-select').value;
+  document.getElementById('action-send-template').style.display = action === 'SEND_TEMPLATE' ? '' : 'none';
+  document.getElementById('action-enroll-sequence').style.display = action === 'ENROLL_SEQUENCE' ? '' : 'none';
+  document.getElementById('action-change-stage').style.display = action === 'CHANGE_STAGE' ? '' : 'none';
+  document.getElementById('action-create-activity').style.display = action === 'CREATE_ACTIVITY' ? '' : 'none';
+}
+
+showEventFilters();
+showActionConfig();
+</script>

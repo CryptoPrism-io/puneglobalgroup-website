@@ -1,0 +1,39 @@
+<div class="page-header">
+  <h1>Sequences</h1>
+  <a href="/sequences/new" class="btn btn-primary">+ New Sequence</a>
+</div>
+
+<% if (sequences.length === 0) { %>
+  <p class="text-muted" style="font-size:0.9rem;margin-top:1rem">No sequences created yet.</p>
+<% } else { %>
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Channel</th>
+        <th>Steps</th>
+        <th>Active Enrollments</th>
+        <th>Status</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% sequences.forEach(function(seq) { %>
+      <tr>
+        <td><a href="/sequences/<%= seq.id %>" style="font-weight:600;color:var(--navy-800)"><%= seq.name %></a></td>
+        <td><span class="badge"><%= seq.channel %></span></td>
+        <td><%= seq.steps.length %></td>
+        <td><%= seq.enrollments.length %></td>
+        <td>
+          <span class="badge" style="background:<%= seq.isActive ? 'var(--success-bg)' : 'var(--bg-warm)' %>;color:<%= seq.isActive ? 'var(--success)' : 'var(--text-tertiary)' %>">
+            <%= seq.isActive ? 'Active' : 'Inactive' %>
+          </span>
+        </td>
+        <td class="text-muted"><%= new Date(seq.createdAt).toLocaleDateString('en-IN') %></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
+<% } %>
