@@ -57,6 +57,7 @@ model Lead {
   scrapeBatch            ScrapeBatch? @relation(fields: [scrapeBatchId], references: [id])
   quotes                 Quote[]
   outreachMessages       OutreachMessage[]
+  sequenceEnrollments    SequenceEnrollment[]
 }
 
 model Contact {
@@ -78,6 +79,7 @@ model Contact {
   activities  Activity[]
   quotes      Quote[]
   outreachMessages OutreachMessage[]
+  sequenceEnrollments SequenceEnrollment[]
 }
 
 model Activity {
@@ -224,6 +226,7 @@ model MessageTemplate {
   isActive        Boolean   @default(true)
   campaigns       Campaign[]
   messages        OutreachMessage[]
+  sequenceSteps   SequenceStep[]
 }
 
 model Campaign {
@@ -242,6 +245,12 @@ model Campaign {
   failedCount     Int       @default(0)
   sentAt          DateTime?
   completedAt     DateTime?
+  scheduledFor    DateTime?
+  recurringCron   String?
+  lastRunAt       DateTime?
+  sendWindowStart Int?        @default(9)
+  sendWindowEnd   Int?        @default(18)
+  sendWindowDays  String?     @default("1,2,3,4,5,6")
   messages        OutreachMessage[]
 }
 
@@ -266,4 +275,76 @@ model OutreachMessage {
   errorMessage    String?
   resendEmailId   String?
   trackingData    Json?
+}
+
+model Sequence {
+  id          Int                  @id @default(autoincrement())
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  name        String
+  channel     String               // EMAIL | WHATSAPP | MIXED
+  maxSteps    Int                  @default(3)
+  isActive    Boolean              @default(true)
+  steps       SequenceStep[]
+  enrollments SequenceEnrollment[]
+}
+
+model SequenceStep {
+  id         Int             @id @default(autoincrement())
+  sequenceId Int
+  sequence   Sequence        @relation(fields: [sequenceId], references: [id], onDelete: Cascade)
+  stepOrder  Int
+  templateId Int
+  template   MessageTemplate @relation(fields: [templateId], references: [id])
+  channel    String          // EMAIL | WHATSAPP
+  delayDays  Int             @default(0)
+  delayHours Int             @default(0)
+
+  @@unique([sequenceId, stepOrder])
+}
+
+model SequenceEnrollment {
+  id            Int       @id @default(autoincrement())
+  createdAt     DateTime  @default(now())
+  sequenceId    Int
+  sequence      Sequence  @relation(fields: [sequenceId], references: [id], onDelete: Cascade)
+  leadId        Int
+  lead          Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  contactId     Int
+  contact       Contact   @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  currentStep   Int       @default(1)
+  status        String    @default("ACTIVE") // ACTIVE | COMPLETED | STOPPED | PAUSED
+  stoppedReason String?   // REPLIED | BOUNCED | MANUAL
+  completedAt   DateTime?
+
+  @@unique([sequenceId, leadId])
+}
+
+model AutomationTrigger {
+  id            Int       @id @default(autoincrement())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  name          String
+  event         String    // STAGE_CHANGE | LEAD_CREATED | EMAIL_BOUNCED | EMAIL_OPENED | QUOTE_EXPIRED | LEAD_STALE
+  eventFilter   Json?     // e.g. { "toStage": "CONTACTED" }
+  actionType    String    // SEND_TEMPLATE | ENROLL_SEQUENCE | CHANGE_STAGE | CREATE_ACTIVITY
+  actionConfig  Json      // e.g. { "templateId": 5, "channel": "EMAIL" }
+  cooldownHours Int       @default(0)
+  isActive      Boolean   @default(true)
+  lastFiredAt   DateTime?
+}
+
+model ScheduledJob {
+  id            Int       @id @default(autoincrement())
+  createdAt     DateTime  @default(now())
+  type          String    // SEQUENCE_STEP | SCHEDULED_CAMPAIGN | RECURRING_CAMPAIGN | TRIGGER_ACTION | DAILY_SWEEP
+  status        String    @default("PENDING") // PENDING | PROCESSING | COMPLETED | FAILED | DEFERRED | CANCELLED
+  scheduledFor  DateTime
+  referenceId   Int?
+  referenceType String?   // ENROLLMENT | CAMPAIGN | TRIGGER
+  payload       Json?
+  attempts      Int       @default(0)
+  maxAttempts   Int       @default(3)
+  lastError     String?
+  processedAt   DateTime?
 }
