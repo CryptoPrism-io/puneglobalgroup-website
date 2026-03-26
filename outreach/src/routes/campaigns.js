@@ -84,7 +84,8 @@ router.get('/preview-recipients', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const prisma = req.app.locals.prisma;
-    const { name, templateId, channel, sendNow } = req.body;
+    const { name, templateId, channel, sendNow, scheduledFor, recurringCron,
+            sendWindowStart, sendWindowEnd, sendWindowDays } = req.body;
 
     // Build filters object from individual filter params
     const filters = {};
@@ -104,6 +105,11 @@ router.post('/', async (req, res) => {
       }
     }
 
+    // Parse send window days from checkbox array
+    const winDays = Array.isArray(sendWindowDays)
+      ? sendWindowDays.join(',')
+      : sendWindowDays || '1,2,3,4,5,6';
+
     const campaign = await prisma.campaign.create({
       data: {
         name: name?.trim() || 'Untitled Campaign',
@@ -112,11 +118,40 @@ router.post('/', async (req, res) => {
         filters,
         excludedLeadIds,
         status: 'DRAFT',
+        scheduledFor: scheduledFor ? new Date(scheduledFor) : null,
+        recurringCron: recurringCron || null,
+        sendWindowStart: sendWindowStart ? parseInt(sendWindowStart) : 9,
+        sendWindowEnd: sendWindowEnd ? parseInt(sendWindowEnd) : 18,
+        sendWindowDays: winDays,
       },
     });
 
-    if (sendNow === 'on') {
-      // Fire and forget — execute in background
+    if (recurringCron) {
+      // Create first recurring job
+      const { nextCronRun } = require('../services/jobProcessor');
+      const nextRun = nextCronRun(recurringCron, new Date());
+      if (nextRun) {
+        await prisma.scheduledJob.create({
+          data: {
+            type: 'RECURRING_CAMPAIGN',
+            scheduledFor: nextRun,
+            referenceId: campaign.id,
+            referenceType: 'CAMPAIGN',
+          },
+        });
+      }
+    } else if (scheduledFor) {
+      // Create scheduled job
+      await prisma.scheduledJob.create({
+        data: {
+          type: 'SCHEDULED_CAMPAIGN',
+          scheduledFor: new Date(scheduledFor),
+          referenceId: campaign.id,
+          referenceType: 'CAMPAIGN',
+        },
+      });
+    } else if (sendNow === 'on') {
+      // Fire and forget — execute in background (existing behavior)
       executeCampaign(prisma, campaign.id)
         .then(r => console.log(`Campaign ${campaign.id} done:`, r))
         .catch(e => console.error(`Campaign ${campaign.id} error:`, e));

@@ -126,6 +126,9 @@ const campaignsRouter = require('./src/routes/campaigns');
 const outreachRouter = require('./src/routes/outreach');
 const whatsappRouter = require('./src/routes/whatsapp');
 const webhooksRouter = require('./src/routes/webhooks');
+const sequencesRouter = require('./src/routes/sequences');
+const automationsRouter = require('./src/routes/automations');
+const jobsRouter = require('./src/routes/jobs');
 app.use('/leads', leadsRouter);
 app.use('/contacts', contactsRouter);
 app.use('/activities', activitiesRouter);
@@ -139,6 +142,9 @@ app.use('/campaigns', campaignsRouter);
 app.use('/outreach', outreachRouter);
 app.use('/whatsapp', whatsappRouter);
 app.use('/webhooks', webhooksRouter);
+app.use('/sequences', sequencesRouter);
+app.use('/automations', automationsRouter);
+app.use('/jobs', jobsRouter);
 
 // ── Dashboard ─────────────────────────────────────────────
 app.get('/', async (req, res) => {
@@ -191,9 +197,26 @@ app.get('/', async (req, res) => {
       },
     });
 
+    // Automation stats
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const jobsToday = await prisma.scheduledJob.count({
+      where: { processedAt: { gte: todayStart } },
+    });
+    const activeEnrollments = await prisma.sequenceEnrollment.count({
+      where: { status: 'ACTIVE' },
+    });
+    const activeTriggers = await prisma.automationTrigger.count({
+      where: { isActive: true },
+    });
+    const pendingJobs = await prisma.scheduledJob.count({
+      where: { status: 'PENDING' },
+    });
+
     const body = await ejs.renderFile(path.join(__dirname, 'views/dashboard-body.ejs'), {
       stages: STAGES, stageCounts, totalLeads, icpCounts, sourceCounts,
       wonThisMonth, hotLeads, staleLeads, recentActivities,
+      jobsToday, activeEnrollments, activeTriggers, pendingJobs,
     });
     res.render('layout', { title: 'Dashboard', body });
   } catch (err) {
@@ -222,6 +245,10 @@ async function start() {
     console.log('✓ Admin database connected');
     console.log('✓ Demo database connected');
 
+    // Start automation job processor (runs on admin database only)
+    const { startJobProcessor } = require('./src/services/jobProcessor');
+    startJobProcessor(adminPrisma);
+
     app.listen(PORT, () => {
       console.log(`✓ Outreach CRM running at http://localhost:${PORT}`);
     });
@@ -235,6 +262,8 @@ start();
 
 // Graceful shutdown
 process.on('SIGTERM', async () => {
+  const { stopJobProcessor } = require('./src/services/jobProcessor');
+  stopJobProcessor();
   await adminPrisma.$disconnect();
   await demoPrisma.$disconnect();
   await adminPool.end();

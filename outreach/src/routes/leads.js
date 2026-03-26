@@ -144,12 +144,30 @@ router.get('/:id', async (req, res) => {
       orderBy: { name: 'asc' },
     });
 
+    // Load active sequences for enrollment dropdown
+    const sequences = await prisma.sequence.findMany({
+      where: { isActive: true },
+      orderBy: { name: 'asc' },
+    });
+
+    // Load enrollments for this lead
+    const enrollments = await prisma.sequenceEnrollment.findMany({
+      where: { leadId: id },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        sequence: { select: { name: true } },
+        contact: { select: { name: true } },
+      },
+    });
+
     const body = await ejs.renderFile(path.join(VIEWS, 'leads/detail.ejs'), {
       lead: leadPlain,
       tab,
       validNextStages,
       STAGES,
       templates,
+      sequences: JSON.parse(JSON.stringify(sequences)),
+      enrollments: JSON.parse(JSON.stringify(enrollments)),
     });
     res.render('layout', { title: lead.companyName, body });
   } catch (err) {

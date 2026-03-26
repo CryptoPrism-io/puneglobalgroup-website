@@ -401,3 +401,69 @@
   </form>
 </div>
 <% } %>
+
+<!-- Sequence Enrollments -->
+<div class="section" style="margin-top:2rem">
+  <h2>Sequences</h2>
+
+  <% if (typeof enrollments !== 'undefined' && enrollments.length > 0) { %>
+  <div class="table-wrapper" style="margin-bottom:1rem">
+    <table style="font-size:0.85rem">
+      <thead>
+        <tr>
+          <th>Sequence</th>
+          <th>Contact</th>
+          <th>Step</th>
+          <th>Status</th>
+          <th>Enrolled</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% enrollments.forEach(function(e) { %>
+        <tr>
+          <td style="font-weight:600"><%= e.sequence.name %></td>
+          <td><%= e.contact ? e.contact.name : '—' %></td>
+          <td class="text-mono"><%= e.currentStep %></td>
+          <td><span class="badge" style="color:<%= e.status === 'ACTIVE' ? 'var(--success)' : e.status === 'STOPPED' ? 'var(--error)' : 'var(--text-tertiary)' %>"><%= e.status %></span></td>
+          <td class="text-muted"><%= new Date(e.createdAt).toLocaleDateString('en-IN') %></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } else { %>
+    <p class="text-muted" style="font-size:0.85rem;margin-bottom:1rem">Not enrolled in any sequence.</p>
+  <% } %>
+
+  <% if (typeof sequences !== 'undefined' && sequences.length > 0 && lead.contacts && lead.contacts.length > 0) { %>
+  <form method="POST" action="/sequences/0/enroll" id="enroll-form" style="display:flex;gap:0.75rem;align-items:flex-end;flex-wrap:wrap">
+    <input type="hidden" name="leadId" value="<%= lead.id %>">
+    <input type="hidden" name="redirectTo" value="/leads/<%= lead.id %>">
+    <div class="form-group" style="margin-bottom:0">
+      <label style="font-size:0.78rem">Sequence</label>
+      <select name="sequenceSelect" id="enroll-seq" style="min-width:180px" onchange="document.getElementById('enroll-form').action='/sequences/'+this.value+'/enroll'">
+        <% sequences.forEach(function(s) { %>
+          <option value="<%= s.id %>"><%= s.name %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom:0">
+      <label style="font-size:0.78rem">Contact</label>
+      <select name="contactId" style="min-width:150px">
+        <% lead.contacts.forEach(function(c) { %>
+          <option value="<%= c.id %>"><%= c.name %><%= c.isPrimary ? ' (primary)' : '' %></option>
+        <% }); %>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-sm btn-primary">Enroll</button>
+  </form>
+  <script>
+    (function() {
+      var sel = document.getElementById('enroll-seq');
+      if (sel && sel.value) {
+        document.getElementById('enroll-form').action = '/sequences/' + sel.value + '/enroll';
+      }
+    })();
+  </script>
+  <% } %>
+</div>

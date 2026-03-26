@@ -76,6 +76,22 @@
         </a>
       </div>
 
+      <div class="nav-section-label">Automation</div>
+      <div class="nav-section">
+        <a href="/sequences" class="nav-item <%= currentPath.startsWith('/sequences') ? 'active' : '' %>">
+          <i data-lucide="workflow" class="nav-icon"></i>
+          <span class="nav-label">Sequences</span>
+        </a>
+        <a href="/automations" class="nav-item <%= currentPath.startsWith('/automations') ? 'active' : '' %>">
+          <i data-lucide="zap" class="nav-icon"></i>
+          <span class="nav-label">Automations</span>
+        </a>
+        <a href="/jobs" class="nav-item <%= currentPath.startsWith('/jobs') ? 'active' : '' %>">
+          <i data-lucide="clock" class="nav-icon"></i>
+          <span class="nav-label">Job Queue</span>
+        </a>
+      </div>
+
       <div class="nav-section-label">Data</div>
       <div class="nav-section">
         <a href="/scrape-batches" class="nav-item <%= currentPath.startsWith('/scrape-batches') ? 'active' : '' %>">
