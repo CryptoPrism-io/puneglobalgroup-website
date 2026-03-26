@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { emitEvent } = require('../services/eventEmitter');
 
 router.post('/resend', async (req, res) => {
   try {
@@ -37,6 +38,15 @@ router.post('/resend', async (req, res) => {
         where: { id: message.id },
         data: updates,
       });
+
+      const eventData = { leadId: message.leadId, contactId: message.contactId, messageId: message.id };
+      if (type === 'email.bounced') {
+        emitEvent(prisma, 'EMAIL_BOUNCED', eventData);
+      } else if (type === 'email.opened') {
+        emitEvent(prisma, 'EMAIL_OPENED', eventData);
+      } else if (type === 'email.clicked') {
+        emitEvent(prisma, 'EMAIL_CLICKED', eventData);
+      }
     }
 
     res.status(200).send('ok');

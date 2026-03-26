@@ -6,6 +6,7 @@ const router = express.Router();
 const { buildFilterQuery } = require('../services/search');
 const { changeStage, STAGES, isValidTransition } = require('../services/pipeline');
 const { computeFitScore } = require('../services/scoring');
+const { emitEvent } = require('../services/eventEmitter');
 
 const VIEWS = path.join(__dirname, '../../views');
 
@@ -102,6 +103,7 @@ router.post('/', async (req, res) => {
     const lead = await prisma.lead.create({
       data: { ...data, fitScore },
     });
+    emitEvent(prisma, 'LEAD_CREATED', { leadId: lead.id, source: data.source, icpType: data.icpType });
     res.redirect(`/leads/${lead.id}?success=Lead+created+successfully`);
   } catch (err) {
     console.error('Create lead error:', err);
@@ -200,7 +202,10 @@ router.post('/:id/stage', async (req, res) => {
     const id = parseInt(req.params.id);
     const newStage = req.body.newStage;
     const notes = req.body.notes || null;
+    const lead = await prisma.lead.findUnique({ where: { id } });
+    const fromStage = lead ? lead.stage : null;
     await changeStage(prisma, id, newStage, notes);
+    emitEvent(prisma, 'STAGE_CHANGE', { leadId: id, fromStage, toStage: newStage });
     res.redirect(`/leads/${id}?success=Stage+updated+to+${newStage}`);
   } catch (err) {
     console.error('Stage change error:', err);
