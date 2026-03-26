@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { products, Product } from "@/lib/pgg-data";
-import { SiteLogo } from "@/components/SiteLogo";
+
 
 // ————————————————————————————————————————————
 // The Merchant — Design Tokens (Dark Theme)
@@ -78,17 +78,6 @@ function buildGlobalCSS(T: Theme) {
     from { transform: scaleX(0); }
     to   { transform: scaleX(1); }
   }
-
-  .prod-nav-link {
-    font-family: 'DM Sans', sans-serif;
-    color: ${T.text};
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-  }
-  .prod-nav-link:hover { opacity: 1; }
 
   .app-card {
     background: ${T.bgAlt};
@@ -169,7 +158,6 @@ function buildGlobalCSS(T: Theme) {
     .prod-hero-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
     .prod-main-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
     .prod-apps-grid { grid-template-columns: 1fr 1fr !important; }
-    .prod-nav { padding: 0 1rem !important; }
     .prod-breadcrumb { overflow-x: auto; white-space: nowrap; }
   }
   @media(max-width: 480px) {
@@ -183,66 +171,7 @@ function buildGlobalCSS(T: Theme) {
 `;
 }
 
-// ————————————————————————————————————————————
-// Navbar
-// ————————————————————————————————————————————
-function SubpageNav({ T }: { T: Theme }) {
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", h);
-    return () => window.removeEventListener("scroll", h);
-  }, []);
 
-  return (
-    <nav
-      className="prod-nav"
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-        background: scrolled ? `${T.bg}cc` : "transparent",
-        backdropFilter: scrolled ? "blur(16px) saturate(1.4)" : "none",
-        borderBottom: `1px solid ${scrolled ? T.borderMid : "transparent"}`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0 clamp(1rem, 3vw, 2.5rem)",
-        height: "64px",
-        transition: "border-color 0.3s ease, background 0.3s ease",
-      }}
-    >
-      <Link
-        href="/products"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-          textDecoration: "none",
-        }}
-      >
-        <span style={{ color: T.textFaint, fontSize: "0.9rem" }}>&#8592;</span>
-        <span
-          style={{
-            fontFamily: F.body,
-            fontWeight: 500,
-            color: T.text,
-            fontSize: "0.875rem",
-            opacity: 0.8,
-          }}
-        >
-          All Products
-        </span>
-      </Link>
-
-      <SiteLogo href="/" inverted />
-
-      <a href="/#contact" className="btn-cta-primary" style={{ fontSize: "0.82rem", padding: "0.5rem 1.25rem" }}>
-        Get a Quote
-      </a>
-    </nav>
-  );
-}
 
 // ————————————————————————————————————————————
 // Product Hero Image Carousel
@@ -381,7 +310,6 @@ function ProductPageContent({ product }: { product: Product }) {
 
   return (
     <div className="section-dark" style={{ background: T.bg, minHeight: "100vh" }}>
-      <SubpageNav T={T} />
 
       {/* ——— Hero ——— */}
       <section
@@ -937,7 +865,6 @@ export default function ProductPageClient({ slug }: { slug: string }) {
             gap: "1rem",
           }}
         >
-          <SubpageNav T={T} />
           <h1 style={{ fontFamily: F.display, fontSize: "2.5rem", color: T.text, margin: 0 }}>Product Not Found</h1>
           <Link
             href="/products"
