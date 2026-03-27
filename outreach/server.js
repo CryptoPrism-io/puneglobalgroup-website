@@ -197,21 +197,18 @@ app.get('/', async (req, res) => {
       },
     });
 
-    // Automation stats
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-    const jobsToday = await prisma.scheduledJob.count({
-      where: { processedAt: { gte: todayStart } },
-    });
-    const activeEnrollments = await prisma.sequenceEnrollment.count({
-      where: { status: 'ACTIVE' },
-    });
-    const activeTriggers = await prisma.automationTrigger.count({
-      where: { isActive: true },
-    });
-    const pendingJobs = await prisma.scheduledJob.count({
-      where: { status: 'PENDING' },
-    });
+    // Automation stats (wrapped — demo DB may not have these tables yet)
+    let jobsToday = 0, activeEnrollments = 0, activeTriggers = 0, pendingJobs = 0;
+    try {
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      jobsToday = await prisma.scheduledJob.count({ where: { processedAt: { gte: todayStart } } });
+      activeEnrollments = await prisma.sequenceEnrollment.count({ where: { status: 'ACTIVE' } });
+      activeTriggers = await prisma.automationTrigger.count({ where: { isActive: true } });
+      pendingJobs = await prisma.scheduledJob.count({ where: { status: 'PENDING' } });
+    } catch (statsErr) {
+      console.warn('Automation stats unavailable:', statsErr.message.substring(0, 80));
+    }
 
     const body = await ejs.renderFile(path.join(__dirname, 'views/dashboard-body.ejs'), {
       stages: STAGES, stageCounts, totalLeads, icpCounts, sourceCounts,
