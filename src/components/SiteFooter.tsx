@@ -176,13 +176,31 @@ export default function SiteFooter() {
             </div>
           </div>
 
-          {/* Bottom bar: copyright + GSTIN */}
+          {/* Bottom bar: copyright + ops portal + GSTIN */}
           <div style={{
             display: "flex", justifyContent: "space-between", alignItems: "center",
             flexWrap: "wrap", gap: "1rem", padding: "1.5rem 0",
           }}>
-            <div style={{ fontFamily: F.body, fontSize: "0.76rem", color: "rgba(250,247,242,0.38)" }}>
-              &copy; {new Date().getFullYear()} Pune Global Group. All rights reserved.
+            <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+              <span style={{ fontFamily: F.body, fontSize: "0.76rem", color: "rgba(250,247,242,0.38)" }}>
+                &copy; {new Date().getFullYear()} Pune Global Group. All rights reserved.
+              </span>
+              <a
+                href="https://ops.puneglobalgroup.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontFamily: F.body, fontSize: "0.72rem", fontWeight: 500,
+                  color: C.saffron, textDecoration: "none",
+                  padding: "4px 14px", borderRadius: "6px",
+                  border: `1px solid ${C.saffron}40`,
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = C.saffron; e.currentTarget.style.color = C.dark; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = C.saffron; }}
+              >
+                Ops Portal →
+              </a>
             </div>
             <div style={{
               display: "flex", alignItems: "center", gap: "8px",
