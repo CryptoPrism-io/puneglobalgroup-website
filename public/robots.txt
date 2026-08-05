@@ -1,0 +1,16 @@
+# Pune Global Group — puneglobalgroup.in
+# Industrial packaging manufacturer, Pune, India. Est. 1995.
+
+User-agent: *
+Allow: /
+
+# Auth-gated / internal routes — never index these.
+Disallow: /admin
+Disallow: /login
+Disallow: /api/
+
+# Internal business ERP (separate app, not part of the public marketing site).
+Disallow: /ops
+
+Host: https://puneglobalgroup.in
+Sitemap: https://puneglobalgroup.in/sitemap.xml
