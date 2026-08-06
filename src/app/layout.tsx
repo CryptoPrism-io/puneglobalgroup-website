@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -39,6 +40,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Script
+          defer
+          data-domain="puneglobalgroup.in"
+          src="https://plausible.yogeshsahu.xyz/js/script.js"
+          strategy="afterInteractive"
+        />
         <AuthProvider>
           <GlobalNav />
           {children}
