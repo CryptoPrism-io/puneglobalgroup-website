@@ -1,0 +1,60 @@
+name: Free Firebase Hosting storage
+
+# One-shot / on-demand cleanup for the Spark-plan Hosting storage quota (HTTP 429).
+# Sets retainedReleases so old releases auto-prune, then deletes all but the
+# newest 3 finalized versions to free storage immediately.
+# Trigger manually:  gh workflow run free-hosting-storage.yml -R CryptoPrism-io/puneglobalgroup-website
+
+on:
+  workflow_dispatch:
+
+env:
+  FIREBASE_PROJECT_ID: puneglobalgroup
+
+jobs:
+  free-storage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/274885489333/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: github-deploy@cryptoprism-io.iam.gserviceaccount.com
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Delete old hosting versions + set retained releases
+        run: |
+          set -euo pipefail
+          TOKEN=$(gcloud auth application-default print-access-token)
+          BASE="https://firebasehosting.googleapis.com/v1beta1"
+          SITE="sites/puneglobalgroup"
+          if ! curl -sf -H "Authorization: Bearer $TOKEN" "$BASE/$SITE" >/dev/null 2>&1; then
+            SITE=$(curl -sf -H "Authorization: Bearer $TOKEN" "$BASE/projects/$FIREBASE_PROJECT_ID/sites" \
+              | jq -r '.sites[]? | select(.type=="DEFAULT_SITE") | .name' | head -1)
+            echo "Resolved default site: $SITE"
+          fi
+          echo "Using site: $SITE"
+
+          echo "--- Setting retainedReleases=10 ---"
+          curl -s -X PATCH -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+            -d '{"releaseConfig":{"retainedReleases":10}}' "$BASE/$SITE" || echo "PATCH failed (continuing)"
+
+          echo "--- Deleting all but newest 3 finalized versions ---"
+          MAP=$(curl -sf -H "Authorization: Bearer $TOKEN" "$BASE/$SITE/versions?pageSize=100")
+          DEL=$(echo "$MAP" | jq -r '.versions[]? | select(.status=="FINALIZED") | [.createTime,.name] | @tsv' | sort -r | awk 'NR>3 {print $2}')
+          COUNT=$(printf '%s\n' "$DEL" | grep -c . || true)
+          echo "Deleting $COUNT old version(s)"
+          for v in $DEL; do
+            echo "  DELETE $v"
+            curl -s -X DELETE -H "Authorization: Bearer $TOKEN" "$BASE/$v"
+            echo
+          done
+
+          echo "--- Remaining versions ---"
+          curl -s -H "Authorization: Bearer $TOKEN" "$BASE/$SITE/versions?pageSize=100" \
+            | jq -r '.versions[]? | select(.status=="FINALIZED") | [.createTime,.name] | @tsv' | sort -r | head -10
