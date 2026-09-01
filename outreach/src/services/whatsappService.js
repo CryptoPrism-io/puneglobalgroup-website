@@ -80,6 +80,11 @@ async function getMessageCapping() {
   return request(`/api/sessions/${encodeURIComponent(session)}/capping`);
 }
 
+async function getPhoneByLid(lid) {
+  const mapping = await request(`/api/${encodeURIComponent(session)}/lids/${encodeURIComponent(lid)}`);
+  return mapping?.pn || null;
+}
+
 async function assertCanReachOut() {
   const [timelock, capping] = await Promise.all([getReachoutTimelock(), getMessageCapping()]);
   if (timelock?.isActive) throw new Error('WhatsApp reachout timelock is active; outreach paused');
@@ -135,5 +140,5 @@ async function disconnect() {
 
 module.exports = {
   initSession, sendMessage, sendMedia, isConnected, getQrCode, getStatus, disconnect,
-  normalizePhone, getReachoutTimelock, getMessageCapping, assertCanReachOut,
+  normalizePhone, getPhoneByLid, getReachoutTimelock, getMessageCapping, assertCanReachOut,
 };

@@ -1,4 +1,4 @@
-const { normalizePhone, sendMessage } = require('./whatsappService');
+const { normalizePhone, getPhoneByLid, sendMessage } = require('./whatsappService');
 const { appendConsentNote, OPT_IN_MARKER, OPT_OUT_MARKER } = require('./whatsappConsent');
 const { changeStage } = require('./pipeline');
 const { generateReply } = require('./bedrockReplyService');
@@ -23,8 +23,21 @@ function classifyReply(body, priorReplyCount = 0) {
 }
 
 function phoneFromChatId(chatId) {
-  const raw = String(chatId || '').split('@')[0].split(':')[0];
-  return normalizePhone(raw);
+  const match = String(chatId || '').match(/^(\d+)(?::\d+)?(?:@c\.us|@s\.whatsapp\.net)?$/);
+  return match ? normalizePhone(match[1]) : null;
+}
+
+async function resolvePhoneFromChatId(chatId) {
+  const id = String(chatId || '');
+  if (id.endsWith('@lid')) {
+    try {
+      return phoneFromChatId(await getPhoneByLid(id));
+    } catch (error) {
+      if (error.status === 404) return null;
+      throw error;
+    }
+  }
+  return phoneFromChatId(id);
 }
 
 function withTag(tags, tag) {
@@ -78,7 +91,8 @@ async function handleInboundMessage(prisma, event) {
   const eventKey = `WAHA_REPLY:${event.id || payload.id}`;
   if (await prisma.activity.findFirst({ where: { subject: eventKey } })) return { duplicate: true };
 
-  const phone = phoneFromChatId(payload.from);
+  const phone = await resolvePhoneFromChatId(payload.from);
+  if (!phone) return { ignored: true, reason: 'unsupported sender id' };
   const contact = await findContactByPhone(prisma, phone);
   if (!contact) return { unmatched: true, phone };
 
@@ -168,4 +182,4 @@ async function handleAcknowledgement(prisma, event) {
   return { updated: Boolean(Object.keys(updates).length), messageId: message.id };
 }
 
-module.exports = { classifyReply, phoneFromChatId, handleInboundMessage, handleAcknowledgement };
+module.exports = { classifyReply, phoneFromChatId, resolvePhoneFromChatId, handleInboundMessage, handleAcknowledgement };
