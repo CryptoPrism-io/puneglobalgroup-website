@@ -11,6 +11,7 @@ const { sendEmail } = require('./emailService');
 const { sendMessage: sendWhatsApp, isConnected, assertCanReachOut } = require('./whatsappService');
 const { changeStage } = require('./pipeline');
 const { hasWhatsAppOptIn } = require('./whatsappConsent');
+const { randomSequenceDelayMs } = require('./whatsappPolicy');
 
 let processorInterval = null;
 
@@ -196,6 +197,18 @@ function nextCronRun(cronStr, after) {
   return fallback;
 }
 
+async function nextDeferredSlot(prisma, earliest) {
+  const latest = await prisma.scheduledJob.findFirst({
+    where: {
+      status: { in: ['PENDING', 'DEFERRED'] },
+      scheduledFor: { gte: earliest, lte: new Date(earliest.getTime() + 8 * 60 * 60 * 1000) },
+    },
+    orderBy: { scheduledFor: 'desc' },
+  });
+  const anchor = latest?.scheduledFor > earliest ? latest.scheduledFor : earliest;
+  return new Date(anchor.getTime() + randomSequenceDelayMs());
+}
+
 async function processJob(prisma, job) {
   await prisma.scheduledJob.update({
     where: { id: job.id },
@@ -285,7 +298,7 @@ async function processJob(prisma, job) {
     console.error(`[JobProcessor] Job ${job.id} failed:`, err.message);
     if (err.code === 'WHATSAPP_DAILY_LIMIT' || /timelock|capping status/i.test(err.message)) {
       const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
-      const retryAt = nextOpenSlot(tomorrow, 10, 18, '1,2,3,4,5');
+      const retryAt = await nextDeferredSlot(prisma, nextOpenSlot(tomorrow, 10, 18, '1,2,3,4,5'));
       await prisma.scheduledJob.update({
         where: { id: job.id },
         data: { status: 'DEFERRED', scheduledFor: retryAt, attempts: job.attempts, lastError: err.message },
@@ -310,7 +323,7 @@ async function pollJobs(prisma) {
   try {
     const jobs = await prisma.scheduledJob.findMany({
       where: {
-        status: 'PENDING',
+        status: { in: ['PENDING', 'DEFERRED'] },
         scheduledFor: { lte: new Date() },
       },
       orderBy: { scheduledFor: 'asc' },
