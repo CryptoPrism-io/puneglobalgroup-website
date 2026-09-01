@@ -22,6 +22,15 @@ function classifyReply(body, priorReplyCount = 0) {
   return 'QUALIFY';
 }
 
+function isOutgoingMessage(event, payload) {
+  return Boolean(
+    payload?.fromMe
+    || payload?.id?.fromMe
+    || payload?._data?.id?.fromMe
+    || event?.source === 'api'
+  );
+}
+
 function phoneFromChatId(chatId) {
   const match = String(chatId || '').match(/^(\d+)(?::\d+)?(?:@c\.us|@s\.whatsapp\.net)?$/);
   return match ? normalizePhone(match[1]) : null;
@@ -86,7 +95,7 @@ async function moveToContacted(prisma, lead) {
 
 async function handleInboundMessage(prisma, event) {
   const payload = event?.payload || {};
-  if (event?.event !== 'message' || payload.fromMe || String(payload.from || '').endsWith('@g.us')) return { ignored: true };
+  if (event?.event !== 'message' || isOutgoingMessage(event, payload) || String(payload.from || '').endsWith('@g.us')) return { ignored: true };
 
   const eventKey = `WAHA_REPLY:${event.id || payload.id}`;
   if (await prisma.activity.findFirst({ where: { subject: eventKey } })) return { duplicate: true };
@@ -182,4 +191,4 @@ async function handleAcknowledgement(prisma, event) {
   return { updated: Boolean(Object.keys(updates).length), messageId: message.id };
 }
 
-module.exports = { classifyReply, phoneFromChatId, resolvePhoneFromChatId, handleInboundMessage, handleAcknowledgement };
+module.exports = { classifyReply, isOutgoingMessage, phoneFromChatId, resolvePhoneFromChatId, handleInboundMessage, handleAcknowledgement };
