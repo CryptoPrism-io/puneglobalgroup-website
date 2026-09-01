@@ -19,6 +19,10 @@ services:
     image: ${CRM_IMAGE}
     restart: unless-stopped
     env_file: .env.aws
+    environment:
+      WHATSAPP_PDF_PATH: /app/private/pp-brochure.pdf
+    volumes:
+      - ./private/Pune_Global_Group_PP_Company_Introduction_WhatsApp.pdf:/app/private/pp-brochure.pdf:ro
     depends_on:
       postgres:
         condition: service_healthy

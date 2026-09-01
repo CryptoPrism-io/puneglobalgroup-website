@@ -2,9 +2,10 @@
  * Sequence Engine — enroll leads, execute steps, check engagement, advance/stop.
  */
 
+const fs = require('node:fs/promises');
 const { renderTemplate } = require('./templateEngine');
 const { sendEmail } = require('./emailService');
-const { sendMessage: sendWhatsApp, isConnected, assertCanReachOut } = require('./whatsappService');
+const { sendMessage: sendWhatsApp, sendMedia, isConnected, assertCanReachOut } = require('./whatsappService');
 const { hasWhatsAppOptIn } = require('./whatsappConsent');
 const { assertDailyLimit, randomSequenceDelayMs } = require('./whatsappPolicy');
 
@@ -140,7 +141,15 @@ async function executeStep(prisma, enrollmentId, stepOrder) {
       if (!await isConnected()) throw new Error('WhatsApp not connected');
       const phone = contact.whatsapp || contact.phone;
       if (!phone) throw new Error('No phone/WhatsApp for contact');
-      const result = await sendWhatsApp(phone, renderedBody);
+      const result = template.attachmentType === 'PDF'
+        ? await sendMedia(
+            phone,
+            await fs.readFile(process.env.WHATSAPP_PDF_PATH || '/app/private/pp-brochure.pdf'),
+            'application/pdf',
+            'Pune_Global_Group_PP_Company_Introduction.pdf',
+            renderedBody,
+          )
+        : await sendWhatsApp(phone, renderedBody);
       trackingData = result?.id ? { wahaMessageId: result.id } : null;
       status = 'SENT';
       sentAt = new Date();

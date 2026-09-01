@@ -31,6 +31,14 @@ function isOutgoingMessage(event, payload) {
   );
 }
 
+function isStaleMessage(payload, now = Date.now()) {
+  const timestamp = Number(payload?.timestamp);
+  if (!Number.isFinite(timestamp)) return false;
+  const sentAt = timestamp < 1e12 ? timestamp * 1000 : timestamp;
+  const maxAge = Number.parseInt(process.env.WHATSAPP_INBOUND_MAX_AGE_MS || '900000', 10);
+  return sentAt < now - maxAge;
+}
+
 function phoneFromChatId(chatId) {
   const match = String(chatId || '').match(/^(\d+)(?::\d+)?(?:@c\.us|@s\.whatsapp\.net)?$/);
   return match ? normalizePhone(match[1]) : null;
@@ -95,7 +103,7 @@ async function moveToContacted(prisma, lead) {
 
 async function handleInboundMessage(prisma, event) {
   const payload = event?.payload || {};
-  if (event?.event !== 'message' || isOutgoingMessage(event, payload) || String(payload.from || '').endsWith('@g.us')) return { ignored: true };
+  if (event?.event !== 'message' || isOutgoingMessage(event, payload) || isStaleMessage(payload) || String(payload.from || '').endsWith('@g.us')) return { ignored: true };
 
   const eventKey = `WAHA_REPLY:${event.id || payload.id}`;
   if (await prisma.activity.findFirst({ where: { subject: eventKey } })) return { duplicate: true };
@@ -191,4 +199,4 @@ async function handleAcknowledgement(prisma, event) {
   return { updated: Boolean(Object.keys(updates).length), messageId: message.id };
 }
 
-module.exports = { classifyReply, isOutgoingMessage, phoneFromChatId, resolvePhoneFromChatId, handleInboundMessage, handleAcknowledgement };
+module.exports = { classifyReply, isOutgoingMessage, isStaleMessage, phoneFromChatId, resolvePhoneFromChatId, handleInboundMessage, handleAcknowledgement };
