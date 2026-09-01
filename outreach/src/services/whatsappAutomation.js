@@ -23,10 +23,14 @@ function classifyReply(body, priorReplyCount = 0) {
 }
 
 function isOutgoingMessage(event, payload) {
+  const serializedId = typeof payload?.id === 'string'
+    ? payload.id
+    : payload?.id?._serialized || payload?.id?.$1;
   return Boolean(
     payload?.fromMe
     || payload?.id?.fromMe
     || payload?._data?.id?.fromMe
+    || String(serializedId || '').startsWith('true_')
     || event?.source === 'api'
   );
 }

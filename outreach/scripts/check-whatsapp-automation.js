@@ -15,6 +15,8 @@ assert.equal(phoneFromChatId('123456789@lid'), null);
 assert.equal(phoneFromChatId('status@broadcast'), null);
 assert.equal(isOutgoingMessage({}, { id: { fromMe: true } }), true);
 assert.equal(isOutgoingMessage({}, { _data: { id: { fromMe: true } } }), true);
+assert.equal(isOutgoingMessage({}, { id: 'true_919823383230@c.us_ABC123' }), true);
+assert.equal(isOutgoingMessage({}, { id: { _serialized: 'true_919823383230@lid_ABC123' } }), true);
 assert.equal(isOutgoingMessage({}, { fromMe: false }), false);
 assert.equal(isStaleMessage({ timestamp: 1_700_000_000 }, 1_700_001_000_000), true);
 assert.equal(isStaleMessage({ timestamp: 1_700_000_900 }, 1_700_001_000_000), false);
