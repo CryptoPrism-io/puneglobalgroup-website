@@ -29,4 +29,96 @@ assert.equal(hasWhatsAppOptIn({ notes: 'WA_OPT_IN: web form\nWA_OPT_OUT: recipie
 assert.equal(hasWhatsAppOptIn({ notes: 'WA_OPT_OUT: old request\nWA_OPT_IN: new inbound request' }), true);
 assert.equal(startOfIstDay(new Date('2026-08-31T20:00:00.000Z')).toISOString(), '2026-08-31T18:30:00.000Z');
 
-console.log('WhatsApp automation checks passed');
+async function checkBrochurePermissionFlow() {
+  const originalPdfPath = process.env.WHATSAPP_PDF_PATH;
+  process.env.WHATSAPP_PDF_PATH = __filename;
+  const automationPath = require.resolve('../src/services/whatsappAutomation');
+  const servicePath = require.resolve('../src/services/whatsappService');
+  const originalService = require(servicePath);
+  const sentMedia = [];
+  const sentText = [];
+
+  require.cache[servicePath].exports = {
+    ...originalService,
+    sendMedia: async (...args) => {
+      sentMedia.push(args);
+      return { id: 'true_919999999999@c.us_TEST' };
+    },
+    sendMessage: async (...args) => sentText.push(args),
+  };
+  delete require.cache[automationPath];
+  const { handleInboundMessage } = require(automationPath);
+
+  const activities = [];
+  const messages = [];
+  const leadUpdates = [];
+  const contact = {
+    id: 7,
+    leadId: 9,
+    name: 'Test Contact',
+    phone: '919999999999',
+    whatsapp: null,
+    notes: 'WA_OPT_IN: isolated test',
+    lead: { id: 9, stage: 'CONTACTED', tags: [] },
+  };
+  const prisma = {
+    activity: {
+      findFirst: async ({ where }) => activities.find(item => item.subject === where.subject) || null,
+      count: async () => 0,
+      create: async ({ data }) => { activities.push(data); return data; },
+    },
+    contact: {
+      findMany: async () => [contact],
+      update: async () => contact,
+    },
+    lead: {
+      update: async ({ data }) => { leadUpdates.push(data); return { ...contact.lead, ...data }; },
+    },
+    outreachMessage: {
+      create: async ({ data }) => { messages.push(data); return data; },
+    },
+    sequenceEnrollment: {
+      findMany: async () => [{ id: 11 }],
+      updateMany: async () => ({ count: 1 }),
+    },
+    scheduledJob: {
+      updateMany: async () => ({ count: 1 }),
+    },
+  };
+  const event = {
+    event: 'message',
+    id: 'isolated-positive-reply',
+    payload: {
+      id: 'false_919999999999@c.us_TEST',
+      from: '919999999999@c.us',
+      body: 'Yes, please share it',
+      timestamp: Math.floor(Date.now() / 1000),
+      _data: { type: 'chat' },
+    },
+  };
+
+  const first = await handleInboundMessage(prisma, event);
+  const duplicate = await handleInboundMessage(prisma, event);
+
+  assert.equal(first.disposition, 'SEND_BROCHURE');
+  assert.equal(duplicate.duplicate, true);
+  assert.equal(sentMedia.length, 1);
+  assert.equal(sentText.length, 0);
+  assert.equal(messages.length, 1);
+  assert.equal(messages[0].status, 'SENT');
+  assert.equal(activities.filter(item => item.type === 'WHATSAPP_REPLY').length, 1);
+  assert.equal(activities.filter(item => item.type === 'WHATSAPP_AUTO_REPLY').length, 1);
+  assert.equal(leadUpdates.some(data => data.tags?.includes('brochure-shared')), true);
+
+  require.cache[servicePath].exports = originalService;
+  delete require.cache[automationPath];
+  if (originalPdfPath === undefined) delete process.env.WHATSAPP_PDF_PATH;
+  else process.env.WHATSAPP_PDF_PATH = originalPdfPath;
+}
+
+checkBrochurePermissionFlow()
+  .then(() => console.log('WhatsApp automation checks passed'))
+  .catch(error => {
+    console.error(error);
+    process.exitCode = 1;
+  });
