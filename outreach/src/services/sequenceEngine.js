@@ -4,7 +4,23 @@
 
 const { renderTemplate } = require('./templateEngine');
 const { sendEmail } = require('./emailService');
-const { sendMessage: sendWhatsApp, isConnected } = require('./whatsappService');
+const { sendMessage: sendWhatsApp, isConnected, assertCanReachOut } = require('./whatsappService');
+const { hasWhatsAppOptIn } = require('./whatsappConsent');
+const { assertDailyLimit, randomSequenceDelayMs } = require('./whatsappPolicy');
+
+async function nextSequenceSlot(prisma, earliest) {
+  const horizon = new Date(earliest.getTime() + 8 * 60 * 60 * 1000);
+  const latest = await prisma.scheduledJob.findFirst({
+    where: {
+      type: 'SEQUENCE_STEP',
+      status: { in: ['PENDING', 'DEFERRED'] },
+      scheduledFor: { gte: earliest, lte: horizon },
+    },
+    orderBy: { scheduledFor: 'desc' },
+  });
+  const anchor = latest?.scheduledFor > earliest ? latest.scheduledFor : earliest;
+  return new Date(anchor.getTime() + randomSequenceDelayMs());
+}
 
 async function enrollLead(prisma, sequenceId, leadId, contactId) {
   const sequence = await prisma.sequence.findUnique({
@@ -37,6 +53,7 @@ async function enrollLead(prisma, sequenceId, leadId, contactId) {
   const scheduledFor = new Date();
   scheduledFor.setDate(scheduledFor.getDate() + firstStep.delayDays);
   scheduledFor.setHours(scheduledFor.getHours() + firstStep.delayHours);
+  if (firstStep.channel === 'WHATSAPP') scheduledFor.setTime((await nextSequenceSlot(prisma, scheduledFor)).getTime());
 
   await prisma.scheduledJob.create({
     data: {
@@ -52,15 +69,6 @@ async function enrollLead(prisma, sequenceId, leadId, contactId) {
 }
 
 async function hasEngaged(prisma, leadId, sinceDate) {
-  const engagedMessage = await prisma.outreachMessage.findFirst({
-    where: {
-      leadId,
-      status: { in: ['DELIVERED', 'READ'] },
-      sentAt: { gte: sinceDate },
-    },
-  });
-  if (engagedMessage) return true;
-
   const replyActivity = await prisma.activity.findFirst({
     where: {
       leadId,
@@ -111,6 +119,13 @@ async function executeStep(prisma, enrollmentId, stepOrder) {
   let errorMessage = null;
   let resendEmailId = null;
   let sentAt = null;
+  let trackingData = null;
+
+  if (step.channel === 'WHATSAPP') {
+    if (!hasWhatsAppOptIn(contact)) throw new Error('WhatsApp opt-in is not recorded for this contact');
+    await assertDailyLimit(prisma);
+    await assertCanReachOut();
+  }
 
   try {
     if (step.channel === 'EMAIL') {
@@ -122,10 +137,11 @@ async function executeStep(prisma, enrollmentId, stepOrder) {
       status = 'SENT';
       sentAt = new Date();
     } else if (step.channel === 'WHATSAPP') {
-      if (!isConnected()) throw new Error('WhatsApp not connected');
+      if (!await isConnected()) throw new Error('WhatsApp not connected');
       const phone = contact.whatsapp || contact.phone;
       if (!phone) throw new Error('No phone/WhatsApp for contact');
-      await sendWhatsApp(phone, renderedBody);
+      const result = await sendWhatsApp(phone, renderedBody);
+      trackingData = result?.id ? { wahaMessageId: result.id } : null;
       status = 'SENT';
       sentAt = new Date();
     }
@@ -146,6 +162,7 @@ async function executeStep(prisma, enrollmentId, stepOrder) {
       sentAt,
       errorMessage,
       resendEmailId,
+      trackingData,
     },
   });
 
@@ -171,6 +188,7 @@ async function executeStep(prisma, enrollmentId, stepOrder) {
     const scheduledFor = new Date();
     scheduledFor.setDate(scheduledFor.getDate() + nextStep.delayDays);
     scheduledFor.setHours(scheduledFor.getHours() + nextStep.delayHours);
+    if (nextStep.channel === 'WHATSAPP') scheduledFor.setTime((await nextSequenceSlot(prisma, scheduledFor)).getTime());
 
     await prisma.scheduledJob.create({
       data: {

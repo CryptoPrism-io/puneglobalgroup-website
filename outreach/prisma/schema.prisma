@@ -52,6 +52,12 @@ model Lead {
   notes                  String?
   tags                   Json?
   isArchived             Boolean   @default(false)
+  indiamartUrl           String?
+  justdialUrl            String?
+  mapsUrl                String?
+  cin                    String?
+  latitude               Float?
+  longitude              Float?
   contacts               Contact[]
   activities             Activity[]
   scrapeBatch            ScrapeBatch? @relation(fields: [scrapeBatchId], references: [id])

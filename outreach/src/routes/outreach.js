@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { sendEmail } = require('../services/emailService');
-const { sendMessage: sendWhatsApp, isConnected } = require('../services/whatsappService');
+const { sendMessage: sendWhatsApp, isConnected, assertCanReachOut } = require('../services/whatsappService');
 const { renderTemplate } = require('../services/templateEngine');
+const { hasWhatsAppOptIn } = require('../services/whatsappConsent');
 
 // POST /outreach/send
 router.post('/send', async (req, res) => {
@@ -29,6 +30,7 @@ router.post('/send', async (req, res) => {
     let status = 'QUEUED';
     let errorMessage = null;
     let resendEmailId = null;
+    let trackingData = null;
 
     if (channel === 'EMAIL') {
       const email = contact?.email;
@@ -38,10 +40,13 @@ router.post('/send', async (req, res) => {
       resendEmailId = result.id;
       status = 'SENT';
     } else if (channel === 'WHATSAPP') {
-      if (!isConnected()) throw new Error('WhatsApp not connected. Go to /whatsapp/status to connect.');
+      if (!await isConnected()) throw new Error('WhatsApp not connected. Go to /whatsapp/status to connect.');
       const phone = contact?.whatsapp || contact?.phone;
       if (!phone) throw new Error('Contact has no phone/WhatsApp number');
-      await sendWhatsApp(phone, renderedBody);
+      if (!hasWhatsAppOptIn(contact)) throw new Error('WhatsApp opt-in is not recorded for this contact');
+      await assertCanReachOut();
+      const result = await sendWhatsApp(phone, renderedBody);
+      trackingData = result?.id ? { wahaMessageId: result.id } : null;
       status = 'SENT';
     }
 
@@ -57,6 +62,7 @@ router.post('/send', async (req, res) => {
         sentAt: status === 'SENT' ? new Date() : null,
         errorMessage,
         resendEmailId,
+        trackingData,
       },
     });
 

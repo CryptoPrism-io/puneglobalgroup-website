@@ -1,7 +1,9 @@
 const { renderTemplate } = require('./templateEngine');
 const { sendEmail } = require('./emailService');
-const { sendMessage: sendWhatsApp, isConnected } = require('./whatsappService');
+const { sendMessage: sendWhatsApp, isConnected, assertCanReachOut } = require('./whatsappService');
 const { buildFilterQuery } = require('./search');
+const { hasWhatsAppOptIn } = require('./whatsappConsent');
+const { assertDailyLimit } = require('./whatsappPolicy');
 
 function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 function randomDelay(minMs, maxMs) { return Math.floor(Math.random() * (maxMs - minMs + 1)) + minMs; }
@@ -27,6 +29,20 @@ async function executeCampaign(prisma, campaignId) {
     include: { contacts: { where: { isPrimary: true }, take: 1 } },
   });
 
+  if (campaign.channel === 'WHATSAPP') {
+    const pilotLimit = Number.parseInt(process.env.WHATSAPP_CAMPAIGN_LIMIT || '10', 10);
+    if (!Number.isInteger(pilotLimit) || pilotLimit < 1) {
+      throw new Error('WHATSAPP_CAMPAIGN_LIMIT must be a positive integer');
+    }
+    if (leads.length > pilotLimit) {
+      throw new Error(`WhatsApp pilot is limited to ${pilotLimit} recipients; this campaign has ${leads.length}`);
+    }
+    const withoutConsent = leads.filter(lead => !hasWhatsAppOptIn(lead.contacts[0]));
+    if (withoutConsent.length) throw new Error(`${withoutConsent.length} recipient(s) do not have recorded WhatsApp opt-in`);
+    await assertDailyLimit(prisma, leads.length);
+    await assertCanReachOut();
+  }
+
   await prisma.campaign.update({
     where: { id: campaignId },
     data: { status: 'SENDING', totalRecipients: leads.length, sentAt: new Date() },
@@ -47,6 +63,7 @@ async function executeCampaign(prisma, campaignId) {
     let errorMessage = null;
     let resendEmailId = null;
     let sentAt = null;
+    let trackingData = null;
 
     try {
       if (campaign.channel === 'EMAIL') {
@@ -59,10 +76,11 @@ async function executeCampaign(prisma, campaignId) {
         sentAt = new Date();
         sentCount++;
       } else if (campaign.channel === 'WHATSAPP') {
-        if (!isConnected()) throw new Error('WhatsApp not connected');
+        if (!await isConnected()) throw new Error('WhatsApp not connected');
         const phone = contact?.whatsapp || contact?.phone;
         if (!phone) throw new Error('No phone/WhatsApp number for contact');
-        await sendWhatsApp(phone, renderedBody);
+        const result = await sendWhatsApp(phone, renderedBody);
+        trackingData = result?.id ? { wahaMessageId: result.id } : null;
         status = 'SENT';
         sentAt = new Date();
         sentCount++;
@@ -78,7 +96,7 @@ async function executeCampaign(prisma, campaignId) {
         campaignId, leadId: lead.id, contactId: contact?.id || null,
         channel: campaign.channel, templateId: campaign.templateId,
         subject: renderedSubject, body: renderedBody,
-        status, sentAt, errorMessage, resendEmailId,
+        status, sentAt, errorMessage, resendEmailId, trackingData,
       },
     });
 
@@ -102,7 +120,9 @@ async function executeCampaign(prisma, campaignId) {
 
     if (i < leads.length - 1) {
       if (campaign.channel === 'WHATSAPP') {
-        await sleep(randomDelay(15000, 20000));
+        const minDelay = Number.parseInt(process.env.WHATSAPP_MIN_DELAY_MS || '180000', 10);
+        const maxDelay = Number.parseInt(process.env.WHATSAPP_MAX_DELAY_MS || '480000', 10);
+        await sleep(randomDelay(minDelay, maxDelay));
         if ((i + 1) % 20 === 0) {
           console.log(`WhatsApp batch pause at message ${i + 1}...`);
           await sleep(600000);

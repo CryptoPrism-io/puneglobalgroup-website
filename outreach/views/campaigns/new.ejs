@@ -112,7 +112,7 @@
           <label>Send Mode</label>
           <div style="display:flex;flex-direction:column;gap:0.5rem;margin-top:0.25rem">
             <label style="display:flex;align-items:center;gap:0.4rem;font-weight:400;font-size:0.9rem;cursor:pointer">
-              <input type="radio" name="sendMode" value="now" checked onchange="toggleScheduling()"> Send Now
+              <input type="radio" name="sendMode" value="now" onchange="toggleScheduling()"> Send Now
             </label>
             <label style="display:flex;align-items:center;gap:0.4rem;font-weight:400;font-size:0.9rem;cursor:pointer">
               <input type="radio" name="sendMode" value="scheduled" onchange="toggleScheduling()"> Schedule for Later
@@ -121,7 +121,7 @@
               <input type="radio" name="sendMode" value="recurring" onchange="toggleScheduling()"> Recurring
             </label>
             <label style="display:flex;align-items:center;gap:0.4rem;font-weight:400;font-size:0.9rem;cursor:pointer">
-              <input type="radio" name="sendMode" value="draft" onchange="toggleScheduling()"> Save as Draft
+              <input type="radio" name="sendMode" value="draft" checked onchange="toggleScheduling()"> Save as Draft
             </label>
           </div>
         </div>
@@ -174,7 +174,7 @@
         </div>
 
         <!-- Hidden inputs -->
-        <input type="hidden" name="sendNow" id="send-now-hidden" value="on">
+        <input type="hidden" name="sendNow" id="send-now-hidden" value="">
         <input type="hidden" name="excludedLeadIds" id="excluded-lead-ids" value="[]">
         <input type="hidden" name="filters" id="filters-json" value="{}">
 

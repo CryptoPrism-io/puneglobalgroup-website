@@ -16,6 +16,35 @@
   </div>
 </div>
 
+<!-- Human handoff queue -->
+<div class="section">
+  <h2>Human Action Queue <span style="font-size:0.8rem;font-weight:400;color:var(--text-tertiary)">(<%= humanHandoffs.length %> awaiting review)</span></h2>
+  <% if (humanHandoffs.length === 0) { %>
+    <p class="text-muted" style="font-size:0.9rem">No WhatsApp replies require human review.</p>
+  <% } else { %>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Company</th><th>Contact</th><th>Latest reply</th><th>Stage</th><th>Action</th></tr></thead>
+      <tbody>
+      <% humanHandoffs.forEach(function(lead) { var contact = lead.contacts[0]; var handoff = lead.activities[0]; %>
+        <tr>
+          <td><a href="/leads/<%= lead.id %>?tab=activity" style="font-weight:600"><%= lead.companyName %></a></td>
+          <td><%= contact ? contact.name : '—' %></td>
+          <td><%= handoff && handoff.body ? handoff.body.slice(0, 120) : 'Reply received' %></td>
+          <td><span class="badge badge-<%= lead.stage.toLowerCase() %>"><%= lead.stage %></span></td>
+          <td>
+            <form method="POST" action="/leads/<%= lead.id %>/handoff/resolve">
+              <button type="submit" class="btn btn-secondary">Mark reviewed</button>
+            </form>
+          </td>
+        </tr>
+      <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</div>
+
 <!-- KPI Cards -->
 <div class="dashboard-cards">
   <div class="card">

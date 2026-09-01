@@ -1,6 +1,31 @@
 const express = require('express');
+const crypto = require('node:crypto');
 const router = express.Router();
 const { emitEvent } = require('../services/eventEmitter');
+const { handleInboundMessage, handleAcknowledgement } = require('../services/whatsappAutomation');
+
+function isValidWahaSignature(req) {
+  const secret = process.env.WAHA_WEBHOOK_SECRET || process.env.WAHA_API_KEY;
+  const received = String(req.get('X-Webhook-Hmac') || '');
+  if (!secret || !received || !req.rawBody) return false;
+  const expected = crypto.createHmac('sha512', secret).update(req.rawBody).digest('hex');
+  if (received.length !== expected.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(received), Buffer.from(expected));
+}
+
+router.post('/waha', async (req, res) => {
+  if (!isValidWahaSignature(req)) return res.status(401).send('invalid signature');
+  try {
+    const prisma = req.app.locals.prisma;
+    const result = req.body.event === 'message.ack'
+      ? await handleAcknowledgement(prisma, req.body)
+      : await handleInboundMessage(prisma, req.body);
+    res.status(200).json(result);
+  } catch (err) {
+    console.error('WAHA webhook error:', err.message);
+    res.status(500).send('retry');
+  }
+});
 
 router.post('/resend', async (req, res) => {
   try {

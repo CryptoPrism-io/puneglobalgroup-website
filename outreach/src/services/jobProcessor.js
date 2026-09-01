@@ -8,15 +8,16 @@ const { executeCampaign } = require('./campaignRunner');
 const { runDailySweeps, scheduleDailySweep } = require('./dailySweeps');
 const { renderTemplate } = require('./templateEngine');
 const { sendEmail } = require('./emailService');
-const { sendMessage: sendWhatsApp, isConnected } = require('./whatsappService');
+const { sendMessage: sendWhatsApp, isConnected, assertCanReachOut } = require('./whatsappService');
 const { changeStage } = require('./pipeline');
+const { hasWhatsAppOptIn } = require('./whatsappConsent');
 
 let processorInterval = null;
 
 function isWithinSendWindow(now, windowStart, windowEnd, windowDays) {
-  const start = windowStart ?? 9;
+  const start = windowStart ?? Number.parseInt(process.env.OUTREACH_WINDOW_START || '10', 10);
   const end = windowEnd ?? 18;
-  const days = windowDays ?? '1,2,3,4,5,6';
+  const days = windowDays ?? '1,2,3,4,5';
 
   const istOffset = 5.5 * 60 * 60 * 1000;
   const istTime = new Date(now.getTime() + istOffset);
@@ -30,8 +31,8 @@ function isWithinSendWindow(now, windowStart, windowEnd, windowDays) {
 }
 
 function nextOpenSlot(now, windowStart, windowEnd, windowDays) {
-  const start = windowStart ?? 9;
-  const days = windowDays ?? '1,2,3,4,5,6';
+  const start = windowStart ?? Number.parseInt(process.env.OUTREACH_WINDOW_START || '10', 10);
+  const days = windowDays ?? '1,2,3,4,5';
   const allowedDays = days.split(',').map(Number);
 
   const candidate = new Date(now);
@@ -97,6 +98,7 @@ async function executeTriggerAction(prisma, job) {
     let errorMessage = null;
     let resendEmailId = null;
     let sentAt = null;
+    let trackingData = null;
 
     if (channel === 'EMAIL') {
       if (!contact?.email) throw new Error('No email for contact');
@@ -106,10 +108,13 @@ async function executeTriggerAction(prisma, job) {
       status = 'SENT';
       sentAt = new Date();
     } else if (channel === 'WHATSAPP') {
-      if (!isConnected()) throw new Error('WhatsApp not connected');
+      if (!await isConnected()) throw new Error('WhatsApp not connected');
       const phone = contact?.whatsapp || contact?.phone;
       if (!phone) throw new Error('No phone for contact');
-      await sendWhatsApp(phone, renderedBody);
+      if (!hasWhatsAppOptIn(contact)) throw new Error('WhatsApp opt-in is not recorded for this contact');
+      await assertCanReachOut();
+      const result = await sendWhatsApp(phone, renderedBody);
+      trackingData = result?.id ? { wahaMessageId: result.id } : null;
       status = 'SENT';
       sentAt = new Date();
     }
@@ -118,7 +123,7 @@ async function executeTriggerAction(prisma, job) {
       data: {
         leadId, contactId: contact?.id || null, channel,
         templateId: template.id, subject: renderedSubject, body: renderedBody,
-        status, sentAt, errorMessage, resendEmailId,
+        status, sentAt, errorMessage, resendEmailId, trackingData,
       },
     });
 
@@ -199,7 +204,9 @@ async function processJob(prisma, job) {
 
   try {
     if (job.type !== 'DAILY_SWEEP') {
-      let winStart = 9, winEnd = 18, winDays = '1,2,3,4,5,6';
+      let winStart = Number.parseInt(process.env.OUTREACH_WINDOW_START || '10', 10);
+      let winEnd = Number.parseInt(process.env.OUTREACH_WINDOW_END || '18', 10);
+      let winDays = process.env.OUTREACH_WINDOW_DAYS || '1,2,3,4,5';
       if (job.referenceType === 'CAMPAIGN' && job.referenceId) {
         const campaign = await prisma.campaign.findUnique({ where: { id: job.referenceId } });
         if (campaign) {
@@ -276,6 +283,15 @@ async function processJob(prisma, job) {
     });
   } catch (err) {
     console.error(`[JobProcessor] Job ${job.id} failed:`, err.message);
+    if (err.code === 'WHATSAPP_DAILY_LIMIT' || /timelock|capping status/i.test(err.message)) {
+      const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      const retryAt = nextOpenSlot(tomorrow, 10, 18, '1,2,3,4,5');
+      await prisma.scheduledJob.update({
+        where: { id: job.id },
+        data: { status: 'DEFERRED', scheduledFor: retryAt, attempts: job.attempts, lastError: err.message },
+      });
+      return;
+    }
     const newStatus = (job.attempts + 1) >= job.maxAttempts ? 'FAILED' : 'PENDING';
     const retryAt = new Date(Date.now() + (job.attempts + 1) * 15 * 60 * 1000);
 

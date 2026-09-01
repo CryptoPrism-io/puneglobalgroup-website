@@ -113,7 +113,7 @@
         <% } %>
       </div>
 
-      <div class="form-card" style="max-width:none">
+      <div class="form-card" style="max-width:none;margin-bottom:1.5rem">
         <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1rem">Source</h2>
         <div class="detail-grid" style="gap:0.75rem">
           <div><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Source</span><br>
@@ -128,6 +128,44 @@
           <div style="margin-top:0.75rem"><span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Fit Notes</span><br><%= lead.fitNotes %></div>
         <% } %>
       </div>
+
+      <% if (lead.indiamartUrl || lead.justdialUrl || lead.mapsUrl || lead.cin || lead.latitude) { %>
+      <div class="form-card" style="max-width:none">
+        <h2 style="font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy-800);margin-bottom:1rem">Links & Location</h2>
+        <div style="display:flex;flex-direction:column;gap:0.75rem">
+          <% if (lead.indiamartUrl) { %>
+            <div>
+              <span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">IndiaMART</span><br>
+              <a href="<%= lead.indiamartUrl %>" target="_blank" style="word-break:break-all;color:var(--navy-800)"><%= lead.indiamartUrl %></a>
+            </div>
+          <% } %>
+          <% if (lead.justdialUrl) { %>
+            <div>
+              <span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">JustDial</span><br>
+              <a href="<%= lead.justdialUrl %>" target="_blank" style="word-break:break-all;color:var(--navy-800)"><%= lead.justdialUrl %></a>
+            </div>
+          <% } %>
+          <% if (lead.mapsUrl) { %>
+            <div>
+              <span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Google Maps</span><br>
+              <a href="<%= lead.mapsUrl %>" target="_blank" style="word-break:break-all;color:var(--navy-800)"><%= lead.mapsUrl %></a>
+            </div>
+          <% } %>
+          <% if (lead.cin) { %>
+            <div>
+              <span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">CIN</span><br>
+              <span class="text-mono"><%= lead.cin %></span>
+            </div>
+          <% } %>
+          <% if (lead.latitude && lead.longitude) { %>
+            <div>
+              <span class="text-light" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">Coordinates</span><br>
+              <span class="text-mono"><%= lead.latitude %>, <%= lead.longitude %></span>
+            </div>
+          <% } %>
+        </div>
+      </div>
+      <% } %>
     </div>
 
     <div>
