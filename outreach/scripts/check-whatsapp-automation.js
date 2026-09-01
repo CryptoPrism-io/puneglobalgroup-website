@@ -6,6 +6,8 @@ const { hasWhatsAppOptIn } = require('../src/services/whatsappConsent');
 const { startOfIstDay } = require('../src/services/whatsappPolicy');
 
 assert.equal(classifyReply('Please send a quotation'), 'HUMAN_HANDOFF');
+assert.equal(classifyReply('Yes, please share it'), 'SEND_BROCHURE');
+assert.equal(classifyReply('Sure, send the brochure'), 'SEND_BROCHURE');
 assert.equal(classifyReply('Hello'), 'QUALIFY');
 assert.equal(classifyReply('Here are our dimensions', 1), 'HUMAN_HANDOFF');
 assert.equal(classifyReply('STOP'), 'OPT_OUT');

@@ -1,4 +1,5 @@
-const { normalizePhone, getPhoneByLid, sendMessage } = require('./whatsappService');
+const fs = require('node:fs/promises');
+const { normalizePhone, getPhoneByLid, sendMessage, sendMedia } = require('./whatsappService');
 const { appendConsentNote, OPT_IN_MARKER, OPT_OUT_MARKER } = require('./whatsappConsent');
 const { changeStage } = require('./pipeline');
 const { generateReply } = require('./bedrockReplyService');
@@ -13,12 +14,20 @@ const QUALIFICATION_PROMPT = [
   'Yogesh will review it during business hours. Reply STOP to opt out.',
 ].join('\n');
 
-const HANDOFF_REPLY = 'Thank you. I have passed this to Yogesh for review. He will respond during business hours.';
+const HANDOFF_REPLY = "Thanks, I've got this. I'll review it and come back to you shortly. - Yogesh";
+const BROCHURE_CAPTION = [
+  'Sharing our short PP corrugated packaging brochure.',
+  '',
+  'If you have a live requirement, please send a photo or drawing, dimensions, expected quantity and delivery location.',
+  '',
+  '- Yogesh',
+].join('\n');
 
 function classifyReply(body, priorReplyCount = 0) {
   const text = String(body || '').trim().toLowerCase();
   if (/\b(stop|unsubscribe|remove me|do not contact|don'?t contact|wrong number|not interested|no thanks)\b/.test(text)) return 'OPT_OUT';
-  if (priorReplyCount > 0 || /\b(yes|interested|quote|quotation|price|cost|sample|call|requirement|dimension|qty|quantity|purchase|procurement|brochure|catalog|send details)\b/.test(text)) return 'HUMAN_HANDOFF';
+  if (/\b(yes|sure|okay|ok|interested|brochure|catalog|go ahead|please share|share it|send it|send details)\b/.test(text)) return 'SEND_BROCHURE';
+  if (priorReplyCount > 0 || /\b(quote|quotation|price|cost|sample|call|requirement|dimension|qty|quantity|purchase|procurement)\b/.test(text)) return 'HUMAN_HANDOFF';
   return 'QUALIFY';
 }
 
@@ -90,7 +99,9 @@ async function findContactByPhone(prisma, phone) {
 }
 
 async function stopPendingFollowUps(prisma, leadId) {
-  const enrollments = await prisma.sequenceEnrollment.findMany({ where: { leadId, status: 'ACTIVE' } });
+  const enrollments = await prisma.sequenceEnrollment.findMany({
+    where: { leadId, status: { in: ['ACTIVE', 'PAUSED'] } },
+  });
   if (!enrollments.length) return;
   const ids = enrollments.map(item => item.id);
   await prisma.sequenceEnrollment.updateMany({
@@ -153,7 +164,70 @@ async function handleInboundMessage(prisma, event) {
   });
   await moveToContacted(prisma, contact.lead);
 
-  if (disposition === 'HUMAN_HANDOFF') {
+  if (disposition === 'SEND_BROCHURE') {
+    let result;
+    try {
+      result = await sendMedia(
+        phone,
+        await fs.readFile(process.env.WHATSAPP_PDF_PATH || '/app/private/pp-brochure.pdf'),
+        'application/pdf',
+        'Pune_Global_Group_PP_Company_Introduction.pdf',
+        BROCHURE_CAPTION,
+      );
+    } catch (error) {
+      await prisma.outreachMessage.create({
+        data: {
+          leadId: contact.leadId,
+          contactId: contact.id,
+          channel: 'WHATSAPP',
+          subject: 'Brochure requested',
+          body: BROCHURE_CAPTION,
+          status: 'FAILED',
+          errorMessage: error.message,
+        },
+      });
+      await prisma.lead.update({
+        where: { id: contact.leadId },
+        data: { tags: withTag(contact.lead.tags, 'human-handoff') },
+      });
+      await prisma.activity.create({
+        data: {
+          leadId: contact.leadId,
+          contactId: contact.id,
+          type: 'HUMAN_HANDOFF',
+          subject: 'Brochure delivery failed; manual follow-up required',
+          body: error.message.slice(0, 1000),
+        },
+      });
+      return { disposition, leadId: contact.leadId, delivery: 'FAILED' };
+    }
+
+    await prisma.outreachMessage.create({
+      data: {
+        leadId: contact.leadId,
+        contactId: contact.id,
+        channel: 'WHATSAPP',
+        subject: 'Brochure shared after permission',
+        body: BROCHURE_CAPTION,
+        status: 'SENT',
+        sentAt: new Date(),
+        trackingData: result?.id ? { wahaMessageId: result.id } : null,
+      },
+    });
+    await prisma.lead.update({
+      where: { id: contact.leadId },
+      data: { tags: withTag(contact.lead.tags, 'brochure-shared') },
+    });
+    await prisma.activity.create({
+      data: {
+        leadId: contact.leadId,
+        contactId: contact.id,
+        type: 'WHATSAPP_AUTO_REPLY',
+        subject: 'Brochure shared after permission',
+        body: BROCHURE_CAPTION,
+      },
+    });
+  } else if (disposition === 'HUMAN_HANDOFF') {
     await prisma.lead.update({
       where: { id: contact.leadId },
       data: { tags: withTag(contact.lead.tags, 'human-handoff') },
