@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 
 process.env.WAHA_API_KEY ||= 'test-key';
-const { classifyReply, isOutgoingMessage, isStaleMessage, phoneFromChatId } = require('../src/services/whatsappAutomation');
+const { classifyReply, isOutgoingMessage, isStaleMessage, isSystemMessage, phoneFromChatId } = require('../src/services/whatsappAutomation');
 const { hasWhatsAppOptIn } = require('../src/services/whatsappConsent');
 const { startOfIstDay } = require('../src/services/whatsappPolicy');
 
@@ -20,6 +20,8 @@ assert.equal(isOutgoingMessage({}, { id: { _serialized: 'true_919823383230@lid_A
 assert.equal(isOutgoingMessage({}, { fromMe: false }), false);
 assert.equal(isStaleMessage({ timestamp: 1_700_000_000 }, 1_700_001_000_000), true);
 assert.equal(isStaleMessage({ timestamp: 1_700_000_900 }, 1_700_001_000_000), false);
+assert.equal(isSystemMessage({ _data: { type: 'e2e_notification', subtype: 'encrypt' } }), true);
+assert.equal(isSystemMessage({ _data: { type: 'chat' } }), false);
 assert.equal(hasWhatsAppOptIn({ notes: 'WA_OPT_IN: web form 2026-08-31' }), true);
 assert.equal(hasWhatsAppOptIn({ notes: 'WA_OPT_IN: web form\nWA_OPT_OUT: recipient request' }), false);
 assert.equal(hasWhatsAppOptIn({ notes: 'WA_OPT_OUT: old request\nWA_OPT_IN: new inbound request' }), true);
