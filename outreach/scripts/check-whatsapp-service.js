@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 
 process.env.WAHA_API_KEY ||= 'test-key';
-const { normalizePhone, sendMessage } = require('../src/services/whatsappService');
+const { normalizePhone, sendMessage, sendMedia } = require('../src/services/whatsappService');
 
 assert.equal(normalizePhone('98233 83230'), '919823383230');
 assert.equal(normalizePhone('+91 98233 83230'), '919823383230');
@@ -26,6 +26,12 @@ async function checkSendContract() {
     chatId: '919823383230@c.us',
     text: 'Pilot message',
   });
+
+  await sendMedia('98233 83230', Buffer.from('video'), 'video/mp4', 'reel.mp4', 'Video');
+  assert.equal(calls[3].url, 'http://127.0.0.1:3002/api/sendVideo');
+
+  await sendMedia('98233 83230', Buffer.from('image'), 'image/jpeg', 'showcase.jpg', 'Image');
+  assert.equal(calls[5].url, 'http://127.0.0.1:3002/api/sendImage');
 }
 
 checkSendContract()

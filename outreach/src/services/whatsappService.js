@@ -96,7 +96,9 @@ async function assertCanReachOut() {
 
 async function sendMedia(phone, buffer, mimetype, filename, caption) {
   if (!await isConnected()) throw new Error('WhatsApp not connected');
-  const endpoint = mimetype.startsWith('image/') ? '/api/sendImage' : '/api/sendFile';
+  const endpoint = mimetype.startsWith('image/')
+    ? '/api/sendImage'
+    : mimetype.startsWith('video/') ? '/api/sendVideo' : '/api/sendFile';
   return request(endpoint, {
     method: 'POST',
     timeoutMs: 60000,
