@@ -141,14 +141,13 @@ async function executeStep(prisma, enrollmentId, stepOrder) {
       if (!await isConnected()) throw new Error('WhatsApp not connected');
       const phone = contact.whatsapp || contact.phone;
       if (!phone) throw new Error('No phone/WhatsApp for contact');
-      const result = template.attachmentType === 'PDF'
-        ? await sendMedia(
-            phone,
-            await fs.readFile(process.env.WHATSAPP_PDF_PATH || '/app/private/pp-brochure.pdf'),
-            'application/pdf',
-            'Pune_Global_Group_PP_Company_Introduction.pdf',
-            renderedBody,
-          )
+      const media = {
+        PDF: [process.env.WHATSAPP_PDF_PATH || '/app/private/pp-brochure.pdf', 'application/pdf', 'Pune_Global_Group_PP_Company_Introduction.pdf'],
+        IMAGE: [process.env.WHATSAPP_IMAGE_PATH || '/app/private/pp-product-showcase.jpg', 'image/jpeg', 'Pune_Global_Group_PP_Product_Showcase.jpg'],
+        VIDEO: [process.env.WHATSAPP_VIDEO_PATH || '/app/private/pp-product-reel.mp4', 'video/mp4', 'Pune_Global_Group_PP_Product_Reel.mp4'],
+      }[template.attachmentType];
+      const result = media
+        ? await sendMedia(phone, await fs.readFile(media[0]), media[1], media[2], renderedBody)
         : await sendWhatsApp(phone, renderedBody);
       trackingData = result?.id ? { wahaMessageId: result.id } : null;
       status = 'SENT';

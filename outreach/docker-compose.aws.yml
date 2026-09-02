@@ -21,8 +21,12 @@ services:
     env_file: .env.aws
     environment:
       WHATSAPP_PDF_PATH: /app/private/pp-brochure.pdf
+      WHATSAPP_IMAGE_PATH: /app/private/pp-product-showcase.jpg
+      WHATSAPP_VIDEO_PATH: /app/private/pp-product-reel.mp4
     volumes:
       - ./private/Pune_Global_Group_PP_Company_Introduction_WhatsApp.pdf:/app/private/pp-brochure.pdf:ro
+      - ./private/pp-product-showcase.jpg:/app/private/pp-product-showcase.jpg:ro
+      - ./private/pp-product-reel.mp4:/app/private/pp-product-reel.mp4:ro
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,34 +1,11 @@
-const fs = require('node:fs/promises');
-const { normalizePhone, getPhoneByLid, sendMessage, sendMedia } = require('./whatsappService');
+const { normalizePhone, getPhoneByLid } = require('./whatsappService');
 const { appendConsentNote, OPT_IN_MARKER, OPT_OUT_MARKER } = require('./whatsappConsent');
 const { changeStage } = require('./pipeline');
-const { generateReply } = require('./bedrockReplyService');
-
-const QUALIFICATION_PROMPT = [
-  'Thank you for responding. To route this correctly, please share:',
-  '1. Product or component',
-  '2. Dimensions, weight, or a current-pack photo',
-  '3. Expected monthly quantity',
-  '4. Delivery location',
-  '',
-  'Yogesh will review it during business hours. Reply STOP to opt out.',
-].join('\n');
-
-const HANDOFF_REPLY = "Thanks, I've got this. I'll review it and come back to you shortly. - Yogesh";
-const BROCHURE_CAPTION = [
-  'Sharing our short PP corrugated packaging brochure.',
-  '',
-  'If you have a live requirement, please send a photo or drawing, dimensions, expected quantity and delivery location.',
-  '',
-  '- Yogesh',
-].join('\n');
 
 function classifyReply(body, priorReplyCount = 0) {
   const text = String(body || '').trim().toLowerCase();
-  if (/\b(stop|unsubscribe|remove me|do not contact|don'?t contact|wrong number|not interested|no thanks)\b/.test(text)) return 'OPT_OUT';
-  if (/\b(yes|sure|okay|ok|interested|brochure|catalog|go ahead|please share|share it|send it|send details)\b/.test(text)) return 'SEND_BROCHURE';
-  if (priorReplyCount > 0 || /\b(quote|quotation|price|cost|sample|call|requirement|dimension|qty|quantity|purchase|procurement)\b/.test(text)) return 'HUMAN_HANDOFF';
-  return 'QUALIFY';
+  if (/\b(stop|unsubscribe|remove me|do not contact|don'?t contact|wrong number|not interested|no thanks|not relevant|not related)\b/.test(text)) return 'OPT_OUT';
+  return 'HUMAN_HANDOFF';
 }
 
 function isOutgoingMessage(event, payload) {
@@ -54,6 +31,14 @@ function isStaleMessage(payload, now = Date.now()) {
 
 function isSystemMessage(payload) {
   return payload?._data?.type === 'e2e_notification';
+}
+
+function isEmptyNonMediaMessage(payload) {
+  if (String(payload?.body || '').trim()) return false;
+  const type = String(payload?.type || payload?._data?.type || '').toLowerCase();
+  return !payload?.hasMedia
+    && !payload?._data?.hasMedia
+    && !['image', 'video', 'document', 'audio', 'ptt', 'sticker'].includes(type);
 }
 
 function phoneFromChatId(chatId) {
@@ -122,7 +107,7 @@ async function moveToContacted(prisma, lead) {
 
 async function handleInboundMessage(prisma, event) {
   const payload = event?.payload || {};
-  if (event?.event !== 'message' || isOutgoingMessage(event, payload) || isStaleMessage(payload) || isSystemMessage(payload) || String(payload.from || '').endsWith('@g.us')) return { ignored: true };
+  if (event?.event !== 'message' || isOutgoingMessage(event, payload) || isStaleMessage(payload) || isSystemMessage(payload) || isEmptyNonMediaMessage(payload) || String(payload.from || '').endsWith('@g.us')) return { ignored: true };
 
   const eventKey = `WAHA_REPLY:${event.id || payload.id}`;
   if (await prisma.activity.findFirst({ where: { subject: eventKey } })) return { duplicate: true };
@@ -132,8 +117,7 @@ async function handleInboundMessage(prisma, event) {
   const contact = await findContactByPhone(prisma, phone);
   if (!contact) return { unmatched: true, phone };
 
-  const priorReplyCount = await prisma.activity.count({ where: { leadId: contact.leadId, type: 'WHATSAPP_REPLY' } });
-  const disposition = classifyReply(payload.body, priorReplyCount);
+  const disposition = classifyReply(payload.body);
   await prisma.activity.create({
     data: {
       leadId: contact.leadId,
@@ -164,103 +148,19 @@ async function handleInboundMessage(prisma, event) {
   });
   await moveToContacted(prisma, contact.lead);
 
-  if (disposition === 'SEND_BROCHURE') {
-    let result;
-    try {
-      result = await sendMedia(
-        phone,
-        await fs.readFile(process.env.WHATSAPP_PDF_PATH || '/app/private/pp-brochure.pdf'),
-        'application/pdf',
-        'Pune_Global_Group_PP_Company_Introduction.pdf',
-        BROCHURE_CAPTION,
-      );
-    } catch (error) {
-      await prisma.outreachMessage.create({
-        data: {
-          leadId: contact.leadId,
-          contactId: contact.id,
-          channel: 'WHATSAPP',
-          subject: 'Brochure requested',
-          body: BROCHURE_CAPTION,
-          status: 'FAILED',
-          errorMessage: error.message,
-        },
-      });
-      await prisma.lead.update({
-        where: { id: contact.leadId },
-        data: { tags: withTag(contact.lead.tags, 'human-handoff') },
-      });
-      await prisma.activity.create({
-        data: {
-          leadId: contact.leadId,
-          contactId: contact.id,
-          type: 'HUMAN_HANDOFF',
-          subject: 'Brochure delivery failed; manual follow-up required',
-          body: error.message.slice(0, 1000),
-        },
-      });
-      return { disposition, leadId: contact.leadId, delivery: 'FAILED' };
-    }
-
-    await prisma.outreachMessage.create({
-      data: {
-        leadId: contact.leadId,
-        contactId: contact.id,
-        channel: 'WHATSAPP',
-        subject: 'Brochure shared after permission',
-        body: BROCHURE_CAPTION,
-        status: 'SENT',
-        sentAt: new Date(),
-        trackingData: result?.id ? { wahaMessageId: result.id } : null,
-      },
-    });
-    await prisma.lead.update({
-      where: { id: contact.leadId },
-      data: { tags: withTag(contact.lead.tags, 'brochure-shared') },
-    });
-    await prisma.activity.create({
-      data: {
-        leadId: contact.leadId,
-        contactId: contact.id,
-        type: 'WHATSAPP_AUTO_REPLY',
-        subject: 'Brochure shared after permission',
-        body: BROCHURE_CAPTION,
-      },
-    });
-  } else if (disposition === 'HUMAN_HANDOFF') {
-    await prisma.lead.update({
-      where: { id: contact.leadId },
-      data: { tags: withTag(contact.lead.tags, 'human-handoff') },
-    });
-    await prisma.activity.create({
-      data: {
-        leadId: contact.leadId,
-        contactId: contact.id,
-        type: 'HUMAN_HANDOFF',
-        subject: 'WhatsApp reply requires human review',
-        body: String(payload.body || '[media/non-text reply]').slice(0, 1000),
-      },
-    });
-    await sendMessage(phone, HANDOFF_REPLY);
-  } else {
-    let reply = null;
-    try {
-      reply = await generateReply(payload.body);
-    } catch (error) {
-      console.error('Bedrock reply failed:', error.message);
-    }
-    reply ||= QUALIFICATION_PROMPT;
-    await sendMessage(phone, reply);
-    await prisma.activity.create({
-      data: {
-        leadId: contact.leadId,
-        contactId: contact.id,
-        type: 'WHATSAPP_AUTO_REPLY',
-        subject: reply === QUALIFICATION_PROMPT ? 'Qualification prompt sent' : 'Bedrock reply sent',
-        body: reply.slice(0, 4000),
-      },
-    });
-  }
+  await prisma.lead.update({
+    where: { id: contact.leadId },
+    data: { tags: withTag(contact.lead.tags, 'human-handoff') },
+  });
+  await prisma.activity.create({
+    data: {
+      leadId: contact.leadId,
+      contactId: contact.id,
+      type: 'HUMAN_HANDOFF',
+      subject: 'WhatsApp reply requires human review',
+      body: String(payload.body || '[media/non-text reply]').slice(0, 1000),
+    },
+  });
 
   return { disposition, leadId: contact.leadId };
 }
@@ -281,4 +181,4 @@ async function handleAcknowledgement(prisma, event) {
   return { updated: Boolean(Object.keys(updates).length), messageId: message.id };
 }
 
-module.exports = { classifyReply, isOutgoingMessage, isStaleMessage, isSystemMessage, phoneFromChatId, resolvePhoneFromChatId, handleInboundMessage, handleAcknowledgement };
+module.exports = { classifyReply, isOutgoingMessage, isStaleMessage, isSystemMessage, isEmptyNonMediaMessage, phoneFromChatId, resolvePhoneFromChatId, handleInboundMessage, handleAcknowledgement };
