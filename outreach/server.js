@@ -24,7 +24,9 @@ app.set('views', path.join(__dirname, 'views'));
 
 // ── Body parsing ─────────────────────────────────────────
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.json({
+  verify: (req, _res, buffer) => { req.rawBody = buffer; },
+}));
 
 // ── Static files ─────────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'public')));
@@ -55,6 +57,15 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/health', async (_req, res) => {
+  try {
+    await adminPrisma.$queryRaw`SELECT 1`;
+    res.status(200).send('ok');
+  } catch (_) {
+    res.status(503).send('database unavailable');
+  }
+});
+
 // ── Prisma per-request based on user ─────────────────────
 app.use((req, res, next) => {
   if (req.session.user === 'demo') {
@@ -70,7 +81,7 @@ app.use((req, res, next) => {
 // ── Auth: protect all routes except /login and /webhooks ──
 app.use((req, res, next) => {
   // Allow login page, static assets, and webhooks without auth
-  if (req.path === '/login' || req.path.startsWith('/webhooks')) {
+  if (req.path === '/login' || req.path === '/health' || req.path.startsWith('/webhooks')) {
     return next();
   }
   if (!req.session.user) {
@@ -197,6 +208,15 @@ app.get('/', async (req, res) => {
       },
     });
 
+    const humanHandoffs = await prisma.lead.findMany({
+      where: { tags: { array_contains: ['human-handoff'] }, isArchived: false },
+      orderBy: { updatedAt: 'desc' },
+      include: {
+        contacts: { where: { isPrimary: true }, take: 1 },
+        activities: { where: { type: 'HUMAN_HANDOFF' }, orderBy: { createdAt: 'desc' }, take: 1 },
+      },
+    });
+
     // Automation stats (wrapped — demo DB may not have these tables yet)
     let jobsToday = 0, activeEnrollments = 0, activeTriggers = 0, pendingJobs = 0;
     try {
@@ -213,7 +233,7 @@ app.get('/', async (req, res) => {
     const body = await ejs.renderFile(path.join(__dirname, 'views/dashboard-body.ejs'), {
       stages: STAGES, stageCounts, totalLeads, icpCounts, sourceCounts,
       wonThisMonth, hotLeads, staleLeads, recentActivities,
-      jobsToday, activeEnrollments, activeTriggers, pendingJobs,
+      jobsToday, activeEnrollments, activeTriggers, pendingJobs, humanHandoffs,
     });
     res.render('layout', { title: 'Dashboard', body });
   } catch (err) {

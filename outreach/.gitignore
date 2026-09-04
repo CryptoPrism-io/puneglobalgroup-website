@@ -2,3 +2,6 @@ node_modules/
 .env
 src/generated/
 wa-auth/
+.waha-sessions/
+.env.waha
+.env.aws

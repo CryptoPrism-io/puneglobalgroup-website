@@ -5,17 +5,22 @@ const wa = require('../services/whatsappService');
 router.get('/status', async (req, res) => {
   const ejs = require('ejs');
   const path = require('path');
-  const body = await ejs.renderFile(path.join(__dirname, '../../views/whatsapp/status.ejs'), {
-    status: wa.getStatus(),
-    qrCode: wa.getQrCode(),
-  });
-  res.render('layout', { title: 'WhatsApp', body });
+  try {
+    const status = await wa.getStatus();
+    const body = await ejs.renderFile(path.join(__dirname, '../../views/whatsapp/status.ejs'), {
+      status,
+      qrCode: status === 'connecting' ? await wa.getQrCode() : null,
+    });
+    res.render('layout', { title: 'WhatsApp', body });
+  } catch (err) {
+    res.redirect('/?error=' + encodeURIComponent(`WAHA unavailable: ${err.message}`));
+  }
 });
 
 router.post('/connect', async (req, res) => {
   try {
-    await wa.initSession('./wa-auth');
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await wa.initSession();
+    await new Promise(resolve => setTimeout(resolve, 1500));
     res.redirect('/whatsapp/status?success=Connecting...+Scan+QR+code');
   } catch (err) {
     res.redirect('/whatsapp/status?error=' + encodeURIComponent(err.message));

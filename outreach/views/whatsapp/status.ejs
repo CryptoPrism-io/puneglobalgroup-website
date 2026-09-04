@@ -1,6 +1,6 @@
 <% if (status === 'connected') { %>
   <meta http-equiv="refresh" content="30">
-<% } else if (status === 'connecting' && qrCode) { %>
+<% } else if (status === 'connecting') { %>
   <meta http-equiv="refresh" content="5">
 <% } %>
 
@@ -17,12 +17,16 @@
         <button type="submit" class="btn btn-danger">Disconnect</button>
       </form>
 
-    <% } else if (status === 'connecting' && qrCode) { %>
+    <% } else if (status === 'connecting') { %>
       <h1 style="font-family:'Fraunces',serif; font-size:1.5rem; font-weight:700; color:var(--navy-800); margin-bottom:1rem;">Scan QR Code</h1>
       <p class="text-muted" style="margin-bottom:1rem;">Open WhatsApp on your phone &rarr; Settings &rarr; Linked Devices &rarr; Link a Device</p>
-      <div style="margin:1.5rem 0;">
-        <img src="<%= qrCode %>" style="max-width:300px; border:1px solid var(--border); border-radius:var(--radius); padding:0.5rem;" alt="WhatsApp QR Code">
-      </div>
+      <% if (qrCode) { %>
+        <div style="margin:1.5rem 0;">
+          <img src="<%= qrCode %>" style="max-width:300px; border:1px solid var(--border); border-radius:var(--radius); padding:0.5rem;" alt="WhatsApp QR Code">
+        </div>
+      <% } else { %>
+        <p class="text-muted" style="margin:1.5rem 0;">WAHA is starting. The QR code will appear here automatically.</p>
+      <% } %>
       <p class="text-muted" style="font-size:0.85rem;">Page refreshes automatically every 5 seconds.</p>
 
     <% } else { %>

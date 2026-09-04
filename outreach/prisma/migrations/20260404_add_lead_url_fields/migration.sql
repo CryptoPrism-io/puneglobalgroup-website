@@ -1,0 +1,7 @@
+-- Add URL and location fields to Lead
+ALTER TABLE "Lead" ADD COLUMN "indiamartUrl" TEXT;
+ALTER TABLE "Lead" ADD COLUMN "justdialUrl" TEXT;
+ALTER TABLE "Lead" ADD COLUMN "mapsUrl" TEXT;
+ALTER TABLE "Lead" ADD COLUMN "cin" TEXT;
+ALTER TABLE "Lead" ADD COLUMN "latitude" DOUBLE PRECISION;
+ALTER TABLE "Lead" ADD COLUMN "longitude" DOUBLE PRECISION;

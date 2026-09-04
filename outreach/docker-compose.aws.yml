@@ -1,0 +1,64 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: outreach
+    volumes:
+      - postgres-data:/var/lib/postgresql
+      - ./deploy/init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d outreach"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  crm:
+    image: ${CRM_IMAGE}
+    restart: unless-stopped
+    env_file: .env.aws
+    environment:
+      WHATSAPP_PDF_PATH: /app/private/pp-brochure.pdf
+      WHATSAPP_IMAGE_PATH: /app/private/pp-product-showcase.jpg
+      WHATSAPP_VIDEO_PATH: /app/private/pp-product-reel.mp4
+    volumes:
+      - ./private/Pune_Global_Group_PP_Company_Introduction_WhatsApp.pdf:/app/private/pp-brochure.pdf:ro
+      - ./private/pp-product-showcase.jpg:/app/private/pp-product-showcase.jpg:ro
+      - ./private/pp-product-reel.mp4:/app/private/pp-product-reel.mp4:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      waha:
+        condition: service_started
+    ports:
+      - "127.0.0.1:3001:3001"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  waha:
+    image: ${WAHA_IMAGE}
+    restart: unless-stopped
+    environment:
+      WAHA_API_KEY: ${WAHA_API_KEY}
+      WAHA_DASHBOARD_USERNAME: ${WAHA_DASHBOARD_USERNAME}
+      WAHA_DASHBOARD_PASSWORD: ${WAHA_DASHBOARD_PASSWORD}
+      WHATSAPP_DEFAULT_ENGINE: WEBJS
+      WHATSAPP_HOOK_URL: http://crm:3001/webhooks/waha
+      WHATSAPP_HOOK_EVENTS: message,message.ack
+      WHATSAPP_HOOK_HMAC_KEY: ${WAHA_API_KEY}
+      WHATSAPP_HOOK_RETRIES_POLICY: exponential
+      WHATSAPP_HOOK_RETRIES_ATTEMPTS: 5
+      WAHA_LOG_LEVEL: info
+    ports:
+      - "127.0.0.1:3002:3000"
+    volumes:
+      - waha-sessions:/app/.sessions
+
+volumes:
+  postgres-data:
+  waha-sessions:

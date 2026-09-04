@@ -44,6 +44,12 @@ function extractLeadData(body) {
     growWill: body.growWill?.trim() || null,
     notes: body.notes?.trim() || null,
     tags: body.tags ? JSON.parse(body.tags) : null,
+    indiamartUrl: body.indiamartUrl?.trim() || null,
+    justdialUrl: body.justdialUrl?.trim() || null,
+    mapsUrl: body.mapsUrl?.trim() || null,
+    cin: body.cin?.trim() || null,
+    latitude: body.latitude ? parseFloat(body.latitude) : null,
+    longitude: body.longitude ? parseFloat(body.longitude) : null,
   };
 }
 
@@ -247,6 +253,23 @@ router.post('/:id/archive', async (req, res) => {
   } catch (err) {
     console.error('Archive lead error:', err);
     res.redirect(`/leads/${req.params.id}?error=` + encodeURIComponent(err.message));
+  }
+});
+
+router.post('/:id/handoff/resolve', async (req, res) => {
+  try {
+    const prisma = req.app.locals.prisma;
+    const id = parseInt(req.params.id);
+    const lead = await prisma.lead.findUnique({ where: { id } });
+    if (!lead) return res.status(404).send('Lead not found');
+    const tags = (Array.isArray(lead.tags) ? lead.tags : []).filter(tag => tag !== 'human-handoff');
+    await prisma.lead.update({ where: { id }, data: { tags } });
+    await prisma.activity.create({
+      data: { leadId: id, type: 'HUMAN_HANDOFF_RESOLVED', subject: 'Human handoff reviewed' },
+    });
+    res.redirect('/?success=Human+handoff+marked+reviewed');
+  } catch (err) {
+    res.redirect('/?error=' + encodeURIComponent(err.message));
   }
 });
 

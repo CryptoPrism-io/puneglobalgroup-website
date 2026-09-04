@@ -2,10 +2,23 @@ const express = require('express');
 const path = require('path');
 const ejs = require('ejs');
 const router = express.Router();
+const { appendConsentNote, hasWhatsAppOptIn, OPT_IN_MARKER } = require('../services/whatsappConsent');
+const { enrollLead } = require('../services/sequenceEngine');
 
 const VIEWS = path.join(__dirname, '../../views');
+const DEFAULT_WHATSAPP_SEQUENCE = 'PP WhatsApp Opt-In Intro + One Follow-up';
+
+async function enrollInDefaultWhatsappSequence(prisma, contact) {
+  const sequence = await prisma.sequence.findFirst({ where: { name: DEFAULT_WHATSAPP_SEQUENCE, isActive: true } });
+  if (!sequence) throw new Error('Approved WhatsApp sequence is not configured');
+  return enrollLead(prisma, sequence.id, contact.leadId, contact.id);
+}
 
 function extractContactData(body) {
+  let notes = body.notes?.trim() || null;
+  if (body.whatsappOptIn === 'on' && !hasWhatsAppOptIn({ notes })) {
+    notes = appendConsentNote(notes, OPT_IN_MARKER, 'recorded by CRM user');
+  }
   return {
     leadId: parseInt(body.leadId),
     name: body.name?.trim() || '',
@@ -17,7 +30,7 @@ function extractContactData(body) {
     linkedinUrl: body.linkedinUrl?.trim() || null,
     isPrimary: body.isPrimary === 'on' || body.isPrimary === 'true',
     discType: body.discType || null,
-    notes: body.notes?.trim() || null,
+    notes,
   };
 }
 
@@ -66,6 +79,7 @@ router.get('/new', async (req, res) => {
       contact: null,
       leads: JSON.parse(JSON.stringify(leads)),
       defaultLeadId: leadId,
+      hasWhatsAppOptIn,
     });
     res.render('layout', { title: 'New Contact', body });
   } catch (err) {
@@ -79,7 +93,10 @@ router.post('/', async (req, res) => {
   try {
     const prisma = req.app.locals.prisma;
     const data = extractContactData(req.body);
-    const contact = await prisma.contact.create({ data });
+    await prisma.$transaction(async tx => {
+      const contact = await tx.contact.create({ data });
+      if (req.body.whatsappOptIn === 'on') await enrollInDefaultWhatsappSequence(tx, contact);
+    });
     res.redirect(`/leads/${data.leadId}?tab=contacts&success=Contact+added`);
   } catch (err) {
     console.error('Create contact error:', err);
@@ -106,6 +123,7 @@ router.get('/:id', async (req, res) => {
       contact: JSON.parse(JSON.stringify(contact)),
       leads: JSON.parse(JSON.stringify(leads)),
       defaultLeadId: null,
+      hasWhatsAppOptIn,
     });
     res.render('layout', { title: 'Edit Contact — ' + contact.name, body });
   } catch (err) {
@@ -119,8 +137,15 @@ router.post('/:id', async (req, res) => {
   try {
     const prisma = req.app.locals.prisma;
     const id = parseInt(req.params.id);
+    const existing = await prisma.contact.findUnique({ where: { id } });
+    if (!existing) return res.status(404).send('Contact not found');
     const data = extractContactData(req.body);
-    await prisma.contact.update({ where: { id }, data });
+    await prisma.$transaction(async tx => {
+      const contact = await tx.contact.update({ where: { id }, data });
+      if (!hasWhatsAppOptIn(existing) && hasWhatsAppOptIn(contact)) {
+        await enrollInDefaultWhatsappSequence(tx, contact);
+      }
+    });
     res.redirect(`/leads/${data.leadId}?tab=contacts&success=Contact+updated`);
   } catch (err) {
     console.error('Update contact error:', err);

@@ -5,16 +5,20 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "check:whatsapp": "node scripts/check-whatsapp-service.js && node scripts/check-whatsapp-pilot.js && node scripts/check-whatsapp-automation.js && node scripts/check-bedrock-reply.js",
+    "waha:setup": "node scripts/setup-waha-local.js",
+    "waha:up": "docker compose --env-file .env.waha -f docker-compose.waha.yml up -d",
+    "waha:down": "docker compose --env-file .env.waha -f docker-compose.waha.yml down"
   },
   "type": "commonjs",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.1121.0",
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
-    "@whiskeysockets/baileys": "^6.7.21",
     "bcrypt": "^6.0.0",
     "connect-pg-simple": "^10.0.0",
     "decimal.js": "^10.6.0",
@@ -22,12 +26,9 @@
     "ejs": "^5.0.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
-    "link-preview-js": "^3.2.0",
     "pg": "^8.20.0",
-    "pino": "^9.14.0",
     "prisma": "^7.5.0",
-    "puppeteer": "^24.40.0",
-    "qrcode": "^1.5.4",
+    "puppeteer": "^25.9.0",
     "resend": "^4.8.0"
   },
   "devDependencies": {
