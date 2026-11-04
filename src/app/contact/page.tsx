@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -38,7 +38,7 @@ const C = {
 const F = {
   display: "'Playfair Display', Georgia, serif",
   body:    "'DM Sans', system-ui, sans-serif",
-  italic:  "'Cormorant Garamond', Georgia, serif",
+  italic:  "'DM Sans', system-ui, sans-serif",
 };
 
 /* ─── Animation Tokens ───────────────────────────────────────────────────────── */
@@ -48,20 +48,20 @@ const VP = { once: true, amount: 0.15 };
 const SPRING_HOVER = { type: "spring" as const, stiffness: 300, damping: 25 };
 
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
+  initial: false as const,
   animate: { opacity: 1, y: 0 },
   transition: { duration: DUR, ease: EASE, delay },
 });
 
 const fadeUpScroll = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
+  initial: false as const,
   whileInView: { opacity: 1, y: 0 },
   viewport: VP,
   transition: { duration: DUR, ease: EASE, delay },
 });
 
 const fadeRightScroll = (delay = 0) => ({
-  initial: { opacity: 0, x: 30 },
+  initial: false as const,
   whileInView: { opacity: 1, x: 0 },
   viewport: VP,
   transition: { duration: DUR, ease: EASE, delay },
@@ -86,7 +86,7 @@ const PAGE_CSS = `
   /* ── Hero header text ── */
   .cp-eyebrow {
     font-family: ${F.italic};
-    font-style: italic;
+    font-style: normal;
     font-size: 1.18rem;
     color: rgba(245,166,35,0.75);
     letter-spacing: 0.03em;
@@ -152,8 +152,13 @@ const PAGE_CSS = `
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
   }
+  .cp-row-3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
   @media (max-width: 560px) {
-    .cp-row-2 { grid-template-columns: 1fr; }
+    .cp-row-2, .cp-row-3 { grid-template-columns: 1fr; }
   }
 
   /* ── Form inputs ── */
@@ -234,22 +239,20 @@ const PAGE_CSS = `
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: ${C.gold};
-    color: ${C.navyDark};
+    background: #3A7BBF;
+    color: #fff;
     font-family: ${F.body};
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    padding: 13px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    min-height: 48px;
+    padding: 0 28px;
     border: none;
-    border-radius: 1px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
+    transition: background 0.2s;
   }
   .cp-btn:hover:not(:disabled) {
-    background: #D4C4A8;
-    transform: translateY(-1px);
+    background: #2F6AA6;
   }
   .cp-btn:active { transform: translateY(0); }
   .cp-btn:disabled { opacity: 0.65; cursor: default; }
@@ -365,14 +368,30 @@ export default function ContactPage() {
     email:           "",
     phone:           "",
     productInterest: "",
+    size:            "",
+    quantity:        "",
+    city:            "",
     message:         "",
   });
+  // Product pages link here as /contact?product=<name>
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search).get("product");
+    if (p) setForm(f => ({ ...f, productInterest: p }));
+  }, []);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) return;
+    if (!form.name.trim() || !form.email.trim()) return;
     setStatus("submitting");
+    // RFQ details go into the message too, so the existing email notification shows them
+    const rfq = [
+      form.productInterest && `Product: ${form.productInterest}`,
+      form.size.trim() && `Size (L×W×H mm): ${form.size.trim()}`,
+      form.quantity.trim() && `Quantity: ${form.quantity.trim()}`,
+      form.city.trim() && `Delivery city: ${form.city.trim()}`,
+    ].filter(Boolean).join("\n");
+    const message = [rfq, form.message.trim()].filter(Boolean).join("\n\n") || "(no details)";
     try {
       await addDoc(collection(db, "contacts"), {
         name:            form.name.trim(),
@@ -380,12 +399,15 @@ export default function ContactPage() {
         email:           form.email.trim(),
         phone:           form.phone.trim(),
         productInterest: form.productInterest,
-        message:         form.message.trim(),
+        size:            form.size.trim(),
+        quantity:        form.quantity.trim(),
+        city:            form.city.trim(),
+        message,
         createdAt:       serverTimestamp(),
         source:          "website-contact",
       });
       setStatus("success");
-      setForm({ name: "", company: "", email: "", phone: "", productInterest: "", message: "" });
+      setForm({ name: "", company: "", email: "", phone: "", productInterest: "", size: "", quantity: "", city: "", message: "" });
     } catch {
       setStatus("error");
     }
@@ -471,8 +493,8 @@ export default function ContactPage() {
               <span style={{ color: "rgba(250,247,242,0.55)" }}>Contact</span>
             </nav>
 
-            <motion.span className="cp-eyebrow" {...fadeUp(0.2)}>Get in Touch</motion.span>
-            <motion.h1 className="cp-h1" {...fadeUp(0.4)}>Start Your Packaging Project.</motion.h1>
+            <motion.span className="cp-eyebrow" {...fadeUp(0.2)}>Contact</motion.span>
+            <motion.h1 className="cp-h1" {...fadeUp(0.4)}>Request a quote</motion.h1>
             <motion.p className="cp-sub" {...fadeUp(0.6)}>
               Send us your RFQ, request a sample, or begin supplier qualification.
               Whether you need returnable PP crates for an automotive line or
@@ -562,7 +584,7 @@ export default function ContactPage() {
                     <div
                       style={{
                         fontFamily: F.italic,
-                        fontStyle:  "italic",
+                        fontStyle:  "normal",
                         fontSize:   "0.94rem",
                         color:      C.textMuted,
                         marginTop:  "2px",
@@ -655,7 +677,7 @@ export default function ContactPage() {
                     paddingTop: "1.5rem",
                     borderTop:  `1px solid ${C.border}`,
                     fontFamily: F.italic,
-                    fontStyle:  "italic",
+                    fontStyle:  "normal",
                     fontSize:   "1rem",
                     color:      C.textMuted,
                     lineHeight: 1.6,
@@ -902,7 +924,7 @@ export default function ContactPage() {
 
                     {/* Product Interest */}
                     <div>
-                      <FieldLabel htmlFor="cp-product">Product Interest</FieldLabel>
+                      <FieldLabel htmlFor="cp-product">Product</FieldLabel>
                       <div className="cp-select-wrap">
                         <select
                           id="cp-product"
@@ -911,6 +933,9 @@ export default function ContactPage() {
                           onChange={e => setForm(p => ({ ...p, productInterest: e.target.value }))}
                         >
                           <option value="">Select a product category</option>
+                          {form.productInterest && !PRODUCT_OPTIONS.includes(form.productInterest) && (
+                            <option value={form.productInterest}>{form.productInterest}</option>
+                          )}
                           {PRODUCT_OPTIONS.map(opt => (
                             <option key={opt} value={opt}>{opt}</option>
                           ))}
@@ -918,19 +943,35 @@ export default function ContactPage() {
                       </div>
                     </div>
 
+                    {/* Size + Quantity + City */}
+                    <div className="cp-row-3">
+                      <div>
+                        <FieldLabel htmlFor="cp-size">Size (L×W×H mm)</FieldLabel>
+                        <input id="cp-size" type="text" className="cp-input" placeholder="600 × 400 × 300"
+                          value={form.size} onChange={e => setForm(p => ({ ...p, size: e.target.value }))} />
+                      </div>
+                      <div>
+                        <FieldLabel htmlFor="cp-qty">Quantity</FieldLabel>
+                        <input id="cp-qty" type="text" inputMode="numeric" className="cp-input" placeholder="500"
+                          value={form.quantity} onChange={e => setForm(p => ({ ...p, quantity: e.target.value }))} />
+                      </div>
+                      <div>
+                        <FieldLabel htmlFor="cp-city">Delivery city</FieldLabel>
+                        <input id="cp-city" type="text" className="cp-input" placeholder="Chakan, Pune"
+                          value={form.city} onChange={e => setForm(p => ({ ...p, city: e.target.value }))} autoComplete="address-level2" />
+                      </div>
+                    </div>
+
                     {/* Message */}
                     <div>
-                      <FieldLabel htmlFor="cp-message">
-                        Message <span style={{ color: C.saffron }}>*</span>
-                      </FieldLabel>
+                      <FieldLabel htmlFor="cp-message">Anything else</FieldLabel>
                       <textarea
                         id="cp-message"
                         className="cp-input"
-                        rows={6}
-                        placeholder="Describe your packaging requirements — product type, annual volume, dimensions, material preference, industry..."
+                        rows={4}
+                        placeholder="What goes inside, how it is handled, how often you reorder. Have a drawing? Send it on WhatsApp after submitting."
                         value={form.message}
                         onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
-                        required
                         style={{ resize: "vertical", minHeight: "140px" }}
                       />
                     </div>
@@ -978,7 +1019,7 @@ export default function ContactPage() {
                           </>
                         ) : (
                           <>
-                            Send Request
+                            Send quote request
                             <IconArrowRight size={14} />
                           </>
                         )}
@@ -987,7 +1028,7 @@ export default function ContactPage() {
                       <p
                         style={{
                           fontFamily: F.italic,
-                          fontStyle:  "italic",
+                          fontStyle:  "normal",
                           fontSize:   "1rem",
                           color:      C.textFaint,
                           opacity:    1,

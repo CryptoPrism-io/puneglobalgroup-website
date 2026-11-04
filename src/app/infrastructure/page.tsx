@@ -9,24 +9,10 @@ import { machines, capabilities } from "@/lib/pgg-data";
 // ————————————————————————————————————————————
 // Image data
 // ————————————————————————————————————————————
-const MACHINE_IMAGES: Record<string, string[]> = {
-  "Flat Bed Punch Press":             ["/infrastructure/machines/flat-bed-punch-press-wide.jpg",       "/infrastructure/machines/flat-bed-punch-press-detail.jpg",       "/infrastructure/machines/flat-bed-punch-press-operation.jpg"],
-  "Plastic Ultrasonic Welder":        ["/infrastructure/machines/ultrasonic-welder-wide.jpg",          "/infrastructure/machines/ultrasonic-welder-detail.jpg",          "/infrastructure/machines/ultrasonic-welder-operation.jpg"],
-  "Screen Printing Unit":             ["/infrastructure/machines/screen-printing-wide.jpg",            "/infrastructure/machines/screen-printing-detail.jpg",            "/infrastructure/machines/screen-printing-operation.jpg"],
-  "Guillotine Sheeter":               ["/infrastructure/machines/guillotine-sheeter-wide.jpg",         "/infrastructure/machines/guillotine-sheeter-detail.jpg",         "/infrastructure/machines/guillotine-sheeter-operation.jpg"],
-  "Synchro Sheeter":                  ["/infrastructure/machines/synchro-sheeter-wide.jpg",            "/infrastructure/machines/synchro-sheeter-detail.jpg",            "/infrastructure/machines/synchro-sheeter-operation.jpg"],
-  "Stretch Wrap & Forklift Despatch": ["/infrastructure/machines/stretch-wrap-forklift-wide.jpg",      "/infrastructure/machines/stretch-wrap-forklift-detail.jpg",      "/infrastructure/machines/stretch-wrap-forklift-operation.jpg"],
-};
+// Generated machine photos removed; cards show specs only until real photos exist.
+const MACHINE_IMAGES: Record<string, string[]> = {};
 const MC_LABELS = ["Wide View", "Detail", "In Operation"];
 
-const FACILITY_SHOTS = [
-  { src: "/infrastructure/facility/converting-floor.jpg",  label: "Converting Floor"    },
-  { src: "/infrastructure/facility/storage-warehouse.jpg", label: "Storage & Warehouse" },
-  { src: "/infrastructure/facility/dispatch-area.jpg",     label: "Dispatch Area"       },
-  { src: "/infrastructure/facility/quality-control.jpg",   label: "Quality Control"     },
-  { src: "/infrastructure/facility/freight-lift.jpg",      label: "Freight Lift"        },
-  { src: "/infrastructure/facility/forklift.jpg",          label: "Forklift"            },
-];
 
 // ————————————————————————————————————————————
 // The Merchant — Design Tokens
@@ -50,9 +36,9 @@ const C = {
 };
 
 const F = {
-  display: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
-  body: "'DM Sans', 'Plus Jakarta Sans', sans-serif",
-  italic: "'Cormorant Garamond', Georgia, serif",
+  display: "'Playfair Display', 'DM Sans', system-ui, sans-serif",
+  body: "'DM Sans', system-ui, sans-serif",
+  italic: "'DM Sans', system-ui, sans-serif",
 };
 
 const GLOBAL_CSS = `
@@ -179,7 +165,7 @@ const ease = [0.22, 1, 0.36, 1] as const;
 const vp = { once: true, amount: 0.15 };
 
 const fadeUp = {
-  initial: { opacity: 0, y: 25 },
+  initial: false as const,
   whileInView: { opacity: 1, y: 0 },
   viewport: vp,
   transition: { duration: 0.6, ease },
@@ -229,7 +215,7 @@ function MachineCard({ machine, delay }: { machine: typeof machines[0]; delay: n
   return (
     <motion.div
       className={`machine-card card-heritage${hasImgs ? " has-carousel" : ""}`}
-      initial={{ opacity: 0, y: 25 }}
+      initial={false}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={vp}
       transition={{ duration: 0.6, ease, delay }}
@@ -288,34 +274,6 @@ function MachineCard({ machine, delay }: { machine: typeof machines[0]; delay: n
 // ————————————————————————————————————————————
 // Facility Gallery
 // ————————————————————————————————————————————
-function FacilityGallery() {
-  return (
-    <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2.5rem 5rem" }}>
-      <motion.div {...fadeUp} style={{ textAlign: "center", marginBottom: "2.5rem" }}>
-        <p style={{ display: "inline-block", fontFamily: F.body, fontStyle: "normal", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: C.taupe, border: `1px solid ${C.border}`, borderRadius: "999px", padding: "0.3em 1em", margin: "0 0 1rem" }}>
-          Inside the Facility
-        </p>
-        <div style={{ width: "32px", height: "2px", background: C.charcoal, margin: "0 auto 1.25rem" }} />
-        <h2 style={{ fontFamily: F.display, fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)", fontWeight: 700, color: C.charcoal, margin: 0, lineHeight: 1.15 }}>
-          10,000 sq ft.{" "}
-          <em style={{ fontStyle: "italic", fontWeight: 500 }}>Purpose-Built.</em>
-        </h2>
-      </motion.div>
-      <div className="fac-grid">
-        {FACILITY_SHOTS.map(({ src, label }, i) => (
-          <motion.div key={src} className="fac-item"
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={vp}
-            transition={{ duration: 0.6, ease, delay: i * 0.08 }}>
-            <OptImg src={src} alt={label} sizes="(max-width: 768px) 100vw, 33vw" />
-            <div className="fac-caption">{label}</div>
-          </motion.div>
-        ))}
-      </div>
-    </section>
-  );
-}
 
 // ————————————————————————————————————————————
 // Main Page
@@ -339,36 +297,6 @@ export default function InfrastructurePage() {
           zIndex: 1,
         }}
       >
-        {/* Full-bleed background image */}
-        <OptImg
-          src="/infrastructure/machines/synchro-sheeter-wide.jpg"
-          alt="Synchro sheeter in operation at PGG facility, MIDC Pune"
-          priority
-          sizes="100vw"
-          style={{
-            position: "absolute", inset: 0,
-            width: "100%", height: "100%",
-            objectFit: "cover", objectPosition: "center 40%",
-            display: "block",
-            imageRendering: "-webkit-optimize-contrast" as React.CSSProperties["imageRendering"],
-          }}
-        />
-
-        {/* Blur layer — masked to left 55% where text sits */}
-        <div style={{
-          position: "absolute", inset: 0,
-          backdropFilter: "blur(14px)",
-          WebkitBackdropFilter: "blur(14px)",
-          maskImage: "linear-gradient(to right, black 0%, black 38%, transparent 62%)",
-          WebkitMaskImage: "linear-gradient(to right, black 0%, black 38%, transparent 62%)",
-        }} />
-
-        {/* Gradient overlay — dark left, fades to transparent right */}
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "linear-gradient(to right, rgba(15,26,46,0.96) 0%, rgba(15,26,46,0.90) 30%, rgba(15,26,46,0.50) 58%, rgba(15,26,46,0.05) 100%)",
-        }} />
-
         {/* Content */}
         <div style={{
           position: "relative", zIndex: 1,
@@ -378,7 +306,7 @@ export default function InfrastructurePage() {
           <div style={{ maxWidth: "580px" }}>
             <motion.span className="saffron-badge"
               style={{ marginBottom: "1.5rem", display: "inline-flex" }}
-              initial={{ opacity: 0, y: 25 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease, delay: 0.1 }}>
               Manufacturing · Converting · Trading
@@ -386,23 +314,22 @@ export default function InfrastructurePage() {
 
             <motion.div style={{ width: "48px", height: "2px", background: C.cream,
               marginBottom: "1.5rem", transformOrigin: "left" }}
-              initial={{ scaleX: 0 }}
+              initial={false}
               animate={{ scaleX: 1 }}
               transition={{ duration: 0.6, ease, delay: 0.2 }} />
 
-            <motion.h1 style={{ fontFamily: F.display, fontSize: "clamp(3rem, 6vw, 5rem)",
-              fontWeight: 900, color: C.cream, margin: "0 0 1.5rem",
+            <motion.h1 style={{ fontFamily: F.display, fontSize: "clamp(2.2rem, 4.5vw, 3.6rem)",
+              fontWeight: 700, color: C.cream, margin: "0 0 1.5rem",
               lineHeight: 1.08 }}
-              initial={{ opacity: 0, y: 25 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease, delay: 0.3 }}>
-              Built for Speed.{" "}<br />
-              <em style={{ fontStyle: "italic", fontWeight: 500 }}><span className="gold-text">Infrastructure</span> for Precision.</em>
+Our plant at MIDC Sanaswadi, Pune
             </motion.h1>
 
             <motion.p style={{ fontFamily: F.body, fontSize: "1.05rem", color: "rgba(250,247,242,0.78)",
               lineHeight: 1.75, margin: "0 0 2rem" }}
-              initial={{ opacity: 0, y: 25 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease, delay: 0.45 }}>
               Our dedicated manufacturing facility at BU Bhandari MIDC, Sanaswadi, Pune
@@ -415,7 +342,7 @@ export default function InfrastructurePage() {
             <motion.div style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem",
               background: "rgba(250,247,242,0.10)", border: "1px solid rgba(250,247,242,0.20)",
               borderRadius: "3px", padding: "0.65rem 1.25rem" }}
-              initial={{ opacity: 0, y: 25 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease, delay: 0.6 }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(250,247,242,0.7)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -467,7 +394,7 @@ export default function InfrastructurePage() {
             <motion.div
               key={i}
               className="cap-item"
-              initial={{ opacity: 0, y: 25 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={vp}
               transition={{ duration: 0.6, ease, delay: i * 0.08 }}
@@ -570,9 +497,7 @@ export default function InfrastructurePage() {
               lineHeight: 1.15,
             }}
           >
-            Six Converting Machines.{" "}
-            <br />
-            <em style={{ fontStyle: "italic", fontWeight: 500 }}>One Integrated Facility.</em>
+            Machines in our plant
           </h2>
           <p
             style={{
@@ -602,7 +527,6 @@ export default function InfrastructurePage() {
         </div>
       </section>
 
-      <FacilityGallery />
 
       {/* ——— Quality Section ——— */}
       <section
@@ -625,14 +549,14 @@ export default function InfrastructurePage() {
             }}
           >
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={false}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={vp}
               transition={{ duration: 0.6, ease }}>
               <p
                 style={{
                   fontFamily: F.italic,
-                  fontStyle: "italic",
+                  fontStyle: "normal",
                   fontSize: "1rem",
                   color: C.taupe,
                   margin: "0 0 1rem",
@@ -651,9 +575,7 @@ export default function InfrastructurePage() {
                   lineHeight: 1.2,
                 }}
               >
-                Zero Defect{" "}
-                <br />
-                <em style={{ fontStyle: "italic", fontWeight: 500 }}>Commitment</em>
+                Quality checks
               </h2>
               <p
                 style={{
@@ -685,7 +607,7 @@ export default function InfrastructurePage() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
+              initial={false}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={vp}
               transition={{ duration: 0.6, ease, delay: 0.15 }}
@@ -786,15 +708,14 @@ export default function InfrastructurePage() {
               lineHeight: 1.2,
             }}
           >
-            Two Addresses.{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 500 }}>One Point of Contact.</em>
+            Office and plant
           </h2>
         </motion.div>
 
         <div className="infra-locations-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
           {/* Converting Facility — dark card */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={false}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={vp}
             transition={{ duration: 0.6, ease }}
@@ -875,7 +796,7 @@ export default function InfrastructurePage() {
 
           {/* Commercial Office — cream card */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={false}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={vp}
             transition={{ duration: 0.6, ease, delay: 0.1 }}
@@ -960,7 +881,7 @@ export default function InfrastructurePage() {
         </motion.div>
         <div className="infra-bridge-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
           <motion.div
-            initial={{ opacity: 0, y: 25 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={vp}
             transition={{ duration: 0.6, ease }}
@@ -976,7 +897,7 @@ export default function InfrastructurePage() {
             </Link>
           </motion.div>
           <motion.div
-            initial={{ opacity: 0, y: 25 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={vp}
             transition={{ duration: 0.6, ease, delay: 0.12 }}
@@ -1042,7 +963,7 @@ export default function InfrastructurePage() {
               lineHeight: 1.2,
             }}
           >
-            Ready to Place an Order?
+            Ready to order?
           </h2>
           <p
             style={{
@@ -1169,7 +1090,7 @@ export default function InfrastructurePage() {
               },
             ].map((line, i) => (
               <motion.div key={line.num}
-                initial={{ opacity: 0, y: 25 }}
+                initial={false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={vp}
                 transition={{ duration: 0.6, ease, delay: i * 0.15 }}

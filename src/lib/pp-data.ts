@@ -13,7 +13,7 @@ export interface PPVariant {
   reuseCycles: string;    // "50–100 trips"
   useCases: string[];     // exactly 2
   features: string[];     // 3–4 bullet points
-  images: [string, string, string]; // [hero, engineering, usecase]
+  images: string[]; // [hero, engineering]
 }
 
 export interface PPFamily {
@@ -31,7 +31,7 @@ export const ppFamilies: PPFamily[] = [
   {
     id: "boxes",
     name: "Boxes",
-    descriptor: "Six closure systems. One material. Engineered for industrial handling, not single-use disposal.",
+    descriptor: "Six closure types, all reusable for dozens of trips. Pick the one that suits how the box is handled.",
     variants: [
       {
         code: "BOX-01",
@@ -52,7 +52,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/boxes/box-01-hero.jpg",
           "/products/pp/boxes/box-01-engineering.jpg",
-          "/products/pp/boxes/box-01-usecase.jpg",
         ],
       },
       {
@@ -74,7 +73,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/boxes/box-02-hero.jpg",
           "/products/pp/boxes/box-02-engineering.jpg",
-          "/products/pp/boxes/box-02-usecase.jpg",
         ],
       },
       {
@@ -96,7 +94,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/boxes/box-03-hero.jpg",
           "/products/pp/boxes/box-03-engineering.jpg",
-          "/products/pp/boxes/box-03-usecase.jpg",
         ],
       },
       {
@@ -118,7 +115,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/boxes/box-04-hero.jpg",
           "/products/pp/boxes/box-04-engineering.jpg",
-          "/products/pp/boxes/box-04-usecase.jpg",
         ],
       },
       {
@@ -140,7 +136,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/boxes/box-05-hero.jpg",
           "/products/pp/boxes/box-05-engineering.jpg",
-          "/products/pp/boxes/box-05-usecase.jpg",
         ],
       },
       {
@@ -162,7 +157,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/boxes/box-06-hero.jpg",
           "/products/pp/boxes/box-06-engineering.jpg",
-          "/products/pp/boxes/box-06-usecase.jpg",
         ],
       },
     ],
@@ -174,7 +168,7 @@ export const ppFamilies: PPFamily[] = [
   {
     id: "separators",
     name: "Separators & Inserts",
-    descriptor: "Custom-engineered protection for parts that cannot touch. Die-cut, interlocked, and dimensioned to your component.",
+    descriptor: "Partitions that stop parts touching each other. Cut and slotted to the size of your part.",
     variants: [
       {
         code: "SEP-01",
@@ -195,7 +189,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/separators/sep-01-hero.jpg",
           "/products/pp/separators/sep-01-engineering.jpg",
-          "/products/pp/separators/sep-01-usecase.jpg",
         ],
       },
       {
@@ -217,7 +210,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/separators/sep-02-hero.jpg",
           "/products/pp/separators/sep-02-engineering.jpg",
-          "/products/pp/separators/sep-02-usecase.jpg",
         ],
       },
     ],
@@ -229,7 +221,7 @@ export const ppFamilies: PPFamily[] = [
   {
     id: "layer-pads",
     name: "Layer Pads",
-    descriptor: "Pallet-level load distribution. Five colours standard. Moisture proof, reusable, and lighter than every alternative.",
+    descriptor: "Sheets placed between layers on a pallet to spread the load. Five standard colours, moisture proof and reusable.",
     variants: [
       {
         code: "PAD-01",
@@ -250,7 +242,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/layer-pads/layerpad-hero.jpg",
           "/products/pp/layer-pads/layerpad-engineering.jpg",
-          "/products/pp/layer-pads/layerpad-usecase.jpg",
         ],
       },
       {
@@ -284,7 +275,7 @@ export const ppFamilies: PPFamily[] = [
   {
     id: "trays",
     name: "Trays",
-    descriptor: "Assembly staging to optical protection. Five tray configurations including foam-laminated and ESD-rated variants.",
+    descriptor: "Five tray types for assembly lines and delicate parts, including foam-lined and ESD-safe versions.",
     variants: [
       {
         code: "TRY-01",
@@ -305,7 +296,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/trays/tray-folded-corner-hero.jpg",
           "/products/pp/trays/tray-folded-corner-cad.jpg",
-          "/products/pp/trays/tray-folded-corner-usecase1.jpg",
         ],
       },
       {
@@ -327,7 +317,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/trays/tray-stackable-interlocking-hero.jpg",
           "/products/pp/trays/tray-stackable-interlocking-cad.jpg",
-          "/products/pp/trays/tray-stackable-interlocking-usecase1.jpg",
         ],
       },
       {
@@ -349,7 +338,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/trays/tray-fixed-dividers-hero.jpg",
           "/products/pp/trays/tray-fixed-dividers-cad.jpg",
-          "/products/pp/trays/tray-fixed-dividers-usecase1.jpg",
         ],
       },
       {
@@ -371,7 +359,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/trays/tray-foam-laminated-hero.jpg",
           "/products/pp/trays/tray-foam-laminated-cad.jpg",
-          "/products/pp/trays/tray-foam-laminated-usecase1.jpg",
         ],
       },
       {
@@ -393,7 +380,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/trays/tray-esd-antistatic-hero.jpg",
           "/products/pp/trays/tray-esd-antistatic-cad.jpg",
-          "/products/pp/trays/tray-esd-antistatic-usecase1.jpg",
         ],
       },
     ],
@@ -405,7 +391,7 @@ export const ppFamilies: PPFamily[] = [
   {
     id: "bins",
     name: "Industrial & Picking Bins",
-    descriptor: "Factory-floor scrap management to warehouse picking. Colour-coded, labelled, and built for forklift and shelving environments.",
+    descriptor: "Bins for scrap collection, picking and storage. Colour-coded and sized for shelving or forklift handling.",
     variants: [
       {
         code: "BIN-01",
@@ -426,7 +412,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/bins/bin-01-hero.jpg",
           "/products/pp/bins/bin-01-engineering.jpg",
-          "/products/pp/bins/bin-01-usecase.jpg",
         ],
       },
       {
@@ -448,7 +433,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/bins/bin-02-hero.jpg",
           "/products/pp/bins/bin-02-engineering.jpg",
-          "/products/pp/bins/bin-02-usecase.jpg",
         ],
       },
       {
@@ -470,7 +454,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/bins/bin-03-hero.jpg",
           "/products/pp/bins/bin-03-engineering.jpg",
-          "/products/pp/bins/bin-03-usecase.jpg",
         ],
       },
       {
@@ -492,7 +475,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/picking-bins/pkgbin-01-hero.jpg",
           "/products/pp/picking-bins/pkgbin-01-engineering.jpg",
-          "/products/pp/picking-bins/pkgbin-01-usecase.jpg",
         ],
       },
     ],
@@ -525,7 +507,6 @@ export const ppFamilies: PPFamily[] = [
         images: [
           "/products/pp/flooring/flr-01-hero.jpg",
           "/products/pp/flooring/flr-01-engineering.jpg",
-          "/products/pp/flooring/flr-01-usecase.jpg",
         ],
       },
     ],

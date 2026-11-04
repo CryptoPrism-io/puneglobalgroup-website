@@ -35,11 +35,32 @@ const C = {
 const F = {
   display: "'Playfair Display', Georgia, serif",
   body:    "'DM Sans', system-ui, sans-serif",
-  italic:  "'Cormorant Garamond', Georgia, serif",
+  italic:  "'DM Sans', system-ui, sans-serif",
 };
 
 /* ─── Global CSS ─────────────────────────────────────────────────────────────── */
 const GLOBAL_CSS = `
+  /* ── Plain hero, buttons, steps ── */
+  .hero2-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+  .hero2-img { aspect-ratio: 4 / 3; }
+  .hero2-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; border-top: 1px solid rgba(250,247,242,0.12); padding-top: 1.75rem; }
+  .hero2-facts > div { display: flex; flex-direction: column; gap: 0.25rem; }
+  .btn2 { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.4rem; border-radius: 6px; font-family: 'DM Sans', system-ui, sans-serif; font-size: 1rem; font-weight: 600; text-decoration: none; transition: background 0.2s, border-color 0.2s; }
+  .btn2-primary { background: #3A7BBF; color: #fff; border: 1px solid #3A7BBF; }
+  .btn2-primary:hover { background: #2F6AA6; }
+  .btn2-ghost { background: transparent; color: #FAF7F2; border: 1px solid rgba(250,247,242,0.35); }
+  .btn2-ghost:hover { border-color: rgba(250,247,242,0.7); }
+  .btn2-link { display: inline-flex; align-items: center; gap: 6px; color: #9CC3EA; font-family: 'DM Sans', system-ui, sans-serif; font-size: 1rem; font-weight: 500; text-decoration: none; padding: 0 0.5rem; min-height: 48px; }
+  .how-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
+  .how-steps li { display: flex; flex-direction: column; }
+  .how-num { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(250,247,242,0.35); color: #FAF7F2; display: inline-flex; align-items: center; justify-content: center; font-family: 'DM Sans', system-ui, sans-serif; font-weight: 600; margin-bottom: 1rem; }
+  @media (max-width: 960px) {
+    .hero2-grid { grid-template-columns: 1fr; }
+    .hero2-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .how-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 560px) { .how-steps { grid-template-columns: 1fr; } }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; font-size: 16px; }
   body {
@@ -207,7 +228,7 @@ const GLOBAL_CSS = `
   /* Eyebrow */
   .eyebrow {
     font-family: ${F.italic};
-    font-style: italic;
+    font-style: normal;
     font-size: 1.18rem;
     font-weight: 400;
     color: ${C.taupe};
@@ -439,7 +460,7 @@ const GLOBAL_CSS = `
     .infra-metrics-grid { grid-template-columns: repeat(3, 1fr) !important; }
     .blog-teaser-grid { grid-template-columns: 1fr 1fr !important; }
     section { padding-top: 48px !important; padding-bottom: 48px !important; }
-    section.hero-section { padding-top: 90px !important; }
+    section.hero-section, section.hero2 { padding-top: 96px !important; }
     .infra-section { padding-top: 32px !important; padding-bottom: 32px !important; }
   }
   @media (max-width: 480px) {
@@ -462,7 +483,7 @@ const GLOBAL_CSS = `
     margin-top: 1rem;
   }
   .scroll-counter {
-    font-family: 'DM Mono', 'Courier New', monospace;
+    font-family: 'DM Sans', system-ui, sans-serif;
     font-size: 0.68rem;
     color: rgba(250,247,242,0.4);
     letter-spacing: 0.05em;
@@ -596,7 +617,7 @@ function Logo({ inverted = false }: { inverted?: boolean }) {
           letterSpacing: "0.13em", color: textColor, lineHeight: 1.1, textTransform: "uppercase" }}>
           Pune Global Group
         </span>
-        <span style={{ fontFamily: F.italic, fontStyle: "italic", fontWeight: 400,
+        <span style={{ fontFamily: F.italic, fontStyle: "normal", fontWeight: 400,
           fontSize: "0.98rem", color: subColor, letterSpacing: "0.03em", lineHeight: 1.2 }}>
           Your Trusted Packaging Partner
         </span>
@@ -698,7 +719,7 @@ function AnimatedStat({ raw, label, note, animClass, numColor, labelColor, noteC
         color: labelColor ?? C.cream, letterSpacing: "0.05em", textTransform: "uppercase" }}>
         {label}
       </div>
-      <div style={{ fontFamily: F.italic, fontStyle: "italic",
+      <div style={{ fontFamily: F.italic, fontStyle: "normal",
         fontSize: "1.15rem", color: noteColor ?? "rgba(250,247,242,0.6)" }}>
         {note}
       </div>
@@ -781,223 +802,53 @@ function FloatingParticles() {
 /* Framer Motion shared easing */
 const heroEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-function Hero() {
-  const scrollToContact = () =>
-    document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+const WA_QUOTE = "https://wa.me/919823383230?text=" + encodeURIComponent("Hi, I'd like a quote for PP packaging. Part size / quantity: ");
 
-  const stats = [
-    { raw: "1M+ Ton", label: "Material Supplied", note: "and counting" },
-    { raw: "50+",     label: "Active Clients",    note: "across India" },
-    { raw: "21",      label: "States Served",     note: "nationwide" },
-    { raw: "1995",    label: "Established",       note: "Pune, Maharashtra" },
+function Hero() {
+  const facts = [
+    { value: "1995",    label: "In business since" },
+    { value: "50+",     label: "Active clients" },
+    { value: "21",      label: "States supplied" },
+    { value: "±1 mm",   label: "Custom sizing" },
   ];
 
   return (
-    <section className="hero-section" style={{
-      minHeight: "100vh", background: C.deepWarm,
-      display: "flex", flexDirection: "column", justifyContent: "center",
-      padding: "clamp(80px, 10vh, 110px) clamp(1.5rem, 5vw, 4rem) clamp(48px, 8vh, 80px)",
-      position: "relative", zIndex: 1,
-    }}>
-      <FloatingParticles />
-      <div className="hero-grid" style={{ maxWidth: "1400px", margin: "0 auto", width: "100%", position: "relative", zIndex: 1 }}>
-
-        {/* ── LEFT COLUMN ─────────────────────────────────────── */}
-        <div className="hero-text-col">
-          {/* Eyebrow — fade in + slide from left with slight blur */}
-          <motion.div
-            initial={{ opacity: 0, x: -30, filter: "blur(6px)" }}
-            animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-            transition={{ duration: 0.9, delay: 0.3, ease: heroEase }}
-            className="hero-eyebrow-anim"
-            style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "3rem" }}>
-            <span className="saffron-badge"><Typewriter text="Est. 1995 · Pune, India" delay={0.5} speed={40} /></span>
-            <div className="hero-eyebrow-divider" style={{ flex: 1, height: "1px", background: "rgba(250,247,242,0.25)" }} />
-            <span className="hero-eyebrow-est" style={{ fontFamily: F.body, fontSize: "0.7rem", color: "rgba(250,247,242,0.75)",
-              letterSpacing: "0.12em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
-              <Typewriter text="PP · Board · Paper" delay={1.5} speed={50} />
-            </span>
-          </motion.div>
-
-          {/* Headline */}
-          <h1 className="hero-headline" style={{
-            fontFamily: F.display, fontWeight: 900,
-            fontSize: "clamp(2.2rem, 4vw, 3.8rem)",
-            lineHeight: 1.06, color: C.charcoal,
-            letterSpacing: "-0.02em", marginBottom: "0",
-          }}>
-            <motion.span
-              initial={{ opacity: 0, y: 22 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.4, ease: heroEase }}
-              style={{ display: "block" }}>
-              Industrial Packaging for{" "}
-              <span style={{
-                background: "linear-gradient(135deg, #E0EEFF 0%, #5B9BD5 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}>Automotive, Pharma &amp; Electronics</span>
-            </motion.span>
-            <motion.span
-              className="hero-subtitle-line"
-              initial={{ opacity: 0, y: 22 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.6, ease: heroEase }}
-              style={{
-                display: "block", fontSize: "0.72em", fontWeight: 400,
-                letterSpacing: "0em", color: "rgba(250,247,242,0.55)", marginTop: "0.22em",
-              }}>
-              Precision PP Trays, Boxes &amp; Separators — Made in India Since 1995
-            </motion.span>
+    <section className="hero2" style={{ background: C.deepWarm, padding: "clamp(104px, 14vh, 140px) clamp(1.25rem, 5vw, 4rem) clamp(48px, 7vh, 72px)" }}>
+      <div className="hero2-grid" style={{ maxWidth: "1280px", margin: "0 auto" }}>
+        <div>
+          <p style={{ fontFamily: F.body, fontSize: "0.85rem", fontWeight: 600, color: "#9CC3EA", margin: "0 0 1.25rem", letterSpacing: "0.02em" }}>
+            PP corrugated packaging, made in Pune since 1995
+          </p>
+          <h1 style={{ fontFamily: F.display, fontWeight: 700, fontSize: "clamp(2.1rem, 4.2vw, 3.6rem)", lineHeight: 1.1, letterSpacing: "-0.015em", color: C.cream, margin: 0 }}>
+            Returnable PP boxes, trays and separators, made to your part size.
           </h1>
-
-          {/* Rule — scale from left */}
-          <motion.div
-            className="hero-rule"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.85, delay: 0.7, ease: heroEase }}
-            style={{ height: "1px", background: "rgba(250,247,242,0.12)", margin: "2.75rem 0", transformOrigin: "left" }} />
-
-          {/* Body + CTAs — fade up together */}
-          <motion.div
-            className="hero-body-cta"
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, delay: 0.8, ease: heroEase }}
-          >
-            <p style={{ fontFamily: F.body, fontSize: "1.05rem", lineHeight: 1.85,
-              color: "rgba(250,247,242,0.65)", marginBottom: "2.5rem", fontWeight: 300 }}>
-              Pune Global Group manufactures precision PP trays, separators, boxes
-              and crates for automotive, pharma and electronics industries — export-ready,
-              custom-spec, from our Pune facility. We also convert FBB sheets and
-              trade paper &amp; board grades across 21 states.
-            </p>
-            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-              <Link href="/products" className="btn-primary" style={{ textDecoration: "none" }}>
-                View Products <IconArrowRight size={14} />
-              </Link>
-              <button className="btn-outline" onClick={scrollToContact}>
-                Get a Quote <IconChevronRight size={14} />
-              </button>
-            </div>
-          </motion.div>
-
-        </div>
-
-        {/* ── RIGHT COLUMN — image + stats beneath ───────── */}
-        <div className="hero-img-col" style={{ display: "grid", gridTemplateRows: "auto 1fr auto", gap: 0 }}>
-          <div className="hero-carousel-box" style={{
-            position: "relative",
-            height: "clamp(400px, 60vh, 620px)",
-            borderRadius: "10px",
-            overflow: "hidden",
-            boxShadow: "0 8px 48px rgba(0,0,0,0.30)",
-          }}>
-          <div className="hero-carousel-wrap">
-            {[
-              "/hero-homepage-v2.jpg",
-              "/hero-infrastructure.jpg",
-              "/infrastructure/facility/dispatch-area.jpg",
-              "/hero-pp-family.jpg",
-              "/infrastructure/facility/quality-control.jpg",
-              "/hero-paper-family.jpg",
-              "/infrastructure/facility/storage-warehouse.jpg",
-            ].map((src, i) => (
-              <OptImg key={src} src={src} alt="" className="hero-carousel-img"
-                sizes="(max-width: 960px) 100vw, 55vw" priority={i === 0} />
-            ))}
-          </div>
-
-          {/* Certification badge overlay — ISO badges gentle fade in */}
-          <motion.div
-            className="hero-cert-badge"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.2, ease: heroEase }}
-            style={{
-              position: "absolute", bottom: "1.5rem", right: "1.5rem",
-              background: "rgba(15,20,30,0.45)",
-              backdropFilter: "blur(20px) saturate(1.4)",
-              WebkitBackdropFilter: "blur(20px) saturate(1.4)",
-              borderRadius: "8px",
-              padding: "0.8rem 1.1rem",
-              display: "flex", alignItems: "center", gap: "0.75rem",
-              border: "1px solid rgba(250,247,242,0.15)",
-            }}>
-            <IconCircleCheck size={18} style={{ color: C.saffron, flexShrink: 0 }} />
-            <div>
-              <div className="hero-cert-label" style={{
-                fontFamily: F.body, fontSize: "0.56rem", letterSpacing: "0.15em",
-                textTransform: "uppercase", color: "rgba(250,247,242,0.45)", marginBottom: "3px",
-              }}>
-                Certified Quality
-              </div>
-              <div className="hero-cert-text" style={{
-                fontFamily: F.body, fontSize: "0.76rem", fontWeight: 500,
-                color: C.cream, letterSpacing: "0.01em",
-              }}>
-                ISO 9001:2015 · FSC · BRC
-              </div>
-            </div>
-          </motion.div>
-          </div>
-
-          {/* Spacer */}
-          <div className="hero-spacer" />
-
-          {/* Stats — 4 columns under the image, aligned with CTAs on left */}
-          <div className="hero-stats-mini" style={{
-            display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 0, alignSelf: "end",
-            border: `1px solid rgba(250,247,242,0.08)`,
-            borderRadius: "8px",
-            overflow: "hidden",
-          }}>
-            {stats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 24, scale: 0.92 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 70,
-                  damping: 16,
-                  delay: 1.2 + i * 0.35,
-                }}
-                style={{
-                  padding: "0.85rem 0.75rem",
-                  textAlign: "center",
-                  borderRight: i < stats.length - 1 ? "1px solid rgba(250,247,242,0.08)" : "none",
-                  background: i % 2 === 0 ? "rgba(250,247,242,0.03)" : "transparent",
-                }}>
-                <div className="hero-stat-num" style={{
-                  fontFamily: F.display, fontWeight: 700,
-                  fontSize: "1.35rem", color: C.charcoal, lineHeight: 1,
-                  marginBottom: "4px",
-                }}>
-                  {stat.raw}
-                </div>
-                <div className="hero-stat-label" style={{
-                  fontFamily: F.body, fontWeight: 500, fontSize: "0.58rem",
-                  color: C.warm, letterSpacing: "0.06em", textTransform: "uppercase",
-                  marginBottom: "2px",
-                }}>
-                  {stat.label}
-                </div>
-                <div className="hero-stat-note" style={{
-                  fontFamily: F.italic, fontStyle: "italic",
-                  fontSize: "0.72rem", color: "rgba(250,247,242,0.45)",
-                }}>
-                  {stat.note}
-                </div>
-              </motion.div>
-            ))}
+          <p style={{ fontFamily: F.body, fontSize: "1.1rem", lineHeight: 1.7, color: "rgba(250,247,242,0.78)", margin: "1.5rem 0 2rem", maxWidth: "36rem" }}>
+            We make PP corrugated packaging for automotive, pharma and electronics plants.
+            Send us your part size or a drawing and we&apos;ll come back with a design and a price.
+          </p>
+          <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
+            <Link href="/contact" className="btn2 btn2-primary">Request a quote</Link>
+            <a href={WA_QUOTE} target="_blank" rel="noopener noreferrer" className="btn2 btn2-ghost">WhatsApp us</a>
+            <Link href="/products/pp-corrugated" className="btn2-link">Browse PP products <IconArrowRight size={14} /></Link>
           </div>
         </div>
-
+        <div className="hero2-img">
+          <OptImg src="/hero-pp-family.jpg" alt="PP corrugated boxes, trays, bins and separators" priority
+            sizes="(max-width: 960px) 100vw, 45vw"
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", borderRadius: "8px" }} />
+        </div>
       </div>
+      <dl className="hero2-facts" style={{ maxWidth: "1280px", margin: "clamp(2.5rem, 6vh, 4rem) auto 0" }}>
+        {facts.map((f) => (
+          <div key={f.label}>
+            <dt style={{ fontFamily: F.body, fontSize: "0.85rem", color: "rgba(250,247,242,0.7)", order: 2 }}>{f.label}</dt>
+            <dd style={{ fontFamily: F.display, fontSize: "1.75rem", fontWeight: 700, color: C.cream, margin: 0, order: 1 }}>{f.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <p style={{ maxWidth: "1280px", margin: "1.5rem auto 0", fontFamily: F.body, fontSize: "0.95rem", color: "rgba(250,247,242,0.7)" }}>
+        Buying FBB, kraft or duplex board? <Link href="/products/paper-board" style={{ color: "#9CC3EA", textDecoration: "underline" }}>See our paper &amp; board grades</Link>
+      </p>
     </section>
   );
 }
@@ -1027,7 +878,7 @@ function MarqueeTicker() {
         {repeated.map((item, i) => (
           <span key={i} style={{
             display: "inline-flex", alignItems: "center",
-            fontFamily: F.italic, fontStyle: "italic",
+            fontFamily: F.italic, fontStyle: "normal",
             fontSize: "1.08rem", letterSpacing: "0.01em",
             color: C.warm, whiteSpace: "nowrap", padding: "0 2.5rem",
           }}>
@@ -1049,7 +900,6 @@ const PP_PRODUCTS = [
     imgs: [
       "/products/pp/boxes/box-01-hero.jpg",
       "/products/pp/boxes/box-01-engineering.jpg",
-      "/products/pp/boxes/box-01-usecase.jpg",
     ],
     slug: "pp-box-open-top-riveted",
   },
@@ -1060,7 +910,6 @@ const PP_PRODUCTS = [
     imgs: [
       "/products/pp/separators/sep-01-hero.jpg",
       "/products/pp/separators/sep-01-engineering.jpg",
-      "/products/pp/separators/sep-01-usecase.jpg",
     ],
     slug: "pp-sep-cross-partition",
   },
@@ -1071,7 +920,6 @@ const PP_PRODUCTS = [
     imgs: [
       "/products/pp/bins/bin-02-hero.jpg",
       "/products/pp/bins/bin-02-engineering.jpg",
-      "/products/pp/bins/bin-02-usecase.jpg",
     ],
     slug: "pp-bin-hopper-front",
   },
@@ -1082,7 +930,6 @@ const PP_PRODUCTS = [
     imgs: [
       "/products/pp/layer-pads/layerpad-hero.jpg",
       "/products/pp/layer-pads/layerpad-engineering.jpg",
-      "/products/pp/layer-pads/layerpad-usecase.jpg",
     ],
     slug: "pp-layer-pad-heavy-duty",
   },
@@ -1093,7 +940,6 @@ const PP_PRODUCTS = [
     imgs: [
       "/products/pp/trays/tray-esd-antistatic-hero.jpg",
       "/products/pp/trays/tray-esd-antistatic-cad.jpg",
-      "/products/pp/trays/tray-esd-antistatic-usecase1.jpg",
     ],
     slug: "pp-tray-esd-antistatic",
   },
@@ -1471,21 +1317,21 @@ function ProductsSection() {
       name: "Cyber XLPac GC1",
       spec: "ITC PSPD · Virgin FBB · GC1",
       desc: "India's benchmark FBB — coated both sides, virgin fibre, FSC certified. 200–400 GSM.",
-      imgs: ["/products/paper/cyber-xlpac-gc1-hero.jpg", "/products/paper/cyber-xlpac-gc1-reel.jpg", "/products/paper/cyber-xlpac-gc1-stack.jpg", "/products/paper/cyber-xlpac-gc1-usecase.jpg"],
+      imgs: ["/products/paper/cyber-xlpac-gc1-hero.jpg", "/products/paper/cyber-xlpac-gc1-reel.jpg", "/products/paper/cyber-xlpac-gc1-stack.jpg"],
       slug: "cyber-xlpac-gc1",
     },
     {
       name: "Carte Lumina",
       spec: "ITC PSPD · Luxury Virgin Board",
       desc: "Avant-garde luxury virgin board for cosmetics, perfumes and premium brand packaging. 200–400 GSM.",
-      imgs: ["/products/paper/carte-lumina-hero.jpg", "/products/paper/carte-lumina-reel.jpg", "/products/paper/carte-lumina-stack.jpg", "/products/paper/carte-lumina-usecase.jpg"],
+      imgs: ["/products/paper/carte-lumina-hero.jpg", "/products/paper/carte-lumina-reel.jpg", "/products/paper/carte-lumina-stack.jpg"],
       slug: "carte-lumina",
     },
     {
       name: "Eco Natura",
       spec: "ITC PSPD · Recycled Greyback",
       desc: "Best-in-class recycled greyback board — consistent caliper, smooth filling line performance. 230–400 GSM.",
-      imgs: ["/products/paper/eco-natura-hero.jpg", "/products/paper/eco-natura-reel.jpg", "/products/paper/eco-natura-stack.jpg", "/products/paper/eco-natura-usecase.jpg"],
+      imgs: ["/products/paper/eco-natura-hero.jpg", "/products/paper/eco-natura-reel.jpg", "/products/paper/eco-natura-stack.jpg"],
       slug: "eco-natura",
     },
   ];
@@ -1495,7 +1341,7 @@ function ProductsSection() {
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -1505,29 +1351,28 @@ function ProductsSection() {
             letterSpacing: "0.18em", textTransform: "uppercase",
             color: "#5B9BD5", display: "block", marginBottom: "0.85rem",
           }}>
-            Our Products
+            What we make
           </span>
           <motion.h2
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
             style={{ fontFamily: F.italic, fontWeight: 400,
             fontSize: "clamp(2rem, 4vw, 3rem)", color: C.cream,
             letterSpacing: "-0.01em", lineHeight: 1.1, margin: "0 0 1.1rem",
-            fontStyle: "italic" }}>
-            From Raw Board to Finished Packaging
+            fontStyle: "normal" }}>
+            PP packaging we manufacture, and board we supply
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
             style={{ fontFamily: F.body, fontSize: "1.0625rem", color: "rgba(250,247,242,0.60)",
             lineHeight: 1.75, maxWidth: "560px", margin: "0 0 2rem", fontWeight: 300 }}>
-            Two manufacturing verticals — PP corrugated packaging and paper/board
-            conversion — serving automotive, pharma, FMCG and export industries
-            across 21 states.
+            Custom PP corrugated boxes, trays, bins and separators from our Pune plant.
+            Paper and board grades, cut to size or by the reel, supplied from stock.
           </motion.p>
           <div style={{ width: "48px", height: "1px", background: "rgba(250,247,242,0.15)" }} />
         </motion.div>
@@ -1536,7 +1381,7 @@ function ProductsSection() {
 
       {/* Two-panel product showcase */}
       <motion.div className="hp-cat-row"
-        initial={{ opacity: 0, scale: 0.97 }}
+        initial={false}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}>
@@ -1617,132 +1462,53 @@ function InfraMetricValue({ value }: { value: string }) {
   );
 }
 
-/* ─── Infrastructure Callout ─────────────────────────────────────────────────── */
+/* ─── How ordering works + facility numbers ──────────────────────────────────── */
 function InfraCallout() {
+  const steps = [
+    { n: "1", title: "Send your requirement", body: "Part size, quantity and how the packaging is used. A drawing or a photo of the part helps." },
+    { n: "2", title: "Get a design and price", body: "We suggest the box, tray or partition layout, board thickness and a unit price." },
+    { n: "3", title: "Approve a sample", body: "Check fit with your parts on your line before the order is confirmed." },
+    { n: "4", title: "Production and delivery", body: "Made at our MIDC Sanaswadi plant in Pune and delivered to your site." },
+  ];
   const metrics = [
-    { value: "50 T/Day", label: "Processing Capacity" },
-    { value: "±0.3 mm",  label: "Sheet Tolerance" },
-    { value: "2500 mm",  label: "Max Reel Width" },
-    { value: "15400 mm", label: "Max Sheet Length" },
-    { value: "6",        label: "In-House Machines" },
-    { value: "48 Hr",    label: "Typical Turnaround" },
+    { value: "50 T/day", label: "Processing capacity" },
+    { value: "±0.3 mm",  label: "Sheet tolerance" },
+    { value: "2500 mm",  label: "Max reel width" },
+    { value: "6",        label: "In-house machines" },
   ];
 
   return (
-    <div className="infra-section" style={{ background: C.parchment, padding: "clamp(32px, 6vw, 64px) clamp(1.5rem, 5vw, 4rem)", position: "relative", overflow: "hidden" }}>
-
-      {/* Raindrop pulse keyframes */}
-      <style>{`
-        @keyframes rp1 { 0%,100% { opacity: 0.42; } 50% { opacity: 0.54; } }
-        @keyframes rp2 { 0%,100% { opacity: 0.53; } 50% { opacity: 0.43; } }
-        @keyframes rp3 { 0%,100% { opacity: 0.44; } 50% { opacity: 0.54; } }
-        @keyframes rp4 { 0%,100% { opacity: 0.52; } 50% { opacity: 0.42; } }
-      `}</style>
-
-      {/* Background — 4 best images side by side */}
-      <div aria-hidden style={{
-        position: "absolute", inset: 0,
-        display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
-        gap: 0,
-        filter: "grayscale(0.2)",
-      }}>
-        {[
-          { src: "/infrastructure/machines/synchro-sheeter-wide.jpg",    anim: "rp1 3.5s ease-in-out infinite" },
-          { src: "/infrastructure/facility/converting-floor.jpg",        anim: "rp2 4.6s ease-in-out 0.8s infinite" },
-          { src: "/infrastructure/support/full-product-lineup.jpg",      anim: "rp3 3.2s ease-in-out 1.5s infinite" },
-          { src: "/infrastructure/facility/quality-control.jpg",         anim: "rp4 4.2s ease-in-out 0.4s infinite" },
-        ].map((item) => (
-          <OptImg key={item.src} src={item.src} alt="" sizes="25vw" style={{
-            width: "100%", height: "100%", objectFit: "cover", display: "block",
-            animation: item.anim,
-          }} />
-        ))}
-      </div>
-
-      {/* Soft wash over images for text clarity */}
-      <div aria-hidden style={{
-        position: "absolute", inset: 0,
-        background: "linear-gradient(180deg, rgba(15,26,46,0.80) 0%, rgba(15,26,46,0.75) 50%, rgba(15,26,46,0.80) 100%)",
-      }} />
-
-      <div style={{ maxWidth: "1400px", margin: "0 auto", position: "relative", zIndex: 1 }}>
-
-        {/* 2-col: text + metrics left, facility photo right */}
-        <div style={{ maxWidth: "100%" }}>
-
-          {/* Left: header + metrics */}
-          <div>
-            <motion.div className="infra-callout-header"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              style={{
-              display: "flex", alignItems: "center", justifyContent: "space-between",
-              gap: "clamp(1rem, 2vw, 2rem)", flexWrap: "wrap", marginBottom: "clamp(1.25rem, 3vw, 2.5rem)",
-            }}>
-              <div>
-                <span style={{
-                  display: "inline-block",
-                  fontFamily: F.body, fontStyle: "normal",
-                  fontSize: "0.62rem", fontWeight: 600,
-                  letterSpacing: "0.14em", textTransform: "uppercase",
-                  color: "#5B9BD5",
-                  border: "1px solid rgba(91,155,213,0.35)",
-                  borderRadius: "999px", padding: "0.3em 1em",
-                  marginBottom: "0.85rem",
-                }}>
-                  MIDC Sanaswadi, Pune · Converting Facility
-                </span>
-                <h2 style={{ fontFamily: F.display, fontWeight: 600,
-                  fontSize: "clamp(1.5rem, 2.5vw, 2.2rem)", color: C.charcoal,
-                  lineHeight: 1.2, letterSpacing: "-0.02em" }}>
-                  Cut-to-size. Wound to spec.<br />
-                  <em style={{ fontWeight: 400, opacity: 0.65 }}>Shipped on time.</em>
-                </h2>
-              </div>
-              <Link href="/infrastructure" style={{
-                display: "inline-flex", alignItems: "center", gap: "8px",
-                fontFamily: F.body, fontSize: "0.98rem", fontWeight: 500,
-                color: C.charcoal, textDecoration: "none", letterSpacing: "0.07em",
-                textTransform: "uppercase",
-                border: `1px solid rgba(250,247,242,0.22)`,
-                padding: "11px 22px", borderRadius: "1px", whiteSpace: "nowrap",
-                transition: "border-color 0.2s, background 0.2s",
-              }}
-              onMouseEnter={e => { const a = e.currentTarget; a.style.borderColor = "rgba(250,247,242,0.5)"; a.style.background = "rgba(250,247,242,0.05)"; }}
-              onMouseLeave={e => { const a = e.currentTarget; a.style.borderColor = "rgba(250,247,242,0.22)"; a.style.background = "transparent"; }}>
-                View Full Facility <IconArrowRight size={13} />
-              </Link>
-            </motion.div>
-
-            <div className="infra-metrics-grid" style={{
-              display: "grid", gridTemplateColumns: "repeat(6, 1fr)",
-              gap: "1px", background: "rgba(250,247,242,0.10)",
-            }}>
-              {metrics.map((m, index) => (
-                <motion.div key={m.label}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: index * 0.1 }}
-                  style={{
-                  background: C.parchment, padding: "1.5rem 1rem", textAlign: "center",
-                }}>
-                  <InfraMetricValue value={m.value} />
-                  <div style={{ fontFamily: F.body, fontSize: "0.66rem",
-                    color: "rgba(250,247,242,0.55)", letterSpacing: "0.07em",
-                    textTransform: "uppercase", marginTop: "6px" }}>
-                    {m.label}
-                  </div>
-                </motion.div>
-              ))}
+    <section style={{ background: C.parchment, padding: "clamp(56px, 8vw, 96px) clamp(1.25rem, 5vw, 4rem)" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+        <h2 style={{ fontFamily: F.display, fontWeight: 700, fontSize: "clamp(1.6rem, 2.8vw, 2.3rem)", color: C.cream, margin: "0 0 0.75rem" }}>
+          How ordering works
+        </h2>
+        <p style={{ fontFamily: F.body, fontSize: "1.05rem", color: "rgba(250,247,242,0.75)", margin: "0 0 2.5rem", maxWidth: "40rem" }}>
+          Most PP packaging we make is custom. This is the usual path from enquiry to delivery.
+        </p>
+        <ol className="how-steps">
+          {steps.map((s) => (
+            <li key={s.n}>
+              <span className="how-num" aria-hidden="true">{s.n}</span>
+              <h3 style={{ fontFamily: F.body, fontSize: "1.1rem", fontWeight: 600, color: C.cream, margin: "0 0 0.4rem" }}>{s.title}</h3>
+              <p style={{ fontFamily: F.body, fontSize: "0.98rem", lineHeight: 1.6, color: "rgba(250,247,242,0.75)", margin: 0 }}>{s.body}</p>
+            </li>
+          ))}
+        </ol>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem 2.5rem", alignItems: "center", marginTop: "3rem", paddingTop: "2rem", borderTop: "1px solid rgba(250,247,242,0.12)" }}>
+          {metrics.map((m) => (
+            <div key={m.label}>
+              <div style={{ fontFamily: F.display, fontWeight: 700, fontSize: "1.5rem", color: C.cream }}>{m.value}</div>
+              <div style={{ fontFamily: F.body, fontSize: "0.85rem", color: "rgba(250,247,242,0.7)" }}>{m.label}</div>
             </div>
+          ))}
+          <div style={{ marginLeft: "auto", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+            <Link href="/infrastructure" className="btn2 btn2-ghost">See the facility</Link>
+            <Link href="/contact" className="btn2 btn2-primary">Start a quote</Link>
           </div>
-
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -2000,7 +1766,7 @@ function BlogTeaser() {
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
 
         <motion.div className="blog-teaser-header"
-          initial={{ opacity: 0, y: 30 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -2009,12 +1775,11 @@ function BlogTeaser() {
           marginBottom: "3rem", flexWrap: "wrap", gap: "1rem",
         }}>
           <div>
-            <span className="eyebrow" style={{ color: "rgba(250,247,242,0.45)" }}>Knowledge Hub</span>
+            <span className="eyebrow" style={{ color: "rgba(250,247,242,0.45)" }}>From the blog</span>
             <h2 style={{ fontFamily: F.display, fontWeight: 700,
               fontSize: "clamp(1.8rem, 3vw, 2.6rem)", color: C.cream,
               letterSpacing: "-0.02em", lineHeight: 1.1 }}>
-              Packaging Intelligence,<br />
-              <em style={{ fontWeight: 400 }}>Free to Use.</em>
+              Guides for packaging buyers
             </h2>
           </div>
           <Link href="/blog" style={{
@@ -2025,7 +1790,7 @@ function BlogTeaser() {
             borderBottom: "1px solid rgba(250,247,242,0.22)", paddingBottom: "3px",
             whiteSpace: "nowrap",
           }}>
-            All Articles <IconArrowRight size={12} />
+            All articles <IconArrowRight size={12} />
           </Link>
         </motion.div>
 
@@ -2034,7 +1799,7 @@ function BlogTeaser() {
             gap: "1px", background: "rgba(250,247,242,0.08)" }}>
           {posts.map((post, i) => (
             <motion.div key={post.slug}
-              initial={{ opacity: 0, y: 30 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: i * 0.1 }}>
@@ -2059,7 +1824,7 @@ function BlogTeaser() {
                   letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(250,247,242,0.45)" }}>
                   {post.category}
                 </span>
-                <span style={{ fontFamily: F.italic, fontStyle: "italic",
+                <span style={{ fontFamily: F.italic, fontStyle: "normal",
                   fontSize: "0.92rem", color: "rgba(250,247,242,0.35)" }}>
                   {post.read}
                 </span>
@@ -2076,7 +1841,7 @@ function BlogTeaser() {
                 color: "rgba(250,247,242,0.65)", letterSpacing: "0.05em", display: "inline-flex",
                 alignItems: "center", gap: "4px",
                 borderBottom: "1px solid rgba(250,247,242,0.22)", paddingBottom: "1px" }}>
-                Read Article <IconChevronRight size={11} />
+                Read article <IconChevronRight size={11} />
               </span>
               </div>
               </Link>
@@ -2097,7 +1862,7 @@ function AboutSection() {
 
           {/* Left */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
+            initial={false}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -2154,7 +1919,7 @@ function AboutSection() {
 
           {/* Right — key figures card */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
+            initial={false}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
@@ -2228,232 +1993,29 @@ function AboutSection() {
   );
 }
 
-/* ─── Contact Section ────────────────────────────────────────────────────────── */
+/* ─── Quote CTA (the full form lives on /contact) ────────────────────────────── */
 function ContactSection() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
-  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!form.name || !form.email || !form.message) return;
-    setStatus("submitting");
-    try {
-      await emailjs.send(
-        "service_ybv3hbj",
-        "template_njm152v",
-        {
-          name: form.name,
-          email: form.email,
-          phone: form.phone || "—",
-          message: form.message,
-        },
-        { publicKey: "LxaNXYpu9X7rnTnEn" }
-      );
-      setStatus("success");
-      setForm({ name: "", email: "", phone: "", message: "" });
-    } catch (err) {
-      console.error("Contact form error:", err);
-      setStatus("error");
-    }
-  };
-
-  const contactItems = [
-    { icon: <IconPhone size={16} color={C.saffron} />, label: "Phone",
-      value: "+91 98233 83230", href: "tel:+919823383230" },
-    { icon: <IconMail size={16} color={C.saffron} />, label: "Email",
-      value: "yogesh.sahu@puneglobalgroup.in", href: "mailto:yogesh.sahu@puneglobalgroup.in" },
-    { icon: <IconMapPin size={16} color={C.saffron} />, label: "Office",
-      value: "206 Gulmohar Center Point, Pune 411006, Maharashtra", href: null },
-    { icon: <IconBuildingFactory2 size={16} color={C.saffron} />, label: "Factory",
-      value: "108 BU Bhandari MIDC, Sanaswadi 412208, Pune", href: null },
-  ];
-
   return (
-    <section id="contact" style={{ background: C.deepWarm, padding: "100px clamp(1.5rem, 5vw, 4rem)" }}>
-      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-
-        <div className="sr" style={{ marginBottom: "3.5rem" }}>
-          <span className="eyebrow">Get In Touch</span>
-          <h2 style={{ fontFamily: F.display, fontWeight: 700,
-            fontSize: "clamp(2rem, 4vw, 3.2rem)", color: C.charcoal,
-            letterSpacing: "-0.02em", lineHeight: 1.25, paddingBottom: "0.1em" }}>
-            Start Your Packaging Project.
+    <section id="contact" style={{ background: C.deepWarm, padding: "clamp(56px, 8vw, 96px) clamp(1.25rem, 5vw, 4rem)" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto", display: "flex", flexWrap: "wrap", gap: "2rem", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid rgba(250,247,242,0.12)", paddingTop: "clamp(40px, 6vw, 64px)" }}>
+        <div style={{ maxWidth: "40rem" }}>
+          <h2 style={{ fontFamily: F.display, fontWeight: 700, fontSize: "clamp(1.7rem, 3vw, 2.5rem)", color: C.cream, margin: "0 0 0.75rem" }}>
+            Need packaging for a part?
           </h2>
+          <p style={{ fontFamily: F.body, fontSize: "1.05rem", lineHeight: 1.7, color: "rgba(250,247,242,0.78)", margin: 0 }}>
+            Tell us the part size and quantity. We reply within one working day.
+            Prefer to talk? Call <a href="tel:+919823383230" style={{ color: "#9CC3EA", textDecoration: "underline" }}>+91 98233 83230</a>, Monday to Saturday, 9:30 am to 6:30 pm.
+          </p>
         </div>
-
-        <div className="contact-grid" style={{ display: "flex", gap: "4rem", alignItems: "flex-start" }}>
-
-          {/* Contact info */}
-          <div className="sr-left" style={{ flex: "1 1 40%" }}>
-            <div style={{ background: C.parchment, border: `1px solid ${C.borderMid}`, padding: "2.5rem" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px",
-                paddingBottom: "1.5rem", borderBottom: `2px solid ${C.saffron}`, marginBottom: "2rem" }}>
-                <TuriyaLogo size={34} onDark />
-                <div>
-                  <div style={{ fontFamily: F.body, fontWeight: 600, fontSize: "1.1rem",
-                    color: C.charcoal, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                    Pune Global Group
-                  </div>
-                  <div style={{ fontFamily: F.italic, fontStyle: "italic",
-                    fontSize: "0.98rem", color: C.taupe }}>
-                    Paper &amp; PP Packaging Solutions
-                  </div>
-                </div>
-              </div>
-
-              {contactItems.map((item) => (
-                <div key={item.label} style={{ display: "flex", gap: "1rem",
-                  alignItems: "flex-start", marginBottom: "1.5rem" }}>
-                  <div style={{ width: "34px", height: "34px",
-                    background: "rgba(200,184,154,0.10)", borderRadius: "1px",
-                    display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    {item.icon}
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: F.body, fontWeight: 500, fontSize: "0.68rem",
-                      color: C.saffron, textTransform: "uppercase", letterSpacing: "0.08em",
-                      marginBottom: "3px" }}>
-                      {item.label}
-                    </div>
-                    {item.href ? (
-                      <a href={item.href} style={{ fontFamily: F.body, fontSize: "1.1rem",
-                        color: C.charcoal, lineHeight: 1.5, transition: "color 0.2s" }}
-                        onMouseEnter={e => (e.currentTarget.style.color = C.saffron)}
-                        onMouseLeave={e => (e.currentTarget.style.color = C.charcoal)}>
-                        {item.value}
-                      </a>
-                    ) : (
-                      <div style={{ fontFamily: F.body, fontSize: "1.1rem",
-                        color: C.charcoal, lineHeight: 1.5 }}>
-                        {item.value}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-
-              <div style={{ marginTop: "2rem", paddingTop: "1.5rem", borderTop: `1px solid ${C.border}`,
-                fontFamily: F.italic, fontStyle: "italic", fontSize: "1.02rem",
-                color: C.taupe, lineHeight: 1.6 }}>
-                Monday – Saturday · 9:30 AM – 6:30 PM IST
-              </div>
-            </div>
-          </div>
-
-          {/* Form */}
-          <div className="sr-right" style={{ flex: "1 1 55%" }}>
-            <div style={{ background: C.parchment, border: `1px solid ${C.borderMid}`,
-              borderTop: `3px solid ${C.saffron}`, padding: "2.5rem" }}>
-              <h3 style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1.4rem",
-                color: C.charcoal, marginBottom: "0.5rem" }}>
-                Request a Quote
-              </h3>
-              <p style={{ fontFamily: F.body, fontSize: "1.08rem", color: C.taupe,
-                lineHeight: 1.65, marginBottom: "2rem", fontWeight: 300 }}>
-                Share your packaging requirements and our team will respond within one business day.
-              </p>
-
-              {status === "success" ? (
-                <div style={{ background: "rgba(212,134,14,0.06)", border: `1px solid rgba(212,134,14,0.25)`,
-                  padding: "2rem", textAlign: "center" }}>
-                  <IconCircleCheck size={38} style={{ color: C.saffron, marginBottom: "1rem" }} />
-                  <div style={{ fontFamily: F.display, fontWeight: 600, fontSize: "1.15rem",
-                    color: C.charcoal, marginBottom: "0.5rem" }}>
-                    Message Received
-                  </div>
-                  <div style={{ fontFamily: F.body, fontSize: "1.1rem", color: C.taupe,
-                    lineHeight: 1.6, fontWeight: 300 }}>
-                    Thank you for reaching out. We will respond within one business day.
-                  </div>
-                  <button className="btn-primary" style={{ marginTop: "1.5rem" }}
-                    onClick={() => setStatus("idle")}>
-                    Send Another Message
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                  <div className="contact-form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
-                    <div>
-                      <label style={{ display: "block", fontFamily: F.body, fontWeight: 500,
-                        fontSize: "0.72rem", color: C.warm, letterSpacing: "0.06em",
-                        textTransform: "uppercase", marginBottom: "6px" }}>
-                        Name <span style={{ color: C.saffron }}>*</span>
-                      </label>
-                      <input type="text" className="form-input" placeholder="Your full name"
-                        value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} required />
-                    </div>
-                    <div>
-                      <label style={{ display: "block", fontFamily: F.body, fontWeight: 500,
-                        fontSize: "0.72rem", color: C.warm, letterSpacing: "0.06em",
-                        textTransform: "uppercase", marginBottom: "6px" }}>
-                        Phone
-                      </label>
-                      <input type="tel" className="form-input" placeholder="+91 XXXXX XXXXX"
-                        value={form.phone} onChange={e => setForm(p => ({ ...p, phone: e.target.value }))} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label style={{ display: "block", fontFamily: F.body, fontWeight: 500,
-                      fontSize: "0.72rem", color: C.warm, letterSpacing: "0.06em",
-                      textTransform: "uppercase", marginBottom: "6px" }}>
-                      Email <span style={{ color: C.saffron }}>*</span>
-                    </label>
-                    <input type="email" className="form-input" placeholder="your@email.com"
-                      value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} required />
-                  </div>
-
-                  <div>
-                    <label style={{ display: "block", fontFamily: F.body, fontWeight: 500,
-                      fontSize: "0.72rem", color: C.warm, letterSpacing: "0.06em",
-                      textTransform: "uppercase", marginBottom: "6px" }}>
-                      Message <span style={{ color: C.saffron }}>*</span>
-                    </label>
-                    <textarea className="form-input" rows={5}
-                      placeholder="Describe your packaging requirements — product type, quantity, dimensions, material preferences..."
-                      value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
-                      required style={{ resize: "vertical", minHeight: "130px" }} />
-                  </div>
-
-                  {status === "error" && (
-                    <div style={{ background: "rgba(180,30,30,0.05)", border: "1px solid rgba(180,30,30,0.2)",
-                      padding: "11px 15px", fontFamily: F.body, fontSize: "0.86rem", color: "#B41E1E" }}>
-                      Something went wrong. Please try again or call us directly.
-                    </div>
-                  )}
-
-                  <button type="submit" className="btn-primary"
-                    disabled={status === "submitting"}
-                    style={{
-                      color: "#fff",
-                      border: "none", padding: "13px 32px",
-                      fontFamily: F.body, fontWeight: 600,
-                      fontSize: "0.82rem", letterSpacing: "0.09em",
-                      textTransform: "uppercase", cursor: "pointer",
-                      borderRadius: "2px",
-                      transition: "background 0.2s, transform 0.15s",
-                      alignSelf: "flex-start", opacity: status === "submitting" ? 0.7 : 1,
-                    }}>
-                    {status === "submitting"
-                      ? <><IconLoader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> Sending...</>
-                      : <>Send Request <IconArrowRight size={14} /></>}
-                  </button>
-
-                  <p style={{ fontFamily: F.italic, fontStyle: "italic",
-                    fontSize: "1.15rem", color: C.taupe, opacity: 0.7 }}>
-                    We respect your privacy. Your information will never be shared.
-                  </p>
-                </form>
-              )}
-            </div>
-          </div>
+        <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+          <Link href="/contact" className="btn2 btn2-primary">Request a quote</Link>
+          <a href={WA_QUOTE} target="_blank" rel="noopener noreferrer" className="btn2 btn2-ghost">WhatsApp us</a>
         </div>
       </div>
     </section>
   );
 }
 
-/* ─── Page ───────────────────────────────────────────────────────────────────── */
 export default function HomePage() {
   useScrollReveal();
 
@@ -2468,7 +2030,6 @@ export default function HomePage() {
         <ProductsSection />
         <InfraCallout />
         <BlogTeaser />
-        <MarqueeTicker />
         <ContactSection />
       </main>
     </>

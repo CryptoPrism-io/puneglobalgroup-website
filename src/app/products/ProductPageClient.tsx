@@ -50,9 +50,9 @@ const C = {
 };
 
 const F = {
-  display: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
-  body: "'DM Sans', 'Plus Jakarta Sans', sans-serif",
-  italic: "'Cormorant Garamond', Georgia, serif",
+  display: "'Playfair Display', 'DM Sans', system-ui, sans-serif",
+  body: "'DM Sans', system-ui, sans-serif",
+  italic: "'DM Sans', system-ui, sans-serif",
 };
 
 // ————————————————————————————————————————————
@@ -61,12 +61,12 @@ const F = {
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const fadeUp = {
-  initial: { opacity: 0, y: 20 },
+  initial: false as const,
   animate: { opacity: 1, y: 0 },
 };
 
 const fadeUpViewport = {
-  initial: { opacity: 0, y: 20 },
+  initial: false as const,
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, amount: 0.15 },
 };
@@ -193,7 +193,7 @@ function ProductHeroCarousel({ images, name }: { images: string[]; name: string 
   return (
     <>
     <motion.div
-      initial={{ opacity: 0, scale: 0.96 }}
+      initial={false}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
       onMouseEnter={() => setPaused(true)}
@@ -334,11 +334,6 @@ function ProductPageContent({ product }: { product: Product }) {
           borderBottom: `1px solid ${T.border}`,
         }}
       >
-        {/* Paper grain */}
-        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity: 0.04 }} aria-hidden>
-          <filter id="grain-prod"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
-          <rect width="100%" height="100%" filter="url(#grain-prod)" />
-        </svg>
 
         {/* Breadcrumb — slide in from left */}
         {(() => {
@@ -351,7 +346,7 @@ function ProductPageContent({ product }: { product: Product }) {
             <motion.nav
               aria-label="breadcrumb"
               className="prod-breadcrumb"
-              initial={{ opacity: 0, x: -24 }}
+              initial={false}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, ease: EASE }}
               style={{ position: "relative", maxWidth: "1100px", margin: "0 auto 1.75rem", display: "flex", alignItems: "center" }}
@@ -387,7 +382,7 @@ function ProductPageContent({ product }: { product: Product }) {
             </motion.div>
 
             <motion.div
-              initial={{ scaleX: 0 }}
+              initial={false}
               animate={{ scaleX: 1 }}
               transition={{ duration: 0.5, delay: 0.15, ease: EASE }}
               style={{
@@ -475,11 +470,12 @@ function ProductPageContent({ product }: { product: Product }) {
               transition={{ duration: 0.5, delay: 0.65, ease: EASE }}
               style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}
             >
-              <a href="/#contact" className="btn-cta-primary">
-                Enquire Now &rarr;
+              <a href={`/contact?product=${encodeURIComponent(product.name)}`} className="btn-cta-primary">
+                Get a quote for this
               </a>
-              <a href="/#contact" className="btn-cta-outline">
-                Request Sample
+              <a href={`https://wa.me/919823383230?text=${encodeURIComponent(`Hi, I'd like a quote for ${product.name}. Size / quantity: `)}`}
+                target="_blank" rel="noopener noreferrer" className="btn-cta-outline">
+                Ask on WhatsApp
               </a>
             </motion.div>
           </div>
@@ -538,7 +534,7 @@ function ProductPageContent({ product }: { product: Product }) {
               {product.features.map((feature, i) => (
                 <motion.li
                   key={i}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={false}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.15 }}
                   transition={{ duration: 0.5, delay: i * 0.06, ease: EASE }}
@@ -598,7 +594,7 @@ function ProductPageContent({ product }: { product: Product }) {
                 <motion.div
                   key={i}
                   className="app-card"
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={false}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.15 }}
                   transition={{ duration: 0.5, delay: i * 0.06, ease: EASE }}
@@ -635,7 +631,7 @@ function ProductPageContent({ product }: { product: Product }) {
                 {product.specsTable.map((spec, i) => (
                   <motion.tr
                     key={i}
-                    initial={{ opacity: 0, y: 12 }}
+                    initial={false}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.15 }}
                     transition={{ duration: 0.5, delay: i * 0.06, ease: EASE }}
@@ -688,7 +684,7 @@ function ProductPageContent({ product }: { product: Product }) {
               {product.exportCompliance.map((item, i) => (
                 <motion.li
                   key={i}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={false}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.15 }}
                   transition={{ duration: 0.5, delay: i * 0.06, ease: EASE }}
@@ -756,7 +752,7 @@ function ProductPageContent({ product }: { product: Product }) {
                   return (
                     <motion.div
                       key={p.slug}
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={false}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, amount: 0.15 }}
                       transition={{ duration: 0.5, delay: i * 0.1, ease: EASE }}
@@ -784,7 +780,7 @@ function ProductPageContent({ product }: { product: Product }) {
 
         {/* CTA — scroll-triggered fade-up */}
         <motion.section
-          initial={{ opacity: 0, y: 24 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.6, ease: EASE }}
@@ -814,14 +810,14 @@ function ProductPageContent({ product }: { product: Product }) {
             </p>
           </div>
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.5, delay: 0.15, ease: EASE }}
             style={{ display: "flex", flexDirection: "column", gap: "0.75rem", alignItems: "flex-end" }}
           >
-            <a href="/#contact" className="btn-cta-primary" style={{ whiteSpace: "nowrap" }}>
-              Request Sample &rarr;
+            <a href={`/contact?product=${encodeURIComponent(product.name)}`} className="btn-cta-primary" style={{ whiteSpace: "nowrap" }}>
+              Get a quote for this
             </a>
             <a
               href={`mailto:yogesh.sahu@puneglobalgroup.in?subject=Enquiry: ${product.name}`}

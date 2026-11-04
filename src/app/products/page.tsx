@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
-const fadeUp = { initial: { opacity: 0, y: 25 }, animate: { opacity: 1, y: 0 } };
+const fadeUp = { initial: false as const, animate: { opacity: 1, y: 0 } };
 
 const C = {
   cream: "#FAF7F2",
@@ -27,8 +27,8 @@ const C = {
 const F = {
   display: "'Playfair Display', Georgia, serif",
   body:    "'DM Sans', system-ui, sans-serif",
-  italic:  "'Cormorant Garamond', Georgia, serif",
-  mono:    "'DM Mono', 'Courier New', monospace",
+  italic:  "'DM Sans', system-ui, sans-serif",
+  mono:    "'DM Sans', system-ui, sans-serif",
 };
 
 const CSS = `
@@ -37,7 +37,7 @@ const CSS = `
 
   body::before {
     content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9998; opacity: 0.018;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    
   }
 
   @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
@@ -242,25 +242,25 @@ export default function ProductsPage() {
               {...fadeUp}
               transition={{ duration: 0.6, ease, delay: 0.08 }}
             >
-              Our <span className="gold-text">Products</span>
+              Products
             </motion.h1>
             <motion.p
               style={{
-                fontFamily: F.italic, fontStyle: "italic",
+                fontFamily: F.italic, fontStyle: "normal",
                 fontSize: "1.2rem", color: "rgba(250,247,242,0.65)",
                 lineHeight: 1.6,
               }}
               {...fadeUp}
               transition={{ duration: 0.6, ease, delay: 0.16 }}
             >
-              Precision-engineered packaging for automotive, pharma, FMCG and industrial sectors.
+              PP corrugated packaging we make in Pune, and paper and board grades we supply from stock.
             </motion.p>
           </div>
 
           {/* Packaging illustration */}
           <motion.div
             className="hero-illustration"
-            initial={{ opacity: 0, scale: 0.85, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 1, ease, delay: 0.3 }}
             style={{ flexShrink: 0, position: "relative", zIndex: 1 }}
@@ -328,7 +328,7 @@ export default function ProductsPage() {
 
         {/* ── 01 PP Corrugated Systems — NAVY ── */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
+          initial={false}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.6, ease, delay: 0 }}
@@ -371,7 +371,7 @@ export default function ProductsPage() {
 
         {/* ── 02 Paper & Board Grades — DARK ── */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
+          initial={false}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.6, ease, delay: 0.08 }}
@@ -437,7 +437,7 @@ export default function ProductsPage() {
           padding: "clamp(3rem, 6vh, 5rem) clamp(1.5rem, 5vw, 4rem)",
           textAlign: "center",
         }}
-        initial={{ opacity: 0, y: 25 }}
+        initial={false}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.12 }}
         transition={{ duration: 0.6, ease }}
@@ -447,20 +447,19 @@ export default function ProductsPage() {
           fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
           color: C.cream, marginBottom: "1rem", lineHeight: 1.1,
         }}>
-          Request a <span className="gold-text">Product Catalogue</span>
+          Need a price?
         </h2>
         <p style={{ fontFamily: F.body, fontSize: "1rem",
           color: "rgba(250,247,242,0.65)", marginBottom: "2rem" }}>
-          Get our full range specifications delivered to your inbox.
+          Send the size and quantity. We reply within one working day.
         </p>
-        <a href="/#contact" style={{
-          display: "inline-flex", alignItems: "center", gap: "8px",
-          background: C.saffron, color: C.dark,
-          fontFamily: F.body, fontWeight: 600, fontSize: "0.82rem",
-          letterSpacing: "0.09em", textTransform: "uppercase",
-          padding: "13px 32px", borderRadius: "2px", textDecoration: "none",
+        <a href="/contact" style={{
+          display: "inline-flex", alignItems: "center", justifyContent: "center",
+          background: "#3A7BBF", color: "#fff", minHeight: "48px",
+          fontFamily: F.body, fontWeight: 600, fontSize: "1rem",
+          padding: "0 28px", borderRadius: "6px", textDecoration: "none",
         }}>
-          Contact Us →
+          Request a quote
         </a>
       </motion.section>
     </div>

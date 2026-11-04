@@ -27,10 +27,10 @@ const C = {
 };
 
 const F = {
-  display: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
-  body: "'DM Sans', 'Plus Jakarta Sans', sans-serif",
-  italic: "'Cormorant Garamond', Georgia, serif",
-  prose: "'Cormorant Garamond', Georgia, serif",
+  display: "'Playfair Display', 'DM Sans', system-ui, sans-serif",
+  body: "'DM Sans', system-ui, sans-serif",
+  italic: "'DM Sans', system-ui, sans-serif",
+  prose: "'DM Sans', system-ui, sans-serif",
 };
 
 const GLOBAL_CSS = `
@@ -271,7 +271,7 @@ function RenderSection({ section }: { section: BlogSection }) {
             borderRadius: "0 4px 4px 0",
             padding: "1.25rem 1.5rem",
             fontFamily: F.italic,
-            fontStyle: "italic",
+            fontStyle: "normal",
             fontSize: "1.1rem",
             color: C.textBody,
             lineHeight: 1.7,
@@ -300,14 +300,10 @@ function BlogPostContent({ post }: { post: BlogPost }) {
           borderBottom: `1px solid ${C.border}`,
         }}
       >
-        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity: 0.035 }} aria-hidden>
-          <filter id="grain-blog-post"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
-          <rect width="100%" height="100%" filter="url(#grain-blog-post)" />
-        </svg>
 
         <div style={{ position: "relative", maxWidth: "760px", margin: "0 auto" }}>
           <motion.nav
-            initial={{ opacity: 0, x: -20 }}
+            initial={false}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: EASE, delay: 0.1 }}
             style={{ marginBottom: "2rem", display: "flex", alignItems: "center", gap: "0.5rem" }}
@@ -322,7 +318,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
           </motion.nav>
 
           <motion.span
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: EASE, delay: 0.2 }}
             style={{
@@ -344,7 +340,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
           </motion.span>
 
           <motion.div
-            initial={{ scaleX: 0 }}
+            initial={false}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.3 }}
             style={{
@@ -357,7 +353,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
           />
 
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.4 }}
             style={{
@@ -373,7 +369,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
           </motion.h1>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.6 }}
             style={{
@@ -427,14 +423,14 @@ function BlogPostContent({ post }: { post: BlogPost }) {
 
       <main className="blog-content-wrap" style={{ maxWidth: "760px", margin: "0 auto", padding: "3.5rem clamp(1rem, 4vw, 2.5rem) 5rem" }}>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: EASE, delay: 0.4 }}
         >
           <div
             style={{
               fontFamily: F.italic,
-              fontStyle: "italic",
+              fontStyle: "normal",
               fontSize: "1.25rem",
               color: C.textMuted,
               lineHeight: 1.75,
@@ -523,7 +519,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
         })()}
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.6, ease: EASE }}
@@ -582,7 +578,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
 
         {relatedPosts.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.6, ease: EASE }}
@@ -605,7 +601,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
               {relatedPosts.map((related, idx) => (
                 <motion.div
                   key={related.slug}
-                  initial={{ opacity: 0, y: 20, scale: 0.97 }}
+                  initial={false}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, amount: 0.1 }}
                   transition={{ duration: 0.6, ease: EASE, delay: idx * 0.08 }}

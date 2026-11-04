@@ -79,7 +79,6 @@ export const products: Product[] = [
       "/products/paper/cyber-xlpac-gc1-reel.jpg",
       "/products/paper/cyber-xlpac-gc1-stack.jpg",
       "/products/paper/cyber-xlpac-gc1-engineering.jpg",
-      "/products/paper/cyber-xlpac-gc1-usecase.jpg",
     ],
   },
 
@@ -129,7 +128,6 @@ export const products: Product[] = [
       "/products/paper/cyber-xlpac-gc2-reel.jpg",
       "/products/paper/cyber-xlpac-gc2-stack.jpg",
       "/products/paper/cyber-xlpac-gc2-engineering.jpg",
-      "/products/paper/cyber-xlpac-gc2-usecase.jpg",
     ],
   },
 
@@ -178,7 +176,6 @@ export const products: Product[] = [
       "/products/paper/cyber-premium-reel.jpg",
       "/products/paper/cyber-premium-stack.jpg",
       "/products/paper/cyber-premium-engineering.jpg",
-      "/products/paper/cyber-premium-usecase.jpg",
     ],
   },
 
@@ -226,7 +223,6 @@ export const products: Product[] = [
       "/products/paper/pearlxl-packaging-reel.jpg",
       "/products/paper/pearlxl-packaging-stack.jpg",
       "/products/paper/pearlxl-packaging-engineering.jpg",
-      "/products/paper/pearlxl-packaging-usecase.jpg",
     ],
   },
 
@@ -275,7 +271,6 @@ export const products: Product[] = [
       "/products/paper/carte-lumina-reel.jpg",
       "/products/paper/carte-lumina-stack.jpg",
       "/products/paper/carte-lumina-engineering.jpg",
-      "/products/paper/carte-lumina-usecase.jpg",
     ],
   },
 
@@ -325,7 +320,6 @@ export const products: Product[] = [
       "/products/paper/safire-graphik-reel.jpg",
       "/products/paper/safire-graphik-stack.jpg",
       "/products/paper/safire-graphik-engineering.jpg",
-      "/products/paper/safire-graphik-usecase.jpg",
     ],
   },
 
@@ -373,7 +367,6 @@ export const products: Product[] = [
       "/products/paper/cyber-oak-reel.jpg",
       "/products/paper/cyber-oak-stack.jpg",
       "/products/paper/cyber-oak-engineering.jpg",
-      "/products/paper/cyber-oak-usecase.jpg",
     ],
   },
 
@@ -425,7 +418,6 @@ export const products: Product[] = [
       "/products/paper/eco-natura-reel.jpg",
       "/products/paper/eco-natura-stack.jpg",
       "/products/paper/eco-natura-engineering.jpg",
-      "/products/paper/eco-natura-usecase.jpg",
     ],
   },
 
@@ -472,7 +464,6 @@ export const products: Product[] = [
       "/products/paper/eco-blanca-reel.jpg",
       "/products/paper/eco-blanca-stack.jpg",
       "/products/paper/eco-blanca-engineering.jpg",
-      "/products/paper/eco-blanca-usecase.jpg",
     ],
   },
 
@@ -520,7 +511,6 @@ export const products: Product[] = [
       "/products/paper/neowhite-bliss-reel.jpg",
       "/products/paper/neowhite-bliss-stack.jpg",
       "/products/paper/neowhite-bliss-engineering.jpg",
-      "/products/paper/neowhite-bliss-usecase.jpg",
     ],
   },
 
@@ -560,7 +550,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/boxes/box-01-hero.jpg",
       "/products/pp/boxes/box-01-engineering.jpg",
-      "/products/pp/boxes/box-01-usecase.jpg",
       "/products/pp/boxes/box-01-alt.jpg",
     ],
   },
@@ -597,7 +586,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/boxes/box-02-hero.jpg",
       "/products/pp/boxes/box-02-engineering.jpg",
-      "/products/pp/boxes/box-02-usecase.jpg",
       "/products/pp/boxes/box-02-alt.jpg",
     ],
   },
@@ -631,7 +619,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/boxes/box-03-hero.jpg",
       "/products/pp/boxes/box-03-engineering.jpg",
-      "/products/pp/boxes/box-03-usecase.jpg",
     ],
   },
   {
@@ -664,7 +651,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/boxes/box-04-hero.jpg",
       "/products/pp/boxes/box-04-engineering.jpg",
-      "/products/pp/boxes/box-04-usecase.jpg",
       "/products/pp/boxes/box-04-alt.jpg",
     ],
   },
@@ -698,7 +684,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/boxes/box-05-hero.jpg",
       "/products/pp/boxes/box-05-engineering.jpg",
-      "/products/pp/boxes/box-05-usecase.jpg",
       "/products/pp/boxes/box-05-alt.jpg",
     ],
   },
@@ -733,7 +718,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/boxes/box-06-hero.jpg",
       "/products/pp/boxes/box-06-engineering.jpg",
-      "/products/pp/boxes/box-06-usecase.jpg",
       "/products/pp/boxes/box-06-alt.jpg",
     ],
   },
@@ -772,7 +756,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/separators/sep-01-hero.jpg",
       "/products/pp/separators/sep-01-engineering.jpg",
-      "/products/pp/separators/sep-01-usecase.jpg",
     ],
   },
   {
@@ -807,7 +790,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/separators/sep-02-hero.jpg",
       "/products/pp/separators/sep-02-engineering.jpg",
-      "/products/pp/separators/sep-02-usecase.jpg",
     ],
   },
 
@@ -887,7 +869,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/trays/tray-folded-corner-hero.jpg",
       "/products/pp/trays/tray-folded-corner-cad.jpg",
-      "/products/pp/trays/tray-folded-corner-usecase1.jpg",
     ],
   },
 
@@ -926,7 +907,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/trays/tray-stackable-interlocking-hero.jpg",
       "/products/pp/trays/tray-stackable-interlocking-cad.jpg",
-      "/products/pp/trays/tray-stackable-interlocking-usecase1.jpg",
     ],
   },
 
@@ -965,7 +945,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/trays/tray-fixed-dividers-hero.jpg",
       "/products/pp/trays/tray-fixed-dividers-cad.jpg",
-      "/products/pp/trays/tray-fixed-dividers-usecase1.jpg",
     ],
   },
 
@@ -1008,7 +987,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/trays/tray-foam-laminated-hero.jpg",
       "/products/pp/trays/tray-foam-laminated-cad.jpg",
-      "/products/pp/trays/tray-foam-laminated-usecase1.jpg",
     ],
   },
 
@@ -1053,7 +1031,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/trays/tray-esd-antistatic-hero.jpg",
       "/products/pp/trays/tray-esd-antistatic-cad.jpg",
-      "/products/pp/trays/tray-esd-antistatic-usecase1.jpg",
     ],
   },
 
@@ -1091,7 +1068,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/bins/bin-01-hero.jpg",
       "/products/pp/bins/bin-01-engineering.jpg",
-      "/products/pp/bins/bin-01-usecase.jpg",
     ],
   },
 
@@ -1129,7 +1105,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/bins/bin-02-hero.jpg",
       "/products/pp/bins/bin-02-engineering.jpg",
-      "/products/pp/bins/bin-02-usecase.jpg",
     ],
   },
 
@@ -1167,7 +1142,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/bins/bin-03-hero.jpg",
       "/products/pp/bins/bin-03-engineering.jpg",
-      "/products/pp/bins/bin-03-usecase.jpg",
     ],
   },
 
@@ -1205,7 +1179,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/picking-bins/pkgbin-01-hero.jpg",
       "/products/pp/picking-bins/pkgbin-01-engineering.jpg",
-      "/products/pp/picking-bins/pkgbin-01-usecase.jpg",
     ],
   },
 
@@ -1243,7 +1216,6 @@ export const products: Product[] = [
     images: [
       "/products/pp/flooring/flr-01-hero.jpg",
       "/products/pp/flooring/flr-01-engineering.jpg",
-      "/products/pp/flooring/flr-01-usecase.jpg",
     ],
   },
 ];

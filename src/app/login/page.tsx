@@ -15,7 +15,7 @@ const T = {
   accentDim: "rgba(0,196,106,0.12)",
   white: "#f5f5f0",
   muted: "rgba(245,245,240,0.45)",
-  display: "'Cormorant Garamond', Georgia, serif",
+  display: "'DM Sans', system-ui, sans-serif",
   body: "'Plus Jakarta Sans', system-ui, sans-serif",
 };
 

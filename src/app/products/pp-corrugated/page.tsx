@@ -28,8 +28,8 @@ const C = {
 const F = {
   display: "'Playfair Display', Georgia, serif",
   body:    "'DM Sans', system-ui, sans-serif",
-  italic:  "'Cormorant Garamond', Georgia, serif",
-  mono:    "'DM Mono', 'Courier New', monospace",
+  italic:  "'DM Sans', system-ui, sans-serif",
+  mono:    "'DM Sans', system-ui, sans-serif",
 };
 
 const CSS = `
@@ -39,7 +39,7 @@ const CSS = `
   /* Grain overlay */
   body::before {
     content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9998; opacity: 0.04;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    
   }
 
   @keyframes fadeUp   { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
@@ -296,20 +296,21 @@ function ScrollableRow({ children, bgClass = "even", count = 0 }: { children: Re
   );
 }
 
-/* ─── 3-Image Card Carousel ──────────────────────────────────────────────────── */
-function VariantCarousel({ images, name }: { images: [string, string, string]; name: string }) {
+/* ─── Card Carousel ──────────────────────────────────────────────────── */
+function VariantCarousel({ images, name }: { images: string[]; name: string }) {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const touchStartX = useRef<number>(0);
 
   useEffect(() => {
-    if (paused) return;
-    const t = setInterval(() => setIdx(c => (c + 1) % 3), 4000);
+    if (paused || images.length < 2) return;
+    const t = setInterval(() => setIdx(c => (c + 1) % images.length), 4000);
     return () => clearInterval(t);
-  }, [paused]);
+  }, [paused, images.length]);
 
-  const labels = ["Studio", "Engineering", "In Use"];
-  const shouldLoad = useSlideLoader(idx, 3);
+  const n = images.length;
+  const labels = ["Product", "Drawing", "Detail"];
+  const shouldLoad = useSlideLoader(idx, n);
 
   return (
     <div
@@ -319,7 +320,7 @@ function VariantCarousel({ images, name }: { images: [string, string, string]; n
       onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
       onTouchEnd={(e) => {
         const dx = e.changedTouches[0].clientX - touchStartX.current;
-        if (Math.abs(dx) > 36) setIdx(c => dx < 0 ? (c + 1) % 3 : (c + 2) % 3);
+        if (Math.abs(dx) > 36) setIdx(c => dx < 0 ? (c + 1) % n : (c + n - 1) % n);
       }}
       style={{ position: "relative", height: "220px", overflow: "hidden", background: C.parchment }}
     >
@@ -340,7 +341,7 @@ function VariantCarousel({ images, name }: { images: [string, string, string]; n
         position: "absolute", bottom: "2px", left: "50%", transform: "translateX(-50%)",
       }}>
         <div className="dot-wrap">
-          {[0, 1, 2].map(i => (
+          {images.map((_, i) => (
             <button
               key={i}
               className="dot-pip"
@@ -373,7 +374,7 @@ function VariantCarousel({ images, name }: { images: [string, string, string]; n
 function VariantCard({ variant, delay }: { variant: PPVariant; delay: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, x: 20 }}
+      initial={false}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, amount: 0.12 }}
       transition={{ duration: 0.6, ease, delay }}
@@ -469,7 +470,7 @@ function FamilySection({ family, index }: { family: typeof ppFamilies[0]; index:
         background: index % 2 === 0 ? C.dark : "#0E1018",
         borderTop: `1px solid ${C.border}`,
       }}
-      initial={{ opacity: 0, y: 25 }}
+      initial={false}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.12 }}
       transition={{ duration: 0.6, ease }}
@@ -524,7 +525,7 @@ function CapabilityBar() {
           {CAPS.map((c, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 25 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.12 }}
               transition={{ duration: 0.6, ease, delay: i * 0.08 }}
@@ -573,7 +574,7 @@ function LifecycleTable() {
       <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
         <motion.div
           style={{ marginBottom: "0.6rem" }}
-          initial={{ opacity: 0, y: 25 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.6, ease }}
@@ -591,7 +592,7 @@ function LifecycleTable() {
             fontWeight: 700, color: C.cream, lineHeight: 1.15,
             marginBottom: "0.75rem",
           }}
-          initial={{ opacity: 0, y: 25 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.6, ease, delay: 0.08 }}
@@ -603,7 +604,7 @@ function LifecycleTable() {
             fontFamily: F.body, fontSize: "0.95rem", color: C.taupe, lineHeight: 1.75,
             maxWidth: "540px", fontWeight: 300, marginBottom: "2.5rem",
           }}
-          initial={{ opacity: 0, y: 25 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.6, ease, delay: 0.16 }}
@@ -614,7 +615,7 @@ function LifecycleTable() {
 
         <motion.div
           className="lc-wrap"
-          initial={{ opacity: 0, y: 25 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.6, ease, delay: 0.24 }}
@@ -659,13 +660,13 @@ function LifecycleTable() {
         </motion.div>
 
         <motion.p
-          initial={{ opacity: 0, y: 25 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.6, ease, delay: 0.08 }}
           style={{
           fontFamily: F.body, fontSize: "0.76rem", color: C.taupe,
-          marginTop: "1rem", fontStyle: "italic",
+          marginTop: "1rem", fontStyle: "normal",
         }}>
           * Indicative ranges based on standard configurations. Contact us for a cycle-cost analysis specific to your use case.
         </motion.p>
@@ -687,7 +688,7 @@ function Hero() {
           <motion.div
             className="pp-eyebrow-row"
             style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}
-            initial={{ opacity: 0, y: 25 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease, delay: 0 }}
           >
@@ -711,13 +712,11 @@ function Hero() {
               fontSize: "clamp(2rem, 4vw, 3.8rem)",
               lineHeight: 1.05, color: C.cream, letterSpacing: "-0.028em",
             }}
-            initial={{ opacity: 0, y: 25 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease, delay: 0.08 }}
           >
-            Industrial handling
-            <br />
-            <em style={{ fontWeight: 400, color: C.warm }}>&amp; protection systems.</em>
+            PP corrugated boxes, trays and separators
           </motion.h1>
 
           <div style={{ height: "1px", background: C.borderMid, margin: "2rem 0" }} />
@@ -727,22 +726,22 @@ function Hero() {
               fontFamily: F.body, fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)",
               color: C.taupe, lineHeight: 1.85, maxWidth: "580px", fontWeight: 300,
             }}
-            initial={{ opacity: 0, y: 25 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease, delay: 0.16 }}
           >
-            We convert single-flute PP corrugated sheet into returnable
-            industrial packaging &mdash; boxes, trays, separators, layer pads,
-            bins, and flooring &mdash; engineered for your plant, not your catalogue.
+            Returnable packaging made from PP corrugated sheet at our Pune plant:
+            boxes, trays, separators, layer pads, bins and floor protection.
+            Every size below can be changed to fit your part.
           </motion.p>
 
           <motion.div
             style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "2.5rem" }}
-            initial={{ opacity: 0, y: 25 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease, delay: 0.24 }}
           >
-            <Link href="/contact" className="btn-pp">Request a System Quote &rarr;</Link>
+            <Link href="/contact" className="btn-pp">Request a quote</Link>
             <Link href="/products" className="btn-ghost">&larr; All Products</Link>
           </motion.div>
         </div>
@@ -815,7 +814,7 @@ export default function PPCorrugatedPage() {
                 padding: "4rem clamp(1.5rem, 5vw, 4rem)",
                 background: i % 2 === 0 ? C.dark : "#0E1018",
               }}
-              initial={{ opacity: 0, y: 25 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.12 }}
               transition={{ duration: 0.6, ease }}
@@ -873,7 +872,7 @@ export default function PPCorrugatedPage() {
           padding: "5rem clamp(1.5rem, 5vw, 4rem)",
           background: C.pp,
         }}
-        initial={{ opacity: 0, y: 25 }}
+        initial={false}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.12 }}
         transition={{ duration: 0.6, ease }}

@@ -18,7 +18,7 @@ const C = {
 const F = {
   display: "'Playfair Display', Georgia, serif",
   body:    "'DM Sans', system-ui, sans-serif",
-  italic:  "'Cormorant Garamond', Georgia, serif",
+  italic:  "'DM Sans', system-ui, sans-serif",
 };
 
 const FOOTER_CSS = `

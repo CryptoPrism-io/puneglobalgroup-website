@@ -53,8 +53,8 @@ export function SiteLogo({ inverted = false, href = "/" }: { inverted?: boolean;
               Pune Global Group
             </span>
             <span className="sitelogo-sub" style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontStyle: "italic",
+              fontFamily: "'DM Sans', system-ui, sans-serif",
+              fontStyle: "normal",
               fontWeight: 400,
               fontSize: "0.74rem",
               color: subColor,
@@ -62,7 +62,7 @@ export function SiteLogo({ inverted = false, href = "/" }: { inverted?: boolean;
               lineHeight: 1.2,
               whiteSpace: "nowrap",
             }}>
-              Your Trusted Packaging Partner
+              PP &amp; paper packaging · Pune
             </span>
           </div>
         </div>
