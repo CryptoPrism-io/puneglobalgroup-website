@@ -1,3 +1,4 @@
+import { ppPosts } from "@/lib/blog-pp";
 // ============================================================
 // PGG Data — Products, Blog Posts, Infrastructure
 // ============================================================
@@ -1262,6 +1263,7 @@ export interface BlogSection {
 }
 
 export const blogPosts: BlogPost[] = [
+  ...ppPosts,
   // ——————————————————————————————————————————
   // 1. GSM Guide
   // ——————————————————————————————————————————
@@ -1272,9 +1274,18 @@ export const blogPosts: BlogPost[] = [
     categoryColor: "#2563EB",
     date: "February 2026",
     readTime: "6 min",
-    coverImage: "/blog/gsm-guide-paper-board.jpg",
+    coverImage: "/blog/gsm-guide-paper-board.png",
     excerpt:
       "GSM is the most fundamental specification in paper and board buying. Get it wrong and you're either over-spending or watching your cartons fail on the shelf.",
+    answer:
+      "GSM (grams per square metre) is the weight of one square metre of paper or board. It is the main buying specification, but it does not tell you stiffness or thickness: two 300 GSM boards can differ in caliper and strength, so specify GSM together with caliper for the job. Folding box board is typically 230–400 GSM.",
+    faqs: [
+      { q: "What does GSM mean in paper and board?", a: "Grams per square metre: the weight of one square metre of the sheet. A 300 GSM board weighs 300 grams per square metre." },
+      { q: "What GSM is used for pharma cartons?", a: "Pharma secondary cartons typically use FBB or duplex board in the 300–350 GSM range, with stiffness specified as well as GSM." },
+      { q: "Is higher GSM always stronger?", a: "Not necessarily. Stiffness depends on caliper, fibre and ply construction too. Two boards at the same GSM can perform differently, so specify caliper as well." },
+      { q: "What GSM range does folding box board come in?", a: "FBB is typically available from about 230 to 400 GSM." },
+    ],
+    updated: "November 2026",
     content: [
       {
         type: "paragraph",
@@ -1371,7 +1382,7 @@ export const blogPosts: BlogPost[] = [
   // 2. FBB vs Duplex
   // ——————————————————————————————————————————
   {
-    coverImage: "/blog/fbb-vs-duplex-board.jpg",
+    coverImage: "/blog/fbb-vs-duplex-board.png",
     slug: "fbb-vs-duplex-board",
     title: "FBB vs Duplex Board: Which is Right for Your Packaging?",
     category: "Product Guide",
@@ -1380,6 +1391,14 @@ export const blogPosts: BlogPost[] = [
     readTime: "5 min",
     excerpt:
       "Folding Box Board and Duplex Board are the two workhorses of folding carton manufacturing. Knowing when to use each could save you 15–25% on board cost without compromising performance.",
+    answer:
+      "Use folding box board (FBB) when you need high stiffness, premium print and fast packing lines, such as branded pharma, cosmetics and export cartons. Use duplex board when cost matters more than appearance, such as generic pharma, garments and general retail. FBB is made from virgin fibre and costs more; duplex uses recycled or mixed fibre.",
+    faqs: [
+      { q: "What is the difference between FBB and duplex board?", a: "FBB is a multi-ply virgin fibre board with high stiffness and a premium print surface. Duplex is made from recycled or mixed fibre, costs less and has a grey or white back." },
+      { q: "Is FBB stronger than duplex?", a: "At the same GSM, FBB is stiffer, which helps cartons keep their shape and run well on high-speed packing lines." },
+      { q: "When should I use duplex board?", a: "For generic pharma secondary packs, garments and hosiery, stationery and general retail, where cost matters more than premium print." },
+    ],
+    updated: "November 2026",
     content: [
       {
         type: "paragraph",
@@ -1475,7 +1494,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "export-packaging-compliance-india",
-    coverImage: "/blog/export-packaging-compliance-india.jpg",
+    coverImage: "/blog/export-packaging-compliance-india.png",
     title: "Export Packaging Compliance for Indian Manufacturers in 2026",
     category: "Compliance",
     categoryColor: "#DC2626",
@@ -1483,6 +1502,14 @@ export const blogPosts: BlogPost[] = [
     readTime: "8 min",
     excerpt:
       "Export packaging compliance is no longer just about durability. In 2026, Indian manufacturers face a complex web of BIS requirements, EU regulations, US FDA standards, and FSC certification demands.",
+    answer:
+      "Indian exporters need packaging that meets the destination's rules as well as India's: correct labelling under DGFT and product-specific law, BIS standards for board, EU food-contact and deforestation (EUDR) rules for Europe, US FDA 21 CFR 176 for food-contact paper in the US, FSC where buyers ask for it, and ISPM-15 for wooden pallets. Keep the mill COA and compliance declarations for every lot.",
+    faqs: [
+      { q: "What documents do I need for export packaging board?", a: "Typically the mill Certificate of Analysis, a food-contact compliance declaration where relevant, BIS conformity documents, FSC chain of custody documents if the FSC logo is used, EUDR due diligence for EU shipments and ISPM-15 certificates for wooden pallets." },
+      { q: "Do wooden pallets for export need treatment?", a: "Yes. Solid wood packaging such as pallets and crates must be treated and marked to ISPM-15 for international shipments." },
+      { q: "Which US rule covers paper food packaging?", a: "21 CFR 176 covers paper and paperboard components that contact food." },
+    ],
+    updated: "November 2026",
     content: [
       {
         type: "paragraph",
@@ -1546,7 +1573,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "Pune Global Group holds FSC Chain of Custody certification (FSC C064218). This means we can supply FSC-certified ITC FBB with full chain of custody documentation, enabling our clients to display the FSC logo on their export packaging without separately obtaining their own certification.",
+        text: "Pune Global Group holds FSC Chain of Custody certification (FSC C064218). This means we can supply FSC-certified ITC FBB with full chain of custody documentation, so your carton printer can buy board with a valid FSC claim and our chain of custody code on the invoice. Note that the company that prints and applies the FSC label needs its own chain of custody certificate.",
       },
       {
         type: "heading",
@@ -1590,7 +1617,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "pp-corrugated-returnable-packaging",
-    coverImage: "/blog/pp-corrugated-returnable-packaging.jpg",
+    coverImage: "/blog/pp-corrugated-returnable-packaging.png",
     title: "Why PP Corrugated is Replacing Cardboard in Returnable Packaging",
     category: "Industry Trends",
     categoryColor: "#059669",
@@ -1598,6 +1625,14 @@ export const blogPosts: BlogPost[] = [
     readTime: "5 min",
     excerpt:
       "Automotive OEMs, electronics manufacturers, and pharma companies across India are quietly replacing cardboard with PP corrugated for internal and closed-loop logistics. Here's the economics.",
+    answer:
+      "PP corrugated is replacing cardboard in closed-loop logistics because one PP box lasts dozens to hundreds of trips while a cardboard box lasts one to three. Although a PP box costs several times more, its cost per trip is far lower, it resists oil and moisture, can be washed, and can be made ESD-safe. Cardboard still makes sense for one-way and export shipments.",
+    faqs: [
+      { q: "Is PP corrugated cheaper than cardboard?", a: "Per piece, no: a PP box costs several times more. Per trip, yes, because it is reused dozens to hundreds of times in a closed loop." },
+      { q: "How many trips does a PP corrugated box last?", a: "Our boxes are rated for roughly 50–200 trips depending on the design and handling; layer pads last 200–500." },
+      { q: "When is cardboard still the better choice?", a: "For one-way or export shipments where packaging does not come back, low or irregular volumes, and products whose packaging is destroyed on opening." },
+    ],
+    updated: "November 2026",
     content: [
       {
         type: "paragraph",
@@ -1609,18 +1644,18 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "The fundamental case for PP corrugated returnable packaging is the cost-per-trip analysis. A standard corrugated cardboard tray for automotive components costs approximately Rs 80–120 per unit. It lasts 1–3 trips under factory conditions before structural integrity is compromised. A comparable PP corrugated foldable box costs Rs 450–700 per unit but survives 500+ trips under normal handling.",
+        text: "The fundamental case for PP corrugated returnable packaging is the cost-per-trip analysis. A standard corrugated cardboard tray for automotive components costs approximately Rs 80–120 per unit. It lasts 1–3 trips under factory conditions before structural integrity is compromised. A comparable PP corrugated foldable box costs Rs 450–700 per unit and typically lasts 50–200 trips, depending on the design and how it is handled.",
       },
       {
         type: "table",
         rows: [
           { label: "Metric", value: "Cardboard vs PP Corrugated" },
           { label: "Unit cost", value: "Cardboard: Rs 100 | PP: Rs 550" },
-          { label: "Expected trips", value: "Cardboard: 2 | PP: 500" },
-          { label: "Cost per trip", value: "Cardboard: Rs 50 | PP: Rs 1.10" },
-          { label: "Annual cost (1000 trips)", value: "Cardboard: Rs 50,000 | PP: Rs 1,100" },
+          { label: "Expected trips (example)", value: "Cardboard: 2 | PP: 100" },
+          { label: "Cost per trip", value: "Cardboard: Rs 50 | PP: Rs 5.50" },
+          { label: "Cost of 1,000 trips", value: "Cardboard: Rs 50,000 | PP: Rs 5,500" },
           { label: "Waste generated", value: "Cardboard: High | PP: Minimal" },
-          { label: "Storage (flat-folded)", value: "Cardboard: Bulky | PP: 70% space saving" },
+          { label: "Storage when empty", value: "Cardboard: Bulky | PP: Folds flat (collapsible designs)" },
         ],
       },
       {
@@ -1657,7 +1692,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "PP corrugated returnable packaging reduces packaging waste significantly. A closed-loop system with 500-trip PP boxes eliminates approximately 498 corrugated boxes that would otherwise have been purchased, used once, and sent to waste. For manufacturers with ESG reporting requirements — increasingly common for export-facing businesses and publicly listed companies — this waste reduction is reportable as a direct contribution to Scope 3 emission reductions.",
+        text: "PP corrugated returnable packaging reduces packaging waste significantly. In a closed loop, a PP box that completes 100 trips replaces about 50 cardboard boxes that would each have lasted two trips before going to waste. For manufacturers with ESG reporting requirements — increasingly common for export-facing businesses and publicly listed companies — this waste reduction can be measured and reported. Our guide on measuring returnable packaging for ESG reports explains how.",
       },
       {
         type: "paragraph",
@@ -1694,7 +1729,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "sheet-vs-reel-paper-supply",
-    coverImage: "/blog/sheet-vs-reel-paper-supply.jpg",
+    coverImage: "/blog/sheet-vs-reel-paper-supply.png",
     title: "Sheet vs Reel: How to Choose Your Paper Supply Format",
     category: "Industry Guide",
     categoryColor: "#2563EB",
@@ -1702,6 +1737,13 @@ export const blogPosts: BlogPost[] = [
     readTime: "6 min",
     excerpt:
       "Whether you take your board in reel or sheet form affects your waste percentage, storage footprint, minimum order quantity, and lead time. Most buyers default to sheets — here's when that's wrong.",
+    answer:
+      "Buy board in reels when you run long jobs on web-fed presses or sheet in-house: material efficiency is higher and the price per tonne lower. Buy sheets when you run sheet-fed offset presses with short runs and frequent size changes, or lack storage for reels. Many converters save by buying reels and having them sheeted to exact job sizes.",
+    faqs: [
+      { q: "Is reel or sheet supply cheaper?", a: "Reels usually cost less per tonne and waste less material, but need web-fed equipment or a sheeting service. Sheets suit sheet-fed presses and short runs." },
+      { q: "Can you sheet board to my press size?", a: "Yes. We supply reels and also sheet board to your exact press dimensions in our Pune warehouse." },
+    ],
+    updated: "November 2026",
     content: [
       {
         type: "paragraph",
@@ -1801,7 +1843,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "itc-pspd-vs-imported-board",
-    coverImage: "/blog/itc-pspd-vs-imported-board.jpg",
+    coverImage: "/blog/itc-pspd-vs-imported-board.png",
     title: "ITC PSPD vs Imported Board: A Total Cost of Ownership Analysis",
     category: "Product Guide",
     categoryColor: "#7C3AED",
@@ -1809,6 +1851,13 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 min",
     excerpt:
       "Indian buyers pay 20–35% less at the invoice level for ITC FBB compared to equivalent European imports. But is that the full picture? A realistic total cost of ownership comparison.",
+    answer:
+      "For most Indian packaging, ITC PSPD folding box board costs less in total than imported European board once duty, freight, port charges and working capital are counted, and it arrives in days rather than months. Imports still make sense for ultra-premium packaging, grades not made in India, or where a specific foreign mill is mandated.",
+    faqs: [
+      { q: "Is ITC board as good as imported board?", a: "For most pharma, FMCG and cosmetics cartons, ITC FBB meets the requirement, including IS 14927 and food-contact compliance. Imported board can have an edge in very high-speed or luxury applications." },
+      { q: "What extra costs come with imported board?", a: "Import duty and GST, freight and insurance, port clearing charges and the working capital tied up during long lead times." },
+    ],
+    updated: "November 2026",
     content: [
       {
         type: "paragraph",
@@ -1908,7 +1957,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "pharma-packaging-board-specs",
-    coverImage: "/blog/pharma-packaging-board-specs.jpg",
+    coverImage: "/blog/pharma-packaging-board-specs.png",
     title: "Pharma Packaging Board Specifications: What Your QA Team Needs to Know",
     category: "Compliance",
     categoryColor: "#DC2626",
@@ -1916,6 +1965,13 @@ export const blogPosts: BlogPost[] = [
     readTime: "8 min",
     excerpt:
       "Pharmaceutical folding cartons are regulated components — not just boxes. Specifying the wrong board grade or accepting a non-compliant Certificate of Analysis can put your regulatory status at risk.",
+    answer:
+      "Pharma carton board should be specified on GSM, caliper, stiffness in both directions, moisture content and brightness, not GSM alone, and every lot should come with a mill Certificate of Analysis. Your QA team should also hold IS 14927 or IS 1397 compliance, food-contact and, for exports, heavy-metal migration documents, and qualify the board supplier under GMP.",
+    faqs: [
+      { q: "What should a pharma board specification include?", a: "GSM, caliper, machine and cross direction stiffness, moisture content and brightness, plus the documents required with each lot." },
+      { q: "What documents should come with pharma carton board?", a: "A mill Certificate of Analysis for each lot, IS 14927 or IS 1397 compliance, a food-contact declaration and, for export packaging, heavy-metal migration reports and FSC documents if the logo is used." },
+    ],
+    updated: "November 2026",
     content: [
       {
         type: "paragraph",
@@ -2026,7 +2082,7 @@ export const blogPosts: BlogPost[] = [
   // ——————————————————————————————————————————
   {
     slug: "india-paper-board-market-2026",
-    coverImage: "/blog/india-paper-board-market-2026.jpg",
+    coverImage: "/blog/india-paper-board-market-2026.png",
     title: "India Paper & Board Market Outlook: Trends Shaping 2025–2026",
     category: "Industry Trends",
     categoryColor: "#059669",
@@ -2034,6 +2090,13 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 min",
     excerpt:
       "India's paper and packaging board market is growing at 6–8% annually, driven by pharma exports, FMCG premiumisation, and the e-commerce packaging boom. Here's what buyers need to understand about the demand and pricing environment ahead.",
+    answer:
+      "India's paper and board demand is growing faster than new mill capacity, driven by pharma exports, packaged FMCG in smaller cities and e-commerce. For buyers this means firmer domestic prices and tighter supply of premium FBB, so contracted supply and stronger supplier relationships matter more than spot buying.",
+    faqs: [
+      { q: "What is driving paper board demand in India?", a: "Pharma exports, the shift to packaged FMCG in tier 2 and 3 cities, and e-commerce packaging." },
+      { q: "How should buyers respond to a tight board market?", a: "Move from spot buying to contracted supply, plan stock ahead of peak seasons and keep more than one qualified grade or supplier." },
+    ],
+    updated: "November 2026",
     content: [
       {
         type: "paragraph",

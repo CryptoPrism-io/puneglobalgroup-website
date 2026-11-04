@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, FormEvent } from "react";
 import OptImg, { useSlideLoader } from "@/components/OptImg";
+import { blogPosts } from "@/lib/pgg-data";
 import Link from "next/link";
 import {
   IconPhone, IconMail, IconMapPin, IconBuildingFactory2, IconPackage, IconStack2,
@@ -1730,36 +1731,10 @@ function ClientLogoBand() {
 
 /* ─── Blog Teaser ────────────────────────────────────────────────────────────── */
 function BlogTeaser() {
-  const posts = [
-    {
-      slug: "gsm-guide-paper-board",
-      category: "Industry Guide",
-      title: "Understanding GSM in Paper & Board — A Complete Buyer's Guide",
-      excerpt: "GSM is the most fundamental specification in paper buying. Get it wrong and you're either over-spending or watching your cartons fail.",
-      read: "6 min",
-    },
-    {
-      slug: "fbb-vs-duplex-board",
-      category: "Product Guide",
-      title: "FBB vs Duplex Board: Which is Right for Your Packaging?",
-      excerpt: "Knowing when to use FBB vs Duplex could save 15–25% on board cost without compromising performance.",
-      read: "5 min",
-    },
-    {
-      slug: "export-packaging-compliance-india",
-      category: "Compliance",
-      title: "Export Packaging Compliance for Indian Manufacturers in 2026",
-      excerpt: "BIS, EU, US FDA and FSC — what Indian exporters need to know before their next shipment.",
-      read: "8 min",
-    },
-    {
-      slug: "pp-corrugated-returnable-packaging",
-      category: "Industry Trends",
-      title: "Why PP Corrugated is Replacing Cardboard in Returnable Packaging",
-      excerpt: "Automotive OEMs and pharma companies are switching to PP corrugated for closed-loop logistics. Here's the economics.",
-      read: "5 min",
-    },
-  ];
+  // Latest PP guides first; keeps the homepage in step with the blog data
+  const posts = blogPosts
+    .filter((p) => ["pp-corrugated-specification-guide", "esd-antistatic-pp-corrugated", "pp-corrugated-returnable-packaging", "pp-layer-pads-palletisation"].includes(p.slug))
+    .map((p) => ({ slug: p.slug, category: p.category, title: p.title, excerpt: p.excerpt, read: p.readTime, coverImage: p.coverImage }));
 
   return (
     <section className="section-dark" style={{ background: C.deepWarm, padding: "80px clamp(1.5rem, 5vw, 4rem)" }}>
@@ -1813,7 +1788,7 @@ function BlogTeaser() {
                 }}
                 onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(250,247,242,0.05)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = C.deepWarm; }}>
-              <OptImg src={`/blog/${post.slug}.jpg`} alt="" sizes="(max-width: 768px) 100vw, 33vw" style={{
+              <OptImg src={post.coverImage ?? `/blog/${post.slug}.png`} alt="" sizes="(max-width: 768px) 100vw, 33vw" style={{
                 width: "100%", height: "160px", objectFit: "cover", display: "block",
                 transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
               }} />
