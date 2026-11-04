@@ -4,6 +4,8 @@ import { AuthProvider } from "@/context/AuthContext";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import GlobalNav from "@/components/GlobalNav";
 import SiteFooter from "@/components/SiteFooter";
+import JsonLd from "@/components/JsonLd";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -25,13 +27,17 @@ export const metadata: Metadata = {
     url: "https://puneglobalgroup.in",
     siteName: "Pune Global Group",
     type: "website",
+    locale: "en_IN",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Pune Global Group: PP corrugated packaging made in Pune" }],
   },
+  twitter: { card: "summary_large_image", images: ["/og.png"] },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

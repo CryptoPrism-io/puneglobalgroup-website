@@ -1246,6 +1246,12 @@ export interface BlogPost {
   content: BlogSection[];
   /** Slugs of related products to cross-link at end of post */
   relatedProducts?: string[];
+  /** 2–3 sentence direct answer shown first (answer engines quote this) */
+  answer?: string;
+  /** Questions answered at the end of the post (also FAQPage schema) */
+  faqs?: { q: string; a: string }[];
+  /** Month the post was last revised, e.g. "November 2026" */
+  updated?: string;
 }
 
 export interface BlogSection {

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run images && next dev",
-    "build": "node scripts/generate-sitemap.js && npm run images && next build",
+    "build": "npm run images && next build",
     "start": "next start",
     "lint": "next lint",
     "images": "node scripts/optimize-images.mjs"
