@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import OptImg from "@/components/OptImg";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { blogPosts, BlogPost, BlogSection, products } from "@/lib/pgg-data";
@@ -414,10 +415,11 @@ function BlogPostContent({ post }: { post: BlogPost }) {
 
       {post.coverImage && (
         <div style={{ width: "100%", maxHeight: "480px", overflow: "hidden", lineHeight: 0 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <OptImg
             src={post.coverImage}
             alt={post.title}
+            priority
+            sizes="100vw"
             style={{ width: "100%", height: "480px", objectFit: "cover", display: "block" }}
           />
         </div>
@@ -504,8 +506,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
                       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; (e.currentTarget as HTMLElement).style.transform = "none"; }}>
                       {thumb && (
                         <div style={{ height: "130px", overflow: "hidden" }}>
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={thumb} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                          <OptImg src={thumb} alt={p.name} sizes="(max-width: 768px) 50vw, 25vw" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                         </div>
                       )}
                       <div style={{ padding: "0.875rem 1rem 1rem" }}>

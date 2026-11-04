@@ -51,3 +51,6 @@ TROUBLESHOOTING.md
 
 # Playwright / browser automation local cache
 .playwright-mcp/
+
+# Generated responsive image variants (npm run images)
+public/_opt/

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import OptImg from "@/components/OptImg";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { blogPosts, BlogPost } from "@/lib/pgg-data";
@@ -186,8 +187,7 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
     >
       <div className="bcard-img">
         {post.coverImage
-          // eslint-disable-next-line @next/next/no-img-element
-          ? <img src={post.coverImage} alt="" />
+          ? <OptImg src={post.coverImage} alt="" sizes="(max-width: 768px) 100vw, 33vw" />
           : <div style={{ background: C.navyMid, width: "100%", height: "100%" }} />
         }
         <div className="bcard-accent" style={{ background: post.categoryColor }} />
@@ -352,8 +352,7 @@ export default function BlogPage() {
           >
             <div className="feat-img-wrap">
               {featured.coverImage && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={featured.coverImage} alt="" />
+                <OptImg src={featured.coverImage} alt="" sizes="(max-width: 960px) 100vw, 60vw" priority />
               )}
               <div className="feat-overlay" />
               <div style={{

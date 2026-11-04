@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import OptImg, { useSlideLoader } from "@/components/OptImg";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -263,6 +264,8 @@ function GradeCarousel({ images, name }: { images: string[]; name: string }) {
     return () => { clearTimeout(t); clearTimeout(init); };
   }, [paused, images.length]);
 
+  const shouldLoad = useSlideLoader(idx, images.length);
+
   return (
     <div
       onMouseEnter={() => setPaused(true)}
@@ -275,8 +278,8 @@ function GradeCarousel({ images, name }: { images: string[]; name: string }) {
       style={{ position: "relative", height: "220px", overflow: "hidden", background: C.parchment }}
     >
       {images.map((src, i) => (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img key={i} src={src} alt={`${name} ${i + 1}`} className={`carousel-img${i === idx ? " active" : ""}`} />
+        <OptImg key={i} src={src} alt={`${name} ${i + 1}`} className={`carousel-img${i === idx ? " active" : ""}`}
+          load={shouldLoad(i)} sizes="(max-width: 768px) 100vw, 33vw" />
       ))}
       <div style={{ position: "absolute", bottom: "2px", left: "50%", transform: "translateX(-50%)" }}>
         <div style={{ display: "flex", gap: "5px", padding: "8px 12px" }}>
@@ -448,9 +451,10 @@ export default function PaperBoardPage() {
             overflow: "hidden",
             boxShadow: "0 8px 48px rgba(0,0,0,0.35)",
           }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <OptImg
               src="/hero-paper-family.jpg"
+              priority
+              sizes="(max-width: 960px) 100vw, 50vw"
               alt="Premium paper and board grades — ITC PSPD reels and cut sheets"
               style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
             />

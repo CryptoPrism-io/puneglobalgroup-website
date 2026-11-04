@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, FormEvent } from "react";
+import OptImg, { useSlideLoader } from "@/components/OptImg";
 import Link from "next/link";
 import {
   IconPhone, IconMail, IconMapPin, IconBuildingFactory2, IconPackage, IconStack2,
@@ -903,9 +904,9 @@ function Hero() {
               "/infrastructure/facility/quality-control.jpg",
               "/hero-paper-family.jpg",
               "/infrastructure/facility/storage-warehouse.jpg",
-            ].map((src) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img key={src} src={src} alt="" className="hero-carousel-img" />
+            ].map((src, i) => (
+              <OptImg key={src} src={src} alt="" className="hero-carousel-img"
+                sizes="(max-width: 960px) 100vw, 55vw" priority={i === 0} />
             ))}
           </div>
 
@@ -1100,6 +1101,7 @@ const PP_PRODUCTS = [
 
 function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
   const [idx, setIdx] = useState(0);
+  const shouldLoad = useSlideLoader(idx, p.imgs.length);
   const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
@@ -1151,8 +1153,8 @@ function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
           flexShrink: 0,
         }}>
           {p.imgs.map((src, j) => (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img key={src} src={src} alt={`${p.name} — ${j + 1}`}
+            <OptImg key={src} src={src} alt={`${p.name} — ${j + 1}`}
+              load={shouldLoad(j)} sizes="(max-width: 768px) 100vw, (max-width: 960px) 50vw, 33vw"
               style={{
                 position: "absolute",
                 inset: 0,
@@ -1294,6 +1296,7 @@ function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
   const [hovered, setHovered] = useState(false);
   /* taller default image for Paper & Board Grades */
   const imgH = hovered ? "260px" : "180px";
+  const shouldLoad = useSlideLoader(idx, p.imgs.length);
   useEffect(() => {
     if (hovered) return;
     let intervalId: ReturnType<typeof setInterval> | undefined;
@@ -1336,8 +1339,8 @@ function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
           flexShrink: 0,
         }}>
           {p.imgs.map((src, j) => (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img key={src} src={src} alt={`${p.name} — ${j + 1}`}
+            <OptImg key={src} src={src} alt={`${p.name} — ${j + 1}`}
+              load={shouldLoad(j)} sizes="(max-width: 768px) 100vw, (max-width: 960px) 50vw, 33vw"
               style={{
                 position: "absolute",
                 inset: 0,
@@ -1539,9 +1542,8 @@ function ProductsSection() {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}>
 
         {/* PP Corrugated */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <Link href="/products/pp-corrugated" className="hp-cat-pp">
-          <img src="/hero-pp-family.jpg" alt="" className="hp-cat-bg-img" />
+          <OptImg src="/hero-pp-family.jpg" alt="" className="hp-cat-bg-img" sizes="(max-width: 960px) 100vw, 50vw" />
           <div className="hp-pp-overlay" />
           <div className="hp-cat-content">
             <div className="hp-cat-index-row">
@@ -1564,9 +1566,8 @@ function ProductsSection() {
         </Link>
 
         {/* Paper & Board */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <Link href="/products/paper-board" className="hp-cat-paper">
-          <img src="/hero-paper-family.jpg" alt="" className="hp-cat-bg-img" />
+          <OptImg src="/hero-paper-family.jpg" alt="" className="hp-cat-bg-img" sizes="(max-width: 960px) 100vw, 50vw" />
           <div className="hp-paper-overlay" />
           <div className="hp-cat-content">
             <div className="hp-cat-index-row">
@@ -1651,8 +1652,7 @@ function InfraCallout() {
           { src: "/infrastructure/support/full-product-lineup.jpg",      anim: "rp3 3.2s ease-in-out 1.5s infinite" },
           { src: "/infrastructure/facility/quality-control.jpg",         anim: "rp4 4.2s ease-in-out 0.4s infinite" },
         ].map((item) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img key={item.src} src={item.src} alt="" style={{
+          <OptImg key={item.src} src={item.src} alt="" sizes="25vw" style={{
             width: "100%", height: "100%", objectFit: "cover", display: "block",
             animation: item.anim,
           }} />
@@ -2048,8 +2048,7 @@ function BlogTeaser() {
                 }}
                 onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(250,247,242,0.05)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = C.deepWarm; }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`/blog/${post.slug}.jpg`} alt="" style={{
+              <OptImg src={`/blog/${post.slug}.jpg`} alt="" sizes="(max-width: 768px) 100vw, 33vw" style={{
                 width: "100%", height: "160px", objectFit: "cover", display: "block",
                 transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
               }} />
@@ -2139,12 +2138,11 @@ function AboutSection() {
               50+ clients across India.
             </p>
 
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <div style={{
               borderRadius: "8px", overflow: "hidden", marginBottom: "2rem",
               boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
             }}>
-              <img src="/infrastructure/facility/converting-floor.jpg" alt="PGG Converting Facility at MIDC Sanaswadi" style={{
+              <OptImg src="/infrastructure/facility/converting-floor.jpg" alt="PGG Converting Facility at MIDC Sanaswadi" sizes="(max-width: 960px) 100vw, 50vw" style={{
                 width: "100%", height: "220px", objectFit: "cover", display: "block",
               }} />
             </div>
