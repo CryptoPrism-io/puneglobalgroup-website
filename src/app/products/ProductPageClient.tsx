@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import OptImg, { useSlideLoader } from "@/components/OptImg";
+import Lightbox from "@/components/Lightbox";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { products, Product } from "@/lib/pgg-data";
@@ -179,20 +181,26 @@ function buildGlobalCSS(T: Theme) {
 function ProductHeroCarousel({ images, name }: { images: string[]; name: string }) {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [open, setOpen] = useState(false);
+  const shouldLoad = useSlideLoader(idx, images.length);
 
   useEffect(() => {
-    if (paused || images.length <= 1) return;
+    if (paused || open || images.length <= 1) return;
     const t = setInterval(() => setIdx(c => (c + 1) % images.length), 1500);
     return () => clearInterval(t);
-  }, [paused, images.length]);
+  }, [paused, open, images.length]);
 
   return (
+    <>
     <motion.div
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onClick={() => setOpen(true)}
+      role="button"
+      aria-label={`Open ${name} images`}
       style={{
         position: "relative",
         borderRadius: "6px",
@@ -203,11 +211,13 @@ function ProductHeroCarousel({ images, name }: { images: string[]; name: string 
       }}
     >
       {images.map((src, j) => (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img
+        <OptImg
           key={src}
           src={src}
           alt={`${name} — view ${j + 1}`}
+          load={shouldLoad(j)}
+          priority={j === 0}
+          sizes="(max-width: 960px) 100vw, 50vw"
           style={{
             width: "100%",
             height: "380px",
@@ -236,7 +246,8 @@ function ProductHeroCarousel({ images, name }: { images: string[]; name: string 
           {images.map((_, j) => (
             <button
               key={j}
-              onClick={() => setIdx(j)}
+              aria-label={`Show image ${j + 1}`}
+              onClick={(e) => { e.stopPropagation(); setIdx(j); }}
               style={{
                 width: "7px",
                 height: "7px",
@@ -270,10 +281,12 @@ function ProductHeroCarousel({ images, name }: { images: string[]; name: string 
           borderRadius: "99px",
           backdropFilter: "blur(4px)",
         }}>
-          Paused
+          Paused · click to enlarge
         </div>
       )}
     </motion.div>
+    {open && <Lightbox images={images} start={idx} alt={name} onClose={() => setOpen(false)} />}
+    </>
   );
 }
 
@@ -752,8 +765,7 @@ function ProductPageContent({ product }: { product: Product }) {
                       <Link href={p.category === "Paper & Board" ? `/products/paper-board/${p.slug}` : `/products/pp-corrugated/${p.slug}`} className="related-card">
                         {thumb && (
                           <div style={{ overflow: "hidden" }}>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={thumb} alt={p.name} className="related-card-img" />
+                            <OptImg src={thumb} alt={p.name} className="related-card-img" sizes="(max-width: 768px) 50vw, 25vw" />
                           </div>
                         )}
                         <div className="related-card-body">

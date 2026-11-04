@@ -1,4 +1,5 @@
 "use client";
+import OptImg from "@/components/OptImg";
 
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -335,8 +336,7 @@ export default function ProductsPage() {
           style={{ display: "flex", flex: 1 }}
         >
         <Link href="/products/pp-corrugated" className="cat-pp section-dark" style={{ flex: 1 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={PP_COMPOSITE} alt="" className="cat-bg-img" />
+          <OptImg src={PP_COMPOSITE} alt="" className="cat-bg-img" sizes="(max-width: 960px) 100vw, 50vw" priority />
 
           {/* Dark gradient overlay lifting text */}
           <div className="pp-overlay" />
@@ -379,8 +379,7 @@ export default function ProductsPage() {
           style={{ display: "flex", flex: 1 }}
         >
         <Link href="/products/paper-board" className="cat-paper section-dark" style={{ flex: 1 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={PAPER_COMPOSITE} alt="" className="cat-bg-img" />
+          <OptImg src={PAPER_COMPOSITE} alt="" className="cat-bg-img" sizes="(max-width: 960px) 100vw, 50vw" priority />
 
           {/* Dark gradient overlay */}
           <div className="paper-overlay" />

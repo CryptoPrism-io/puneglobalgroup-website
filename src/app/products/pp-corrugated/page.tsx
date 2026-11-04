@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import OptImg, { useSlideLoader } from "@/components/OptImg";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ppFamilies, PPVariant } from "@/lib/pp-data";
@@ -308,6 +309,7 @@ function VariantCarousel({ images, name }: { images: [string, string, string]; n
   }, [paused]);
 
   const labels = ["Studio", "Engineering", "In Use"];
+  const shouldLoad = useSlideLoader(idx, 3);
 
   return (
     <div
@@ -323,11 +325,12 @@ function VariantCarousel({ images, name }: { images: [string, string, string]; n
     >
       {/* All 3 images stacked — crossfade via CSS opacity transition */}
       {images.map((src, i) => (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <OptImg
           key={i}
           src={src}
           alt={`${name} — ${labels[i]}`}
+          load={shouldLoad(i)}
+          sizes="(max-width: 768px) 100vw, 33vw"
           className={`carousel-img${i === idx ? " active" : ""}`}
         />
       ))}
@@ -752,9 +755,10 @@ function Hero() {
           overflow: "hidden",
           boxShadow: "0 8px 48px rgba(0,0,0,0.35)",
         }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <OptImg
             src="/hero-pp-family.jpg"
+            priority
+            sizes="(max-width: 960px) 100vw, 50vw"
             alt="PP corrugated product family — boxes, trays, bins, layer pads, separators"
             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
           />

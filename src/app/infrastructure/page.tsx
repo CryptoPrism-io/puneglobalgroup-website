@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import OptImg, { useSlideLoader } from "@/components/OptImg";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { machines, capabilities } from "@/lib/pgg-data";
@@ -223,6 +224,7 @@ function MachineCard({ machine, delay }: { machine: typeof machines[0]; delay: n
   }, [imgs.length]);
 
   const hasImgs = imgs.length > 0;
+  const shouldLoad = useSlideLoader(idx, imgs.length);
 
   return (
     <motion.div
@@ -235,8 +237,8 @@ function MachineCard({ machine, delay }: { machine: typeof machines[0]; delay: n
       {hasImgs && (
         <div className="mc-carousel">
           {imgs.map((src, i) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img key={src} src={src} alt={`${machine.name} — ${MC_LABELS[i]}`} className={`mc-img${i === idx ? " active" : ""}`} />
+            <OptImg key={src} src={src} alt={`${machine.name} — ${MC_LABELS[i]}`} className={`mc-img${i === idx ? " active" : ""}`}
+              load={shouldLoad(i)} sizes="(max-width: 960px) 100vw, 50vw" />
           ))}
           <span className="mc-label">{MC_LABELS[idx]}</span>
         </div>
@@ -306,8 +308,7 @@ function FacilityGallery() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={vp}
             transition={{ duration: 0.6, ease, delay: i * 0.08 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={src} alt={label} loading="lazy" />
+            <OptImg src={src} alt={label} sizes="(max-width: 768px) 100vw, 33vw" />
             <div className="fac-caption">{label}</div>
           </motion.div>
         ))}
@@ -339,13 +340,11 @@ export default function InfrastructurePage() {
         }}
       >
         {/* Full-bleed background image */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <OptImg
           src="/infrastructure/machines/synchro-sheeter-wide.jpg"
           alt="Synchro sheeter in operation at PGG facility, MIDC Pune"
-          fetchPriority="high"
-          loading="eager"
-          decoding="sync"
+          priority
+          sizes="100vw"
           style={{
             position: "absolute", inset: 0,
             width: "100%", height: "100%",
