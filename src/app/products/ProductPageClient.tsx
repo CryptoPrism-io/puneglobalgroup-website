@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import OptImg, { useSlideLoader } from "@/components/OptImg";
 import Lightbox from "@/components/Lightbox";
+import CarouselControls, { useCarousel } from "@/components/CarouselControls";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { products, Product } from "@/lib/pgg-data";
@@ -180,16 +181,10 @@ function buildGlobalCSS(T: Theme) {
 // Product Hero Image Carousel
 // ————————————————————————————————————————————
 function ProductHeroCarousel({ images, name }: { images: string[]; name: string }) {
-  const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const [open, setOpen] = useState(false);
+  const { idx, go, swipe } = useCarousel(images.length, { delay: 4000, paused: paused || open });
   const shouldLoad = useSlideLoader(idx, images.length);
-
-  useEffect(() => {
-    if (paused || open || images.length <= 1) return;
-    const t = setInterval(() => setIdx(c => (c + 1) % images.length), 1500);
-    return () => clearInterval(t);
-  }, [paused, open, images.length]);
 
   return (
     <>
@@ -200,6 +195,8 @@ function ProductHeroCarousel({ images, name }: { images: string[]; name: string 
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onClick={() => setOpen(true)}
+      {...swipe}
+      className="cc-host"
       role="button"
       aria-label={`Open ${name} images`}
       style={{
@@ -233,58 +230,11 @@ function ProductHeroCarousel({ images, name }: { images: string[]; name: string 
         />
       ))}
 
-      {/* Dot navigation */}
-      {images.length > 1 && (
-        <div style={{
-          position: "absolute",
-          bottom: "12px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          display: "flex",
-          gap: "6px",
-          zIndex: 2,
-        }}>
-          {images.map((_, j) => (
-            <button
-              key={j}
-              aria-label={`Show image ${j + 1}`}
-              onClick={(e) => { e.stopPropagation(); setIdx(j); }}
-              style={{
-                width: "7px",
-                height: "7px",
-                borderRadius: "50%",
-                border: "none",
-                padding: 0,
-                cursor: "pointer",
-                background: j === idx ? "#fff" : "rgba(255,255,255,0.45)",
-                transition: "background 0.25s, transform 0.25s",
-                transform: j === idx ? "scale(1.25)" : "scale(1)",
-              }}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* Pause badge */}
-      {paused && images.length > 1 && (
-        <div style={{
-          position: "absolute",
-          top: "10px",
-          right: "10px",
-          fontFamily: "'DM Sans', sans-serif",
-          fontSize: "0.6rem",
-          fontWeight: 600,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          background: "rgba(0,0,0,0.55)",
-          color: "rgba(250,247,242,0.85)",
-          padding: "3px 8px",
-          borderRadius: "99px",
-          backdropFilter: "blur(4px)",
-        }}>
-          Paused · click to enlarge
-        </div>
-      )}
+      <CarouselControls count={images.length} idx={idx} go={go} label="image" />
+      <span style={{ position: "absolute", top: "10px", right: "10px", zIndex: 3, fontFamily: "'DM Sans', sans-serif",
+        fontSize: "0.75rem", fontWeight: 600, background: "rgba(15,20,30,0.6)", color: "#fff", padding: "3px 8px", borderRadius: "4px" }}>
+        Click to enlarge
+      </span>
     </motion.div>
     {open && <Lightbox images={images} start={idx} alt={name} onClose={() => setOpen(false)} />}
     </>
