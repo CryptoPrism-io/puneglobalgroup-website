@@ -6,6 +6,7 @@ import Lightbox from "@/components/Lightbox";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { products, Product } from "@/lib/pgg-data";
+import { productFaqs } from "@/lib/seo";
 
 
 // ————————————————————————————————————————————
@@ -721,6 +722,23 @@ function ProductPageContent({ product }: { product: Product }) {
             </ul>
           </div>
         </motion.section>
+
+        {/* Questions buyers ask (same text as the FAQPage schema) */}
+        <section aria-labelledby="faq-h" style={{ marginTop: "3.5rem" }}>
+          <h2 id="faq-h" style={{ fontFamily: F.display, fontSize: "1.6rem", fontWeight: 700, color: T.text, margin: "0 0 1.25rem" }}>
+            Questions about the {product.name}
+          </h2>
+          <div style={{ borderTop: `1px solid ${T.borderMid}` }}>
+            {productFaqs(product).map((f) => (
+              <details key={f.q} className="pfaq" style={{ borderBottom: `1px solid ${T.borderMid}` }}>
+                <summary style={{ fontFamily: F.body, fontSize: "1.02rem", fontWeight: 600, color: T.text, padding: "1rem 0", cursor: "pointer" }}>
+                  {f.q}
+                </summary>
+                <p style={{ fontFamily: F.body, fontSize: "0.98rem", lineHeight: 1.65, color: T.textMuted, margin: "0 0 1rem" }}>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
         {/* Related Products — cards stagger on scroll with spring hover */}
         {(() => {

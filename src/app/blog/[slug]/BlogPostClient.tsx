@@ -86,69 +86,6 @@ const GLOBAL_CSS = `
   }
 `;
 
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", h);
-    return () => window.removeEventListener("scroll", h);
-  }, []);
-
-  return (
-    <nav
-      className="blog-nav"
-      style={{
-        position: "sticky",
-        top: "70px",
-        zIndex: 100,
-        background: scrolled ? "rgba(15,26,46,0.95)" : C.navy,
-        backdropFilter: "blur(8px)",
-        borderBottom: `1px solid ${scrolled ? C.borderMid : C.border}`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0 clamp(1rem, 3vw, 2.5rem)",
-        height: "64px",
-        transition: "border-color 0.3s ease, background 0.3s ease",
-      }}
-    >
-      <Link
-        href="/blog"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-          textDecoration: "none",
-        }}
-      >
-        <span style={{ color: C.steel, fontSize: "0.9rem" }}>{"\u2190"}</span>
-        <span style={{ fontFamily: F.body, fontWeight: 500, color: C.cream, fontSize: "0.875rem", opacity: 0.8 }}>
-          All Articles
-        </span>
-      </Link>
-
-      <SiteLogo href="/" />
-
-      <a
-        href="/contact"
-        style={{
-          fontFamily: F.body,
-          background: C.gold,
-          color: C.navy,
-          textDecoration: "none",
-          fontSize: "0.82rem",
-          fontWeight: 500,
-          padding: "0.5rem 1.25rem",
-          borderRadius: "3px",
-          letterSpacing: "0.03em",
-        }}
-      >
-        Get a Quote
-      </a>
-    </nav>
-  );
-}
-
 function RenderSection({ section }: { section: BlogSection }) {
   switch (section.type) {
     case "paragraph":
@@ -310,7 +247,7 @@ function BlogPostContent({ post }: { post: BlogPost }) {
           >
             <Link href="/" style={{ fontFamily: F.body, fontSize: "0.76rem", color: C.textMuted, textDecoration: "none" }}>Home</Link>
             <span style={{ color: C.textFaint, fontSize: "0.76rem" }}>/</span>
-            <Link href="/blog" style={{ fontFamily: F.body, fontSize: "0.76rem", color: C.textMuted, textDecoration: "none" }}>Insights</Link>
+            <Link href="/blog" style={{ fontFamily: F.body, fontSize: "0.76rem", color: C.textMuted, textDecoration: "none" }}>Blog</Link>
             <span style={{ color: C.textFaint, fontSize: "0.76rem" }}>/</span>
             <span style={{ fontFamily: F.body, fontSize: "0.76rem", color: C.cream, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "280px" }}>
               {post.title}
@@ -409,17 +346,6 @@ function BlogPostContent({ post }: { post: BlogPost }) {
         </div>
       </header>
 
-      {post.coverImage && (
-        <div style={{ width: "100%", maxHeight: "480px", overflow: "hidden", lineHeight: 0 }}>
-          <OptImg
-            src={post.coverImage}
-            alt={post.title}
-            priority
-            sizes="100vw"
-            style={{ width: "100%", height: "480px", objectFit: "cover", display: "block" }}
-          />
-        </div>
-      )}
 
       <main className="blog-content-wrap" style={{ maxWidth: "760px", margin: "0 auto", padding: "3.5rem clamp(1rem, 4vw, 2.5rem) 5rem" }}>
         <motion.div
@@ -439,7 +365,12 @@ function BlogPostContent({ post }: { post: BlogPost }) {
               marginBottom: "3rem",
             }}
           >
-            {post.excerpt}
+            {post.answer ? (
+              <>
+                <span style={{ display: "block", fontFamily: F.body, fontSize: "0.8rem", fontWeight: 600, color: C.cream, marginBottom: "0.4rem" }}>Short answer</span>
+                <span style={{ color: C.textBody }}>{post.answer}</span>
+              </>
+            ) : post.excerpt}
           </div>
 
           <div>
@@ -447,19 +378,33 @@ function BlogPostContent({ post }: { post: BlogPost }) {
               <RenderSection key={i} section={section} />
             ))}
           </div>
+
+          {post.faqs && post.faqs.length > 0 && (
+            <section aria-labelledby="post-faq" style={{ marginTop: "3rem" }}>
+              <h2 id="post-faq" className="h2-dark" style={{ fontFamily: F.display, fontSize: "1.6rem", fontWeight: 700, color: C.cream, margin: "0 0 1rem", paddingBottom: "0.5rem", borderBottom: `1px solid ${C.borderMid}` }}>
+                Frequently asked questions
+              </h2>
+              {post.faqs.map((f) => (
+                <div key={f.q} style={{ marginBottom: "1.5rem" }}>
+                  <h3 style={{ fontFamily: F.body, fontSize: "1.1rem", fontWeight: 600, color: C.cream, margin: "0 0 0.4rem" }}>{f.q}</h3>
+                  <p style={{ fontFamily: F.body, fontSize: "1.05rem", lineHeight: 1.7, color: C.textBody, margin: 0 }}>{f.a}</p>
+                </div>
+              ))}
+            </section>
+          )}
         </motion.div>
 
         <div style={{ marginTop: "3.5rem", paddingTop: "2rem", borderTop: `1px solid ${C.border}` }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>
             <span style={{ fontFamily: F.body, fontSize: "0.78rem", color: C.textMuted }}>
-              Published by Pune Global Group {"\u00B7"} {post.date}
+              Published by Pune Global Group {"\u00B7"} {post.date}{post.updated && post.updated !== post.date ? ` \u00B7 Updated ${post.updated}` : ""}
             </span>
             <a href="/contact" style={{ fontFamily: F.body, fontSize: "0.78rem", color: C.gold, textDecoration: "none", fontWeight: 600 }}>
               Contact Us {"\u2192"}
             </a>
           </div>
           <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-            {["Paper & Board", "Packaging India", "Pune Global Group", post.category].map((tag) => (
+            {[post.category, "Pune Global Group"].map((tag) => (
               <span
                 key={tag}
                 style={{
@@ -657,7 +602,7 @@ export default function BlogPostClient({ slug }: { slug: string }) {
       <style>{GLOBAL_CSS}</style>
       {post ? (
         <>
-          <Navbar />
+          {/* Global nav already covers this page */}
           <BlogPostContent post={post} />
         </>
       ) : (
