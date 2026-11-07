@@ -15,7 +15,7 @@ const C = {
 
 const GLOBAL_NAV_CSS = `
   .gnav-link {
-    font-family: 'DM Sans', 'Plus Jakarta Sans', sans-serif;
+    font-family: 'DM Sans', system-ui, sans-serif;
     font-size: 0.825rem;
     font-weight: 500;
     color: ${C.warm};
@@ -41,23 +41,16 @@ const GLOBAL_NAV_CSS = `
 
   .gnav-cta {
     display: inline-flex; align-items: center; gap: 6px;
-    font-family: 'DM Sans', 'Plus Jakarta Sans', sans-serif;
+    font-family: 'DM Sans', system-ui, sans-serif;
     font-size: 0.72rem; font-weight: 600;
     letter-spacing: 0.08em; text-transform: uppercase;
-    color: #fff; background: linear-gradient(180deg, #6BAAE0 0%, #3A7BBF 100%);
+    color: #fff; background: #3A7BBF;
     border: none; cursor: pointer;
-    padding: 8px 18px; border-radius: 999px;
+    padding: 10px 18px; border-radius: 6px;
     text-decoration: none;
-    box-shadow: 0 2px 0 #2A5A8A, 0 3px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
-    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
-    text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+    transition: background 0.2s;
   }
-  .gnav-cta:hover {
-    background: linear-gradient(180deg, #8AC0F0 0%, #5B9BD5 100%);
-    box-shadow: 0 3px 0 #2A5A8A, 0 5px 16px rgba(91,155,213,0.35), inset 0 1px 0 rgba(255,255,255,0.3);
-    transform: translateY(-1px) scale(1.02);
-  }
-  .gnav-cta:active { transform: translateY(1px); box-shadow: 0 1px 0 #2A5A8A, 0 2px 4px rgba(0,0,0,0.2); }
+  .gnav-cta:hover { background: #2F6AA6; }
 
   .gnav-mobile-menu {
     display: none;
@@ -92,9 +85,9 @@ const GLOBAL_NAV_CSS = `
 `;
 
 const NAV_LINKS = [
-  { label: "Home",           href: "/" },
-  { label: "Products",       href: "/products" },
-  { label: "Infrastructure", href: "/infrastructure" },
+  { label: "PP Packaging",   href: "/products/pp-corrugated" },
+  { label: "Paper & Board",  href: "/products/paper-board" },
+  { label: "Facility",       href: "/infrastructure" },
   { label: "Blog",           href: "/blog" },
   { label: "About",          href: "/about" },
   { label: "Contact",        href: "/contact" },
@@ -123,24 +116,15 @@ export default function GlobalNav() {
     <>
       <style>{GLOBAL_NAV_CSS}</style>
 
-      {/* ── Floating glassmorphic nav ── */}
+      {/* ── Top nav ── */}
       <nav style={{
-        position: "fixed", top: "12px", left: "50%", transform: "translateX(-50%)",
-        width: "calc(100% - clamp(3rem, 10vw, 8rem) - 50px)",
-        maxWidth: "1450px",
+        position: "fixed", top: 0, left: 0, right: 0,
         zIndex: 900,
-        height: "56px",
-        background: scrolled ? "rgba(28,26,23,0.35)" : "rgba(28,26,23,0.15)",
-        backdropFilter: "blur(40px) saturate(1.6)",
-        WebkitBackdropFilter: "blur(40px) saturate(1.6)",
-        border: `1px solid rgba(250,247,242,${scrolled ? "0.12" : "0.06"})`,
-        borderRadius: "16px",
-        boxShadow: scrolled
-          ? "0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(250,247,242,0.06)"
-          : "none",
-        transition: "box-shadow 0.3s ease, background 0.3s ease",
+        height: "64px",
+        background: "#141C2B",
+        borderBottom: `1px solid rgba(250,247,242,${scrolled ? "0.14" : "0.08"})`,
         display: "flex", alignItems: "center",
-        padding: "0 clamp(1rem, 3vw, 1.75rem)",
+        padding: "0 clamp(1rem, 4vw, 3rem)",
       }}>
         <div style={{
           display: "flex", alignItems: "center",
@@ -168,7 +152,7 @@ export default function GlobalNav() {
           {/* CTA + hamburger */}
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <Link href="/contact" className="gnav-cta gnav-desktop-links">
-              Get Quote →
+              Request a quote
             </Link>
             <button
               className="gnav-hamburger"
@@ -193,8 +177,8 @@ export default function GlobalNav() {
             href={l.href}
             onClick={() => setMobileOpen(false)}
             style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontStyle: "italic", fontWeight: isActive(l.href) ? 600 : 400,
+              fontFamily: "'DM Sans', system-ui, sans-serif",
+              fontStyle: "normal", fontWeight: isActive(l.href) ? 600 : 400,
               fontSize: "2rem", color: C.cream,
               textDecoration: "none", letterSpacing: "0.03em",
               background: isActive(l.href) ? "rgba(250,247,242,0.10)" : "none",
@@ -206,7 +190,7 @@ export default function GlobalNav() {
           </Link>
         ))}
         <Link href="/contact" onClick={() => setMobileOpen(false)} className="gnav-cta">
-          Get Quote →
+          Request a quote
         </Link>
       </div>
     </>

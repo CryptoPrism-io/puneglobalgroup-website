@@ -35,9 +35,9 @@ const C = {
 };
 
 const F = {
-  display: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
-  body:    "'DM Sans', 'Plus Jakarta Sans', sans-serif",
-  italic:  "'Cormorant Garamond', Georgia, serif",
+  display: "'Playfair Display', 'DM Sans', system-ui, sans-serif",
+  body:    "'DM Sans', system-ui, sans-serif",
+  italic:  "'DM Sans', system-ui, sans-serif",
 };
 
 const CSS = `
@@ -124,47 +124,27 @@ const ease = [0.22, 1, 0.36, 1] as const;
 const vp = { once: true, amount: 0.15 };
 
 const fadeUp = {
-  initial: { opacity: 0, y: 25 },
+  initial: false as const,
   whileInView: { opacity: 1, y: 0 },
   viewport: vp,
   transition: { duration: 0.6, ease },
 };
 
 const slideLeft = {
-  initial: { opacity: 0, x: -30 },
+  initial: false as const,
   whileInView: { opacity: 1, x: 0 },
   viewport: vp,
   transition: { duration: 0.6, ease },
 };
 
 const slideRight = {
-  initial: { opacity: 0, x: 30 },
+  initial: false as const,
   whileInView: { opacity: 1, x: 0 },
   viewport: vp,
   transition: { duration: 0.6, ease },
 };
 
 /* ── CountUp on scroll ───────────────────────── */
-function CountUp({ value, suffix = "" }: { value: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.5 });
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    if (!inView) return;
-    let start = 0;
-    const dur = 1200;
-    const step = (ts: number) => {
-      if (!start) start = ts;
-      const p = Math.min((ts - start) / dur, 1);
-      setDisplay(Math.round(p * value));
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [inView, value]);
-
-  return <span ref={ref}>{display}{suffix}</span>;
-}
 
 function useScrollReveal() {
   useEffect(() => {
@@ -266,7 +246,7 @@ export default function AboutPage() {
           <motion.span
             className="eyebrow"
             style={{ color: "rgba(250,247,242,0.4)" }}
-            initial={{ opacity: 0, y: 25 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease, delay: 0.1 }}
           >
@@ -279,12 +259,11 @@ export default function AboutPage() {
               color: C.cream, letterSpacing: "-0.03em",
               lineHeight: 1.05, margin: "0 0 1.5rem", maxWidth: "700px",
             }}
-            initial={{ opacity: 0, y: 25 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease, delay: 0.25 }}
           >
-            Three Decades of<br />
-            <em style={{ fontWeight: 400 }}>Packaging Excellence.</em>
+            A Pune packaging business since 1995
           </motion.h1>
           <motion.p
             style={{
@@ -292,7 +271,7 @@ export default function AboutPage() {
               color: "rgba(250,247,242,0.55)", lineHeight: 1.8,
               maxWidth: "520px", margin: 0, fontWeight: 300,
             }}
-            initial={{ opacity: 0, y: 25 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease, delay: 0.4 }}
           >
@@ -325,8 +304,7 @@ export default function AboutPage() {
                 fontSize: "clamp(1.9rem, 3.5vw, 3rem)", color: C.cream,
                 letterSpacing: "-0.02em", lineHeight: 1.15, marginBottom: "2rem",
               }}>
-                Founded on Trust.<br />
-                <em style={{ fontWeight: 400 }}>Built on Reliability.</em>
+                How we started
               </h2>
 
               <p style={{ fontFamily: F.body, fontSize: "1rem", lineHeight: 1.9,
@@ -398,7 +376,7 @@ export default function AboutPage() {
                     </span>
                     <span style={{ fontFamily: F.display, fontWeight: 700,
                       fontSize: "1.4rem", color: C.saffron }}>
-                      <CountUp value={item.num} suffix={item.suffix} />
+                      {item.num}{item.suffix}
                     </span>
                   </div>
                 ))}
@@ -444,7 +422,7 @@ export default function AboutPage() {
             <h2 className="h2-dark" style={{ fontFamily: F.display, fontWeight: 700,
               fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", color: C.cream,
               letterSpacing: "-0.02em", lineHeight: 1.15, margin: "0 0 0.5rem" }}>
-              The People Behind the Brand.
+              Who runs it
             </h2>
           </motion.div>
           <div className="leadership-grid">
@@ -463,7 +441,7 @@ export default function AboutPage() {
               },
             ].map((person, i) => (
               <motion.div key={person.name}
-                initial={{ opacity: 0, y: 25, scale: 0.97 }}
+                initial={false}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={vp}
                 transition={{ duration: 0.6, ease, delay: i * 0.12 }}
@@ -481,7 +459,7 @@ export default function AboutPage() {
                   {person.role}
                 </div>
                 <div style={{ fontFamily: F.body, fontSize: "0.8rem", color: C.textMuted,
-                  fontStyle: "italic", marginBottom: "1.25rem" }}>
+                  fontStyle: "normal", marginBottom: "1.25rem" }}>
                   {person.qual}
                 </div>
                 <p style={{ fontFamily: F.body, fontSize: "0.92rem", lineHeight: 1.85,
@@ -524,7 +502,7 @@ export default function AboutPage() {
           <div className="industries-grid-3" style={{ marginBottom: "3rem" }}>
             {tradeCustomers.map((ind, i) => (
               <motion.div key={ind.name} className="ind-tile"
-                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+                initial={false}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={vp}
                 transition={{ duration: 0.6, ease, delay: i * 0.1 }}
@@ -562,7 +540,7 @@ export default function AboutPage() {
           <div className="industries-grid-4">
             {endIndustries.map((ind, i) => (
               <motion.div key={ind.name} className="ind-tile"
-                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+                initial={false}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={vp}
                 transition={{ duration: 0.6, ease, delay: i * 0.1 }}
@@ -618,7 +596,7 @@ export default function AboutPage() {
               },
             ].map((loc, i) => (
               <motion.div key={loc.label}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+                initial={false}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={vp}
                 transition={{ duration: 0.6, ease, delay: i * 0.1 }}

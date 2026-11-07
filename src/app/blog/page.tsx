@@ -25,9 +25,9 @@ const C = {
 };
 
 const F = {
-  display: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
-  body:    "'DM Sans', 'Plus Jakarta Sans', sans-serif",
-  italic:  "'Cormorant Garamond', Georgia, serif",
+  display: "'Playfair Display', 'DM Sans', system-ui, sans-serif",
+  body:    "'DM Sans', system-ui, sans-serif",
+  italic:  "'DM Sans', system-ui, sans-serif",
 };
 
 const CSS = `
@@ -179,7 +179,7 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
     <MotionLink
       href={`/blog/${post.slug}`}
       className="bcard"
-      initial={{ opacity: 0, y: 20, scale: 0.97 }}
+      initial={false}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.6, ease: EASE, delay: index * 0.08 }}
@@ -261,20 +261,16 @@ export default function BlogPage() {
         padding: "clamp(50px, 7vh, 80px) clamp(1.5rem, 5vw, 4rem) clamp(1.5rem, 3vh, 2.5rem)",
         position: "relative", overflow: "hidden",
       }}>
-        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity: 0.04 }} aria-hidden>
-          <filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.68" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
-          <rect width="100%" height="100%" filter="url(#g)" />
-        </svg>
         <div aria-hidden style={{
           position: "absolute", right: "2rem", top: "50%", transform: "translateY(-50%)",
           fontFamily: F.display, fontSize: "clamp(8rem, 18vw, 16rem)",
-          fontWeight: 800, fontStyle: "italic",
+          fontWeight: 800, fontStyle: "normal",
           color: "rgba(250,247,242,0.035)", lineHeight: 1,
           pointerEvents: "none", userSelect: "none",
         }}>01</div>
         <div style={{ maxWidth: "1100px", margin: "0 auto", position: "relative" }}>
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.2 }}
             style={{
@@ -286,21 +282,21 @@ export default function BlogPage() {
               letterSpacing: "0.18em", textTransform: "uppercase",
               color: "rgba(250,247,242,0.55)",
             }}>
-              Knowledge Hub
+              Blog
             </span>
             <div className="blog-masthead-rule" style={{
               flex: "0 0 48px", height: "1px", background: "rgba(250,247,242,0.3)",
               animation: "ruleGrow 0.55s ease 0.2s both",
             }} />
             <span style={{
-              fontFamily: F.italic, fontStyle: "italic",
+              fontFamily: F.italic, fontStyle: "normal",
               fontSize: "0.75rem", color: "rgba(250,247,242,0.45)",
             }}>
               {blogPosts.length} Articles
             </span>
           </motion.div>
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.4 }}
             style={{
@@ -311,11 +307,10 @@ export default function BlogPage() {
               maxWidth: "680px",
             }}
           >
-            Packaging<br />
-            <em style={{ fontStyle: "italic", fontWeight: 500 }}><span className="gold-text">Intelligence</span></em>
+            Guides for packaging buyers
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.6 }}
             style={{
@@ -323,8 +318,7 @@ export default function BlogPage() {
               lineHeight: 1.75, margin: 0, maxWidth: "520px",
             }}
           >
-            Technical guides, compliance updates, and market intelligence
-            for packaging buyers and converting professionals across India.
+            Practical notes on choosing PP packaging and paper grades: specifications, costs and compliance.
           </motion.p>
         </div>
       </section>
@@ -338,14 +332,14 @@ export default function BlogPage() {
             }}>Latest</span>
             <div style={{ flex: "0 0 32px", height: "1px", background: C.steel, opacity: 0.5 }} />
             <span style={{
-              fontFamily: F.italic, fontStyle: "italic",
+              fontFamily: F.italic, fontStyle: "normal",
               fontSize: "0.75rem", color: C.textFaint, opacity: 0.6,
             }}>#01</span>
           </div>
           <MotionLink
             href={`/blog/${featured.slug}`}
             className="feat-wrap"
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.5, ease: EASE }}
@@ -423,7 +417,7 @@ export default function BlogPage() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.6, ease: EASE }}

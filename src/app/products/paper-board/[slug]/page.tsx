@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { products } from "@/lib/pgg-data";
 import ProductPageClient from "../../ProductPageClient";
 
@@ -8,6 +9,17 @@ export async function generateStaticParams() {
 }
 
 type Props = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const p = products.find((x) => x.slug === slug);
+  if (!p) return {};
+  return {
+    title: p.name,
+    description: `${p.tagline.replace(/\.$/, "")}. Request a quote from Pune Global Group, Pune.`,
+    alternates: { canonical: `/products/paper-board/${p.slug}/` },
+  };
+}
 
 export default async function PaperBoardProductPage({ params }: Props) {
   const { slug } = await params;

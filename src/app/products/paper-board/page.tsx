@@ -25,8 +25,8 @@ const C = {
 const F = {
   display: "'Playfair Display', Georgia, serif",
   body:    "'DM Sans', system-ui, sans-serif",
-  italic:  "'Cormorant Garamond', Georgia, serif",
-  mono:    "'DM Mono', 'Courier New', monospace",
+  italic:  "'DM Sans', system-ui, sans-serif",
+  mono:    "'DM Sans', system-ui, sans-serif",
 };
 
 const CSS = `
@@ -34,7 +34,7 @@ const CSS = `
   body { background: ${C.dark}; color: ${C.charcoal}; font-family: ${F.body}; -webkit-font-smoothing: antialiased; }
   body::before {
     content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9998; opacity: 0.035;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    
   }
   @keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
   @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
@@ -110,7 +110,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · BRC · ISO 9001",
     useCases: ["Pharma cartons (primary & secondary)", "Premium FMCG and liquor packaging"],
-    images: ["/products/paper/cyber-xlpac-gc1-hero.jpg", "/products/paper/cyber-xlpac-gc1-reel.jpg", "/products/paper/cyber-xlpac-gc1-stack.jpg", "/products/paper/cyber-xlpac-gc1-engineering.jpg", "/products/paper/cyber-xlpac-gc1-usecase.jpg"],
+    images: ["/products/paper/cyber-xlpac-gc1-hero.jpg", "/products/paper/cyber-xlpac-gc1-reel.jpg", "/products/paper/cyber-xlpac-gc1-stack.jpg", "/products/paper/cyber-xlpac-gc1-engineering.jpg"],
   },
   {
     code: "GC2",
@@ -122,7 +122,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · BRC · ISO 9001",
     useCases: ["High-speed filling line applications", "FMCG products requiring reverse-side text"],
-    images: ["/products/paper/cyber-xlpac-gc2-hero.jpg", "/products/paper/cyber-xlpac-gc2-reel.jpg", "/products/paper/cyber-xlpac-gc2-stack.jpg", "/products/paper/cyber-xlpac-gc2-engineering.jpg", "/products/paper/cyber-xlpac-gc2-usecase.jpg"],
+    images: ["/products/paper/cyber-xlpac-gc2-hero.jpg", "/products/paper/cyber-xlpac-gc2-reel.jpg", "/products/paper/cyber-xlpac-gc2-stack.jpg", "/products/paper/cyber-xlpac-gc2-engineering.jpg"],
   },
   {
     code: "CPM",
@@ -134,7 +134,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · BRC · ISO 9001",
     useCases: ["Liquor and spirits cartons", "Glass bottle outer packaging"],
-    images: ["/products/paper/cyber-premium-hero.jpg", "/products/paper/cyber-premium-reel.jpg", "/products/paper/cyber-premium-stack.jpg", "/products/paper/cyber-premium-engineering.jpg", "/products/paper/cyber-premium-usecase.jpg"],
+    images: ["/products/paper/cyber-premium-hero.jpg", "/products/paper/cyber-premium-reel.jpg", "/products/paper/cyber-premium-stack.jpg", "/products/paper/cyber-premium-engineering.jpg"],
   },
   {
     code: "PXL",
@@ -146,7 +146,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · ISO 9001",
     useCases: ["FMCG everyday packaging", "Pharma secondary packaging"],
-    images: ["/products/paper/pearlxl-packaging-hero.jpg", "/products/paper/pearlxl-packaging-reel.jpg", "/products/paper/pearlxl-packaging-stack.jpg", "/products/paper/pearlxl-packaging-engineering.jpg", "/products/paper/pearlxl-packaging-usecase.jpg"],
+    images: ["/products/paper/pearlxl-packaging-hero.jpg", "/products/paper/pearlxl-packaging-reel.jpg", "/products/paper/pearlxl-packaging-stack.jpg", "/products/paper/pearlxl-packaging-engineering.jpg"],
   },
   {
     code: "CLM",
@@ -158,7 +158,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · BRC · ISO 9001",
     useCases: ["Cosmetics and luxury brand packaging", "Perfume and fragrance cartons"],
-    images: ["/products/paper/carte-lumina-hero.jpg", "/products/paper/carte-lumina-reel.jpg", "/products/paper/carte-lumina-stack.jpg", "/products/paper/carte-lumina-engineering.jpg", "/products/paper/carte-lumina-usecase.jpg"],
+    images: ["/products/paper/carte-lumina-hero.jpg", "/products/paper/carte-lumina-reel.jpg", "/products/paper/carte-lumina-stack.jpg", "/products/paper/carte-lumina-engineering.jpg"],
   },
   {
     code: "SFG",
@@ -170,7 +170,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · BRC · ISO 9001",
     useCases: ["POP displays and retail shelf-ready packaging", "Greeting cards and book covers"],
-    images: ["/products/paper/safire-graphik-hero.jpg", "/products/paper/safire-graphik-reel.jpg", "/products/paper/safire-graphik-stack.jpg", "/products/paper/safire-graphik-engineering.jpg", "/products/paper/safire-graphik-usecase.jpg"],
+    images: ["/products/paper/safire-graphik-hero.jpg", "/products/paper/safire-graphik-reel.jpg", "/products/paper/safire-graphik-stack.jpg", "/products/paper/safire-graphik-engineering.jpg"],
   },
   {
     code: "COK",
@@ -182,7 +182,7 @@ const VIRGIN_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · ISO 9001",
     useCases: ["FMCG brands with eco/sustainability positioning", "Consumer electronics cartons"],
-    images: ["/products/paper/cyber-oak-hero.jpg", "/products/paper/cyber-oak-reel.jpg", "/products/paper/cyber-oak-stack.jpg", "/products/paper/cyber-oak-engineering.jpg", "/products/paper/cyber-oak-usecase.jpg"],
+    images: ["/products/paper/cyber-oak-hero.jpg", "/products/paper/cyber-oak-reel.jpg", "/products/paper/cyber-oak-stack.jpg", "/products/paper/cyber-oak-engineering.jpg"],
   },
 ];
 
@@ -197,7 +197,7 @@ const RECYCLED_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · ISO 9001",
     useCases: ["FMCG and general-purpose carton packaging", "Cereal, dry food and toy boxes"],
-    images: ["/products/paper/eco-natura-hero.jpg", "/products/paper/eco-natura-reel.jpg", "/products/paper/eco-natura-stack.jpg", "/products/paper/eco-natura-engineering.jpg", "/products/paper/eco-natura-usecase.jpg"],
+    images: ["/products/paper/eco-natura-hero.jpg", "/products/paper/eco-natura-reel.jpg", "/products/paper/eco-natura-stack.jpg", "/products/paper/eco-natura-engineering.jpg"],
   },
   {
     code: "EBL",
@@ -209,7 +209,7 @@ const RECYCLED_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · ISO 9001",
     useCases: ["Hosiery and garment packaging", "Retail cartons needing clean white reverse"],
-    images: ["/products/paper/eco-blanca-hero.jpg", "/products/paper/eco-blanca-reel.jpg", "/products/paper/eco-blanca-stack.jpg", "/products/paper/eco-blanca-engineering.jpg", "/products/paper/eco-blanca-usecase.jpg"],
+    images: ["/products/paper/eco-blanca-hero.jpg", "/products/paper/eco-blanca-reel.jpg", "/products/paper/eco-blanca-stack.jpg", "/products/paper/eco-blanca-engineering.jpg"],
   },
   {
     code: "NWB",
@@ -221,7 +221,7 @@ const RECYCLED_GRADES = [
     origin: "India (ITC PSPD)",
     certifications: "FSC · ISO 9001",
     useCases: ["Pharmaceutical blister card backing", "FMCG product packaging"],
-    images: ["/products/paper/neowhite-bliss-hero.jpg", "/products/paper/neowhite-bliss-reel.jpg", "/products/paper/neowhite-bliss-stack.jpg", "/products/paper/neowhite-bliss-engineering.jpg", "/products/paper/neowhite-bliss-usecase.jpg"],
+    images: ["/products/paper/neowhite-bliss-hero.jpg", "/products/paper/neowhite-bliss-reel.jpg", "/products/paper/neowhite-bliss-stack.jpg", "/products/paper/neowhite-bliss-engineering.jpg"],
   },
 ];
 
@@ -299,7 +299,7 @@ function GradeCarousel({ images, name }: { images: string[]; name: string }) {
 function GradeCard({ grade, delay }: { grade: typeof VIRGIN_GRADES[0]; delay: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 25 }}
+      initial={false}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.12 }}
       transition={{ duration: 0.6, ease, delay }}
@@ -387,7 +387,7 @@ export default function PaperBoardPage() {
           <div>
             <motion.div
               style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "1.5rem" }}
-              initial={{ opacity: 0, y: 25 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease, delay: 0 }}
             >
@@ -408,12 +408,11 @@ export default function PaperBoardPage() {
                 fontSize: "clamp(2rem, 4vw, 3.8rem)",
                 lineHeight: 1.05, color: C.charcoal, letterSpacing: "-0.028em",
               }}
-              initial={{ opacity: 0, y: 25 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease, delay: 0.08 }}
             >
-              Paper grades,
-              <br /><em style={{ fontWeight: 400, color: C.warm }}>press-ready.</em>
+              Paper and board grades, cut to your size
             </motion.h1>
 
             <div style={{ height: "1px", background: C.borderMid, margin: "2rem 0" }} />
@@ -423,22 +422,21 @@ export default function PaperBoardPage() {
                 fontFamily: F.body, fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)",
                 color: C.taupe, lineHeight: 1.85, maxWidth: "560px", fontWeight: 300,
               }}
-              initial={{ opacity: 0, y: 25 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease, delay: 0.16 }}
             >
-              Trusted traders of ITC PSPD and TNPL board grades — FBB, duplex, kraft liner,
-              test liner and white top. Sheeted from reel to your exact press dimensions out of our
-              Pune warehouse.
+              We supply ITC PSPD and TNPL grades: FBB, duplex, kraft liner, test liner and white top.
+              Buy by the reel or have it sheeted to your press size at our Pune warehouse.
             </motion.p>
 
             <motion.div
               style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "2.5rem" }}
-              initial={{ opacity: 0, y: 25 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease, delay: 0.24 }}
             >
-              <Link href="/#contact" className="btn-kraft">Request Samples &amp; Pricing →</Link>
+              <Link href="/contact?product=FBB%20%2F%20Duplex%20Board" className="btn-kraft">Request samples and pricing</Link>
               <Link href="/products" className="btn-ghost">← All Products</Link>
             </motion.div>
           </div>
@@ -493,7 +491,7 @@ export default function PaperBoardPage() {
           {/* ITC PSPD Virgin Boards */}
           <motion.div
             style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2rem" }}
-            initial={{ opacity: 0, y: 25 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.12 }}
             transition={{ duration: 0.6, ease }}
@@ -514,7 +512,7 @@ export default function PaperBoardPage() {
           {/* ITC PSPD Recycled Boards */}
           <motion.div
             style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2rem" }}
-            initial={{ opacity: 0, y: 25 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.12 }}
             transition={{ duration: 0.6, ease }}
@@ -539,7 +537,7 @@ export default function PaperBoardPage() {
       <motion.section
         className="section-dark"
         style={{ padding: "5rem clamp(1.5rem, 5vw, 4rem)", background: "#243528" }}
-        initial={{ opacity: 0, y: 25 }}
+        initial={false}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.12 }}
         transition={{ duration: 0.6, ease }}
@@ -596,7 +594,7 @@ export default function PaperBoardPage() {
             {CAPS.map((cap, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 25 }}
+                initial={false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.12 }}
                 transition={{ duration: 0.6, ease, delay: i * 0.08 }}
