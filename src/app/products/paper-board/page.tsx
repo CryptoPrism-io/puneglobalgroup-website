@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import OptImg, { useSlideLoader } from "@/components/OptImg";
+import CarouselControls, { useCarousel } from "@/components/CarouselControls";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -248,49 +249,23 @@ function useScrollReveal() {
 
 /* ─── Grade Image Carousel ───────────────────────────────────────────────────── */
 function GradeCarousel({ images, name }: { images: string[]; name: string }) {
-  const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
-  const touchStartX = useRef<number>(0);
-
-  useEffect(() => {
-    if (paused) return;
-    let t: ReturnType<typeof setTimeout>;
-    const len = images.length;
-    const advance = (current: number) => {
-      const isLast = current === len - 1;
-      t = setTimeout(() => { const next = (current + 1) % len; setIdx(next); advance(next); }, isLast ? 6000 : 4500);
-    };
-    const init = setTimeout(() => advance(0), 2500);
-    return () => { clearTimeout(t); clearTimeout(init); };
-  }, [paused, images.length]);
-
+  const { idx, go, swipe } = useCarousel(images.length, { delay: 4500, paused });
   const shouldLoad = useSlideLoader(idx, images.length);
 
   return (
     <div
+      className="cc-host"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
-      onTouchEnd={(e) => {
-        const dx = e.changedTouches[0].clientX - touchStartX.current;
-        if (Math.abs(dx) > 36) setIdx(c => dx < 0 ? (c + 1) % images.length : (c + 2) % images.length);
-      }}
+      {...swipe}
       style={{ position: "relative", height: "220px", overflow: "hidden", background: C.parchment }}
     >
       {images.map((src, i) => (
         <OptImg key={i} src={src} alt={`${name} ${i + 1}`} className={`carousel-img${i === idx ? " active" : ""}`}
           load={shouldLoad(i)} sizes="(max-width: 768px) 100vw, 33vw" />
       ))}
-      <div style={{ position: "absolute", bottom: "2px", left: "50%", transform: "translateX(-50%)" }}>
-        <div style={{ display: "flex", gap: "5px", padding: "8px 12px" }}>
-          {images.map((_, i) => (
-            <button key={i} className="dot-pip"
-              onClick={(e) => { e.preventDefault(); setIdx(i); }}
-              style={{ width: i === idx ? "18px" : "6px", background: i === idx ? C.cream : "rgba(255,255,255,0.5)" }}
-            />
-          ))}
-        </div>
-      </div>
+      <CarouselControls count={images.length} idx={idx} go={go} label="image" showCount={false} />
     </div>
   );
 }

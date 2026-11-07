@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { optSrc, optSrcSet } from "@/lib/img";
 
 /**
@@ -14,6 +14,7 @@ export default function Lightbox({
   const [i, setI] = useState(start);
   const n = images.length;
   const go = (d: number) => setI((c) => (c + d + n) % n);
+  const touchX = useRef(0);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -37,6 +38,8 @@ export default function Lightbox({
 
   return (
     <div role="dialog" aria-modal="true" aria-label={alt} onClick={onClose}
+      onTouchStart={(e) => { touchX.current = e.touches[0].clientX; }}
+      onTouchEnd={(e) => { const dx = e.changedTouches[0].clientX - touchX.current; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); }}
       style={{
         position: "fixed", inset: 0, zIndex: 1000,
         background: "rgba(12,11,10,0.92)",

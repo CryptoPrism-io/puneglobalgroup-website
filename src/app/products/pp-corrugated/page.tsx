@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import OptImg, { useSlideLoader } from "@/components/OptImg";
+import CarouselControls, { useCarousel } from "@/components/CarouselControls";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ppFamilies, PPVariant } from "@/lib/pp-data";
@@ -298,33 +299,20 @@ function ScrollableRow({ children, bgClass = "even", count = 0 }: { children: Re
 
 /* ─── Card Carousel ──────────────────────────────────────────────────── */
 function VariantCarousel({ images, name }: { images: string[]; name: string }) {
-  const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
-  const touchStartX = useRef<number>(0);
-
-  useEffect(() => {
-    if (paused || images.length < 2) return;
-    const t = setInterval(() => setIdx(c => (c + 1) % images.length), 4000);
-    return () => clearInterval(t);
-  }, [paused, images.length]);
-
   const n = images.length;
+  const { idx, go, swipe } = useCarousel(n, { delay: 4000, paused });
   const labels = ["Product", "Drawing", "Detail"];
   const shouldLoad = useSlideLoader(idx, n);
 
   return (
     <div
-      className="carousel-wrap"
+      className="carousel-wrap cc-host"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
-      onTouchEnd={(e) => {
-        const dx = e.changedTouches[0].clientX - touchStartX.current;
-        if (Math.abs(dx) > 36) setIdx(c => dx < 0 ? (c + 1) % n : (c + n - 1) % n);
-      }}
+      {...swipe}
       style={{ position: "relative", height: "220px", overflow: "hidden", background: C.parchment }}
     >
-      {/* All 3 images stacked — crossfade via CSS opacity transition */}
       {images.map((src, i) => (
         <OptImg
           key={i}
@@ -336,25 +324,7 @@ function VariantCarousel({ images, name }: { images: string[]; name: string }) {
         />
       ))}
 
-      {/* Dot indicators — large touch target via .dot-wrap padding */}
-      <div style={{
-        position: "absolute", bottom: "2px", left: "50%", transform: "translateX(-50%)",
-      }}>
-        <div className="dot-wrap">
-          {images.map((_, i) => (
-            <button
-              key={i}
-              className="dot-pip"
-              onClick={(e) => { e.preventDefault(); setIdx(i); }}
-              aria-label={labels[i]}
-              style={{
-                width: i === idx ? "18px" : "6px",
-                background: i === idx ? C.cream : "rgba(255,255,255,0.5)",
-              }}
-            />
-          ))}
-        </div>
-      </div>
+      <CarouselControls count={n} idx={idx} go={go} label="image" showCount={false} />
 
       {/* Label badge */}
       <div style={{

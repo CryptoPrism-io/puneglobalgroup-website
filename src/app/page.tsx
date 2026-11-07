@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, FormEvent } from "react";
 import OptImg, { useSlideLoader } from "@/components/OptImg";
+import CarouselControls, { useCarousel } from "@/components/CarouselControls";
 import { blogPosts } from "@/lib/pgg-data";
 import Link from "next/link";
 import {
@@ -947,28 +948,9 @@ const PP_PRODUCTS = [
 ];
 
 function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
-  const [idx, setIdx] = useState(0);
-  const shouldLoad = useSlideLoader(idx, p.imgs.length);
   const [hovered, setHovered] = useState(false);
-
-  useEffect(() => {
-    if (hovered) return;
-    let t: ReturnType<typeof setTimeout>;
-    const len = p.imgs.length;
-
-    const advance = (current: number) => {
-      const isLast = current === len - 1;
-      t = setTimeout(() => {
-        const next = (current + 1) % len;
-        setIdx(next);
-        advance(next);
-      }, isLast ? 3000 : 2000);
-    };
-
-    // Stagger initial start so cards don't all switch simultaneously
-    const initT = setTimeout(() => advance(0), i * 700);
-    return () => { clearTimeout(t); clearTimeout(initT); };
-  }, [hovered, i, p.imgs.length]);
+  const { idx, go, swipe } = useCarousel(p.imgs.length, { delay: 4000 + (i % 3) * 700, paused: hovered });
+  const shouldLoad = useSlideLoader(idx, p.imgs.length);
 
   return (
     <motion.div
@@ -991,12 +973,11 @@ function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
           transition: "background 0.25s",
           height: "100%",
         }}>
-        {/* Image area — expands on hover */}
-        <div style={{
-          height: hovered ? "240px" : "160px",
+        {/* Image area */}
+        <div className="cc-host" {...swipe} style={{
+          height: "200px",
           overflow: "hidden",
           position: "relative",
-          transition: "height 0.45s cubic-bezier(0.4, 0, 0.2, 1)",
           flexShrink: 0,
         }}>
           {p.imgs.map((src, j) => (
@@ -1013,29 +994,7 @@ function PPProductCard({ p, i }: { p: typeof PP_PRODUCTS[0]; i: number }) {
                 transition: "opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1)",
               }} />
           ))}
-          {/* Image index dots — always visible, subtler when not hovered */}
-          <div style={{
-            position: "absolute",
-            bottom: "10px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            gap: "5px",
-            opacity: hovered ? 1 : 0.55,
-            transition: "opacity 0.3s",
-            zIndex: 2,
-          }}>
-            {p.imgs.map((_, j) => (
-              <span key={j} style={{
-                width: j === idx ? "16px" : "5px",
-                height: "5px",
-                borderRadius: "3px",
-                background: j === idx ? "#fff" : "rgba(255,255,255,0.5)",
-                transition: "width 0.35s ease, background 0.25s ease",
-                display: "block",
-              }} />
-            ))}
-          </div>
+          <CarouselControls count={p.imgs.length} idx={idx} go={go} label="image" showCount={false} />
         </div>
 
         {/* Text body */}
@@ -1139,22 +1098,10 @@ type PaperProduct = {
 };
 
 function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
-  const [idx, setIdx] = useState(0);
   const [hovered, setHovered] = useState(false);
-  /* taller default image for Paper & Board Grades */
-  const imgH = hovered ? "260px" : "180px";
+  const { idx, go, swipe } = useCarousel(p.imgs.length, { delay: 4500 + (i % 3) * 700, paused: hovered });
+  const imgH = "200px";
   const shouldLoad = useSlideLoader(idx, p.imgs.length);
-  useEffect(() => {
-    if (hovered) return;
-    let intervalId: ReturnType<typeof setInterval> | undefined;
-    const timeoutId = setTimeout(() => {
-      intervalId = setInterval(() => setIdx(c => (c + 1) % p.imgs.length), 4500);
-    }, i * 600);
-    return () => {
-      clearTimeout(timeoutId);
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [hovered, i, p.imgs.length]);
 
   return (
     <motion.div
@@ -1177,12 +1124,11 @@ function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
           transition: "background 0.25s",
           height: "100%",
         }}>
-        {/* Image area — expands on hover */}
-        <div style={{
+        {/* Image area */}
+        <div className="cc-host" {...swipe} style={{
           height: imgH,
           overflow: "hidden",
           position: "relative",
-          transition: "height 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
           flexShrink: 0,
         }}>
           {p.imgs.map((src, j) => (
@@ -1199,30 +1145,7 @@ function PaperProductCard({ p, i }: { p: PaperProduct; i: number }) {
                 transition: "opacity 0.55s ease",
               }} />
           ))}
-          {/* Dot indicators — visible on hover */}
-          <div style={{
-            position: "absolute",
-            bottom: "8px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            gap: "4px",
-            opacity: hovered ? 1 : 0,
-            transition: "opacity 0.3s",
-            zIndex: 2,
-          }}>
-            {p.imgs.map((_, j) => (
-              <span key={j} style={{
-                width: "5px",
-                height: "5px",
-                borderRadius: "50%",
-                background: j === idx ? "#fff" : "rgba(255,255,255,0.45)",
-                transition: "background 0.2s, transform 0.2s",
-                transform: j === idx ? "scale(1.3)" : "scale(1)",
-                display: "block",
-              }} />
-            ))}
-          </div>
+          <CarouselControls count={p.imgs.length} idx={idx} go={go} label="image" showCount={false} />
         </div>
 
         {/* Text body */}
